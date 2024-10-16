@@ -1,0 +1,35 @@
+{
+    "application": {
+        "id": "",
+        "title": "Transener.Operaciones.LicenciasTrabajo.habilitacionesauditoria",
+        "description": "Transener - Habilitaciones - Auditoria Externa",
+        "type": "SAP_UI5_Component",
+        "componentUrl": "/",
+        "appUrl": "#habilitacionesauditoria-Display",
+        "navigationComponentName": "Transener.Operaciones.LicenciasTrabajo",
+        "intentSemanticObject": "habilitacionesauditoria",
+        "intentAction": "Display",
+        "html5ApplicationName": "habilitacionesauditoria",
+        "HCPParentApplicationName": ""
+    },
+    "assignment": {
+        "groups": [
+            "b6228f7a-5876-42f6-be48-11e83dbdbe30-1517856268624"
+        ],
+        "contentPackages": [
+            "8b221117-ac21-4842-82c7-656ac5a28b6f-1517609122679"
+        ],
+        "categories": []
+    },
+    "tile": {
+        "type": "StaticTile",
+        "title": "Auditoria Externa",
+        "subtitle": "Habilitaciones",
+        "searchKeywords": "Auditoria Externa, Habilitaciones",
+        "displayIconUrl": "sap-icon://order-status",
+        "displayInfoText": "",
+        "size": "1x1",
+        "serviceURL": "",
+        "refreshInterval": ""
+    }
+}

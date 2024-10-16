@@ -1,0 +1,170 @@
+/* 
+dark blue :#3a668b
+light blue: #96c6fb
+lighter light blue: #e9f2fb
+darker grey: #eaeaea
+light grey: #f3f3f3 
+*/
+
+html.sap-desktop .sapMShellAppWidthLimited .sapMShellCentralBox {
+    background-color: transparent;
+}
+
+.sapMPageEnableScrolling {
+    background: white !important;
+}
+
+.sapUiGlobalBackgroundColor,
+.sapMShellGlobalInnerBackground {
+    background-color: transparent;
+}
+
+.sapMShellGlobalOuterBackground {
+    background: url(../img/landscape.png) no-repeat center center fixed;
+    background-size: cover;
+}
+
+.sapMShellBrandingBar {
+    display: none;
+}
+
+header .sapMBar,
+.sapMBar {
+    background-color: transparent !important;
+    box-shadow: none;
+}
+
+.sapMDialog header .sapMBar {
+	 background-color: #eaeaea !important;
+}
+
+html.sap-desktop .sapContrast.sapMIBar.sapMFooter-CTX {
+	 background-color: transparent !important;
+}
+#myApp section:first-child {
+    background: white !important;
+    padding: 0 15px;
+}
+
+.sapMListTbl th {
+    background-color: #96c6fb !important;
+}
+
+h1 {
+    color: #3a668b !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+    background-color: #eaeaea !important;
+}
+
+.sapMTitle span {
+    font-size: 20px;
+    color: #3a668b !important;
+    font-weight: bold !important;
+}
+
+.sapMPanelBGTranslucent.sapMPanelContent {
+    background-color: #f3f3f3 !important;
+}
+
+table {
+    padding: 20px !important;
+}
+
+footer {
+    background-color: white;
+}
+
+.buttonInverted span {
+    background-color: #3a668b !important;
+    color: white !important;
+    font-weight: bold !important;
+}
+
+.buttonInverted span .sapUiIcon::before {
+    font-size: 16px;
+    vertical-align: top;
+}
+
+.buttonRegular .sapMBtnDefault {
+    background-color: white !important;
+    color: #3a668b !important;
+    border: 1px solid #ababab !important;
+    font-weight: bold !important;
+}
+
+.buttonRegularLight .sapMBtnDefault {
+    background-color: white !important;
+    color: #3a668b !important;
+    border: 1px solid #ababab !important;
+}
+
+.buttonRegularLight .sapMBtnIcon::before,
+.buttonRegular .sapMBtnIcon::before {
+    color: #3a668b !important;
+}
+
+.tableButton .sapMBtnDefault {
+    border: none;
+    background: transparent;
+}
+
+.tableButton .sapMBtnIcon::before {
+    font-size: 16px;
+}
+
+html.sap-desktop .sapContrast.sapMIBar.sapMFooter-CTX {
+    border: none;
+    box-shadow: 0px -7px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sapContrast .sapMBtnInner,
+.sapMBtnInner {
+    text-shadow: none !important;
+}
+
+tbody .sapMListTblCell {
+    padding: .3rem .5rem;
+}
+
+tbody tr:nth-child(odd) {
+    background: #e9f2fb
+}
+
+.headerButton {
+    border: none;
+    background: transparent;
+}
+
+.headerButton:hover {
+    border: none;
+    background: transparent;
+}
+
+/*DIALOG*/
+
+.sapMDialogSection .sapMLabel {
+	width: 5rem;
+}
+
+.sapMSlt {
+    width: 15rem !important;
+    height: 2rem;
+}
+.sapMSltArrow {
+	line-height: 1.5rem;
+}
+
+.sapUiFupGroup button span.sapMBtnInner.sapMBtnEmphasized {
+	background-color: #eaeaea !important;
+	color: #5d5f70 !important;
+	border-color: #5d5f70;
+}
+
+.sapUiFupGroup button span.sapMBtnInner.sapMBtnEmphasized .sapMBtnCustomIcon {
+	color: #5d5f70 !important;	
+}
+
+.sapUiFup:not(.sapUiFupButtonOnly) .sapUiFupGroup>div>div:last-child {
+	padding-left: 0 !important;
+}

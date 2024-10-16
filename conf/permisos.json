@@ -1,0 +1,178 @@
+{
+	"general": {
+		"comentario": "Para el negado se aplica la logistica, signo de exclamacion, nombre de boton de la vista path, y quien NO lo va a ver",
+		"comentario2": "casos de licencias de emergencia, ellos no generan solicitud",
+		"all": [
+			"Jefe_Turno_COT",
+			"Jefe_Turno_COTDT",
+			"Jefe_COTDT",
+			"Jefe_COT",
+			"preguntar_lucas",
+			"Solicitante_Lic_S",
+			"Solicitante_Lic",
+			"Solicitante_Lic_TBA",
+			"Jefe_Trabajo",
+			"Jefe_Trabajo_Suplente",
+			"Programacion_COTDT",
+			"Programacion_COT",
+			"Tramitador",
+			"Operador_COTDT",
+			"Operador_COT"
+		],
+		"view": [
+			"Coordinador_Mantenimiento"
+		],
+		"!ButtonLicense": [
+			"Coordinador_Mantenimiento"
+		],
+		"!ButtonSolicitud": [
+			"Jefe_Turno_COT",
+			"Jefe_Turno_COTDT",
+			"Programacion_COT",
+			"Programacion_COTDT"
+		],
+		"!ButtonTipoLicencia": [
+			"Jefe_COTDT",
+			"Jefe_COT",
+			"preguntar_lucas",
+			"Solicitante_Lic_S",
+			"Solicitante_Lic",
+			"Solicitante_Lic_TBA",
+			"Jefe_Trabajo",
+			"Jefe_Trabajo_Suplente",
+			"Tramitador",
+			"Operador_COTDT",
+			"Operador_COT"
+		]
+	},
+	"!general": {
+		"comentario": "En el caso de que no se necesite mostrar un modulo usar este.",
+		"all": [],
+		"view": []
+	},
+	"entregasDevoluciones": {
+		"all": [
+			"Jefe_Turno_COT",
+			"Jefe_Turno_COTDT",
+			"Operador_COTDT",
+			"Operador_COT"
+		]
+	},
+	"medidasSeguridad": {
+		"all": [
+			"Jefe_COTDT",
+			"Jefe_COT",
+			"Jefe_Trabajo",
+			"Jefe_Trabajo_Suplente",
+			"Jefe_Turno_COT",
+			"Jefe_Turno_COTDT",
+			"Operador_COTDT",
+			"Operador_COT",
+			"Programacion_COTDT",
+			"Programacion_COT",
+			"Solicitante_Lic",
+			"Solicitante_Lic_S",
+			"Solicitante_Lic_TBA",
+			"preguntar lucas",
+			"Tramitador"
+		],
+		"view": [
+			"Coordinador_Mantenimiento"
+		]
+	},
+	"observaciones": {
+		"botonAnulacion": [
+			"Asistencia_Mantenimiento",
+			"Coordinador_Mantenimiento",
+			"Jefe_Turno_COTDT",
+			"Jefe_Turno_COT",
+			"Programacion_COT",
+			"Programacion_COTDT"
+		]
+	},
+	"listado": {
+		"botonCoordinar": [
+			"Coordinador_Mantenimiento",
+			"Asistencia_Mantenimiento"
+		],
+		"botonTramitar": [
+			"Jefe_Turno_COT",
+			"Jefe_Turno_COTDT",
+			"Operador_COT",
+			"Operador_COTDT",
+			"Programacion_COT",
+			"Programacion_COTDT"
+		],
+		"BotonSolicitudListado": [
+			"Jefe_Trabajo",
+			"Jefe_Trabajo_Suplente",
+			"Tramitador",
+			"Coordinador_Mantenimiento"
+		],
+		"!BotonSolicitudListado": [
+			"Jefe_Turno_COT",
+			"Jefe_Turno_COTDT",
+			"Jefe_COTDT",
+			"Programacion_COTDT",
+			"Programacion_COT",
+			"Operador_COTDT",
+			"Operador_COT",
+			"Solicitante_Lic",
+			"Solicitante_Lic_S",
+			"Solicitante_Lic_TBA"
+		],
+		"!ButonDuplicateLicenseCoordinator": [
+			"Coordinador_Mantenimiento"
+		],
+		"BotonLicenciaListado": [
+			"Jefe_COTDT",
+			"Jefe_COT",
+			"Jefe_Trabajo",
+			"Jefe_Trabajo_Suplente",
+			"Jefe_Turno_COT",
+			"Jefe_Turno_COTDT",
+			"Operador_COTDT",
+			"Operador_COT",
+			"Programacion_COTDT",
+			"Programacion_COT",
+			"Solicitante_Lic",
+			"Solicitante_Lic_S",
+			"Solicitante_Lic_TBA",
+			"Tramitador"
+		],
+		"!BotonLicenciaListado": [
+			"Coordinador_Mantenimiento"
+		],
+		"tramitacionMasiva": [
+			"Tramitador",
+			"Jefe_Turno_COT",
+			"Jefe_Turno_COTDT",
+			"Operador_COT",
+			"Operador_COTDT",
+			"Programacion_COT",
+			"Programacion_COTDT"
+		]
+	},
+	"default": {
+		"view": [
+			"Asistencia_Mantenimiento",
+			"Coordinador_Mantenimiento",
+			"Jefe_COTDT",
+			"Jefe_COT",
+			"Jefe_Trabajo",
+			"Jefe_Trabajo_Suplente",
+			"Jefe_Turno_COT",
+			"Jefe_Turno_COTDT",
+			"Operador_COTDT",
+			"Operador_COT",
+			"Programacion_COTDT",
+			"Programacion_COT",
+			"Solicitante_Lic",
+			"Solicitante_Lic_S",
+			"Solicitante_Lic_TBA",
+			"preguntar lucas",
+			"Tramitador",
+			"Visualizador"
+		]
+	}
+}

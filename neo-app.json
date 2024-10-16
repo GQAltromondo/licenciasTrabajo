@@ -1,0 +1,97 @@
+{
+  "welcomeFile": "/index.html",
+  "routes": [
+    {
+      "path": "/destinations/Examinadores_PT15",
+      "target": {
+        "type": "destination",
+        "name": "Examinadores_PT15"
+      },
+      "description": "Hana XS Destination"
+    },
+    {
+      "path": "bpmworkflowruntime",
+      "target": {
+        "type": "destination",
+        "name": "bpmworkflowruntime",
+        "entryPath": "/workflow-service"
+      },
+      "description": "Workflow Service Runtime"
+    },
+    {
+      "path": "/destinations/SAP_Gateway",
+      "target": {
+        "type": "destination",
+        "name": "SAP_Gateway"
+      },
+      "description": "SAP ERP"
+    },
+    {
+      "path": "/destinations/transenerStyling",
+      "target": {
+        "type": "destination",
+        "name": "TransenerStyling"
+      },
+      "description": "Styling de Transner"
+    },
+    {
+      "path": "/destinations/styling",
+      "target": {
+        "type": "destination",
+        "name": "Styling"
+      },
+      "description": "Styling"
+    },
+    {
+      "path": "/services/userapi",
+      "target": {
+        "type": "service",
+        "name": "userapi"
+      }
+    },
+    {
+      "path": "/themedesignerPath",
+      "target": {
+        "type": "application",
+        "name": "themedesigner"
+      },
+      "description": "UI Theme Designer"
+    },
+    {
+      "path": "/resources",
+      "target": {
+        "type": "service",
+        "name": "sapui5",
+        "entryPath": "/resources"
+      },
+      "description": "SAPUI5 Resources"
+    },
+    {
+      "path": "/test-resources",
+      "target": {
+        "type": "service",
+        "name": "sapui5",
+        "entryPath": "/test-resources"
+      },
+      "description": "SAPUI5 Test Resources"
+    }
+  ],
+  "sendWelcomeFileRedirect": true,
+  "cacheControl": [
+    {
+      "directive": "private",
+      "maxAge": 0,
+      "path": "**.html"
+    },
+    {
+      "directive": "private",
+      "maxAge": 0,
+      "path": "sap-ui-cachebuster-info.json"
+    },
+    {
+      "directive": "public",
+      "maxAge": 0,
+      "path": "sap-ui-cachebuster-info.json"
+    }
+  ]
+}

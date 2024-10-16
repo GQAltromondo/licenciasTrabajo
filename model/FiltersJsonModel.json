@@ -1,0 +1,147 @@
+{
+	"Substatus": {
+		"attribute": "Substatus",
+		"value": "",
+		"operator": "EQ",
+		"typeOfFilter": "Dual",
+		"hasEmptyValues": false,
+		"EmptyValues": "",
+		"type": "String"
+	},
+	"Tplnr": {
+		"attribute": "Tplnr",
+		"value": [],
+		"operator": "EQ",
+		"typeOfFilter": "Multiple",
+		"hasEmptyValues": false,
+		"EmptyValues": "",
+		"typeOfValue": "Array"
+	},
+	"Solbeg": {
+		"attribute": "Solbeg",
+		"value": null,
+		"operator": "GE",
+		"typeOfFilter": "Single",
+		"hasEmptyValues": false,
+		"EmptyValues": "",
+		"typeOfValue": "Date"
+	},
+	"Solend": {
+		"attribute": "Solend",
+		"value": null,
+		"operator": "LE",
+		"typeOfFilter": "Single",
+		"hasEmptyValues": false,
+		"EmptyValues": "",
+		"typeOfValue": "Date"
+	},
+	"Period": {
+		"value": "",
+		"operator": "EQ"
+	},
+	"Licstat": {
+		"value": [],
+		"operator": "EQ"
+	},
+	"Equnr": {
+		"value": "",
+		"operator": "EQ"
+	},
+	"Arbpl": {
+		"value": "",
+		"operator": "EQ"
+	},
+	"Werks": {
+		"attribute": "Werks",
+		"value": "",
+		"operator": "EQ",
+		"typeOfFilter": "Single",
+		"hasEmptyValues": false,
+		"EmptyValues": "",
+		"typeOfValue": "String"
+	},
+	"Ingrp": {
+		"value": "",
+		"operator": "EQ"
+	},
+	"Equstatnocam": {
+		"value": "N",
+		"operator": "EQ"
+	},
+	"Jobcond": {
+		"value": "",
+		"operator": "EQ"
+	},
+	"Tipolicencia": {
+		"value": "",
+		"operator": "EQ"
+	},
+	"Equstat": {
+		"value": "N",
+		"operator": "EQ"
+	},
+	"Solicitante": {
+		"value": "",
+		"operator": "EQ"
+	},
+	"Tipotrbjo": {
+		"value": "",
+		"operator": "EQ"
+	},
+	"Tiemporep": {
+		"value": "",
+		"operator": "EQ"
+	},
+	"R500kv": {
+		"value": "",
+		"operator": "EQ"
+	},
+	"Barrafs": {
+		"value": "",
+		"operator": "EQ"
+	},
+	"SenalesC": {
+		"value": [],
+		"operator": "EQ"
+	},
+	"Jefe": {
+		"value": "",
+		"operator": "EQ"
+	},
+	"JefeSuplente": {
+		"value": "",
+		"operator": "EQ"
+	},
+	"SolSuplente": {
+		"value": "",
+		"operator": "EQ"
+	},
+	"Rdisparo": {
+		"value": "N",
+		"operator": "EQ"
+	},
+	"Aro": {
+		"value": "Z",
+		"operator": "EQ"
+	},
+	"Bloqueo": {
+		"value": "N",
+		"operator": "EQ"
+	},
+	"Anio": {
+		"value": "",
+		"operator": "EQ"
+	},
+	"Tipoequipo": {
+		"value": "",
+		"operator": "EQ"
+	},
+	"Tipinterv": {
+		"value": "",
+		"operator": "EQ"
+	},
+	"Id": {
+		"value": "",
+		"operator": "EQ"
+	}
+}

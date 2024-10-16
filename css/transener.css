@@ -1,0 +1,212 @@
+.bold {
+	font-weight: bold !important;
+}
+
+.sapUiLoSplitter .sapUiLoSplitterContent{
+	height: 200px ;
+}
+
+.italic {
+	font-style: italic;
+}
+
+.underlined{
+	text-decoration: underline;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.tinyPadding {
+	padding: 0.5rem;
+}
+
+.capitalize{
+	text-transform: lowercase;
+}
+
+.float-right{
+	float: right;
+}
+
+.expandTitle{
+	width: 95%;
+}
+
+.fontWhite {
+	color: #fff;
+}
+
+.fontLightGray {
+	color: #aaa !important;
+}
+
+.fontDarkGray {
+	color: #666 !important;
+}
+
+.p-0{
+	padding: 0px;
+}
+
+.sapUiFormResGridCont{
+	padding-bottom: 0px !important;
+}
+
+.fontTransenerADark {
+	color: #6C217F;
+}
+
+.fontBelcorpBDark {
+	color: #535193;
+}
+
+.fontBelcorpBLight {
+	color: #73d0f5;
+}
+
+.padding-10-5{
+	    padding: 10px 5px;
+}
+
+.m-r-20{
+	margin-right: 20px;
+}
+
+.m-r-10{
+	margin-right: 10px;
+}
+
+.m-t-15{
+	margin-top: 15px;
+}
+
+.m-b-20{
+	margin-bottom: 20px;
+}
+.m-b-10{
+	margin-bottom: 10px;
+}
+
+.fontMediumTiny {
+    font-size: 0.6rem;
+}
+
+.fontMediumSize {
+	font-size: 1.2rem;
+}
+
+.fontLargeSize {
+	font-size: 2rem;
+}
+
+.fontGiantSize {
+	font-size: 3rem;
+}
+
+.backgroundLightBlue div.sapContrastPlus, .backgroundLightBlue h1 {
+	color: white;
+	background-color: #009de0 !important;
+}
+
+/***************************************** custom icon tab bar *************************************************/
+.customIconTabBelcorp .sapMITBSelected .sapMITBFilterDefault {
+    background: #9039A5;
+    color: #fff;
+}
+
+.customIconTabBelcorp .sapMITBSelected>.sapMITBContentArrow {
+    border-bottom-color: #9039A5;
+}
+
+.customIconTabBelcorp .sapMITBFilterDefault {
+    color: #9039A5;
+}
+
+.customIconTabBelcorp .sapMITBFilterIcon {
+	border: 1px solid #9039A5;
+}
+
+/**************************************** botones ****************************************/
+/* hover violeta de boton gris */
+.botonClaroBelcorp:not(.sapMBtnDisabled)>.sapMBtnInner.sapMBtnActive {
+    background-color: #6C217F;
+    border-color: #6C217F;
+}
+
+/* boton violeta */
+html.sap-desktop .botonEstado .sapMToggleBtnPressed, .sapMToggleBtnPressed:not(.sapMBtnDisabled), html.sap-desktop .sapMIBar-CTX .sapMToggleBtnPressed, .sapMIBar-CTX .sapMToggleBtnPressed:not(.sapMBtnDisabled), html.sap-desktop .sapMTB-Transparent-CTX .sapMBtnInner.sapMToggleBtnPressed, .sapMTB-Transparent-CTX .sapMBtnInner.sapMToggleBtnPressed:not(.sapMBtnDisabled) {
+    background-color: #7e3c8f;
+    border-color: #6c217f;
+    color: #ffffff;
+}
+
+/*  hover de boton violeta */
+.botonEstado.sapMBtn:hover>.sapMBtnHoverable.sapMToggleBtnPressed:not(.sapMBtnActive), .sapMBtn .sapMBtnHoverable.sapMToggleBtnPressed:hover {
+    background-color: rgba(108, 33, 127, 0.65);
+    border-color: #c58bd4;
+    color: #ffffff;
+}
+
+/**************************************** datapicker ************************************/
+.selectFechaBelcorp span {
+	background-color:rgba(222,222,222,0.5);
+	cursor:pointer;
+	color:#9039A5;
+}
+
+.selectFechaBelcorp span:hover {
+	background-color:rgba(222,222,222,0.5);
+}
+
+.selectFechaBelcorp.sapMInputVH:not(.sapMInputBaseReadonly) .sapMInputValHelp>.sapMInputValHelpInner:active {
+    background-color: #9039A5;
+}
+
+/*************************************** select ****************************************/
+/*.selectSociedad .sapMInputBaseInner:not(.sapMInputBaseReadonlyInner):not(.sapMInputBaseStateInner):not(.sapMInputBaseDisabledInner):hover {*/
+/*    background: #ffffff;*/
+/*    border-color: #6C217F;*/
+/*}*/
+
+/*.selectSociedad .sapMComboBoxBasePressed .sapMComboBoxBaseArrow, html.sap-desktop .sapMComboBoxBasePressed .sapMComboBoxBaseArrow:hover {*/
+/*    background: #6C217F;*/
+/*}*/
+
+/*.selectSociedad .sapMSelectListItemBase.sapMSelectListItemBasePressed, .sapMSelectListItemBase.sapMSelectListItemBasePressed.sapMSelectListItemBaseSelected {*/
+/*    background: #6C217F;*/
+/*}*/
+
+/*.selectSociedad .sapMSelectListItem.sapMSelectListItemBase.sapMSelectListItemBasePressed:active {*/
+/*	background: #6C217F;*/
+/*}*/
+
+/*.selectSociedad .sapMComboBoxArrow.sapMComboBoxBaseArrow.sapMComboBoxTextFieldArrow:active {*/
+/*	background: #6C217F;	*/
+/*}*/
+
+/*****************************************custom grouped list*************************************************/
+.customGroupedList.sapMList .sapMLIB.sapMGHLI,
+.customGroupedList.sapMListBGSolid.sapMList .sapMLIB.sapMGHLI{
+	font-size: 1.1rem;
+    font-weight: bold;
+    color: #fff;
+    background: #9039A5;
+}
+
+/*****************************************custom grouped table*************************************************/
+.customGroupedTable.sapMList .sapMLIB.sapMGHLI {
+	color: #fff;
+	font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.customGroupedTable.sapMListBGTranslucent .sapMGHLI.sapMLIB,
+.customGroupedTable.sapMListBGTranslucent .sapMGHLI.sapMLIB:not(.sapMLIBActive):not(.sapMLIBSelected):not(:hover) {
+    background: #9039A5;
+}
+.FilterPanel .sapMText.filtrosAplicadosText {
+	color: red;
+	text-shadow: 1px 1px 2px #000 !important;
+}

@@ -1,0 +1,46 @@
+{
+  "generation": [
+    {
+      "templateId": "ui5template.basicSAPUI5ApplicationProject",
+      "templateVersion": "1.38.11",
+      "dateTimeStamp": "Wed, 11 Jan 2017 19:46:15 GMT"
+    },
+    {
+      "templateId": "ui5template.basicSAPUI5ApplicationComponent",
+      "templateVersion": "1.4.0",
+      "dateTimeStamp": "Fri, 20 Jan 2017 19:57:12 GMT"
+    }
+  ],
+  "translation": {
+    "translationDomain": "",
+    "supportedLanguages": "es, en, pt",
+    "defaultLanguage": "es",
+    "defaultI18NPropertyFile": "i18n.properties",
+    "resourceModelName": "i18n"
+  },
+  "basevalidator": {
+    "services": {
+      "js": "jsValidator",
+      "xml": "fioriXmlAnalysis"
+    }
+  },
+  "codeCheckingTriggers": {
+    "notifyBeforePush": true,
+    "notifyBeforePushLevel": "Error",
+    "blockPush": false,
+    "blockPushLevel": "Error"
+  },
+  "hcpdeploy": {
+    "account": "d635e7898",
+    "name": "transeneroperacionesworklicens",
+    "lastVersionWeTriedToDeploy": "1.0.56"
+  },
+  "hybrid": {
+    "FacadeConfig": {
+      "cordova-plugin-device-orientation": false,
+      "accelerometer": {},
+      "compass": {},
+      "bFacade": false
+    }
+  }
+}

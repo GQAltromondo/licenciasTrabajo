@@ -1,0 +1,1 @@
+sap.ui.define(["Transener/Operaciones/LicenciasTrabajo/utils/Gantt/formatter"],function(e){"use strict";return{get:function(){let t=[{key:"30"},{key:"01"},{key:"02"},{key:"03"},{key:"06"},{key:"07"},{key:"09"},{key:"10"},{key:"11"},{key:"23"},{key:"90"}];return t.map(t=>{t.text=e.getStatusName(t.key);return t})}}});

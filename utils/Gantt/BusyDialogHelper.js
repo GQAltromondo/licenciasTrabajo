@@ -1,0 +1,1 @@
+sap.ui.define([],function(){"use strict";return{_busyDialog:null,_getBusyDialog:function(){if(!this._busyDialog){this._busyDialog=new sap.m.BusyDialog}return this._busyDialog},open:function(i,s){var t=i?i:"";var e=s?s:"";var u=this._getBusyDialog();u.setTitle(t);u.setText(e);u.open()},close:function(){this._getBusyDialog().close()}}});

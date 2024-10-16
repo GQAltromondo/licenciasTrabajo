@@ -1,0 +1,392 @@
+<mvc:View xmlns="sap.ui.table" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns:m="sap.m" xmlns:gnt2="sap.gantt.simple"
+	xmlns:axistime="sap.gantt.axistime" xmlns:gnt-cal="sap.gantt.def.cal" xmlns:config="sap.gantt.config" xmlns:l="sap.ui.layout" height="100vh"
+	controllerName="Transener.Operaciones.LicenciasTrabajo.views.Main.Gantt.Gantt">
+	<m:Page showNavButton="false" contentOnlyBusy="true" showHeader="false" >
+		<m:Panel expandable="true" expanded="true" id="FilterPanel" class="customPanel sapUiMediumMarginBottom" >
+			<m:headerToolbar class="customPanel">
+				<m:Toolbar>
+				
+					<core:Icon src="sap-icon://filter" class="textBlue"/>
+					<m:Title text="Filtros" class="textBlue"/>
+				</m:Toolbar>
+			</m:headerToolbar>
+			<m:content>
+				<m:FlexBox width="95%" class="columns" alignItems="Stretch" justifyContent="Center">
+					<m:items>
+						<m:FlexBox width="100%" class="columns" alignItems="Stretch" justifyContent="End">
+							<m:items>
+								<m:Label text="Semana" width="100px">
+									<m:layoutData>
+										<m:FlexItemData growFactor="1"/>
+									</m:layoutData>
+								</m:Label>
+								<m:ComboBox selectedKey="{filters>/week}" items="{selects>/weeks}" width="290px" class="CustomAlign">
+									<core:Item key="{selects>code}" text="{selects>text}"/>
+									<m:layoutData>
+										<m:FlexItemData growFactor="1"/>
+									</m:layoutData>
+								</m:ComboBox>
+								<m:Label text="Año" width="100px">
+									<m:layoutData>
+										<m:FlexItemData growFactor="1"/>
+									</m:layoutData>
+								</m:Label>
+								<m:Select forceSelection="false" selectedKey="{filters>/year}" width="290px" items="{selects>/years}" class="CustomAlign">
+									<core:Item key="{selects>code}" text="{selects>text}"/>
+									<m:layoutData>
+										<m:FlexItemData growFactor="1"/>
+									</m:layoutData>
+								</m:Select>
+							</m:items>
+							<m:layoutData>
+								<m:FlexItemData growFactor="1"/>
+							</m:layoutData>
+						</m:FlexBox>
+					</m:items>
+				</m:FlexBox>
+				<m:FlexBox width="95%" class="columns" alignItems="Stretch" justifyContent="Center">
+					<m:items>
+						<m:FlexBox width="100%" class="columns" alignItems="Stretch" justifyContent="Start">
+							<m:items>
+								<m:Label text="Region" width="100px">
+									<m:layoutData>
+										<m:FlexItemData growFactor="1"/>
+									</m:layoutData>
+								</m:Label>
+								<m:ComboBox selectedKey="{filters>/Region}" width="290px" items="{Regiones>/results}" class="CustomAlign">
+									<core:Item key="{Regiones>Werks}" text="{Regiones>Name1}"/>
+									<m:layoutData>
+										<m:FlexItemData growFactor="1"/>
+									</m:layoutData>
+								</m:ComboBox>
+								<m:Label text="Tipo de Equipo" width="100px">
+									<m:layoutData>
+										<m:FlexItemData growFactor="1"/>
+									</m:layoutData>
+								</m:Label>
+								<m:ComboBox selectedKey="{filters>/Codigo}" width="290px" items="{TipoEquipoJsonModel>/TipoEquipo}" class="CustomAlign">
+									<core:Item key="{TipoEquipoJsonModel>Tipo}" text="{TipoEquipoJsonModel>Tipo} - {TipoEquipoJsonModel>Descripcion}"/>
+									<m:layoutData>
+										<m:FlexItemData growFactor="1"/>
+									</m:layoutData>
+								</m:ComboBox>
+							</m:items>
+							<m:layoutData>
+								<m:FlexItemData growFactor="1"/>
+							</m:layoutData>
+						</m:FlexBox>
+					</m:items>
+				</m:FlexBox>
+				<m:FlexBox width="47.5%" class="columns" alignItems="Stretch" justifyContent="Center">
+					<m:items>
+						<m:FlexBox width="100%" class="columns" alignItems="Stretch" justifyContent="Start">
+							<m:items>
+								<m:Label text="Estado" width="100px">
+									<m:layoutData>
+										<m:FlexItemData growFactor="1"/>
+									</m:layoutData>
+								</m:Label>
+								<m:MultiComboBox selectedKeys="{filters>/Licstat}" width="290px" items="{Licstat>/}" class="CustomAlign">
+									<core:Item key="{Licstat>key}" text="{Licstat>text}"/>
+									<m:layoutData>
+										<m:FlexItemData growFactor="1"/>
+									</m:layoutData>
+								</m:MultiComboBox>
+							</m:items>
+							<m:layoutData>
+								<m:FlexItemData growFactor="1"/>
+							</m:layoutData>
+						</m:FlexBox>
+					</m:items>
+				</m:FlexBox>
+				<m:FlexBox width="95%">
+					<m:items>
+						<m:Button text="Buscar" press=".getGanttData"/>
+					</m:items>
+				</m:FlexBox>
+			</m:content>
+		</m:Panel>
+		<gnt2:GanttChartContainer id="container" enableTimeScrollSync="true">
+			<gnt2:toolbar>
+				<gnt2:ContainerToolbar id="toolbar" design="Auto" showBirdEyeButton="false" showLegendButton="false">
+					<gnt2:legendContainer/>
+				</gnt2:ContainerToolbar>
+			</gnt2:toolbar>
+			<gnt2:ganttCharts>
+				<gnt2:GanttChartWithTable id="ganttView2" shapeDragEnd="handleShapeDragEnd" height="100px" >
+					<gnt2:table>
+						<Table selectionMode="None" id="ganntTable2"  visibleRowCount="2" selectionBehavior="RowSelector" enableColumnReordering="true" fixedColumnCount="1"
+							rows="{ path: 'TempSeleccionado>/' }">
+							<extension/>
+							<rowSettingsTemplate>
+								<gnt2:GanttRowSettings>
+									<gnt2:shapes1 width="40%">
+										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>LunesI}"
+											endTime="{TempSeleccionado>LunesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
+											strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}"
+											visible="{ parts: [{path: 'TempSeleccionado>LunesI'}, {path: 'TempSeleccionado>LunesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>MartesI}"
+											endTime="{TempSeleccionado>MartesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
+											strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}"
+											visible="{ parts: [{path: 'TempSeleccionado>MartesI'}, {path: 'TempSeleccionado>MartesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>MiercolesI}"
+											endTime="{TempSeleccionado>MiercolesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
+											strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}"
+											visible="{ parts: [{path: 'TempSeleccionado>MiercolesI'}, {path: 'TempSeleccionado>MiercolesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>JuevesI}"
+											endTime="{TempSeleccionado>JuevesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
+											strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}"
+											visible="{ parts: [{path: 'TempSeleccionado>JuevesI'}, {path: 'TempSeleccionado>JuevesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>ViernesI}"
+											endTime="{TempSeleccionado>ViernesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
+											strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}"
+											visible="{ parts: [{path: 'TempSeleccionado>ViernesI'}, {path: 'TempSeleccionado>ViernesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>SabadoI}"
+											endTime="{TempSeleccionado>SabadoF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
+											strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}"
+											visible="{ parts: [{path: 'TempSeleccionado>SabadoI'}, {path: 'TempSeleccionado>SabadoF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>DomingoI}"
+											endTime="{TempSeleccionado>DomingoF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
+											strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}"
+											visible="{ parts: [{path: 'TempSeleccionado>DomingoI'}, {path: 'TempSeleccionado>DomingoF'}], formatter: '.onFormatRectangle'}"/>
+									</gnt2:shapes1>
+								</gnt2:GanttRowSettings>
+							</rowSettingsTemplate>
+							<Column sortProperty="EquipoSoli" filterProperty="EquipoSoli" width="120px">
+								<m:Text text="Codigo" wrapping="true"/>
+								<template>
+									<m:HBox>
+										<m:items>
+											<!--<core:Icon class="sapUiSmallMarginEnd" src="sap-icon://timesheet" size="1.25rem"/>-->
+											<m:Label text="{TempSeleccionado>EquipoSoli}"/>
+										</m:items>
+									</m:HBox>
+								</template>
+							</Column>
+							<!--<Column sortProperty="Type" filterProperty="Type">-->
+							<!--	<m:Text text="Nro. Tarea " wrapping="false"/>-->
+							<!--	<template>-->
+							<!--		<m:Label text="{= ${TempSeleccionado>Type} === 'FO' ? 'Freight Order' : 'Freight Unit'}"/>-->
+							<!--	</template>-->
+							<!--</Column>-->
+							<Column sortProperty="DescEquipo" filterProperty="DescEquipo" width="400px">
+								<m:Text text="Descripcion" wrapping="false"/>
+								<template>
+									<m:Label text="{TempSeleccionado>DescEquipo}"/>
+								</template>
+							</Column>
+							<Column sortProperty="IdLicencia" filterProperty="IdLicencia" width="120px">
+								<m:Text text="Nro. Licencia" wrapping="false"/>
+								<template>
+									<m:Label text="{TempSeleccionado>IdLicencia}"/>
+								</template>
+							</Column>
+							<Column sortProperty="Tiemporep" filterProperty="TiemporepText" width="140px">
+								<m:Text text="Tiempo Reposición" wrapping="false"/>
+								<template>
+									<m:Label text="{parts: ['repositionTimesModel>/', 'TempSeleccionado&gt;Tiemporep'], formatter: '.fixedValuesListFormatter'}"/>
+								</template>
+							</Column>
+							<Column sortProperty="Tipointerv" filterProperty="Tipointerv" width="140px">
+								<m:Text text="Tipo Intervención" wrapping="false"/>
+								<template>
+									<m:Label text="{TempSeleccionado>Tipointerv}"/>
+								</template>
+							</Column>
+							<Column sortProperty="Condtrabajo" filterProperty="CondtrabajoText" width="200px">
+								<m:Text text="Cond. trabajo" wrapping="false"/>
+								<template>
+									<m:Label text="{parts: ['workConditionsModel>/', 'TempSeleccionado&gt;Condtrabajo'], formatter: '.fixedValuesListFormatter'}"/>
+								</template>
+							</Column>
+							<Column sortProperty="Comentarios" filterProperty="Comentarios" width="600px">
+								<m:Text text="Comentarios" wrapping="false"/>
+								<template>
+									<m:Label text="{TempSeleccionado>Comentarios}"/>
+								</template>
+							</Column>
+							<Column sortProperty="Solicitante" filterProperty="Solicitante" width="140px">
+								<m:Text text="Solicitante" wrapping="false"/>
+								<template>
+									<m:Label text="{TempSeleccionado>Solicitante}"/>
+								</template>
+							</Column>
+							<Column sortProperty="StatLicencia" filterProperty="StatLicenciaText" width="120px">
+								<m:Text text="Est. Licen." wrapping="false"/>
+								<template>
+									<m:Label text="{path: 'TempSeleccionado>StatLicencia', formatter: '.licenseStatusFormatter'}"/>
+								</template>
+							</Column>
+							<Column sortProperty="JefeTrabajo" filterProperty="JefeTrabajo" width="140px">
+								<m:Text text="Jefe de Trabajo" wrapping="false"/>
+								<template>
+									<m:Label text="{TempSeleccionado>JefeTrabajo}"/>
+								</template>
+							</Column>
+						</Table>
+					</gnt2:table>
+					<gnt2:axisTimeStrategy zoomLevel="2">
+						<axistime:ProportionZoomStrategy>
+							<axistime:totalHorizon>
+								<config:TimeHorizon startTime="20251229000000" endTime="20260106000000"/>
+							</axistime:totalHorizon>
+							<axistime:visibleHorizon>
+								<config:TimeHorizon startTime="20251229000000" endTime="20260106000000"/>
+							</axistime:visibleHorizon>
+						</axistime:ProportionZoomStrategy>
+					</gnt2:axisTimeStrategy>
+					<!--<gnt2:calendarDef>
+						<gnt-cal:CalendarDefs defs="{ path:'calc>/'}">
+							<gnt-cal:Calendar key="{calc>CalendarId}" timeIntervals="{path:'calc>Intervals', templateShareable: 'true'}"
+								backgroundColor="{= ${calc>CalendarId} === 'nwt' ? '#666' : '#ccc' }">
+								<gnt-cal:TimeInterval startTime="{calc>StartDateTime}" endTime="{calc>EndDateTime}"/>
+							</gnt-cal:Calendar>
+						</gnt-cal:CalendarDefs>
+					</gnt2:calendarDef>-->
+				</gnt2:GanttChartWithTable>
+				<gnt2:GanttChartWithTable id="ganttView" shapeDragEnd="handleShapeDragEnd" heigth="100%" >
+					<gnt2:table>
+						<Table selectionMode="MultiToggle" id="ganntTable" selectionBehavior="RowOnly" rowSelectionChange="onRowSelection" enableColumnReordering="true" fixedColumnCount="1"
+							rows="{ path: 'RequerimentsModel>/data' }">
+							<extension/>
+							<rowSettingsTemplate>
+								<gnt2:GanttRowSettings>
+									<gnt2:shapes1 width="40%">
+										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>LunesI}"
+											endTime="{RequerimentsModel>LunesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
+											strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}"
+											visible="{ parts: [{path: 'RequerimentsModel>LunesI'}, {path: 'RequerimentsModel>LunesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>MartesI}"
+											endTime="{RequerimentsModel>MartesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
+											strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}"
+											visible="{ parts: [{path: 'RequerimentsModel>MartesI'}, {path: 'RequerimentsModel>MartesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>MiercolesI}" 
+											endTime="{RequerimentsModel>MiercolesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
+											strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}"
+											visible="{ parts: [{path: 'RequerimentsModel>MiercolesI'}, {path: 'RequerimentsModel>MiercolesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>JuevesI}"
+											endTime="{RequerimentsModel>JuevesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
+											strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}"
+											visible="{ parts: [{path: 'RequerimentsModel>JuevesI'}, {path: 'RequerimentsModel>JuevesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>ViernesI}"
+											endTime="{RequerimentsModel>ViernesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
+											strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}"
+											visible="{ parts: [{path: 'RequerimentsModel>ViernesI'}, {path: 'RequerimentsModel>ViernesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>SabadoI}"
+											endTime="{RequerimentsModel>SabadoF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
+											strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}"
+											visible="{ parts: [{path: 'RequerimentsModel>SabadoI'}, {path: 'RequerimentsModel>SabadoF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>DomingoI}"
+											endTime="{RequerimentsModel>DomingoF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
+											strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}"
+											visible="{ parts: [{path: 'RequerimentsModel>DomingoI'}, {path: 'RequerimentsModel>DomingoF'}], formatter: '.onFormatRectangle'}"/>
+									</gnt2:shapes1>
+								</gnt2:GanttRowSettings>
+							</rowSettingsTemplate>
+							<Column sortProperty="EquipoSoli" filterProperty="EquipoSoli" width="120px">
+								<m:Text text="Codigo" wrapping="true"/>
+								<template>
+									<m:HBox>
+										<m:items>
+											<!--<core:Icon class="sapUiSmallMarginEnd" src="sap-icon://timesheet" size="1.25rem"/>-->
+											<m:Label text="{RequerimentsModel>EquipoSoli}"/>
+										</m:items>
+									</m:HBox>
+								</template>
+							</Column>
+							<!--<Column sortProperty="Type" filterProperty="Type">-->
+							<!--	<m:Text text="Nro. Tarea " wrapping="false"/>-->
+							<!--	<template>-->
+							<!--		<m:Label text="{= ${RequerimentsModel>Type} === 'FO' ? 'Freight Order' : 'Freight Unit'}"/>-->
+							<!--	</template>-->
+							<!--</Column>-->
+							<Column sortProperty="DescEquipo" filterProperty="DescEquipo" width="400px">
+								<m:Text text="Descripcion" wrapping="false"/>
+								<template>
+									<m:Label text="{RequerimentsModel>DescEquipo}"/>
+								</template>
+							</Column>
+							<Column sortProperty="IdLicencia" filterProperty="IdLicencia" width="120px">
+								<m:Text text="Nro. Licencia" wrapping="false"/>
+								<template>
+									<m:Label text="{RequerimentsModel>IdLicencia}"/>
+								</template>
+							</Column>
+							<Column sortProperty="Tiemporep" filterProperty="TiemporepText" width="140px">
+								<m:Text text="Tiempo Reposición" wrapping="false"/>
+								<template>
+									<m:Label text="{parts: ['repositionTimesModel>/', 'RequerimentsModel&gt;Tiemporep'], formatter: '.fixedValuesListFormatter'}"/>
+								</template>
+							</Column>
+							<Column sortProperty="Tipointerv" filterProperty="Tipointerv" width="140px">
+								<m:Text text="Tipo Intervención" wrapping="false"/>
+								<template>
+									<m:Label text="{RequerimentsModel>Tipointerv}"/>
+								</template>
+							</Column>
+							<Column sortProperty="Condtrabajo" filterProperty="CondtrabajoText" width="200px">
+								<m:Text text="Cond. trabajo" wrapping="false"/>
+								<template>
+									<m:Label text="{parts: ['workConditionsModel>/', 'RequerimentsModel&gt;Condtrabajo'], formatter: '.fixedValuesListFormatter'}"/>
+								</template>
+							</Column>
+							<Column sortProperty="Comentarios" filterProperty="Comentarios" width="600px">
+								<m:Text text="Comentarios" wrapping="false"/>
+								<template>
+									<m:Label text="{RequerimentsModel>Comentarios}"/>
+								</template>
+							</Column>
+							<Column sortProperty="Solicitante" filterProperty="Solicitante" width="140px">
+								<m:Text text="Solicitante" wrapping="false"/>
+								<template>
+									<m:Label text="{RequerimentsModel>Solicitante}"/>
+								</template>
+							</Column>
+							<Column sortProperty="StatLicencia" filterProperty="StatLicenciaText" width="120px">
+								<m:Text text="Est. Licen." wrapping="false"/>
+								<template>
+									<m:Label text="{path: 'RequerimentsModel>StatLicencia', formatter: '.licenseStatusFormatter'}"/>
+								</template>
+							</Column>
+							<Column sortProperty="JefeTrabajo" filterProperty="JefeTrabajo" width="140px">
+								<m:Text text="Jefe de Trabajo" wrapping="false"/>
+								<template>
+									<m:Label text="{RequerimentsModel>JefeTrabajo}"/>
+								</template>
+							</Column>
+						</Table>
+					</gnt2:table>
+					<gnt2:axisTimeStrategy zoomLevel="3">
+						<axistime:ProportionZoomStrategy>
+							<axistime:totalHorizon>
+								<config:TimeHorizon startTime="20251229000000" endTime="20260106000000"/>
+							</axistime:totalHorizon>
+							<axistime:visibleHorizon>
+								<config:TimeHorizon startTime="20251229000000" endTime="20260106000000"/>
+							</axistime:visibleHorizon>
+						</axistime:ProportionZoomStrategy>
+					</gnt2:axisTimeStrategy>
+					<!--<gnt2:calendarDef>
+						<gnt-cal:CalendarDefs defs="{ path:'calc>/'}">
+							<gnt-cal:Calendar key="{calc>CalendarId}" timeIntervals="{path:'calc>Intervals', templateShareable: 'true'}"
+								backgroundColor="{= ${calc>CalendarId} === 'nwt' ? '#666' : '#ccc' }">
+								<gnt-cal:TimeInterval startTime="{calc>StartDateTime}" endTime="{calc>EndDateTime}"/>
+							</gnt-cal:Calendar>
+						</gnt-cal:CalendarDefs>
+					</gnt2:calendarDef>-->
+				</gnt2:GanttChartWithTable>
+			</gnt2:ganttCharts>
+		</gnt2:GanttChartContainer>
+		<m:subHeader>
+			<m:Toolbar width="100%" id="toolbar2">
+				<m:content>
+						<m:Button icon="sap-icon://nav-back" press="goToHome"/>
+					<m:SearchField width="50%" placeholder="Busqueda rapida" id="fastSearch" liveChange="onFastSearch"/>
+					<m:ToolbarSpacer id="spacer0"/>
+					<Button xmlns="sap.m" text="Exportar Licencias" id="button2" icon="sap-icon://action" press="onExport"/>
+				</m:content>
+			</m:Toolbar>
+		</m:subHeader>
+		<m:footer></m:footer>
+	</m:Page>
+</mvc:View>
