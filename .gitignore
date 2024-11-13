@@ -1,6 +1,6 @@
 
 UIAdaptation_index.html
-changes_preview.js
+
 sap-ui-cachebuster-info.json
 extended_runnable_file.html
 .*/extended_runnable_file.html
@@ -16,3 +16,13 @@ AppVariantPreviewPayload.zip
 mergedManifestDescriptor.json
 APIExternalProducer.js
 .*/APIExternalProducer.js
+node_modules/
+dist/
+.scp/
+.env
+Makefile*.mta
+mta_archives
+mta-*
+resources
+archive.zip
+.*_mta_build_tmp

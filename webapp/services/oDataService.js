@@ -36,7 +36,9 @@ sap.ui.define([
 		getModel: function (name) {
 			if (!this._models[name]) {
 				var sessionLanguage = this._getSessionLanguage();
-				var url = this._services[name];
+				var baseurl = sap.ui.getCore().getModel("appCurrentInfo")
+			
+				var url = baseurl.appUrl + this._services[name];
 				this._models[name] = new sap.ui.model.odata.v2.ODataModel(url, {
 					json: true,
 					useBatch: false,
@@ -55,7 +57,7 @@ sap.ui.define([
 				});
 			}
 			this._models[name].setSizeLimit(99999);
-			AppManagementHelper.getApp().setModel(this._models[name], name);
+			//AppManagementHelper.getApp().setModel(this._models[name], name);
 			return this._models[name];
 		}
 	};

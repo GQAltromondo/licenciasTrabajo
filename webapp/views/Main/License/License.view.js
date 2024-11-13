@@ -577,31 +577,31 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 				template: new sap.m.ColumnListItem({
 					visible: "{ColocacionTableJsonModel>enabled}",
 					cells: [
-						new sap.m.DatePicker({
-							specialDates: {
-								templateShareable: false,
-								path: "EspecialDatesTramitacion>/Fechas",
-								template: new sap.ui.unified.DateTypeRange({
-									startDate: "{EspecialDatesTramitacion>Fecha}",
-									type: {
-										path: "EspecialDatesTramitacion>Estado",
-										formatter: oController.tipoSegunEstado
-									}
-								})
-							},
-							change: $.proxy(oController.handleDateChange, oController, "ColocacionTableJsonModel"),
-							// enabled: {
-							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"ColocacionTableJsonModel>enabled",
-							// 		"ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("colocaciones/")
-							// },
-							dateValue: "{ColocacionTableJsonModel>Datehab}",
-							minDate: "{LicenseJsonModel>/Solbeg}",
-							maxDate: "{LicenseJsonModel>/Solend}",
-							displayFormat: "dd-MM-yyyy"
-						}),
+						// new sap.m.DatePicker({
+						// 	specialDates: {
+						// 		templateShareable: false,
+						// 		path: "EspecialDatesTramitacion>/Fechas",
+						// 		template: new sap.ui.unified.DateTypeRange({
+						// 			startDate: "{EspecialDatesTramitacion>Fecha}",
+						// 			type: {
+						// 				path: "EspecialDatesTramitacion>Estado",
+						// 				formatter: oController.tipoSegunEstado
+						// 			}
+						// 		})
+						// 	},
+						// 	change: $.proxy(oController.handleDateChange, oController, "ColocacionTableJsonModel"),
+						// 	// enabled: {
+						// 	// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+						// 	// 		"ColocacionTableJsonModel>enabled",
+						// 	// 		"ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+						// 	// 	],
+						// 	// 	formatter: oController.rolStatusEdition("colocaciones/")
+						// 	// },
+						// 	dateValue: "{ColocacionTableJsonModel>Datehab}",
+						// 	minDate: "{LicenseJsonModel>/Solbeg}",
+						// 	maxDate: "{LicenseJsonModel>/Solend}",
+						// 	displayFormat: "dd-MM-yyyy"
+						// }),
 						new sap.m.TimePicker({
 							change: [oController.handleDateChange, oController],
 							// enabled: {
@@ -710,31 +710,31 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 				template: new sap.m.ColumnListItem({
 					// visible: "{RetiroTableJsonModel>enabled}",
 					cells: [
-						new sap.m.DatePicker({
-							specialDates: {
-								templateShareable: false,
-								path: "EspecialDatesTramitacion>/Fechas",
-								template: new sap.ui.unified.DateTypeRange({
-									startDate: "{EspecialDatesTramitacion>Fecha}",
-									type: {
-										path: "EspecialDatesTramitacion>Estado",
-										formatter: oController.tipoSegunEstado
-									}
-								})
-							},
-							change: $.proxy(oController.handleDateChange, oController, "RetiroTableJsonModel"),
-							// enabled: {
-							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"RetiroTableJsonModel>enabled",
-							// 		"RetiroTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("retiro/")
-							// },
-							dateValue: "{RetiroTableJsonModel>Datehab}",
-							minDate: "{LicenseJsonModel>/Solbeg}",
-							maxDate: "{LicenseJsonModel>/Solend}",
-							displayFormat: "dd-MM-yyyy"
-						}),
+						// new sap.m.DatePicker({
+						// 	specialDates: {
+						// 		templateShareable: false,
+						// 		path: "EspecialDatesTramitacion>/Fechas",
+						// 		template: new sap.ui.unified.DateTypeRange({
+						// 			startDate: "{EspecialDatesTramitacion>Fecha}",
+						// 			type: {
+						// 				path: "EspecialDatesTramitacion>Estado",
+						// 				formatter: oController.tipoSegunEstado
+						// 			}
+						// 		})
+						// 	},
+						// 	change: $.proxy(oController.handleDateChange, oController, "RetiroTableJsonModel"),
+						// 	// enabled: {
+						// 	// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+						// 	// 		"RetiroTableJsonModel>enabled",
+						// 	// 		"RetiroTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+						// 	// 	],
+						// 	// 	formatter: oController.rolStatusEdition("retiro/")
+						// 	// },
+						// 	dateValue: "{RetiroTableJsonModel>Datehab}",
+						// 	minDate: "{LicenseJsonModel>/Solbeg}",
+						// 	maxDate: "{LicenseJsonModel>/Solend}",
+						// 	displayFormat: "dd-MM-yyyy"
+						// }),
 						new sap.m.TimePicker({
 							change: [oController.handleDateChange, oController],
 							// enabled: {
@@ -844,31 +844,31 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 				template: new sap.m.ColumnListItem({
 					visible: "{InhibicionTableJsonModel>enabled}",
 					cells: [
-						new sap.m.DatePicker({
-							specialDates: {
-								templateShareable: false,
-								path: "EspecialDatesTramitacion>/Fechas",
-								template: new sap.ui.unified.DateTypeRange({
-									startDate: "{EspecialDatesTramitacion>Fecha}",
-									type: {
-										path: "EspecialDatesTramitacion>Estado",
-										formatter: oController.tipoSegunEstado
-									}
-								})
-							},
-							change: $.proxy(oController.handleDateChange, oController, "InhibicionTableJsonModel"),
-							// enabled: {
-							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"InhibicionTableJsonModel>enabled",
-							// 		"InhibicionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("inhibicion/")
-							// },
-							dateValue: "{InhibicionTableJsonModel>Datehab}",
-							minDate: "{LicenseJsonModel>/Solbeg}",
-							maxDate: "{LicenseJsonModel>/Solend}",
-							displayFormat: "dd-MM-yyyy"
-						}),
+						// new sap.m.DatePicker({
+						// 	specialDates: {
+						// 		templateShareable: false,
+						// 		path: "EspecialDatesTramitacion>/Fechas",
+						// 		template: new sap.ui.unified.DateTypeRange({
+						// 			startDate: "{EspecialDatesTramitacion>Fecha}",
+						// 			type: {
+						// 				path: "EspecialDatesTramitacion>Estado",
+						// 				formatter: oController.tipoSegunEstado
+						// 			}
+						// 		})
+						// 	},
+						// 	change: $.proxy(oController.handleDateChange, oController, "InhibicionTableJsonModel"),
+						// 	// enabled: {
+						// 	// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+						// 	// 		"InhibicionTableJsonModel>enabled",
+						// 	// 		"InhibicionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+						// 	// 	],
+						// 	// 	formatter: oController.rolStatusEdition("inhibicion/")
+						// 	// },
+						// 	dateValue: "{InhibicionTableJsonModel>Datehab}",
+						// 	minDate: "{LicenseJsonModel>/Solbeg}",
+						// 	maxDate: "{LicenseJsonModel>/Solend}",
+						// 	displayFormat: "dd-MM-yyyy"
+						// }),
 						new sap.m.TimePicker({
 							change: [oController.handleDateChange, oController],
 							// enabled: {
@@ -979,32 +979,32 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 					visible: "{HabilitacionTableJsonModel>enabled}",
 					cells: [
 
-						new sap.m.DatePicker({
-							specialDates: {
-								templateShareable: false,
-								path: "EspecialDatesTramitacion>/Fechas",
-								template: new sap.ui.unified.DateTypeRange({
-									startDate: "{EspecialDatesTramitacion>Fecha}",
-									type: {
-										path: "EspecialDatesTramitacion>Estado",
-										formatter: oController.tipoSegunEstado
-									}
-								})
-							},
-							change: $.proxy(oController.handleDateChange, oController, "HabilitacionTableJsonModel"),
-							// enabled: {
-							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"HabilitacionTableJsonModel>enabled",
-							// 		"HabilitacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("colocaciones/")
-							// },
-							dateValue: "{HabilitacionTableJsonModel>Datehab}",
-							minDate: "{LicenseJsonModel>/Solbeg}",
-							maxDate: "{LicenseJsonModel>/Solend}",
-							displayFormat: "dd-MM-yyyy",
-							valueFormat: "dd-MM-yyyy"
-						}),
+						// new sap.m.DatePicker({
+						// 	specialDates: {
+						// 		templateShareable: false,
+						// 		path: "EspecialDatesTramitacion>/Fechas",
+						// 		template: new sap.ui.unified.DateTypeRange({
+						// 			startDate: "{EspecialDatesTramitacion>Fecha}",
+						// 			type: {
+						// 				path: "EspecialDatesTramitacion>Estado",
+						// 				formatter: oController.tipoSegunEstado
+						// 			}
+						// 		})
+						// 	},
+						// 	change: $.proxy(oController.handleDateChange, oController, "HabilitacionTableJsonModel"),
+						// 	// enabled: {
+						// 	// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+						// 	// 		"HabilitacionTableJsonModel>enabled",
+						// 	// 		"HabilitacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+						// 	// 	],
+						// 	// 	formatter: oController.rolStatusEdition("colocaciones/")
+						// 	// },
+						// 	dateValue: "{HabilitacionTableJsonModel>Datehab}",
+						// 	minDate: "{LicenseJsonModel>/Solbeg}",
+						// 	maxDate: "{LicenseJsonModel>/Solend}",
+						// 	displayFormat: "dd-MM-yyyy",
+						// 	valueFormat: "dd-MM-yyyy"
+						// }),
 						new sap.m.TimePicker({
 							change: [oController.handleDateChange, oController],
 							// enabled: {
@@ -1123,30 +1123,30 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 				template: new sap.m.ColumnListItem({
 					visible: "{DevolutionTableJsonModel>enabled}",
 					cells: [
-						new sap.m.DatePicker({
-							specialDates: {
-								templateShareable: false,
-								path: "EspecialDatesTramitacion>/Fechas",
-								template: new sap.ui.unified.DateTypeRange({
-									startDate: "{EspecialDatesTramitacion>Fecha}",
-									type: {
-										path: "EspecialDatesTramitacion>Estado",
-										formatter: oController.tipoSegunEstado
-									}
-								})
-							},
-							change: $.proxy(oController.handleDateChange, oController, "DevolutionTableJsonModel"),
-							enabled: {
-								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-									"DevolutionTableJsonModel>enabled",
-									"DevolutionTableJsonModel>enabledContinua", "DevolutionTableJsonModel>sameDayValidation"
-								],
-								formatter: oController.rolStatusEdition("entregas/")
-							},
-							dateValue: "{DevolutionTableJsonModel>Datelicencia}",
-							minDate: "{LicenseJsonModel>/Solbeg}",
-							displayFormat: "dd-MM-yyyy"
-						}),
+						// new sap.m.DatePicker({
+						// 	specialDates: {
+						// 		templateShareable: false,
+						// 		path: "EspecialDatesTramitacion>/Fechas",
+						// 		template: new sap.ui.unified.DateTypeRange({
+						// 			startDate: "{EspecialDatesTramitacion>Fecha}",
+						// 			type: {
+						// 				path: "EspecialDatesTramitacion>Estado",
+						// 				formatter: oController.tipoSegunEstado
+						// 			}
+						// 		})
+						// 	},
+						// 	change: $.proxy(oController.handleDateChange, oController, "DevolutionTableJsonModel"),
+						// 	enabled: {
+						// 		parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+						// 			"DevolutionTableJsonModel>enabled",
+						// 			"DevolutionTableJsonModel>enabledContinua", "DevolutionTableJsonModel>sameDayValidation"
+						// 		],
+						// 		formatter: oController.rolStatusEdition("entregas/")
+						// 	},
+						// 	dateValue: "{DevolutionTableJsonModel>Datelicencia}",
+						// 	minDate: "{LicenseJsonModel>/Solbeg}",
+						// 	displayFormat: "dd-MM-yyyy"
+						// }),
 						new sap.m.TimePicker({
 							enabled: {
 								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
@@ -1339,31 +1339,31 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								formatter: oController.estadoEntregaDia
 							}
 						}).attachBrowserEvent("click", oController.handleDialogStatus),
-						new sap.m.DatePicker({
-							specialDates: {
-								templateShareable: false,
-								path: "EspecialDatesTramitacion>/Fechas",
-								template: new sap.ui.unified.DateTypeRange({
-									startDate: "{EspecialDatesTramitacion>Fecha}",
-									type: {
-										path: "EspecialDatesTramitacion>Estado",
-										formatter: oController.tipoSegunEstado
-									}
-								})
-							},
-							change: $.proxy(oController.handleDateChange, oController, "DeliveryTableJsonModel"),
-							enabled: {
-								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-									"DeliveryTableJsonModel>enabled",
-									"DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-								],
-								formatter: oController.rolStatusEdition("entregas/")
-							},
-							dateValue: "{DeliveryTableJsonModel>Datelicencia}",
-							minDate: "{LicenseJsonModel>/Solbeg}",
-							maxDate: "{LicenseJsonModel>/Solend}",
-							displayFormat: "dd-MM-yyyy"
-						}),
+						// new sap.m.DatePicker({
+						// 	specialDates: {
+						// 		templateShareable: false,
+						// 		path: "EspecialDatesTramitacion>/Fechas",
+						// 		template: new sap.ui.unified.DateTypeRange({
+						// 			startDate: "{EspecialDatesTramitacion>Fecha}",
+						// 			type: {
+						// 				path: "EspecialDatesTramitacion>Estado",
+						// 				formatter: oController.tipoSegunEstado
+						// 			}
+						// 		})
+						// 	},
+						// 	change: $.proxy(oController.handleDateChange, oController, "DeliveryTableJsonModel"),
+						// 	enabled: {
+						// 		parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+						// 			"DeliveryTableJsonModel>enabled",
+						// 			"DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+						// 		],
+						// 		formatter: oController.rolStatusEdition("entregas/")
+						// 	},
+						// 	dateValue: "{DeliveryTableJsonModel>Datelicencia}",
+						// 	minDate: "{LicenseJsonModel>/Solbeg}",
+						// 	maxDate: "{LicenseJsonModel>/Solend}",
+						// 	displayFormat: "dd-MM-yyyy"
+						// }),
 						new sap.m.TimePicker({
 							change: [oController.handleDateChange, oController],
 							enabled: {
@@ -2763,15 +2763,22 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							valueStateText: "{LicenseJsonModel>/JobcondStateMessage}",
 							selectionChange: $.proxy(oController.onSelectionChangeCond, oController),
 							items: {
-								path: "SelectModel>/FixedValuesSet",
-								filters: [new sap.ui.model.Filter("Tabname", sap.ui.model.FilterOperator.EQ, "ZTAB_LICENCIAS"),
-									new sap.ui.model.Filter("Fieldname", sap.ui.model.FilterOperator.EQ, "JOBCOND")
-								],
+								path: "JobConditions>/JobConditions",
 								template: new sap.ui.core.Item({
-									key: "{SelectModel>Valkey}",
-									text: "{SelectModel>Valtext}"
+									key: "{JobConditions>Valkey}",
+									text: "{JobConditions>Valtext}"
 								})
 							},
+							// items: {
+							// 	path: "SelectModel>/FixedValuesSet",
+							// 	filters: [new sap.ui.model.Filter("Tabname", sap.ui.model.FilterOperator.EQ, "ZTAB_LICENCIAS"),
+							// 		new sap.ui.model.Filter("Fieldname", sap.ui.model.FilterOperator.EQ, "JOBCOND")
+							// 	],
+							// 	template: new sap.ui.core.Item({
+							// 		key: "{SelectModel>Valkey}",
+							// 		text: "{SelectModel>Valtext}"
+							// 	})
+							// },
 							/*
 							items: [
 								new sap.ui.core.Item({

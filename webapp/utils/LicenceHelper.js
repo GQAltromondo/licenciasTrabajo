@@ -27,7 +27,8 @@ sap.ui.define([
 			}
 			var obj = items[0].getBindingContext("EstacionesJsonModel").getObject();
 			var sKey = obj.Estacion;
-			EquiposService.loadEquipos(sKey);
+			var sEmpresa = "100";
+			EquiposService.loadEquipos(sKey,sEmpresa);
 			AppManagementHelper.getModel("FilterSelectionJsonModel").setProperty("/enabledComboEQUIPO", true);
 			//TODO uncomment if decide to select region based on ET
 
@@ -737,8 +738,8 @@ sap.ui.define([
 				Tplnr: "",
 			};
 
-			if (oLicense.ColocacionPat_nav.length > 0) {
-				let aCloneColocaciones = jQuery.extend(true, [], oLicense.ColocacionPat_nav);
+			if (oLicense.ColocacionPAT_nav.length > 0) {
+				let aCloneColocaciones = jQuery.extend(true, [], oLicense.ColocacionPAT_nav);
 				aColocaciones = aColocaciones.concat(aCloneColocaciones);
 				aColocaciones.push(oColocacion)
 

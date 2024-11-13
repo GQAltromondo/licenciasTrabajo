@@ -12,7 +12,6 @@ sap.ui.define([
 		},
 
 		getModel: function (sModelName) {
-
 			var jsonModel = this.getApp().getModel(sModelName);
 			if (!jsonModel) {
 				jsonModel = new sap.ui.model.json.JSONModel();

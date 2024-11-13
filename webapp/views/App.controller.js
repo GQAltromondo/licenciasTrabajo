@@ -15,6 +15,33 @@ sap.ui.define([
 			this.setApplicationModels();
 		}, //
 		///
+		onInit: function (){
+			// var cUrl = this.getBaseURL(); 
+		},
+		// getBaseURL: function () {
+
+        //     debugger; 
+             
+        //     var appId  = this.getOwnerComponent().getManifestEntry("/sap.app/id");
+
+        //     //var appId = this.getManifestEntry("/sap.app/id");
+        //     var appPath = appId.replaceAll(".", "/");
+        //     var appModulePath = jQuery.sap.getModulePath(appPath);
+            
+        //     var jsonModel = sap.ui.getCore().getModel("appCurrentInfo");
+        //     //checks if the model exists
+        //     if (!jsonModel) {
+        //         jsonModel = new sap.ui.model.json.JSONModel();
+        //         jsonModel.setSizeLimit(9999);
+        //         jsonModel.appUrl = appModulePath;
+        //         sap.ui.getCore().setModel(jsonModel, "appCurrentInfo");
+        //         //initilializing = appModulePath; 
+        //         jsonModel.setData({});
+        //     }
+        //     return appModulePath;
+             
+        // },
+
 		setApplicationModels: function () {
 
 			var sPath = FioriHelper.getAppPath();
@@ -24,9 +51,7 @@ sap.ui.define([
 			var statusPermisosModel = AppManagementHelper.getModel("statusModel");
 			statusPermisosModel.loadData(sPath + "conf/permisosPorEstado.json", "", false);
 
-			UserService.getUser();
-
-			oDataService.getModel("SelectModel");
+			
 
 			AppManagementHelper.getModel("RapidSearchJsonModel").setData({
 				searchCriteria: ""

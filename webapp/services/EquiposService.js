@@ -42,7 +42,7 @@ sap.ui.define([
 
 		loadEquipos: function (sKey, Equnr) {
 			var aFilter = [
-				new sap.ui.model.Filter("Estacion", sap.ui.model.FilterOperator.EQ, sKey)
+				new sap.ui.model.Filter("Estacion", sap.ui.model.FilterOperator.EQ, sKey),
 			];
 			let roles = AppManagementHelper.getModel("UserJsonModel").getProperty("/roles");
 			aFilter.push(new sap.ui.model.Filter({
@@ -50,6 +50,9 @@ sap.ui.define([
 				operator: sap.ui.model.FilterOperator.EQ,
 				value1: roles.includes("Solicitante_Lic") ? "Solicitante_Lic" : roles[0]
 			}));
+
+
+			aFilter.push(new sap.ui.model.Filter("Empresa", sap.ui.model.FilterOperator.EQ, "100"))
 			this.getEquiposPromise(aFilter).then($.proxy(this.successGetEquipos, this, Equnr)).catch($.proxy(this.errorGetEquipos, this));
 		},
 

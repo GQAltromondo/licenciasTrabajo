@@ -28,6 +28,7 @@ sap.ui.define([
 	"Transener/Operaciones/LicenciasTrabajo/services/EquiposService",
 	"Transener/Operaciones/LicenciasTrabajo/services/OrdenesService",
 	"Transener/Operaciones/LicenciasTrabajo/services/EstacionesService",
+	"Transener/Operaciones/LicenciasTrabajo/services/JobCondService",
 	"Transener/Operaciones/LicenciasTrabajo/services/RepositionTimeService",
 	"Transener/Operaciones/LicenciasTrabajo/services/InterventionTypesService",
 	"Transener/Operaciones/LicenciasTrabajo/services/TipoOfEstacionalListService",
@@ -46,16 +47,17 @@ sap.ui.define([
 	"Transener/Operaciones/LicenciasTrabajo/utils/LegacyValidationHelper",
 	"Transener/Operaciones/LicenciasTrabajo/utils/UnifilarHelper",
 	"Transener/Operaciones/LicenciasTrabajo/services/checkAlternativeLabelService",
+	"Transener/Operaciones/LicenciasTrabajo/services/UserService"
 
 ], function (Controller, NavigationHelper, FormatHelper, FioriComponentHelper, MailHelper, ValidateHelper,
 	MessageBoxHelper, i18nTranslationHelper, AppManagementHelper, DateHelper, ExportLicenseHelper, HardCodeModel, models, LicenseService,
 	RegionesService,
 	PersonalHabilitadoService, WorkPlaceService,
-	oDataService, EmpresaTramitacionService, TipoEquipoService, EquiposService, OrdenesService, EstacionesService,
+	oDataService, EmpresaTramitacionService, TipoEquipoService, EquiposService, OrdenesService, EstacionesService,JobCondService,
 	RepositionTimeService, InterventionTypesService, TipoOfEstacionalListService, StatusService, GrupoPlanificadorService, ReportesService,
 	ReportesHelper, LimitacionesTecnicas,
 	ExcelDownloadHelper, BusyDialogHelper, FioriHelper, LicenceHelper, RolAuthorizationHelper, FormatterHelper, LegacyValidationHelper,
-	UnifilarHelper, checkAlternativeLabelService) {
+	UnifilarHelper, checkAlternativeLabelService,UserService) {
 	"use strict";
 
 	return Controller.extend("Transener.Operaciones.LicenciasTrabajo.views.Main.Main", {
@@ -71,6 +73,7 @@ sap.ui.define([
 		},
 		//mergea esto develop
 		onInit: function () {
+			var cUrl = this.getBaseURL()
 			var oRouter = AppManagementHelper.getAppRouter();
 			AppManagementHelper.getModel("OrderNumberJsonModel").setData({
 				Odering: "down"
@@ -92,10 +95,38 @@ sap.ui.define([
 				Aro: false,
 				Bloqueo: false,
 				Rdisparo: false,
+
+				
 			});
+			UserService.loadModel()
+			oDataService.getModel("SelectModel")
 	//		oRouter.attachRoutePatternMatched(this._onHomeRouteMatched, this);
 
 		},
+		getBaseURL: function () {
+
+            debugger; 
+             
+            var appId  = this.getOwnerComponent().getManifestEntry("/sap.app/id");
+
+            //var appId = this.getManifestEntry("/sap.app/id");
+            var appPath = appId.replaceAll(".", "/");
+            var appModulePath = jQuery.sap.getModulePath(appPath);
+            
+            var jsonModel = sap.ui.getCore().getModel("appCurrentInfo");
+            //checks if the model exists
+            if (!jsonModel) {
+                jsonModel = new sap.ui.model.json.JSONModel();
+                jsonModel.setSizeLimit(9999);
+                jsonModel.appUrl = appModulePath;
+                sap.ui.getCore().setModel(jsonModel, "appCurrentInfo");
+                //initilializing = appModulePath; 
+                jsonModel.setData({});
+            }
+            return appModulePath;
+             
+        },
+		
 		_onHomeRouteMatched: function () {
 			var oRouter = AppManagementHelper.getAppRouter();
 
@@ -173,6 +204,7 @@ sap.ui.define([
 			var sKey = oEvent.getParameter("arguments").url;
 			// Issue 523 - Se debe verificar el indicador de alternative label cuando inicia la app , en el caso que no se cumplan las condiciones
 			// se debe mostrar un error al usuario y salir de la app
+			console.log("ACA",AppManagementHelper.getModel("UserJsonModel").getData())
 			var aRoles = AppManagementHelper.getModel("UserJsonModel").getData().roles;
 			//No se debe validar Visualizadores
 			if (aRoles.indexOf("Visualizador") == -1) {
@@ -432,6 +464,7 @@ sap.ui.define([
 			LicenceHelper.generatePlacementRemoval(oLicense);
 			LicenceHelper.generateTurno(oLicense);
 			LicenceHelper.generateInhibicionHabilitacion(oLicense);
+			
 			this.findEstacionCode(oLicense.Tplnr);
 			this.loadCatalogData(oLicense.Werks).then((oCatalogData) => {
 				AppManagementHelper.getModel("PuestoTrabajoJsonModel");
@@ -474,7 +507,7 @@ sap.ui.define([
 		},
 
 		findEstacionCode: function (Tplnr) {
-			AppManagementHelper.getModel("SelectModel").read("/EstacionesSet", {
+			oDataService.getModel("SelectModel").read("/EstacionesSet", {
 				success: function (data) {
 					var oData = data.results.find(function (e) {
 						return e.Codigo === Tplnr;
@@ -1218,6 +1251,7 @@ sap.ui.define([
 				this.loadStacionalListModel();
 				this.loadStatusModel();
 				this.loadMotivoNoAutorizacionModel();
+				this.loadJobCondModel()
 			}
 
 		},
@@ -3090,6 +3124,13 @@ sap.ui.define([
 					this.onErrorLoad("RepositionTimes").bind(this)
 				);
 		},
+		
+		loadJobCondModel: function () {
+			JobCondService.getPromise()
+				.then(this.onSuccessLoad("JobConditions").bind(this),
+					this.onErrorLoad("JobConditions").bind(this)
+				);
+		},
 
 		loadTipoIntModel: function () {
 			InterventionTypesService.getPromise()
@@ -4198,7 +4239,7 @@ sap.ui.define([
 						};
 						var licencia = lic;
 						var Entregas = lic.EntregasLicencia_nav.results;
-						var Colocacion = lic.ColocacionPat_nav.results;
+						var Colocacion = lic.ColocacionPAT_nav.results;
 						var Retiros = lic.RetirosPAT_nav.results;
 						var Devoluciones = lic.DevolucionLicencia_nav.results;
 						var Suspensiones = lic.SuspensionLicencia_nav.results;

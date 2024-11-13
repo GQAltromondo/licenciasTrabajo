@@ -500,7 +500,8 @@
 				"Tramitador",
 				"Visualizador",
 				"Solicitante_Lic",
-				"Solicitante_Lic_TBA"
+				"Solicitante_Lic_TBA",
+				"Aprobación de Habilitaciones"
 			]
 		},
 		"generalReq": {
@@ -531,7 +532,8 @@
 				"Tramitador",
 				"Visualizador",
 				"Solicitante_Lic",
-				"Solicitante_Lic_TBA"
+				"Solicitante_Lic_TBA",
+				"Aprobación de Habilitaciones"
 			]
 		},
 		"headerReq": {
@@ -542,7 +544,8 @@
 				"Solicitante_Lic_S",
 				"Solicitante_Lic_TBA",
 				"Tramitador",
-				"Coordinador_Mantenimiento"
+				"Coordinador_Mantenimiento",
+				"Aprobación de Habilitaciones"
 			]
 		},
 		"botones": {
@@ -691,7 +694,8 @@
 				"Visualizador",
 				"Solicitante_Lic",
 				"Solicitante_Lic_TBA",
-				"Coordinador_Mantenimiento"
+				"Coordinador_Mantenimiento",
+				"Aprobación de Habilitaciones"
 			]
 		},
 		"botones": {

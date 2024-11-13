@@ -1,0 +1,171 @@
+{
+  "_version": "1.1.0",
+  "sap.app": {
+    "_version": "1.1.0",
+    "id": "Transener.Operaciones.LicenciasTrabajo",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "1.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "sourceTemplate": {
+      "id": "ui5template.basicSAPUI5ApplicationProject",
+      "version": "1.40.12",
+      "toolsId": "3ff90f29-f15d-46e4-a3a9-0b0779af2449"
+    }
+  },
+  "sap.ui": {
+    "_version": "1.1.0",
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    },
+    "supportedThemes": [
+      "sap_hcb",
+      "sap_bluecrystal"
+    ]
+  },
+  "sap.ui5": {
+    "_version": "1.1.0",
+    "dependencies": {
+      "minUI5Version": "1.30.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.comp": {},
+        "sap.ui.core": {},
+        "sap.ui.layout": {},
+        "sap.ushell": {
+          "minVersion": ""
+        },
+        "sap.viz": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "Transener.Operaciones.LicenciasTrabajo.i18n.i18n"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "Transener.Operaciones.LicenciasTrabajo.App",
+      "type": "JS"
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/styles.css"
+        },
+        {
+          "uri": "css/transener.css"
+        },
+        {
+          "uri": "less/all.less"
+        }
+      ],
+      "js": []
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "JS",
+        "viewPath": "Transener.Operaciones.LicenciasTrabajo.views.Main",
+        "controlId": "app",
+        "controlAggregation": "pages",
+        "async": true,
+        "bypassed": {
+          "target": "notFound"
+        }
+      },
+      "routes": [
+        {
+          "name": "Solicitud",
+          "pattern": "solicitud/{id}",
+          "titleTarget": "",
+          "greedy": false,
+          "target": [
+            "solicitud"
+          ]
+        },
+        {
+          "name": "Gantt",
+          "pattern": "gantt",
+          "target": "gantt"
+        },
+        {
+          "name": "Licencias",
+          "pattern": "/:url:",
+          "titleTarget": "",
+          "greedy": false,
+          "target": [
+            "licencias"
+          ]
+        },
+        {
+          "name": "Licencia",
+          "pattern": "licencia/{id}",
+          "titleTarget": "",
+          "greedy": false,
+          "target": [
+            "licencia"
+          ]
+        }
+      ],
+      "targets": {
+        "licencia": {
+          "viewType": "JS",
+          "clearAggregation": true,
+          "transition": "show",
+          "viewName": "License.License"
+        },
+        "gantt": {
+          "viewName": "Gantt.Gantt",
+          "viewLevel": 1,
+          "viewType": "XML",
+          "transition": "show"
+        },
+        "solicitud": {
+          "viewType": "JS",
+          "clearAggregation": true,
+          "transition": "show",
+          "viewName": "Request.Request"
+        },
+        "licencias": {
+          "viewType": "JS",
+          "clearAggregation": true,
+          "transition": "show",
+          "viewName": "Main"
+        },
+        "notFound": {
+          "viewName": "NotFound.NotFound",
+          "transition": "show"
+        }
+      }
+    }
+  },
+  "sap.platform.hcp": {
+    "uri": "",
+    "_version": "1.1.0"
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "TransenerOperacionesLicenciasTrabajo"
+  }
+}

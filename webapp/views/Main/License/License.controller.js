@@ -1003,7 +1003,7 @@ sap.ui.define([
 			//var Reanudaciones = this.getView().getModel("ReanudationTableJsonModel").getData().Reanudations;
 			//var Observaciones = this.getView().getModel("ObservationTableJsonModel").getData().Observations;
 
-			var Colocaciones = licencia.ColocacionPat_nav;
+			var Colocaciones = licencia.ColocacionPAT_nav;
 			var Retiros = licencia.RetiroPAT_nav;
 			var Habilitaciones = licencia.HabilitacionRecierre_nav;
 			var Inhibiciones = licencia.InhibicionRecierre_nav;

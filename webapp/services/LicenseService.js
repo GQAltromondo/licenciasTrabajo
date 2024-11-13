@@ -22,7 +22,7 @@ sap.ui.define([
 		nullLegajo: "00000000",
 
 		_expandProperties: "HorariosPorLicencia_nav,CoordinacionesLicencia_nav,ObservacionesLicencia_nav,TramitacionesLicencia_nav," +
-			"HabilitacionRecierre_nav,InhibicionRecierre_nav,RetiroPAT_nav,ColocacionPat_nav,TurnosLicencias_nav," +
+			"HabilitacionRecierre_nav,InhibicionRecierre_nav,RetiroPAT_nav,ColocacionPAT_nav,TurnosLicencias_nav," +
 			"SuspensionLicencia_nav,ReanudacionLicencia_nav,TransferenciaJefeTrabajo_nav,DevolucionLicencia_nav,EntregasLicencia_nav,AttachmentXLicencia_nav,EsquemaUnifilar_nav",
 
 		PostDaysLicence: function (oLicenseData) {
@@ -54,7 +54,7 @@ sap.ui.define([
 			delete oObject.HabilitacionRecierre_nav;
 			delete oObject.InhibicionRecierre_nav;
 			delete oObject.RetiroPAT_nav;
-			delete oObject.ColocacionPat_nav;
+			delete oObject.ColocacionPAT_nav;
 			delete oObject.TurnosLicencias_nav;
 		},
 
@@ -149,18 +149,18 @@ sap.ui.define([
 			var aData = [];
 
 			var bJefeTurnoCOT = aRoles.find((r) => {
-				return r === "Jefe_Turno_COT" || r === "Jefe_Turno_COTDT"
+				return r === "ope_jefe_cot" || r === "ope_jefe_cotdt"
 			});
 
 			var bProgramacion = aRoles.find((r) => {
-				return r === "Programacion_COT" || r === "Programacion_COTDT"
+				return r === "ope_programacion_cot" || r === "ope_programacion_cotdt"
 			});
 
 			var bOperador = aRoles.find((r) => {
-				return r === "Operador_COT" || r === "Operador_COTDT"
+				return r === "ope_oper-turno_cot" || r === "ope_oper-turno_cotdt"
 			});
 
-			var bSolicitanteLicTBA = aRoles.find(sRol => sRol === "Solicitante_Lic_TBA");
+			var bSolicitanteLicTBA = aRoles.find(sRol => sRol === "ope_solic-lic_transba");
 
 			if (bJefeTurnoCOT) {
 				oModelBlockEnviarCoord.setProperty("/visibleEnviarCoord", false);
@@ -3385,8 +3385,9 @@ sap.ui.define([
 					resolve([])
 				} else {
 					//var role = "Portal_Proveedores_Gestion";
-					var destination = "/destinations/Examinadores_PT15/";
-					$.get(destination + "Users/?filter=groups eq '" + sRole + "'", function (res) {
+					var cUrl = sap.ui.getCore().getModel("appCurrentInfo").appUrl + "/IAS/service/scim/Users/?filter=groups eq '" + sRole + "'"
+					//var destination = "/destinations/Examinadores_PT15/";
+					$.get(cUrl , function (res) {
 						var users = res.Resources;
 						var emails = users.map(function (user) {
 							return user.emails[0].value;

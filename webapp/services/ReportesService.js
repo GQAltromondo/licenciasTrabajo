@@ -10,7 +10,7 @@ sap.ui.define([
 		//made with array to be more easily readable
 		_expandProperties: ["HorariosPorLicencia_nav", "CoordinacionesLicencia_nav", "ObservacionesLicencia_nav", "TramitacionesLicencia_nav",
 			"SuspensionLicencia_nav", "ReanudacionLicencia_nav", "TransferenciaJefeTrabajo_nav", "DevolucionLicencia_nav", "EntregasLicencia_nav",
-			"AttachmentXLicencia_nav", "EsquemaUnifilar_nav", "ColocacionPat_nav", "RetiroPAT_nav", "HabilitacionRecierre_nav",
+			"AttachmentXLicencia_nav", "EsquemaUnifilar_nav", "ColocacionPAT_nav", "RetiroPAT_nav", "HabilitacionRecierre_nav",
 			"InhibicionRecierre_nav",
 		].join(","),
 

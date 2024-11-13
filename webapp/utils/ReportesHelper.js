@@ -1096,7 +1096,7 @@ sap.ui.define([
 					 ["COLOCACIONES"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Comentarios"]
 					);
 					for (var oLicencia of aLicencias) {
-						var aColocaciones = oLicencia.ColocacionPat_nav.results 
+						var aColocaciones = oLicencia.ColocacionPAT_nav.results 
 						if (aColocaciones.length !== 0) {
 							for (var Colocacion of aColocaciones) {
 						

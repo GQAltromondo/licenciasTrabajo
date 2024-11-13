@@ -1,0 +1,1048 @@
+{
+	"28": {
+		"entregas": {
+			"all": [
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			]
+		},
+		"devoluciones": {
+			"all": [
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			]
+		},
+		"transferencia": {
+			"all": [
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			]
+		},
+		"botones": {
+			"ButtonCreateLicenceFromRequest": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			]
+		}
+	},
+	"01": {
+		"entregas": {
+			"all": [
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			]
+		},
+		"comentarios": {
+			"all": [
+				"ope_programacion_cotdt",
+				"ope_programacion_cot"
+			]
+		},
+		"devoluciones": {
+			"all": [
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			]
+		},
+		"transferencia": {
+			"all": [
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			]
+		},
+		"botones": {
+			"botonCancelacionDefinitiva": [
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			],
+			"CancelarTramitacionButon": [
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			],
+			"AnnulateButton": [
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			],
+			"ButtonCreateLicenceFromRequest": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			]
+		},
+		"tramitacion": {
+			"all": [
+				"ope_programacion_cotdt",
+				"ope_oper-turno_cot",
+				"ope_jefe_cot",
+				"ope_programacion_cot",
+				"ope_oper-turno_cotdt",
+				"habilitar",
+				"Tramitador"
+			]
+		},
+		"comentarios2": "Este es una licencia con estado autorizada"
+	},
+	"06": {
+		"tramitacion": {
+			"botonCalendario": [
+				"Asistencia_Mantenimiento",
+				"ope_coord-mant",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"preguntar lucas",
+				"Tramitador",
+				"Visualizador"
+			],
+			"all": [
+				"ope_programacion_cotdt",
+				"ope_oper-turno_cot",
+				"ope_jefe_cot",
+				"ope_programacion_cot",
+				"ope_oper-turno_cotdt",
+				"habilitar",
+				"Tramitador"
+			]
+		},
+
+		"comentarios": {
+			"all": [
+				"ope_programacion_cotdt",
+				"ope_programacion_cot"
+			]
+		},
+		"botones": {
+			"ButtonCreateLicenceFromRequest": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			],
+			"CancelarTramitacionButon": [
+				"Tramitador",
+				"ope_programacion_cotdt",
+				"ope_oper-turno_cot",
+				"ope_jefe_cot",
+				"ope_programacion_cot",
+				"ope_oper-turno_cotdt",
+				"habilitar"
+			]
+		}
+	},
+	"07": {
+		"observacion": {
+			"all": [
+				"Tramitador",
+				"ope_programacion_cotdt",
+				"ope_oper-turno_cot",
+				"ope_jefe_cot",
+				"ope_programacion_cot",
+				"ope_oper-turno_cotdt",
+				"habilitar"
+			]
+		},
+		"tramitacion": {
+			"all": [
+				"Tramitador",
+				"ope_programacion_cotdt",
+				"ope_oper-turno_cot",
+				"ope_jefe_cot",
+				"ope_programacion_cot",
+				"ope_oper-turno_cotdt",
+				"habilitar"
+			]
+		},
+		"comentarios": {
+			"all": [
+				"Tramitador",
+				"ope_programacion_cotdt",
+				"ope_oper-turno_cot",
+				"ope_jefe_cot",
+				"ope_programacion_cot",
+				"ope_oper-turno_cotdt",
+				"habilitar"
+			]
+		},
+		"botones": {
+			"AnnulateButton": [
+				"Tramitador",
+				"ope_programacion_cotdt",
+				"ope_oper-turno_cot",
+				"ope_jefe_cot",
+				"ope_programacion_cot",
+				"ope_oper-turno_cotdt",
+				"habilitar"
+			],
+			"ButtonCreateLicenceFromRequest": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			]
+		}
+	},
+	"03": {
+		"observacion": {
+			"botonVerAnulacion": [
+				"Asistencia_Mantenimiento",
+				"ope_coord-mant",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"preguntar lucas",
+				"Tramitador",
+				"Visualizador"
+			]
+		},
+		"comentario": "en estado 03 no se puede hacer mas nada!!!!",
+		"general": {
+			"!ButtonEditLicense": [
+				"Asistencia_Mantenimiento",
+				"ope_coord-mant",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"preguntar lucas",
+				"Tramitador",
+				"Visualizador"
+			],
+			"!ButtonAddTramitacion": [
+				"Asistencia_Mantenimiento",
+				"ope_coord-mant",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"preguntar lucas",
+				"Tramitador",
+				"Visualizador"
+			]
+		}
+	},
+	"05": {
+		"all": [
+			"ope_jefe_cot",
+			"habilitar",
+			"ope_oper-turno_cot",
+			"ope_oper-turno_cotdt",
+			"ope_programacion_cot",
+			"ope_programacion_cotdt"
+		],
+		"footer": {
+			"botonAutorizacion": [
+				"ope_jefe_cot",
+				"habilitar"
+			]
+		},
+		"botones": {
+			"AnnulateButton": [
+				"Tramitador",
+				"ope_programacion_cotdt",
+				"ope_oper-turno_cot",
+				"ope_jefe_cot",
+				"ope_programacion_cot",
+				"ope_oper-turno_cotdt",
+				"habilitar"
+			],
+			"ButtonCreateLicenceFromRequest": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			]
+		}
+	},
+	"02": {
+		"colocaciones": {
+			"all": [
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			]
+		},
+		"general": {
+			"all": [
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"ope_programacion_cot",
+				"ope_programacion_cotdt",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			],
+			"!Werks": [
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			]
+		},
+		"generalReq": {
+			"all": [
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"Tramitador",
+				"ope_coord-mant"
+			]
+		},
+		"headerReq": {
+			"all": [
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"Tramitador",
+				"ope_coord-mant"
+			]
+		},
+		"header": {
+			"!ET": [
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			],
+			"!Equnr": [
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			],
+			"all": [
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"ope_programacion_cot",
+				"ope_programacion_cotdt",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			]
+		},
+		"botones": {
+			"ButtonCreateLicenceFromRequest": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			],
+			"ButtonEditLicense": [
+				"ope_programacion_cot",
+				"ope_programacion_cotdt",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			],
+			"ButtonEditLicenseSolicitante": [
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			],
+			"ButtonEditLicenseRequest": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"ope_coord-mant"
+			],
+			"ButtonEditSol": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			],
+			"!ButtonEditSol": [
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_programacion_cot",
+				"ope_programacion_cotdt",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			],
+			"AnnulateButton": [
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			]
+		}
+	},
+	"30": {
+		"COMENTARIOANULACION": "SOLO SE PUEDE ANULAR CUANDO LA TENGO EN LA MANO",
+		"comentariodelestado": " licencia o sol con estado pendiente para que sea generada(creada)",
+		"general": {
+			"all": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"preguntar lucas",
+				"Tramitador",
+				"Visualizador",
+				"ope_solic-lic_transener",
+				"ope_solic-lic_transba",
+				"Aprobación de Habilitaciones"
+			]
+		},
+		"generalReq": {
+			"all": [
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"Tramitador",
+				"ope_coord-mant"
+			]
+		},
+		"header": {
+			"all": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"preguntar lucas",
+				"Tramitador",
+				"Visualizador",
+				"ope_solic-lic_transener",
+				"ope_solic-lic_transba",
+				"Aprobación de Habilitaciones"
+			]
+		},
+		"headerReq": {
+			"all": [
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"Tramitador",
+				"ope_coord-mant",
+				"Aprobación de Habilitaciones"
+			]
+		},
+		"botones": {
+			"AnnulateButton": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			],
+			"ButtonEditLicenseSolicitante": [
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			],
+			"ButtonEditLicense": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			],
+			"ButtonEditLicenseRequest": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"ope_coord-mant"
+			],
+			"ButtonEditSol": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"ope_coord-mant"
+			],
+			"ButtonCreateLicenceFromRequest": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			],
+			"ButtonAddReportSemanalCammesa": [
+				"Asistencia_Mantenimiento",
+				"ope_coord-mant"
+			],
+			"!ButtonEditSol": [
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_programacion_cot",
+				"ope_programacion_cotdt",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			],
+			"!ButtonCreateLicenceFromRequest": [
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_programacion_cot",
+				"ope_programacion_cotdt",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			]
+		}
+	},
+	"99": {
+		"OJO": "para prorgramacion?",
+		"COMENTARIOANULACION": "SOLO SE PUEDE ANULAR CUANDO LA TENGO EN LA MANO",
+		"comentariodelestado": " licencia o sol con estado pendiente para que sea generada(creada)",
+		"general": {
+			"all": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"preguntar lucas",
+				"Tramitador",
+				"Visualizador",
+				"ope_solic-lic_transener",
+				"ope_solic-lic_transba",
+				"ope_coord-mant"
+			]
+		},
+		"header": {
+			"all": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"preguntar lucas",
+				"Tramitador",
+				"Visualizador",
+				"ope_solic-lic_transener",
+				"ope_solic-lic_transba",
+				"ope_coord-mant",
+				"Aprobación de Habilitaciones"
+			]
+		},
+		"botones": {
+			"AnnulateButton": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			],
+			"ButtonEditLicense": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			],
+			"ButtonEditLicenseRequest": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"ope_coord-mant"
+			],
+			"ButtonEditSol": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"ope_coord-mant"
+			],
+			"ButtonCreateLicenceFromRequest": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			],
+			"ButtonAddReportSemanalCammesa": [
+				"Asistencia_Mantenimiento",
+				"ope_coord-mant"
+			],
+			"!ButtonEditSol": [
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_programacion_cot",
+				"ope_programacion_cotdt",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			],
+			"!ButtonCreateLicenceFromRequest": [
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_programacion_cot",
+				"ope_programacion_cotdt",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			]
+		}
+	},
+	"29": {
+		"all": [
+			"Asistencia_Mantenimiento",
+			"ope_jefe_cotdt",
+			"ope_jefe_cot",
+			"Jefe_Trabajo",
+			"Jefe_Trabajo_Suplente",
+			"ope_jefe_cot",
+			"habilitar",
+			"ope_oper-turno_cotdt",
+			"ope_oper-turno_cot",
+			"ope_programacion_cotdt",
+			"ope_programacion_cot",
+			"preguntar lucas",
+			"Tramitador",
+			"Visualizador",
+			"ope_solic-lic_transener",
+			"ope_solic-lic_transba"
+		],
+		"comentario": "Solicitud que todavia no es licencia",
+		"botones": {
+			"ButtonCreateLicenceFromRequest": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			],
+			"ButtonEditLicense": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			],
+			"!ButtonEditSol": [
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_programacion_cot",
+				"ope_programacion_cotdt",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot"
+			]
+		}
+	},
+	"23": {
+		"botones": {
+			"ButtonCreateLicenceFromRequest": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			],
+			"CancelarTramitacionButon": [
+				"Tramitador",
+				"ope_programacion_cotdt",
+				"ope_oper-turno_cot",
+				"ope_jefe_cot",
+				"ope_programacion_cot",
+				"ope_oper-turno_cotdt",
+				"habilitar"
+			]
+		},
+		"comentarios": {
+			"all": [
+				"ope_programacion_cotdt",
+				"ope_programacion_cot"
+			]
+		},
+		"tramitacion": {
+			"botonCalendario": [
+				"Asistencia_Mantenimiento",
+				"ope_coord-mant",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"preguntar lucas",
+				"Tramitador",
+				"Visualizador"
+			],
+			"all": [
+				"ope_programacion_cotdt",
+				"ope_oper-turno_cot",
+				"ope_jefe_cot",
+				"ope_programacion_cot",
+				"ope_oper-turno_cotdt",
+				"habilitar",
+				"Tramitador"
+			]
+		}
+	},
+	"09": {
+		"coordinacion": {
+			"all": [
+				"ope_coord-mant"
+			],
+			"!ButtonAddCoordination": [
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			]
+		},
+		"observacion": {
+			"all": [
+				"ope_coord-mant"
+			],
+			"!ButtonAddObservation": [
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			]
+		},
+		"botones": {
+			"AnnulateButton": [
+				"ope_coord-mant"
+			],
+			"ButtonCreateLicenceFromRequest": [
+				"Asistencia_Mantenimiento",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"Tramitador",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba"
+			]
+		}
+	},
+	"11": {
+		"observacion": {
+			"botonVerCancelacion": [
+				"Asistencia_Mantenimiento",
+				"ope_coord-mant",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"preguntar lucas",
+				"Tramitador",
+				"Visualizador"
+			]
+		},
+		"comentario": "en estado 11 no se puede hacer mas nada!!!!",
+		"general": {
+			"!ButtonEditLicense": [
+				"Asistencia_Mantenimiento",
+				"ope_coord-mant",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"preguntar lucas",
+				"Tramitador",
+				"Visualizador"
+			],
+			"!ButtonAddTramitacion": [
+				"Asistencia_Mantenimiento",
+				"ope_coord-mant",
+				"ope_jefe_cotdt",
+				"ope_jefe_cot",
+				"Jefe_Trabajo",
+				"Jefe_Trabajo_Suplente",
+				"ope_jefe_cot",
+				"habilitar",
+				"ope_oper-turno_cotdt",
+				"ope_oper-turno_cot",
+				"ope_programacion_cotdt",
+				"ope_programacion_cot",
+				"ope_solic-lic_transener",
+				"Solicitante licencias Transener_S",
+				"ope_solic-lic_transba",
+				"preguntar lucas",
+				"Tramitador",
+				"Visualizador"
+			]
+		}
+	},
+	"default": {
+		"view": [
+			"Asistencia_Mantenimiento",
+			"ope_coord-mant",
+			"ope_jefe_cotdt",
+			"ope_jefe_cot",
+			"Jefe_Trabajo",
+			"Jefe_Trabajo_Suplente",
+			"ope_jefe_cot",
+			"habilitar",
+			"ope_oper-turno_cotdt",
+			"ope_oper-turno_cot",
+			"ope_programacion_cotdt",
+			"ope_programacion_cot",
+			"ope_solic-lic_transener",
+			"Solicitante licencias Transener_S",
+			"ope_solic-lic_transba",
+			"preguntar lucas",
+			"Tramitador",
+			"Visualizador"
+		],
+		"all": []
+	},
+	"ComentariosDelArchivoJSON": "07 es Coordinada y 05 es tramitada, 02 es observada, 09 es nueva y generada parece"
+}
