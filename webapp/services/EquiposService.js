@@ -21,7 +21,7 @@ sap.ui.define([
 				aFilter.push(new sap.ui.model.Filter({
 					path: "Rol",
 					operator: sap.ui.model.FilterOperator.EQ,
-					value1: roles.includes("Solicitante_Lic") ? "Solicitante_Lic" : roles[0]
+					value1: roles.includes("ope_solic-lic_transener") ? "ope_solic-lic_transener" : roles[0]
 				}));
 				aEquiposPromises.push(this.getEquiposPromiseInd(aFilter, oEquipo.CodigoTplnr))
 			}
@@ -48,7 +48,7 @@ sap.ui.define([
 			aFilter.push(new sap.ui.model.Filter({
 				path: "Rol",
 				operator: sap.ui.model.FilterOperator.EQ,
-				value1: roles.includes("Solicitante_Lic") ? "Solicitante_Lic" : roles[0]
+				value1: roles.includes("ope_solic-lic_transener") ? "ope_solic-lic_transener" : roles[0]
 			}));
 
 

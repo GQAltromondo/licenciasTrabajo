@@ -62,7 +62,6 @@ sap.ui.define([
 		
 							success:  (data, textStatus, jqXHR) => {
 								 
-								console.log("It works");
 								var oModelUser = new sap.ui.model.json.JSONModel();
 								oModelUser.setData(data.Resources);
 		
@@ -116,11 +115,12 @@ sap.ui.define([
 			  });
 
 			var aUserData = {
-                firstname: datos[0].displayName,
-                lastname:  datos[0].displayName,
+                firstName: datos[0].name.givenName,
+                lastName:  datos[0].name.familyName,
                 email: datos[0].emails[0].value,
                 name: datos[0].emails[0].value,
                 displayName: datos[0].displayName,
+				login_name:datos[0].userName,
 				groups: aGroups
 
 
@@ -143,6 +143,7 @@ sap.ui.define([
 		},
 
 		onReadUserApiSuccess: function (data, textStatus, jqXHR) {
+			
 			AppManagementHelper.getModel("UserJsonModel").setData({
 				nombre: data.firstName,
 				apellido: data.lastName,
@@ -151,9 +152,9 @@ sap.ui.define([
 				// roles: ["Supervisor_MantenimienTto"],
 
 				// Paso 1 para creacion de licencias.
-				// roles: ["Solicitante_Lic", "Solicitante_Lic_S"],
-                // (Nuevo rol Solicitante_Lic_TBA Issue #518).
-                // roles: ["Solicitante_Lic_TBA"],
+				// roles: ["ope_solic-lic_transener", "ope_solic-lic_transener"],
+                // (Nuevo rol ope_solic-lic_transba Issue #518).
+                // roles: ["ope_solic-lic_transba"],
 
 				// Paso 2 Coordinador.
 				// roles: ["Coordinador_Mantenimiento"],
@@ -163,9 +164,9 @@ sap.ui.define([
 			    //roles: ["Tramitador"],
 
 				// Paso 4 Entraga, devolución y cancelación definitiva.
-				// roles: ["Jefe_Turno_COT"],
-				// roles: ["Programacion_COTDT"],
-				// roles: ["Operador_COT"],
+				// roles: ["ope_jefe_cot"],
+				// roles: ["ope_programacion_cotdt"],
+				// roles: ["ope_oper-turno_cot"],
 
                 // IMPORTANTE: deployear siempre con este descomentado.
                 // ##########################################################################

@@ -373,13 +373,13 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							*/
 							items: {
 								templateShareable: false,
-								path: "SelectModel>/FixedValuesSet",
+								path: "StatusTramitacion>/Estado",
 								filters: [new sap.ui.model.Filter("Tabname", sap.ui.model.FilterOperator.EQ, "ZTAB_OP_TRALIC"),
-									new sap.ui.model.Filter("Fieldname", sap.ui.model.FilterOperator.EQ, "ESTADO")
+								new sap.ui.model.Filter("Fieldname", sap.ui.model.FilterOperator.EQ, "ESTADO")
 								],
 								template: new sap.ui.core.Item({
-									key: "{SelectModel>Valkey}",
-									text: "{SelectModel>Valtext}"
+									key: "{StatusTramitacion>Valkey}",
+									text: "{StatusTramitacion>Valtext}"
 								})
 							}
 
@@ -399,10 +399,10 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							},
 							items: {
 								templateShareable: false,
-								path: "SelectModel>/MotivoNoAutorizacionSet",
+								path: "MotivoNoAutorizacion>/",
 								template: new sap.ui.core.Item({
-									key: "{SelectModel>Status}",
-									text: "{SelectModel>Descripcion}"
+									key: "{MotivoNoAutorizacion>Status}",
+									text: "{MotivoNoAutorizacion>Descripcion}"
 								})
 							}
 						}),
@@ -577,31 +577,31 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 				template: new sap.m.ColumnListItem({
 					visible: "{ColocacionTableJsonModel>enabled}",
 					cells: [
-						// new sap.m.DatePicker({
-						// 	specialDates: {
-						// 		templateShareable: false,
-						// 		path: "EspecialDatesTramitacion>/Fechas",
-						// 		template: new sap.ui.unified.DateTypeRange({
-						// 			startDate: "{EspecialDatesTramitacion>Fecha}",
-						// 			type: {
-						// 				path: "EspecialDatesTramitacion>Estado",
-						// 				formatter: oController.tipoSegunEstado
-						// 			}
-						// 		})
-						// 	},
-						// 	change: $.proxy(oController.handleDateChange, oController, "ColocacionTableJsonModel"),
-						// 	// enabled: {
-						// 	// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-						// 	// 		"ColocacionTableJsonModel>enabled",
-						// 	// 		"ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-						// 	// 	],
-						// 	// 	formatter: oController.rolStatusEdition("colocaciones/")
-						// 	// },
-						// 	dateValue: "{ColocacionTableJsonModel>Datehab}",
-						// 	minDate: "{LicenseJsonModel>/Solbeg}",
-						// 	maxDate: "{LicenseJsonModel>/Solend}",
-						// 	displayFormat: "dd-MM-yyyy"
-						// }),
+						new sap.m.DatePicker({
+							specialDates: {
+								templateShareable: false,
+								path: "EspecialDatesTramitacion>/Fechas",
+								template: new sap.ui.unified.DateTypeRange({
+									startDate: "{EspecialDatesTramitacion>Fecha}",
+									type: {
+										path: "EspecialDatesTramitacion>Estado",
+										formatter: oController.tipoSegunEstado
+									}
+								})
+							},
+							change: $.proxy(oController.handleDateChange, oController, "ColocacionTableJsonModel"),
+							// enabled: {
+							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+							// 		"ColocacionTableJsonModel>enabled",
+							// 		"ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+							// 	],
+							// 	formatter: oController.rolStatusEdition("colocaciones/")
+							// },
+							dateValue: "{ColocacionTableJsonModel>Datehab}",
+							minDate: "{LicenseJsonModel>/Solbeg}",
+							maxDate: "{LicenseJsonModel>/Solend}",
+							displayFormat: "dd-MM-yyyy"
+						}),
 						new sap.m.TimePicker({
 							change: [oController.handleDateChange, oController],
 							// enabled: {
@@ -710,33 +710,19 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 				template: new sap.m.ColumnListItem({
 					// visible: "{RetiroTableJsonModel>enabled}",
 					cells: [
-						// new sap.m.DatePicker({
-						// 	specialDates: {
-						// 		templateShareable: false,
-						// 		path: "EspecialDatesTramitacion>/Fechas",
-						// 		template: new sap.ui.unified.DateTypeRange({
-						// 			startDate: "{EspecialDatesTramitacion>Fecha}",
-						// 			type: {
-						// 				path: "EspecialDatesTramitacion>Estado",
-						// 				formatter: oController.tipoSegunEstado
-						// 			}
-						// 		})
-						// 	},
-						// 	change: $.proxy(oController.handleDateChange, oController, "RetiroTableJsonModel"),
-						// 	// enabled: {
-						// 	// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-						// 	// 		"RetiroTableJsonModel>enabled",
-						// 	// 		"RetiroTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-						// 	// 	],
-						// 	// 	formatter: oController.rolStatusEdition("retiro/")
-						// 	// },
-						// 	dateValue: "{RetiroTableJsonModel>Datehab}",
-						// 	minDate: "{LicenseJsonModel>/Solbeg}",
-						// 	maxDate: "{LicenseJsonModel>/Solend}",
-						// 	displayFormat: "dd-MM-yyyy"
-						// }),
-						new sap.m.TimePicker({
-							change: [oController.handleDateChange, oController],
+						new sap.m.DatePicker({
+							specialDates: {
+								templateShareable: false,
+								path: "EspecialDatesTramitacion>/Fechas",
+								template: new sap.ui.unified.DateTypeRange({
+									startDate: "{EspecialDatesTramitacion>Fecha}",
+									type: {
+										path: "EspecialDatesTramitacion>Estado",
+										formatter: oController.tipoSegunEstado
+									}
+								})
+							},
+							change: $.proxy(oController.handleDateChange, oController, "RetiroTableJsonModel"),
 							// enabled: {
 							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
 							// 		"RetiroTableJsonModel>enabled",
@@ -744,6 +730,20 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							// 	],
 							// 	formatter: oController.rolStatusEdition("retiro/")
 							// },
+							dateValue: "{RetiroTableJsonModel>Datehab}",
+							minDate: "{LicenseJsonModel>/Solbeg}",
+							maxDate: "{LicenseJsonModel>/Solend}",
+							displayFormat: "dd-MM-yyyy"
+						}),
+						new sap.m.TimePicker({
+							change: [oController.handleDateChange, oController],
+							enabled: {
+								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"RetiroTableJsonModel>enabled",
+									"RetiroTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("retiro/")
+							},
 							dateValue: "{RetiroTableJsonModel>Time}",
 							displayFormat: "HH:mm"
 						}),
@@ -844,33 +844,19 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 				template: new sap.m.ColumnListItem({
 					visible: "{InhibicionTableJsonModel>enabled}",
 					cells: [
-						// new sap.m.DatePicker({
-						// 	specialDates: {
-						// 		templateShareable: false,
-						// 		path: "EspecialDatesTramitacion>/Fechas",
-						// 		template: new sap.ui.unified.DateTypeRange({
-						// 			startDate: "{EspecialDatesTramitacion>Fecha}",
-						// 			type: {
-						// 				path: "EspecialDatesTramitacion>Estado",
-						// 				formatter: oController.tipoSegunEstado
-						// 			}
-						// 		})
-						// 	},
-						// 	change: $.proxy(oController.handleDateChange, oController, "InhibicionTableJsonModel"),
-						// 	// enabled: {
-						// 	// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-						// 	// 		"InhibicionTableJsonModel>enabled",
-						// 	// 		"InhibicionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-						// 	// 	],
-						// 	// 	formatter: oController.rolStatusEdition("inhibicion/")
-						// 	// },
-						// 	dateValue: "{InhibicionTableJsonModel>Datehab}",
-						// 	minDate: "{LicenseJsonModel>/Solbeg}",
-						// 	maxDate: "{LicenseJsonModel>/Solend}",
-						// 	displayFormat: "dd-MM-yyyy"
-						// }),
-						new sap.m.TimePicker({
-							change: [oController.handleDateChange, oController],
+						new sap.m.DatePicker({
+							specialDates: {
+								templateShareable: false,
+								path: "EspecialDatesTramitacion>/Fechas",
+								template: new sap.ui.unified.DateTypeRange({
+									startDate: "{EspecialDatesTramitacion>Fecha}",
+									type: {
+										path: "EspecialDatesTramitacion>Estado",
+										formatter: oController.tipoSegunEstado
+									}
+								})
+							},
+							change: $.proxy(oController.handleDateChange, oController, "InhibicionTableJsonModel"),
 							// enabled: {
 							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
 							// 		"InhibicionTableJsonModel>enabled",
@@ -878,6 +864,20 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							// 	],
 							// 	formatter: oController.rolStatusEdition("inhibicion/")
 							// },
+							dateValue: "{InhibicionTableJsonModel>Datehab}",
+							minDate: "{LicenseJsonModel>/Solbeg}",
+							maxDate: "{LicenseJsonModel>/Solend}",
+							displayFormat: "dd-MM-yyyy"
+						}),
+						new sap.m.TimePicker({
+							change: [oController.handleDateChange, oController],
+							enabled: {
+								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"InhibicionTableJsonModel>enabled",
+									"InhibicionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("inhibicion/")
+							},
 							dateValue: "{InhibicionTableJsonModel>Time}",
 							displayFormat: "HH:mm"
 						}),
@@ -979,34 +979,19 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 					visible: "{HabilitacionTableJsonModel>enabled}",
 					cells: [
 
-						// new sap.m.DatePicker({
-						// 	specialDates: {
-						// 		templateShareable: false,
-						// 		path: "EspecialDatesTramitacion>/Fechas",
-						// 		template: new sap.ui.unified.DateTypeRange({
-						// 			startDate: "{EspecialDatesTramitacion>Fecha}",
-						// 			type: {
-						// 				path: "EspecialDatesTramitacion>Estado",
-						// 				formatter: oController.tipoSegunEstado
-						// 			}
-						// 		})
-						// 	},
-						// 	change: $.proxy(oController.handleDateChange, oController, "HabilitacionTableJsonModel"),
-						// 	// enabled: {
-						// 	// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-						// 	// 		"HabilitacionTableJsonModel>enabled",
-						// 	// 		"HabilitacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-						// 	// 	],
-						// 	// 	formatter: oController.rolStatusEdition("colocaciones/")
-						// 	// },
-						// 	dateValue: "{HabilitacionTableJsonModel>Datehab}",
-						// 	minDate: "{LicenseJsonModel>/Solbeg}",
-						// 	maxDate: "{LicenseJsonModel>/Solend}",
-						// 	displayFormat: "dd-MM-yyyy",
-						// 	valueFormat: "dd-MM-yyyy"
-						// }),
-						new sap.m.TimePicker({
-							change: [oController.handleDateChange, oController],
+						new sap.m.DatePicker({
+							specialDates: {
+								templateShareable: false,
+								path: "EspecialDatesTramitacion>/Fechas",
+								template: new sap.ui.unified.DateTypeRange({
+									startDate: "{EspecialDatesTramitacion>Fecha}",
+									type: {
+										path: "EspecialDatesTramitacion>Estado",
+										formatter: oController.tipoSegunEstado
+									}
+								})
+							},
+							change: $.proxy(oController.handleDateChange, oController, "HabilitacionTableJsonModel"),
 							// enabled: {
 							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
 							// 		"HabilitacionTableJsonModel>enabled",
@@ -1014,6 +999,21 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							// 	],
 							// 	formatter: oController.rolStatusEdition("colocaciones/")
 							// },
+							dateValue: "{HabilitacionTableJsonModel>Datehab}",
+							minDate: "{LicenseJsonModel>/Solbeg}",
+							maxDate: "{LicenseJsonModel>/Solend}",
+							displayFormat: "dd-MM-yyyy",
+							valueFormat: "dd-MM-yyyy"
+						}),
+						new sap.m.TimePicker({
+							change: [oController.handleDateChange, oController],
+							enabled: {
+								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"HabilitacionTableJsonModel>enabled",
+									"HabilitacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("colocaciones/")
+							},
 							dateValue: "{HabilitacionTableJsonModel>Time}",
 							displayFormat: "HH:mm",
 							valueFormat: "HH:mm"
@@ -1123,30 +1123,30 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 				template: new sap.m.ColumnListItem({
 					visible: "{DevolutionTableJsonModel>enabled}",
 					cells: [
-						// new sap.m.DatePicker({
-						// 	specialDates: {
-						// 		templateShareable: false,
-						// 		path: "EspecialDatesTramitacion>/Fechas",
-						// 		template: new sap.ui.unified.DateTypeRange({
-						// 			startDate: "{EspecialDatesTramitacion>Fecha}",
-						// 			type: {
-						// 				path: "EspecialDatesTramitacion>Estado",
-						// 				formatter: oController.tipoSegunEstado
-						// 			}
-						// 		})
-						// 	},
-						// 	change: $.proxy(oController.handleDateChange, oController, "DevolutionTableJsonModel"),
-						// 	enabled: {
-						// 		parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-						// 			"DevolutionTableJsonModel>enabled",
-						// 			"DevolutionTableJsonModel>enabledContinua", "DevolutionTableJsonModel>sameDayValidation"
-						// 		],
-						// 		formatter: oController.rolStatusEdition("entregas/")
-						// 	},
-						// 	dateValue: "{DevolutionTableJsonModel>Datelicencia}",
-						// 	minDate: "{LicenseJsonModel>/Solbeg}",
-						// 	displayFormat: "dd-MM-yyyy"
-						// }),
+						new sap.m.DatePicker({
+							specialDates: {
+								templateShareable: false,
+								path: "EspecialDatesTramitacion>/Fechas",
+								template: new sap.ui.unified.DateTypeRange({
+									startDate: "{EspecialDatesTramitacion>Fecha}",
+									type: {
+										path: "EspecialDatesTramitacion>Estado",
+										formatter: oController.tipoSegunEstado
+									}
+								})
+							},
+							change: $.proxy(oController.handleDateChange, oController, "DevolutionTableJsonModel"),
+							enabled: {
+								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"DevolutionTableJsonModel>enabled",
+									"DevolutionTableJsonModel>enabledContinua", "DevolutionTableJsonModel>sameDayValidation"
+								],
+								formatter: oController.rolStatusEdition("entregas/")
+							},
+							dateValue: "{DevolutionTableJsonModel>Datelicencia}",
+							minDate: "{LicenseJsonModel>/Solbeg}",
+							displayFormat: "dd-MM-yyyy"
+						}),
 						new sap.m.TimePicker({
 							enabled: {
 								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
@@ -1202,7 +1202,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 											"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
 											"DevolutionTableJsonModel>enabled", "DevolutionTableJsonModel>sameDayValidation"
 										],
-										formatter: oController.rolStatusEdition("entregas/")
+										formatter: oController.rolEdition("entregas/")
 									},
 									// valueState: "{DevolutionTableJsonModel>TejtValueState}",
 									// valueStateText: "{DevolutionTableJsonModel>TejtValueStateText}",
@@ -1339,31 +1339,32 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								formatter: oController.estadoEntregaDia
 							}
 						}).attachBrowserEvent("click", oController.handleDialogStatus),
-						// new sap.m.DatePicker({
-						// 	specialDates: {
-						// 		templateShareable: false,
-						// 		path: "EspecialDatesTramitacion>/Fechas",
-						// 		template: new sap.ui.unified.DateTypeRange({
-						// 			startDate: "{EspecialDatesTramitacion>Fecha}",
-						// 			type: {
-						// 				path: "EspecialDatesTramitacion>Estado",
-						// 				formatter: oController.tipoSegunEstado
-						// 			}
-						// 		})
-						// 	},
-						// 	change: $.proxy(oController.handleDateChange, oController, "DeliveryTableJsonModel"),
-						// 	enabled: {
-						// 		parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-						// 			"DeliveryTableJsonModel>enabled",
-						// 			"DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-						// 		],
-						// 		formatter: oController.rolStatusEdition("entregas/")
-						// 	},
-						// 	dateValue: "{DeliveryTableJsonModel>Datelicencia}",
-						// 	minDate: "{LicenseJsonModel>/Solbeg}",
-						// 	maxDate: "{LicenseJsonModel>/Solend}",
-						// 	displayFormat: "dd-MM-yyyy"
-						// }),
+						new sap.m.DatePicker({
+							specialDates: {
+								templateShareable: false,
+								path: "EspecialDatesTramitacion>/Fechas",
+								template: new sap.ui.unified.DateTypeRange({
+									startDate: "{EspecialDatesTramitacion>Fecha}",
+									type: {
+										path: "EspecialDatesTramitacion>Estado",
+										formatter: oController.tipoSegunEstado
+									}
+								})
+							},
+							change: $.proxy(oController.handleDateChange, oController, "DeliveryTableJsonModel"),
+							// enabled: {
+							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles"
+							// 		, "statusModel>/", "LicenseJsonModel>/Werks",
+							// 		"DeliveryTableJsonModel>enabled",
+							// 		"DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+							// 	],
+							// 	formatter: oController.rolStatusEdition2("entregas/")
+							// },
+							dateValue: "{DeliveryTableJsonModel>Datelicencia}",
+							minDate: "{LicenseJsonModel>/Solbeg}",
+							maxDate: "{LicenseJsonModel>/Solend}",
+							displayFormat: "dd-MM-yyyy"
+						}),
 						new sap.m.TimePicker({
 							change: [oController.handleDateChange, oController],
 							enabled: {
@@ -1371,7 +1372,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									"DeliveryTableJsonModel>enabled",
 									"DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
 								],
-								formatter: oController.rolStatusEdition("entregas/")
+								formatter: oController.rolStatusEdition2("entregas/")
 							},
 							dateValue: "{DeliveryTableJsonModel>Time}",
 							displayFormat: "HH:mm"
@@ -1389,7 +1390,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 											"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
 											"DeliveryTableJsonModel>enabled", "DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
 										],
-										formatter: oController.rolStatusEdition("entregas/")
+										formatter: oController.rolStatusEdition2("entregas/")
 									},
 									change: [oController.handleLegacyValidationDeliveries, oController],
 									valueState: "{DeliveryTableJsonModel>TejtValueState}",
@@ -1415,16 +1416,16 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								new sap.m.ComboBox({
 									visible: "{= !${DeliveryTableJsonModel>showPrevValue}}",
 									width: "100%",
-									enabled: {
-										parts: [
-											"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-											"DeliveryTableJsonModel>enabled", "DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-										],
-										formatter: oController.rolStatusEdition("entregas/")
-									},
-									// change: [oController.handleLegacyValidationDeliveries, oController],
-									// valueState: "{DeliveryTableJsonModel>TejtValueState}",
-									// valueStateText: "{DeliveryTableJsonModel>TejtValueStateText}",
+									// enabled: {
+									// 	parts: [
+									// 		"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									// 		"DeliveryTableJsonModel>enabled", "DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+									// 	],
+									// 	formatter: oController.rolStatusEdition2("entregas/")
+									// },
+									change: [oController.handleLegacyValidationDeliveries, oController],
+									valueState: "{DeliveryTableJsonModel>TejtValueState}",
+									valueStateText: "{DeliveryTableJsonModel>TejtValueStateText}",
 									selectedKey: "{DeliveryTableJsonModel>TecET}",
 									items: {
 										templateShareable: false,
@@ -1433,16 +1434,16 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 											key: "{PersonalHabilitadoModel>Legajo}",
 											text: "{PersonalHabilitadoModel>Nombre} {PersonalHabilitadoModel>Legajo}"
 										}),
-										// filters: new sap.ui.model.Filter([
-										//     new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M04"),
-										//     new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M08"),
-										//     new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M12"),
-										//     new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M16"),
-										//     new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M20"),
-										//     new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M24"),
-										//     new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M28"),
-										//     new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "PE5")
-										// ], false)
+										filters: new sap.ui.model.Filter([
+											new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M04"),
+											new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M08"),
+											new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M12"),
+											new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M16"),
+											new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M20"),
+											new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M24"),
+											new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M28"),
+											new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "PE5")
+										], false)
 									}
 								}),
 								new sap.m.Text({
@@ -1457,7 +1458,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							// 		"DeliveryTableJsonModel>enabled",
 							// 		"DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
 							// 	],
-							// 	formatter: oController.rolStatusEdition("entregas/")
+							// 	formatter: oController.rolStatusEdition2("entregas/")
 							// },
 							value: "{DeliveryTableJsonModel>Folio}",
 							maxLength: 10
@@ -1487,7 +1488,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							// 		"DeliveryTableJsonModel>enabled",
 							// 		"DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
 							// 	],
-							// 	formatter: oController.rolStatusEdition("entregas/")
+							// 	formatter: oController.rolStatusEdition2("entregas/")
 							// },
 							value: "{DeliveryTableJsonModel>Commen}",
 							tooltip: "{DeliveryTableJsonModel>Commen}"
@@ -1499,7 +1500,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							// 		"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
 							// 		"DeliveryTableJsonModel>enabled", "DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
 							// 	],
-							// 	formatter: oController.rolStatusEdition("entregas/")
+							// 	formatter: oController.rolStatusEdition2("entregas/")
 							// },
 							visible: {
 								parts: [{
@@ -1768,8 +1769,8 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 						}),
 						new sap.m.Text({
 							text: "{SuspensionTableJsonModel>Cot}"
-								// path: "DeliveryTableJsonModel>Cot"
-								// formatter: $.proxy(oController.handleUserName, oController)
+							// path: "DeliveryTableJsonModel>Cot"
+							// formatter: $.proxy(oController.handleUserName, oController)
 
 						}),
 						new sap.m.ComboBox({
@@ -1903,7 +1904,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 						}),
 						new sap.m.Text({
 							text: "{ReanudationTableJsonModel>Cot}"
-								// formatter: $.proxy(oController.handleUserName, oController)
+							// formatter: $.proxy(oController.handleUserName, oController)
 
 						}),
 						new sap.m.ComboBox({
@@ -2024,8 +2025,8 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 						text: {
 							parts: ["UserJsonModel>/roles"],
 							formatter: function (aRoles) {
-								if (aRoles.includes("Solicitante_Lic") || aRoles.includes("Solicitante_Lic_S") || aRoles.includes(
-										"Solicitante_Lic_TBA")) {
+								if (aRoles.includes("ope_solic-lic_transener") || aRoles.includes("Solicitante_Lic_S") || aRoles.includes(
+									"ope_solic-lic_transba")) {
 									return "Generar Licencia";
 								}
 								return "Enviar a Coordinación";
@@ -2034,8 +2035,8 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 						tooltip: {
 							parts: ["UserJsonModel>/roles"],
 							formatter: function (aRoles) {
-								if (aRoles.includes("Solicitante_Lic") || aRoles.includes("Solicitante_Lic_S") || aRoles.includes(
-										"Solicitante_Lic_TBA")) {
+								if (aRoles.includes("ope_solic-lic_transener") || aRoles.includes("Solicitante_Lic_S") || aRoles.includes(
+									"ope_solic-lic_transba")) {
 									return "Generar Licencia";
 								}
 								return "Enviar a Coordinación";
@@ -2101,7 +2102,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 					]
 				}).addStyleClass("barTransener")
 			],
-			content: [
+		content: [
 				// new sap.m.HBox({
 				// 	visible: {
 				// 		parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "DisableControlsJsonModel>/visibleSol"],
@@ -4111,148 +4112,148 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								}),
 								new sap.m.IconTabFilter({
 									visible: "{DisableControlsJsonModel>/tabVisibility}",
-									/*visible: {
+									visible: {
 										parts: ["UserJsonModel>/roles", "permisosModel>/", "DisableControlsJsonModel>/tabVisibility"],
 										formatter: oController.rolVisualization("entregasDevoluciones/")
-									},*/
+									},
 									design: sap.m.IconTabFilterDesign.Horizontal,
 									icon: "sap-icon://paper-plane",
 									text: "Entregas/Cancelaciones",
 									content: [new sap.m.HBox({
-											width: "100%",
-											justifyContent: "End",
+										width: "100%",
+										justifyContent: "End",
 
-											items: [
-												new sap.m.Button({
-													iconFirst: true,
-													text: "Causa Cancelación",
-													// visible: {
-													// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks"],
-													// 	formatter: oController.rolStatusEdition("observacion/botonVerCancelacion")
-													// },
-													enabled: {
-														path: "LicenseJsonModel>/Licstat",
-														formatter: function (dLicStat) {
-															return dLicStat === "11" ? true : false
-														}
-													},
-													press: [oController.openPopoverCancelacion, oController]
-												}).addStyleClass("buttonInverted")
-											]
-
-										}),
-										new sap.m.Panel({
-											expandable: true,
-											expanded: true,
-											headerText: "Turno",
-											content: [
-												oTurnoTable
-											]
-										}),
-										new sap.m.Panel({
-											expandable: true,
-											expanded: true,
-											headerText: "Colocacion y retiro de PAT",
-											content: [
-												new sap.m.Panel({
-													expandable: true,
-													expanded: true,
-													headerText: "Colocacion",
-													content: [
-														oColocacionTable
-													]
-
-												}),
-												new sap.m.Panel({
-													expandable: true,
-													expanded: true,
-													headerText: "Retiro de PAT",
-													content: [
-														oRetiroTable
-													]
-												})
-											]
-										}),
-										new sap.m.Panel({
-											expandable: true,
-											expanded: true,
-											headerText: "Inhibicion y habilitacion de PAT",
-											content: [
-												new sap.m.Panel({
-													expandable: true,
-													expanded: true,
-													headerText: "Inhibicion",
-													content: [
-														oInhibicionTable
-													]
-
-												}),
-												new sap.m.Panel({
-													expandable: true,
-													expanded: true,
-													headerText: "Habilitacion",
-													content: [
-														oHabilitacionTable
-													]
-												})
-											]
-										}),
-										new sap.m.Panel({
-											expandable: true,
-											expanded: true,
-											headerText: "Entregas y devoluciones",
-											content: [
-												new sap.m.Panel({
-													expandable: true,
-													expanded: true,
-													headerText: "Entregas",
-													content: [
-														oDeliveryTable
-													]
-												}),
-												new sap.m.Panel({
-													expandable: true,
-													expanded: true,
-													headerText: "Devoluciones",
-													content: [
-														oDevolucionTable
-													]
-												})
-											]
-										}),
-										new sap.m.Panel({
-											expandable: true,
-											headerText: "Suspension / Reanudacion",
-											content: [
-												new sap.m.Panel({
-													expandable: true,
-													headerText: "Suspension",
-													content: [
-														oSuspensionTable
-													]
-												}),
-												new sap.m.Panel({
-													expandable: true,
-													headerText: "Reanudacion",
-													content: [
-														oReanudacionTable
-													]
-												})
-											]
-										}),
-										new sap.m.Panel({
-											visible: "{DisableControlsJsonModel>/tabVisibility}",
-											expandable: true,
-											headerText: "Transferencia de Jefe de trabajo",
-											content: [
-												new sap.m.VBox({
-													items: {
-														path: "TransferListJsonModel>/Transfers",
-														template: oTransferTemplate
+										items: [
+											new sap.m.Button({
+												iconFirst: true,
+												text: "Causa Cancelación",
+												// visible: {
+												// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks"],
+												// 	formatter: oController.rolStatusEdition("observacion/botonVerCancelacion")
+												// },
+												enabled: {
+													path: "LicenseJsonModel>/Licstat",
+													formatter: function (dLicStat) {
+														return dLicStat === "11" ? true : false
 													}
-												})
-											]
-										})
+												},
+												press: [oController.openPopoverCancelacion, oController]
+											}).addStyleClass("buttonInverted")
+										]
+
+									}),
+									// new sap.m.Panel({
+									// 	expandable: true,
+									// 	expanded: true,
+									// 	headerText: "Turno",
+									// 	content: [
+									// 		oTurnoTable
+									// 	]
+									// }),
+									// new sap.m.Panel({
+									// 	expandable: true,
+									// 	expanded: true,
+									// 	headerText: "Colocacion y retiro de PAT",
+									// 	content: [
+									// 		new sap.m.Panel({
+									// 			expandable: true,
+									// 			expanded: true,
+									// 			headerText: "Colocacion",
+									// 			content: [
+									// 				oColocacionTable
+									// 			]
+
+									// 		}),
+									// 		new sap.m.Panel({
+									// 			expandable: true,
+									// 			expanded: true,
+									// 			headerText: "Retiro de PAT",
+									// 			content: [
+									// 				oRetiroTable
+									// 			]
+									// 		})
+									// 	]
+									// }),
+									// new sap.m.Panel({
+									// 	expandable: true,
+									// 	expanded: true,
+									// 	headerText: "Inhibicion y habilitacion de PAT",
+									// 	content: [
+									// 		new sap.m.Panel({
+									// 			expandable: true,
+									// 			expanded: true,
+									// 			headerText: "Inhibicion",
+									// 			content: [
+									// 				oInhibicionTable
+									// 			]
+
+									// 		}),
+									// 		new sap.m.Panel({
+									// 			expandable: true,
+									// 			expanded: true,
+									// 			headerText: "Habilitacion",
+									// 			content: [
+									// 				oHabilitacionTable
+									// 			]
+									// 		})
+									// 	]
+									// }),
+									new sap.m.Panel({
+										expandable: true,
+										expanded: true,
+										headerText: "Entregas y devoluciones",
+										content: [
+											new sap.m.Panel({
+												expandable: true,
+												expanded: true,
+												headerText: "Entregas",
+												content: [
+													oDeliveryTable
+												]
+											}),
+											new sap.m.Panel({
+												expandable: true,
+												expanded: true,
+												headerText: "Devoluciones",
+												content: [
+													oDevolucionTable
+												]
+											})
+										]
+									}),
+									new sap.m.Panel({
+										expandable: true,
+										headerText: "Suspension / Reanudacion",
+										content: [
+											new sap.m.Panel({
+												expandable: true,
+												headerText: "Suspension",
+												content: [
+													oSuspensionTable
+												]
+											}),
+											new sap.m.Panel({
+												expandable: true,
+												headerText: "Reanudacion",
+												content: [
+													oReanudacionTable
+												]
+											})
+										]
+									}),
+									new sap.m.Panel({
+										visible: "{DisableControlsJsonModel>/tabVisibility}",
+										expandable: true,
+										headerText: "Transferencia de Jefe de trabajo",
+										content: [
+											new sap.m.VBox({
+												items: {
+													path: "TransferListJsonModel>/Transfers",
+													template: oTransferTemplate
+												}
+											})
+										]
+									})
 									]
 								})
 							]

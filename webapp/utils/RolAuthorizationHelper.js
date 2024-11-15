@@ -89,7 +89,7 @@ sap.ui.define([
 					}
 				}
 				if (permisos[notSubmodulo] && (that.includesAny(permisos[notSubmodulo].all, roles) ||
-						that.includesAny(permisos[notSubmodulo].view, roles))) {
+					that.includesAny(permisos[notSubmodulo].view, roles))) {
 					return false;
 				} else {
 					return extraData(permisos.default && (that.includesAny(permisos.default.all, roles) || that.includesAny(permisos.default.view,
@@ -98,6 +98,7 @@ sap.ui.define([
 			};
 
 		},
+
 
 		rolStatusEdition: function (controlPath, callback) {
 			var that = this;
@@ -116,6 +117,67 @@ sap.ui.define([
 			}
 
 			return function (status, roles, statuses, region, ...extra) {
+				console.log(status)
+				if (!statuses) return false;
+
+				let sRegionFormat = FormatterHelper.centroToRegion(region);
+
+				if (sRegionFormat) {
+					roles = roles.map(role => role.replace("_" + sRegionFormat, ""));
+				}
+
+				if (statuses[status] && statuses[status][submodulo] && statuses[status][submodulo][control] &&
+					that.includesAny(statuses[status][submodulo][control], roles)
+				) {
+					return extraData(true, callback, ...extra);
+				}
+
+				if (statuses[status] && statuses[status][submodulo] && statuses[status][submodulo][notControl] &&
+					that.includesAny(statuses[status][submodulo][notControl], roles)
+				) {
+					return false;
+				}
+
+				if (statuses[status] && statuses[status][submodulo] &&
+					that.includesAny(statuses[status][submodulo].all, roles)
+				) {
+					return extraData(true, callback, ...extra);
+				}
+
+				if (statuses[status] && statuses[status][notSubmodulo] &&
+					that.includesAny(statuses[status][notSubmodulo].all, roles)
+				) {
+					return false;
+				}
+
+				if (statuses[status] && statuses[status].all &&
+					that.includesAny(statuses[status].all, roles)
+				) {
+					return extraData(true, callback, ...extra);
+				}
+
+				return extraData(statuses.default && statuses.default.all &&
+					that.includesAny(statuses.default.all, roles), callback, ...extra);
+			};
+		},
+		rolStatusEdition2: function (controlPath, callback) {
+			var that = this;
+			var arr = controlPath.split("/");
+			var submodulo = arr[0];
+			var control = arr[1];
+			var notControl = "!" + control;
+			var notSubmodulo = "!" + submodulo;
+
+			function extraData(boolean, callback, ...extra) {
+				if (!boolean) return false;
+				if (callback) return callback(...extra);
+				return extra.every(function (el) {
+					return !!el
+				});
+			}
+
+			return function (status, roles, statuses, region, ...extra) {
+				console.log(status)
 				if (!statuses) return false;
 
 				let sRegionFormat = FormatterHelper.centroToRegion(region);

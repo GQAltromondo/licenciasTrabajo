@@ -62,7 +62,7 @@ sap.ui.define([
 			return new Promise((resolve, reject) => {
 				let aFilters = []
 				aFilters.push(new sap.ui.model.Filter("Empresa", sap.ui.model.FilterOperator.EQ, society));
-				AppManagementHelper.getModel("SelectModel").read("/DiccionarioCategoriasSet", {
+				oDataService.getModel("SelectModel").read("/DiccionarioCategoriasSet", {
 					filters: aFilters,
 					success: function (data) {
 						resolve(data.results);
@@ -80,7 +80,7 @@ sap.ui.define([
 			aFilters.push(new sap.ui.model.Filter("Empresa", sap.ui.model.FilterOperator.EQ, society));
 			return new Promise((resolve, reject) => {
 				// Issue 504: se cambio el read de la entidad "PropiedadesEquiposSet" a la nueva entidad "ParteDiarioSemanalSet".
-				AppManagementHelper.getModel("SelectModel").read("/ParteDiarioSemanalSet", {
+				oDataService.getModel("SelectModel").read("/ParteDiarioSemanalSet", {
 					filters: aFilters,
 					success: function (data) {
 						resolve(data.results);
@@ -94,7 +94,7 @@ sap.ui.define([
 
 		getEstacionCode: function (sTplnr) {
 			return new Promise((resolve, reject) => {
-				AppManagementHelper.getModel("SelectModel").read("/EstacionesSet", {
+				oDataService.getModel("SelectModel").read("/EstacionesSet", {
 					success: function (data) {
 						var oData = data.results.find(function (e) {
 							return e.Codigo === sTplnr;
@@ -464,23 +464,23 @@ sap.ui.define([
 						var currentName = oUserJson.nombre + ", " + oUserJson.apellido;
 
 						permisos.forEach(permiso => {
-							hashPermisos[permiso.Rol] = permiso;
+							hashPermisos[permiso.Rol] = permiso
 						});
 
-						emails = [hashPermisos["CREADOR"], hashPermisos["SOLICITANTE"], hashPermisos["SOLICITANTE_SUPLENTE"],
-							hashPermisos["JEFE_TRABAJO"], hashPermisos["JEFE_TRABAJO_SUPLENTE"], hashPermisos["SOLICITANTE_SUPLENTE_AUXILIAR"]
+						emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"],
+							hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]
 						].map(permiso => permiso && permiso.Mail || "nurrestarazu@inclusion.cloud");
 
 						let usuariosAsignados = {
 							Coordinador: currentUser.Legajo + ", " + currentName,
-							Creador: hashPermisos["CREADOR"] ? hashPermisos["CREADOR"].Legajo + ", " + hashPermisos["CREADOR"].Nombre : "",
-							Solicitante: hashPermisos["SOLICITANTE"] ? hashPermisos["SOLICITANTE"].Legajo + ", " + hashPermisos["SOLICITANTE"].Nombre : "",
-							SolicitanteSuplente: hashPermisos["SOLICITANTE_SUPLENTE"] ? hashPermisos["SOLICITANTE_SUPLENTE"].Legajo + ", " +
-								hashPermisos["SOLICITANTE_SUPLENTE"].Nombre : "",
-							Jefe: hashPermisos["JEFE_TRABAJO"] ? hashPermisos["JEFE_TRABAJO"].Legajo + ", " + hashPermisos["JEFE_TRABAJO"].Nombre : "",
-							JefeSuplente: hashPermisos["JEFE_TRABAJO_SUPLENTE"] ? hashPermisos["JEFE_TRABAJO_SUPLENTE"].Legajo + ", " + hashPermisos[
-								"JEFE_TRABAJO_SUPLENTE"].Nombre : "",
-							SolSuplenteAux: hashPermisos["SOLICITANTE_SUPLENTE_AUXILIAR"].Legajo + ", " + hashPermisos["SOLICITANTE_SUPLENTE_AUXILIAR"]
+							Creador: hashPermisos["Creador"] ? hashPermisos["Creador"].Legajo + ", " + hashPermisos["Creador"].Nombre : "",
+							Solicitante: hashPermisos["ope_solic-lic_transener"] ? hashPermisos["ope_solic-lic_transener"].Legajo + ", " + hashPermisos["ope_solic-lic_transener"].Nombre : "",
+							SolicitanteSuplente: hashPermisos["Solicitante_Suplente"] ? hashPermisos["Solicitante_Suplente"].Legajo + ", " +
+								hashPermisos["Solicitante_Suplente"].Nombre : "",
+							Jefe: hashPermisos["Jefe_Trabajo"] ? hashPermisos["Jefe_Trabajo"].Legajo + ", " + hashPermisos["Jefe_Trabajo"].Nombre : "",
+							JefeSuplente: hashPermisos["Jefe_Trabajo_Suplente"] ? hashPermisos["Jefe_Trabajo_Suplente"].Legajo + ", " + hashPermisos[
+								"Jefe_Trabajo_Suplente"].Nombre : "",
+							SolSuplenteAux: hashPermisos["Solicitante_Suplente_Auxiliar"].Legajo + ", " + hashPermisos["Solicitante_Suplente_Auxiliar"]
 								.Nombre
 						};
 
@@ -670,7 +670,7 @@ sap.ui.define([
 			var sAnio = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Anio")
 			var aPromises = [];
 			var oPromiseJT = this.PostPromesa(sAnio, "L", sLicenseId, oDataLicencia.Jefe, FormatterHelper.getJefeName(oDataLicencia.Jefe),
-				"", oDataLicencia.Empresa, "JEFE_TRABAJO");
+				"", oDataLicencia.Empresa, "Jefe_Trabajo");
 			aPromises.push(oPromiseJT);
 			Promise.all(aPromises).then(() => {
 				BusyDialogHelper.close();
@@ -842,13 +842,13 @@ sap.ui.define([
 
 		getSolicitantesEmails: function (aPermisos) {
 			var aEmailsSolic = [];
-			var oSolicitante = aPermisos.find(e => e.Rol === "SOLICITANTE")
+			var oSolicitante = aPermisos.find(e => e.Rol === "ope_solic-lic_transener")
 			if (oSolicitante)
 				aEmailsSolic.push(oSolicitante.Mail);
-			var oSolicitanteSup = aPermisos.find(e => e.Rol === "SOLICITANTE_SUPLENTE")
+			var oSolicitanteSup = aPermisos.find(e => e.Rol === "Solicitante_Suplente")
 			if (oSolicitanteSup)
 				aEmailsSolic.push(oSolicitanteSup.Mail);
-			var oSolicitanteSupAux = aPermisos.find(e => e.Rol === "SOLICITANTE_SUPLENTE_AUXILIAR")
+			var oSolicitanteSupAux = aPermisos.find(e => e.Rol === "Solicitante_Suplente_Auxiliar")
 			if (oSolicitanteSupAux)
 				aEmailsSolic.push(oSolicitanteSupAux.Mail);
 			return aEmailsSolic;
@@ -867,20 +867,20 @@ sap.ui.define([
 				var aEmails = [];
 
 				var oCreador = aPermisos.find(oPermiso => {
-					return oPermiso.Rol === "CREADOR";
+					return oPermiso.Rol === "Creador";
 				});
 
 				var hashPermisos = {};
 				aPermisos.forEach(permiso => {
-					hashPermisos[permiso.Rol] = permiso;
+					hashPermisos[permiso.Rol] = permiso
 				});
 
 				if (Tipo === "L") {
-					aEmails = [hashPermisos["CREADOR"], hashPermisos["SOLICITANTE"], hashPermisos["SOLICITANTE_SUPLENTE"], hashPermisos[
-						"JEFE_TRABAJO"], hashPermisos["JEFE_TRABAJO_SUPLENTE"], hashPermisos["SOLICITANTE_SUPLENTE_AUXILIAR"]].map(permiso => permiso &&
+					aEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
+						"Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]].map(permiso => permiso &&
 						permiso.Mail || "nurrestarazu@inclusion.cloud");
 				} else {
-					aEmails = [hashPermisos["CREADOR"], hashPermisos["SOLICITANTE"]].map(permiso => permiso && permiso.Mail ||
+					aEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail ||
 						"nurrestarazu@inclusion.cloud");
 				}
 
@@ -894,13 +894,13 @@ sap.ui.define([
 					Coordinador: oCurrentUser.Legajo + ", " + sCurrentUserName,
 					Creador: oCreador.Legajo + ", " + oCreador.Nombre
 				};
-				oUsuariosAsignados.Solicitante = hashPermisos["SOLICITANTE"].Legajo + ", " + hashPermisos["SOLICITANTE"].Nombre;
-				oUsuariosAsignados.SolicitanteSuplente = hashPermisos["SOLICITANTE_SUPLENTE"].Legajo + ", " + hashPermisos["SOLICITANTE_SUPLENTE"]
+				oUsuariosAsignados.Solicitante = hashPermisos["ope_solic-lic_transener"].Legajo + ", " + hashPermisos["ope_solic-lic_transener"].Nombre;
+				oUsuariosAsignados.SolicitanteSuplente = hashPermisos["Solicitante_Suplente"].Legajo + ", " + hashPermisos["Solicitante_Suplente"]
 					.Nombre;
-				oUsuariosAsignados.Jefe = hashPermisos["JEFE_TRABAJO"].Legajo + ", " + hashPermisos["JEFE_TRABAJO"].Nombre;
-				oUsuariosAsignados.JefeSuplente = hashPermisos["JEFE_TRABAJO_SUPLENTE"].Legajo + ", " + hashPermisos["JEFE_TRABAJO_SUPLENTE"].Nombre;
-				oUsuariosAsignados.SolSuplenteAux = hashPermisos["SOLICITANTE_SUPLENTE_AUXILIAR"].Legajo + ", " + hashPermisos[
-					"SOLICITANTE_SUPLENTE_AUXILIAR"].Nombre;
+				oUsuariosAsignados.Jefe = hashPermisos["Jefe_Trabajo"].Legajo + ", " + hashPermisos["Jefe_Trabajo"].Nombre;
+				oUsuariosAsignados.JefeSuplente = hashPermisos["Jefe_Trabajo_Suplente"].Legajo + ", " + hashPermisos["Jefe_Trabajo_Suplente"].Nombre;
+				oUsuariosAsignados.SolSuplenteAux = hashPermisos["Solicitante_Suplente_Auxiliar"].Legajo + ", " + hashPermisos[
+					"Solicitante_Suplente_Auxiliar"].Nombre;
 
 				var aPromises = [];
 				aPromises.push(EtMailService.getPromise(Empresa, oLicence.Tplnr));
@@ -1236,26 +1236,26 @@ sap.ui.define([
 
 				var sEmailEt = "";
 				if (licencia.Tipo === "S") {
-					emails = [hashPermisos["CREADOR"], hashPermisos["SOLICITANTE"]].map(permiso => permiso && permiso.Mail ||
+					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail ||
 						"nurrestarazu@inclusion.cloud");
 					sEmailEt = "";
 				} else {
-					emails = [hashPermisos["CREADOR"], hashPermisos["SOLICITANTE"], hashPermisos["SOLICITANTE_SUPLENTE"], hashPermisos["JEFE_TRABAJO"],
-						hashPermisos["JEFE_TRABAJO_SUPLENTE"], hashPermisos["SOLICITANTE_SUPLENTE_AUXILIAR"]
+					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos["Jefe_Trabajo"],
+						hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]
 					].map(permiso => permiso && permiso.Mail || "nurrestarazu@inclusion.cloud");
 					sEmailEt = res[2].results && res[2].results !== 0 ? res[2].results.map(e => (e.Mail)).join(",") : "";
 				}
 
 				let usuariosAsignados = {
 					Coordinador: currentUser.Legajo + ", " + currentName,
-					Creador: hashPermisos["CREADOR"] ? hashPermisos["CREADOR"].Legajo + ", " + hashPermisos["CREADOR"].Nombre : "",
-					Solicitante: hashPermisos["SOLICITANTE"] ? hashPermisos["SOLICITANTE"].Legajo + ", " + hashPermisos["SOLICITANTE"].Nombre : "",
-					SolicitanteSuplente: hashPermisos["SOLICITANTE_SUPLENTE"] ? hashPermisos["SOLICITANTE_SUPLENTE"].Legajo + ", " + hashPermisos[
-						"SOLICITANTE_SUPLENTE"].Nombre : "",
-					Jefe: hashPermisos["JEFE_TRABAJO"] ? hashPermisos["JEFE_TRABAJO"].Legajo + ", " + hashPermisos["JEFE_TRABAJO"].Nombre : "",
-					JefeSuplente: hashPermisos["JEFE_TRABAJO_SUPLENTE"] ? hashPermisos["JEFE_TRABAJO_SUPLENTE"].Legajo + ", " + hashPermisos[
-						"JEFE_TRABAJO_SUPLENTE"].Nombre : "",
-					SolSuplenteAux: hashPermisos["SOLICITANTE_SUPLENTE_AUXILIAR"].Legajo + ", " + hashPermisos["SOLICITANTE_SUPLENTE_AUXILIAR"].Nombre
+					Creador: hashPermisos["Creador"] ? hashPermisos["Creador"].Legajo + ", " + hashPermisos["Creador"].Nombre : "",
+					Solicitante: hashPermisos["ope_solic-lic_transener"] ? hashPermisos["ope_solic-lic_transener"].Legajo + ", " + hashPermisos["ope_solic-lic_transener"].Nombre : "",
+					SolicitanteSuplente: hashPermisos["Solicitante_Suplente"] ? hashPermisos["Solicitante_Suplente"].Legajo + ", " + hashPermisos[
+						"Solicitante_Suplente"].Nombre : "",
+					Jefe: hashPermisos["Jefe_Trabajo"] ? hashPermisos["Jefe_Trabajo"].Legajo + ", " + hashPermisos["Jefe_Trabajo"].Nombre : "",
+					JefeSuplente: hashPermisos["Jefe_Trabajo_Suplente"] ? hashPermisos["Jefe_Trabajo_Suplente"].Legajo + ", " + hashPermisos[
+						"Jefe_Trabajo_Suplente"].Nombre : "",
+					SolSuplenteAux: hashPermisos["Solicitante_Suplente_Auxiliar"].Legajo + ", " + hashPermisos["Solicitante_Suplente_Auxiliar"].Nombre
 				};
 
 				if (observation) {
@@ -1379,17 +1379,17 @@ sap.ui.define([
 				let infAdicional = causaAnulado + "\n" + license.Obscausa;
 				let stringEmails = "";
 
-				stringEmails = [hashPermisos["CREADOR"], hashPermisos["SOLICITANTE"]].map(permiso => permiso && permiso.Mail ||
+				stringEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail ||
 					"nurrestarazu@inclusion.cloud").join(",");
 
 				var usuariosAsignados = {
 					Coordinador: hashPermisos["COORDINADOR"] ? hashPermisos["COORDINADOR"].Legajo + ", " + hashPermisos["COORDINADOR"].Nombre : "",
-					Creador: hashPermisos["CREADOR"] ? hashPermisos["CREADOR"].Legajo + ", " + hashPermisos["CREADOR"].Nombre : "",
-					Solicitante: hashPermisos["SOLICITANTE"].Legajo + ", " + hashPermisos["SOLICITANTE"].Nombre,
-					SolicitanteSuplente: hashPermisos["SOLICITANTE_SUPLENTE"].Legajo + ", " + hashPermisos["SOLICITANTE_SUPLENTE"].Nombre,
-					Jefe: hashPermisos["JEFE_TRABAJO"].Legajo + ", " + hashPermisos["JEFE_TRABAJO"].Nombre,
-					JefeSuplente: hashPermisos["JEFE_TRABAJO_SUPLENTE"].Legajo + ", " + hashPermisos["JEFE_TRABAJO_SUPLENTE"].Nombre,
-					SolSuplenteAux: hashPermisos["SOLICITANTE_SUPLENTE_AUXILIAR"].Legajo + ", " + hashPermisos["SOLICITANTE_SUPLENTE_AUXILIAR"].Nombre
+					Creador: hashPermisos["Creador"] ? hashPermisos["Creador"].Legajo + ", " + hashPermisos["Creador"].Nombre : "",
+					Solicitante: hashPermisos["ope_solic-lic_transener"].Legajo + ", " + hashPermisos["ope_solic-lic_transener"].Nombre,
+					SolicitanteSuplente: hashPermisos["Solicitante_Suplente"].Legajo + ", " + hashPermisos["Solicitante_Suplente"].Nombre,
+					Jefe: hashPermisos["Jefe_Trabajo"].Legajo + ", " + hashPermisos["Jefe_Trabajo"].Nombre,
+					JefeSuplente: hashPermisos["Jefe_Trabajo_Suplente"].Legajo + ", " + hashPermisos["Jefe_Trabajo_Suplente"].Nombre,
+					SolSuplenteAux: hashPermisos["Solicitante_Suplente_Auxiliar"].Legajo + ", " + hashPermisos["Solicitante_Suplente_Auxiliar"].Nombre
 				};
 				var esAnulacion = true;
 				var MotivoDeAnulacion = oAnulatePayload.Obscausa;
@@ -1527,10 +1527,10 @@ sap.ui.define([
 				//MOMENTANEO
 				hashPermisos["COORDINADOR"] = hashPermisos["COORDINADOR"] || "";
 
-				emails = [hashPermisos["CREADOR"], hashPermisos["SOLICITANTE"], hashPermisos["SOLICITANTE_SUPLENTE"], hashPermisos[
-						"SOLICITANTE_SUPLENTE_AUXILIAR"], hashPermisos[
+				emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
+						"Solicitante_Suplente_Auxiliar"], hashPermisos[
 						"TRAMITADOR"],
-					hashPermisos["JEFE_TRABAJO"], hashPermisos["JEFE_TRABAJO_SUPLENTE"], hashPermisos["COORDINADOR"]
+					hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["COORDINADOR"]
 				].map(permiso => permiso && permiso.Mail || "pgotelli@inclusion.cloud");
 
 				//emails = "hzea@inclusion.cloud"
@@ -1548,15 +1548,15 @@ sap.ui.define([
 				}).join(",");
 				var oUsuariosAsignados = {
 					Coordinador: hashPermisos["COORDINADOR"] ? hashPermisos["COORDINADOR"].Legajo + ", " + hashPermisos["COORDINADOR"].Nombre : "",
-					Creador: hashPermisos["CREADOR"] ? hashPermisos["CREADOR"].Legajo + ", " + hashPermisos["CREADOR"].Nombre : "",
-					Solicitante: hashPermisos["SOLICITANTE"] ? hashPermisos["SOLICITANTE"].Legajo + ", " + hashPermisos["SOLICITANTE"].Nombre : "",
-					SolicitanteSuplente: hashPermisos["SOLICITANTE_SUPLENTE"] ? hashPermisos["SOLICITANTE_SUPLENTE"].Legajo + ", " + hashPermisos[
-						"SOLICITANTE_SUPLENTE"].Nombre : "",
-					Jefe: hashPermisos["JEFE_TRABAJO"] ? hashPermisos["JEFE_TRABAJO"].Legajo + ", " + hashPermisos["JEFE_TRABAJO"].Nombre : "",
-					JefeSuplente: hashPermisos["JEFE_TRABAJO_SUPLENTE"] ? hashPermisos["JEFE_TRABAJO_SUPLENTE"].Legajo + ", " + hashPermisos[
-						"JEFE_TRABAJO_SUPLENTE"].Nombre : "",
-					SolSuplenteAux: hashPermisos["SOLICITANTE_SUPLENTE_AUXILIAR"].Legajo + ", " + hashPermisos[
-						"SOLICITANTE_SUPLENTE_AUXILIAR"].Nombre,
+					Creador: hashPermisos["Creador"] ? hashPermisos["Creador"].Legajo + ", " + hashPermisos["Creador"].Nombre : "",
+					Solicitante: hashPermisos["ope_solic-lic_transener"] ? hashPermisos["ope_solic-lic_transener"].Legajo + ", " + hashPermisos["ope_solic-lic_transener"].Nombre : "",
+					SolicitanteSuplente: hashPermisos["Solicitante_Suplente"] ? hashPermisos["Solicitante_Suplente"].Legajo + ", " + hashPermisos[
+						"Solicitante_Suplente"].Nombre : "",
+					Jefe: hashPermisos["Jefe_Trabajo"] ? hashPermisos["Jefe_Trabajo"].Legajo + ", " + hashPermisos["Jefe_Trabajo"].Nombre : "",
+					JefeSuplente: hashPermisos["Jefe_Trabajo_Suplente"] ? hashPermisos["Jefe_Trabajo_Suplente"].Legajo + ", " + hashPermisos[
+						"Jefe_Trabajo_Suplente"].Nombre : "",
+					SolSuplenteAux: hashPermisos["Solicitante_Suplente_Auxiliar"].Legajo + ", " + hashPermisos[
+						"Solicitante_Suplente_Auxiliar"].Nombre,
 					Tramitador: hashPermisos["TRAMITADOR"].Legajo + ", " + hashPermisos[
 						"TRAMITADOR"].Nombre,
 				};
@@ -1798,8 +1798,8 @@ sap.ui.define([
 						hashPermisos[permiso.Rol] = permiso;
 					});
 					hashPermisos["COORDINADOR"] = hashPermisos["COORDINADOR"] || "";
-					emails = [hashPermisos["CREADOR"], hashPermisos["SOLICITANTE"], hashPermisos["SOLICITANTE_SUPLENTE"], hashPermisos[
-						"SOLICITANTE_SUPLENTE_AUXILIAR"], hashPermisos["JEFE_TRABAJO"], hashPermisos["JEFE_TRABAJO_SUPLENTE"]].map(permiso => permiso &&
+					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
+						"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
 						permiso.Mail || "nurrestarazu@inclusion.cloud").join(",");
 
 					var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
@@ -1815,14 +1815,14 @@ sap.ui.define([
 
 					var oUsuariosAsignados = {
 						Coordinador: hashPermisos["COORDINADOR"] ? hashPermisos["COORDINADOR"].Legajo + ", " + hashPermisos["COORDINADOR"].Nombre : "",
-						Creador: hashPermisos["CREADOR"] ? hashPermisos["CREADOR"].Legajo + ", " + hashPermisos["CREADOR"].Nombre : "",
-						Solicitante: hashPermisos["SOLICITANTE"] ? hashPermisos["SOLICITANTE"].Legajo + ", " + hashPermisos["SOLICITANTE"].Nombre : "",
-						SolicitanteSuplente: hashPermisos["SOLICITANTE_SUPLENTE"] ? hashPermisos["SOLICITANTE_SUPLENTE"].Legajo + ", " + hashPermisos[
-							"SOLICITANTE_SUPLENTE"].Nombre : "",
-						Jefe: hashPermisos["JEFE_TRABAJO"] ? hashPermisos["JEFE_TRABAJO"].Legajo + ", " + hashPermisos["JEFE_TRABAJO"].Nombre : "",
-						JefeSuplente: hashPermisos["JEFE_TRABAJO_SUPLENTE"] ? hashPermisos["JEFE_TRABAJO_SUPLENTE"].Legajo + ", " + hashPermisos[
-							"JEFE_TRABAJO_SUPLENTE"].Nombre : "",
-						SolSuplenteAux: hashPermisos["SOLICITANTE_SUPLENTE_AUXILIAR"].Legajo + ", " + hashPermisos["SOLICITANTE_SUPLENTE_AUXILIAR"].Nombre
+						Creador: hashPermisos["Creador"] ? hashPermisos["Creador"].Legajo + ", " + hashPermisos["Creador"].Nombre : "",
+						Solicitante: hashPermisos["ope_solic-lic_transener"] ? hashPermisos["ope_solic-lic_transener"].Legajo + ", " + hashPermisos["ope_solic-lic_transener"].Nombre : "",
+						SolicitanteSuplente: hashPermisos["Solicitante_Suplente"] ? hashPermisos["Solicitante_Suplente"].Legajo + ", " + hashPermisos[
+							"Solicitante_Suplente"].Nombre : "",
+						Jefe: hashPermisos["Jefe_Trabajo"] ? hashPermisos["Jefe_Trabajo"].Legajo + ", " + hashPermisos["Jefe_Trabajo"].Nombre : "",
+						JefeSuplente: hashPermisos["Jefe_Trabajo_Suplente"] ? hashPermisos["Jefe_Trabajo_Suplente"].Legajo + ", " + hashPermisos[
+							"Jefe_Trabajo_Suplente"].Nombre : "",
+						SolSuplenteAux: hashPermisos["Solicitante_Suplente_Auxiliar"].Legajo + ", " + hashPermisos["Solicitante_Suplente_Auxiliar"].Nombre
 					};
 					aPromises.push(EtMailService.getPromise(oLicence.Empresa, oLicence.Tplnr, this.getSelectionArea(oLicence.Tipo, "01")));
 
@@ -1879,8 +1879,8 @@ sap.ui.define([
 
 				// MOMENTANEO
 				hashPermisos["COORDINADOR"] = hashPermisos["COORDINADOR"] || "";
-				emails = [hashPermisos["CREADOR"], hashPermisos["SOLICITANTE"], hashPermisos["SOLICITANTE_SUPLENTE"], hashPermisos[
-					"SOLICITANTE_SUPLENTE_AUXILIAR"], hashPermisos["JEFE_TRABAJO"], hashPermisos["JEFE_TRABAJO_SUPLENTE"]].map(permiso => permiso &&
+				emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
+					"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
 					permiso.Mail || "nurrestarazu@inclusion.cloud").join(",");
 
 				var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
@@ -1895,14 +1895,14 @@ sap.ui.define([
 				aPromises.push(oPromiseCoord);
 				var oUsuariosAsignados = {
 					Coordinador: hashPermisos["COORDINADOR"] ? hashPermisos["COORDINADOR"].Legajo + ", " + hashPermisos["COORDINADOR"].Nombre : "",
-					Creador: hashPermisos["CREADOR"] ? hashPermisos["CREADOR"].Legajo + ", " + hashPermisos["CREADOR"].Nombre : "",
-					Solicitante: hashPermisos["SOLICITANTE"] ? hashPermisos["SOLICITANTE"].Legajo + ", " + hashPermisos["SOLICITANTE"].Nombre : "",
-					SolicitanteSuplente: hashPermisos["SOLICITANTE_SUPLENTE"] ? hashPermisos["SOLICITANTE_SUPLENTE"].Legajo + ", " + hashPermisos[
-						"SOLICITANTE_SUPLENTE"].Nombre : "",
-					Jefe: hashPermisos["JEFE_TRABAJO"] ? hashPermisos["JEFE_TRABAJO"].Legajo + ", " + hashPermisos["JEFE_TRABAJO"].Nombre : "",
-					JefeSuplente: hashPermisos["JEFE_TRABAJO_SUPLENTE"] ? hashPermisos["JEFE_TRABAJO_SUPLENTE"].Legajo + ", " + hashPermisos[
-						"JEFE_TRABAJO_SUPLENTE"].Nombre : "",
-					SolSuplenteAux: hashPermisos["SOLICITANTE_SUPLENTE_AUXILIAR"].Legajo + ", " + hashPermisos["SOLICITANTE_SUPLENTE_AUXILIAR"].Nombre
+					Creador: hashPermisos["Creador"] ? hashPermisos["Creador"].Legajo + ", " + hashPermisos["Creador"].Nombre : "",
+					Solicitante: hashPermisos["ope_solic-lic_transener"] ? hashPermisos["ope_solic-lic_transener"].Legajo + ", " + hashPermisos["ope_solic-lic_transener"].Nombre : "",
+					SolicitanteSuplente: hashPermisos["Solicitante_Suplente"] ? hashPermisos["Solicitante_Suplente"].Legajo + ", " + hashPermisos[
+						"Solicitante_Suplente"].Nombre : "",
+					Jefe: hashPermisos["Jefe_Trabajo"] ? hashPermisos["Jefe_Trabajo"].Legajo + ", " + hashPermisos["Jefe_Trabajo"].Nombre : "",
+					JefeSuplente: hashPermisos["Jefe_Trabajo_Suplente"] ? hashPermisos["Jefe_Trabajo_Suplente"].Legajo + ", " + hashPermisos[
+						"Jefe_Trabajo_Suplente"].Nombre : "",
+					SolSuplenteAux: hashPermisos["Solicitante_Suplente_Auxiliar"].Legajo + ", " + hashPermisos["Solicitante_Suplente_Auxiliar"].Nombre
 				};
 
 				aPromises.push(EtMailService.getPromise(oLicence.Empresa, oLicence.Tplnr, this.getSelectionArea(oLicence.Tipo, "01")));
@@ -2691,7 +2691,7 @@ sap.ui.define([
 			//array creacion, observacion
 
 			//para complentar dps
-			var aRolesForCreation = ["CREADOR", "JEFE_TRABAJO", "JEFE_TRABAJO_SUPLENTE", "SOLICITANTE", "SOLICITANTE_SUPLENTE"]
+			var aRolesForCreation = ["Creador", "Jefe_Trabajo", "Jefe_Trabajo_Suplente", "ope_solic-lic_transener", "Solicitante_Suplente"]
 				//coordinacion y observacion. 
 			var aRolesForCoordinationObservation = ["COORDINADOR"];
 			var aRolesForTramitation = ["TRAMITADOR"];
@@ -3054,15 +3054,15 @@ sap.ui.define([
 		// Para los casos de cot y programacion este combo se va a ver y posteriormente se selecciona o nada o emergencia o terceros.
 		getLicStatByRol: function (sTipoLic, sLicStat) {
 			var sLicStatAux = sLicStat;
-			// Issue #518 -> Agregar lógica para setear el estado de una licencia con el nuevo rol: Solicitante_Lic_TBA
+			// Issue #518 -> Agregar lógica para setear el estado de una licencia con el nuevo rol: ope_solic-lic_transba
 			var aRoles = AppManagementHelper.getModel("UserJsonModel").getData().roles;
 			var inputEnabled = AppManagementHelper.getModel("EnviarCoordModel").getProperty("/visibleTipoLicencia");
 			if (inputEnabled && (sTipoLic === "N" || sTipoLic === "EM" || sTipoLic === "TE")) {
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Gdate", new Date());
 				sLicStat = "07";
 
-				// Si el usuario tiene el nuevo rol -> Solicitante_Lic_TBA
-				var bSolicitanteLicTBA = aRoles.find(sRol => sRol === "Solicitante_Lic_TBA");
+				// Si el usuario tiene el nuevo rol -> ope_solic-lic_transba
+				var bSolicitanteLicTBA = aRoles.find(sRol => sRol === "ope_solic-lic_transba");
 				// Issue # 545 - Solo se debe cambiar el estatus si se uso el boton "Generar Licencia" , si se creo usando el boton "Crear Borrador Licencia"
 				// se debe mantener el estado 30 "Creada"
 				if (bSolicitanteLicTBA && sLicStatAux === "09") {
@@ -3220,21 +3220,21 @@ sap.ui.define([
 			aPromises.push(
 				this.handlePromisePermisos(oLicense.Anio, sTipoSol, sId, oCurrentUser.Legajo, sCurrentUserName, sCurrentUserMail, oCurrentUser.Empresa,
 					"CREATION",
-					"CREADOR"),
+					"Creador"),
 				this.handlePromisePermisos(oLicense.Anio, sTipoSol, sId, oLicense.Solicitante, solicitanteNombre, "", oCurrentUser.Empresa,
 					"CREATION",
-					"SOLICITANTE"),
+					"ope_solic-lic_transener"),
 				this.handlePromisePermisos(oLicense.Anio, sTipoSol, sId, oLicense.SolSuplente, solicitanteSuplenteNombre, "", oCurrentUser.Empresa,
 					"CREATION",
-					"SOLICITANTE_SUPLENTE"),
+					"Solicitante_Suplente"),
 				this.handlePromisePermisos(oLicense.Anio, sTipoSol, sId, oLicense.SolSuplenteAux, solSuplenteAuxNombre, "", oCurrentUser.Empresa,
 					"CREATION",
-					"SOLICITANTE_SUPLENTE_AUXILIAR"),
+					"Solicitante_Suplente_Auxiliar"),
 				this.handlePromisePermisos(oLicense.Anio, sTipoSol, sId, oLicense.Jefe, JefeNombre, "", oCurrentUser.Empresa, "CREATION",
-					"JEFE_TRABAJO"),
+					"Jefe_Trabajo"),
 				this.handlePromisePermisos(oLicense.Anio, sTipoSol, sId, oLicense.JefeSuplente, JefeSuplenteNombre, "", oCurrentUser.Empresa,
 					"CREATION",
-					"JEFE_TRABAJO_SUPLENTE")
+					"Jefe_Trabajo_Suplente")
 			)
 			return aPromises;
 		},
@@ -3252,19 +3252,19 @@ sap.ui.define([
 			let solSuplenteAuxNombre = FormatterHelper.getSolicitanteName(oLicencia.SolSuplenteAux);
 			aPromises.push(
 				this.handlePromisePermisos(sYear, sTipoSol, sLicenceId, oCurrentUser.Legajo, sCurrentUserName, sCurrentUserMail, oCurrentUser.Empresa,
-					"EDITION", "CREADOR"),
+					"EDITION", "Creador"),
 				this.handlePromisePermisos(sYear, sTipoSol, sLicenceId, oLicencia.Solicitante, solicitanteNombre, "", oCurrentUser.Empresa,
 					"EDITION",
-					"SOLICITANTE"),
+					"ope_solic-lic_transener"),
 				this.handlePromisePermisos(sYear, sTipoSol, sLicenceId, oLicencia.SolSuplente, solicitanteSuplenteNombre, "", oCurrentUser.Empresa,
-					"EDITION", "SOLICITANTE_SUPLENTE"),
+					"EDITION", "Solicitante_Suplente"),
 				this.handlePromisePermisos(sYear, sTipoSol, sLicenceId, oLicencia.SolSuplenteAux, solSuplenteAuxNombre, "", oCurrentUser.Empresa,
-					"EDITION", "SOLICITANTE_SUPLENTE_AUXILIAR"),
+					"EDITION", "Solicitante_Suplente_Auxiliar"),
 				this.handlePromisePermisos(sYear, sTipoSol, sLicenceId, oLicencia.Jefe, JefeNombre, "", oCurrentUser.Empresa, "EDITION",
-					"JEFE_TRABAJO"),
+					"Jefe_Trabajo"),
 				this.handlePromisePermisos(sYear, sTipoSol, sLicenceId, oLicencia.JefeSuplente, JefeSuplenteNombre, "", oCurrentUser.Empresa,
 					"EDITION",
-					"JEFE_TRABAJO_SUPLENTE")
+					"Jefe_Trabajo_Suplente")
 			)
 			return aPromises;
 		},
@@ -3324,8 +3324,8 @@ sap.ui.define([
 						""
 
 					if (oLicencia.Tipo === "L") {
-						var aEmailsPermisos = [hashPermisos["SOLICITANTE"], hashPermisos["SOLICITANTE_SUPLENTE"], hashPermisos[
-							"SOLICITANTE_SUPLENTE_AUXILIAR"], hashPermisos["JEFE_TRABAJO"], hashPermisos["JEFE_TRABAJO_SUPLENTE"]].map(permiso =>
+						var aEmailsPermisos = [hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
+							"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso =>
 							permiso &&
 							permiso.Mail ||
 							"hzea@inclusion.cloud")
@@ -3335,14 +3335,14 @@ sap.ui.define([
 
 					aEmails = aEmails.concat(aEmailsPermisos);
 
-					oUsuariosAsignados.Solicitante = hashPermisos["SOLICITANTE"].Legajo + ", " + hashPermisos["SOLICITANTE"].Nombre;
-					oUsuariosAsignados.SolicitanteSuplente = hashPermisos["SOLICITANTE_SUPLENTE"].Legajo + ", " + hashPermisos[
-						"SOLICITANTE_SUPLENTE"].Nombre;
-					oUsuariosAsignados.Jefe = hashPermisos["JEFE_TRABAJO"].Legajo + ", " + hashPermisos["JEFE_TRABAJO"].Nombre;
-					oUsuariosAsignados.JefeSuplente = hashPermisos["JEFE_TRABAJO_SUPLENTE"].Legajo + ", " + hashPermisos["JEFE_TRABAJO_SUPLENTE"]
+					oUsuariosAsignados.Solicitante = hashPermisos["ope_solic-lic_transener"].Legajo + ", " + hashPermisos["ope_solic-lic_transener"].Nombre;
+					oUsuariosAsignados.SolicitanteSuplente = hashPermisos["Solicitante_Suplente"].Legajo + ", " + hashPermisos[
+						"Solicitante_Suplente"].Nombre;
+					oUsuariosAsignados.Jefe = hashPermisos["Jefe_Trabajo"].Legajo + ", " + hashPermisos["Jefe_Trabajo"].Nombre;
+					oUsuariosAsignados.JefeSuplente = hashPermisos["Jefe_Trabajo_Suplente"].Legajo + ", " + hashPermisos["Jefe_Trabajo_Suplente"]
 						.Nombre;
-					oUsuariosAsignados.SolSuplenteAux = hashPermisos["SOLICITANTE_SUPLENTE_AUXILIAR"].Legajo + ", " + hashPermisos[
-						"SOLICITANTE_SUPLENTE_AUXILIAR"].Nombre;
+					oUsuariosAsignados.SolSuplenteAux = hashPermisos["Solicitante_Suplente_Auxiliar"].Legajo + ", " + hashPermisos[
+						"Solicitante_Suplente_Auxiliar"].Nombre;
 					var sEmails = aEmails.join(",");
 					//	var sEmailEt = "";
 					var sInfAdicional = ""
@@ -3458,7 +3458,7 @@ sap.ui.define([
 						Coordinador: "",
 						Creador: oCurrentUser.Legajo + ", " + sCurrentUserName
 					}
-					//TODO creador
+					//TODO Creador
 				switch (oLicencia.Licstat) {
 				case "30":
 					if (bIsSol) {
@@ -3504,14 +3504,14 @@ sap.ui.define([
 					});
 
 					if (oLicencia.Tipo === "L") {
-						var aEmailsPermisos = [hashPermisos["SOLICITANTE"], hashPermisos["SOLICITANTE_SUPLENTE"], hashPermisos[
-							"SOLICITANTE_SUPLENTE_AUXILIAR"], hashPermisos["JEFE_TRABAJO"], hashPermisos["JEFE_TRABAJO_SUPLENTE"]].map(permiso =>
+						var aEmailsPermisos = [hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
+							"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso =>
 							permiso &&
 							permiso.Mail ||
 							"hzea@inclusion.cloud")
 					} else {
-						// Issue 581 - Se debe enviar correo al solicitante ,  creador y Coordinador de Mantenimiento cuando se genere una solicitud
-						var aEmailsPermisos = [hashPermisos["SOLICITANTE"], hashPermisos["CREADOR"]].map(permiso =>
+						// Issue 581 - Se debe enviar correo al Solicitante ,  Creador y Coordinador de Mantenimiento cuando se genere una solicitud
+						var aEmailsPermisos = [hashPermisos["ope_solic-lic_transener"], hashPermisos["Creador"]].map(permiso =>
 							permiso &&
 							permiso.Mail);
 						// Los coordinadores de Mantenimientos se obtuvieron  en un paso anterior
@@ -3525,14 +3525,14 @@ sap.ui.define([
 					aEmails = aEmails.concat(aEmailsPermisos);
 					var sEmails = aEmails.join(",");
 
-					oUsuariosAsignados.Solicitante = hashPermisos["SOLICITANTE"].Legajo + ", " + hashPermisos["SOLICITANTE"].Nombre;
-					oUsuariosAsignados.SolicitanteSuplente = hashPermisos["SOLICITANTE_SUPLENTE"].Legajo + ", " + hashPermisos[
-						"SOLICITANTE_SUPLENTE"].Nombre;
-					oUsuariosAsignados.Jefe = hashPermisos["JEFE_TRABAJO"].Legajo + ", " + hashPermisos["JEFE_TRABAJO"].Nombre;
-					oUsuariosAsignados.JefeSuplente = hashPermisos["JEFE_TRABAJO_SUPLENTE"].Legajo + ", " + hashPermisos["JEFE_TRABAJO_SUPLENTE"]
+					oUsuariosAsignados.Solicitante = hashPermisos["ope_solic-lic_transener"].Legajo + ", " + hashPermisos["ope_solic-lic_transener"].Nombre;
+					oUsuariosAsignados.SolicitanteSuplente = hashPermisos["Solicitante_Suplente"].Legajo + ", " + hashPermisos[
+						"Solicitante_Suplente"].Nombre;
+					oUsuariosAsignados.Jefe = hashPermisos["Jefe_Trabajo"].Legajo + ", " + hashPermisos["Jefe_Trabajo"].Nombre;
+					oUsuariosAsignados.JefeSuplente = hashPermisos["Jefe_Trabajo_Suplente"].Legajo + ", " + hashPermisos["Jefe_Trabajo_Suplente"]
 						.Nombre;
-					oUsuariosAsignados.SolSuplenteAux = hashPermisos["SOLICITANTE_SUPLENTE_AUXILIAR"].Legajo + ", " + hashPermisos[
-						"SOLICITANTE_SUPLENTE_AUXILIAR"].Nombre;
+					oUsuariosAsignados.SolSuplenteAux = hashPermisos["Solicitante_Suplente_Auxiliar"].Legajo + ", " + hashPermisos[
+						"Solicitante_Suplente_Auxiliar"].Nombre;
 
 					//blanquear todo para estado CREADA, no debe llegarle a nadie.460 461
 					if (oLicencia.Licstat === "30") {

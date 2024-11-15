@@ -958,10 +958,14 @@ sap.ui.define([
 		rolStatusEdition: function (controlPath, callback) {
 			return RolAuthorizationHelper.rolStatusEdition(controlPath, callback);
 		},
+		rolStatusEdition2: function (controlPath, callback) {
+			return RolAuthorizationHelper.rolStatusEdition2(controlPath, callback);
+		},
+
 
 		validateSubstatus: function (...extra) {
 
-			console.log("Extra", ...extra)
+
 			return (extra[1] === "" || extra[1] === "R" || extra[1] === "S" || extra[1] === "D" || extra[1] === "E") && extra[2] === "01" &&
 				extra[0];
 		},
@@ -982,7 +986,7 @@ sap.ui.define([
 			var aCurrentUserRoles = AppManagementHelper.getModel("UserJsonModel").getData().roles;
 
 			var UserTieneRolesDeEdicion = aCurrentUserRoles.some(function (rol) { //Si tiene alguno de estos roles que son para editar una licencia devuelve true
-				return rol === 'Solicitante_Lic' || rol === 'Solicitante_Lic_S' || rol === 'Solicitante_Lic_TBA';
+				return rol === 'ope_solic-lic_transener' || rol === 'ope_solic-lic_transener' || rol === 'ope_solic-lic_transba';
 			});
 
 			if (UsuarioEncontrado && UserTieneRolesDeEdicion) {
@@ -3344,7 +3348,7 @@ sap.ui.define([
 			var userInfo = AppManagementHelper.getModel("UserJsonModel");
 			var permisosEliminarDocumento = userInfo.oData.roles[0];
 			/*var EnablePermiso = undefined;
-			if (permisosEliminarDocumento === 'Jefe_Turno_COT' || 'Operador_COT' || 'Programacion_COTDT') {
+			if (permisosEliminarDocumento === 'ope_jefe_cot' || 'ope_oper-turno_cot' || 'ope_programacion_cotdt') {
 				EnablePermiso = false;
 			} else {
 				EnablePermiso = true;
@@ -4648,7 +4652,7 @@ sap.ui.define([
 		},
 		changeLicenTypeCopyTBA: function () {
 			// Si el usuario es solicitante transener
-			if (AppManagementHelper.getModel("UserJsonModel").getData().roles.some((oElement) => oElement === "Solicitante_Lic")) {
+			if (AppManagementHelper.getModel("UserJsonModel").getData().roles.some((oElement) => oElement === "ope_solic-lic_transener")) {
 				// Remplazo el tipo de licencia de la original por "Programada"
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "N");
 			}

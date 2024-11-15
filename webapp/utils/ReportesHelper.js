@@ -26,10 +26,10 @@ sap.ui.define([
 			var xhr = new XMLHttpRequest();
 			//test webide images/transener.png
 			if (society === "100") {
-				xhr.open("GET", "/images/transener_top.png", true);
+				xhr.open("GET", "images/transener_top.png", true);
 				//	xhr.open("GET", "/sap/fiori/transeneroperacionesworklicens/images/transener.png", true);
 			} else {
-				xhr.open("GET", "/images/transba_top.png", true);
+				xhr.open("GET", "images/transba_top.png", true);
 				// xhr.open("GET", "/sap/fiori/transeneroperacionesworklicens/images/TRANSBA.png", true);
 			}
 

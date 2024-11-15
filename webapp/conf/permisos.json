@@ -4,7 +4,7 @@
 		"comentario2": "casos de licencias de emergencia, ellos no generan solicitud",
 		"all": [
 			"ope_jefe_cot",
-			"habilitar",
+			"ope_jefe_turno_cotdt",
 			"ope_jefe_cotdt",
 			"ope_jefe_cot",
 			"preguntar_lucas",
@@ -27,7 +27,7 @@
 		],
 		"!ButtonSolicitud": [
 			"ope_jefe_cot",
-			"habilitar",
+			"ope_jefe_turno_cotdt",
 			"ope_programacion_cot",
 			"ope_programacion_cotdt"
 		],
@@ -52,10 +52,11 @@
 	},
 	"entregasDevoluciones": {
 		"all": [
-			"ope_jefe_cot",
-			"habilitar",
+			"ope_jefe_turno_cot",
+			"ope_jefe_turno_cotdt",
 			"ope_oper-turno_cotdt",
 			"ope_oper-turno_cot"
+			
 		]
 	},
 	"medidasSeguridad": {
@@ -65,7 +66,7 @@
 			"Jefe_Trabajo",
 			"Jefe_Trabajo_Suplente",
 			"ope_jefe_cot",
-			"habilitar",
+			"ope_jefe_turno_cotdt",
 			"ope_oper-turno_cotdt",
 			"ope_oper-turno_cot",
 			"ope_programacion_cotdt",
@@ -84,7 +85,7 @@
 		"botonAnulacion": [
 			"Asistencia_Mantenimiento",
 			"ope_coord-mant",
-			"habilitar",
+			"ope_jefe_turno_cotdt",
 			"ope_jefe_cot",
 			"ope_programacion_cot",
 			"ope_programacion_cotdt"
@@ -97,7 +98,7 @@
 		],
 		"botonTramitar": [
 			"ope_jefe_cot",
-			"habilitar",
+			"ope_jefe_turno_cotdt",
 			"ope_oper-turno_cot",
 			"ope_oper-turno_cotdt",
 			"ope_programacion_cot",
@@ -111,7 +112,7 @@
 		],
 		"!BotonSolicitudListado": [
 			"ope_jefe_cot",
-			"habilitar",
+			"ope_jefe_turno_cotdt",
 			"ope_jefe_cotdt",
 			"ope_programacion_cotdt",
 			"ope_programacion_cot",
@@ -130,7 +131,7 @@
 			"Jefe_Trabajo",
 			"Jefe_Trabajo_Suplente",
 			"ope_jefe_cot",
-			"habilitar",
+			"ope_jefe_turno_cotdt",
 			"ope_oper-turno_cotdt",
 			"ope_oper-turno_cot",
 			"ope_programacion_cotdt",
@@ -146,7 +147,7 @@
 		"tramitacionMasiva": [
 			"Tramitador",
 			"ope_jefe_cot",
-			"habilitar",
+			"ope_jefe_turno_cotdt",
 			"ope_oper-turno_cot",
 			"ope_oper-turno_cotdt",
 			"ope_programacion_cot",
@@ -162,7 +163,7 @@
 			"Jefe_Trabajo",
 			"Jefe_Trabajo_Suplente",
 			"ope_jefe_cot",
-			"habilitar",
+			"ope_jefe_turno_cotdt",
 			"ope_oper-turno_cotdt",
 			"ope_oper-turno_cot",
 			"ope_programacion_cotdt",
