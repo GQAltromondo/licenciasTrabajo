@@ -102,6 +102,7 @@ resources:
     service: process-automation-service
     service-plan: standard
   properties:
+    service-name: sap_wf_sendmail
     key: sap_wf_sendmail-key
 parameters:
   deploy_mode: html5-repo

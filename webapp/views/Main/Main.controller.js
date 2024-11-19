@@ -111,6 +111,9 @@ sap.ui.define([
 
 			var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id");
 
+			var appModel = AppManagementHelper.getModel("appId")
+			appModel.setData(appId)
+
 			//var appId = this.getManifestEntry("/sap.app/id");
 			var appPath = appId.replaceAll(".", "/");
 			var appModulePath = jQuery.sap.getModulePath(appPath);

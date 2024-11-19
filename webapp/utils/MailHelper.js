@@ -11,7 +11,8 @@ sap.ui.define([
 		getToken: function () {
 			return new Promise((resolve, reject) => {
 				$.ajax({
-					url: this._getWorkflowRuntimeBaseURL() + "/bpmworkflowruntime/rest/v1/xsrf-token",
+				//	url: this._getWorkflowRuntimeBaseURL() + "/bpmworkflowruntime/rest/v1/xsrf-token",
+					url: this._getWorkflowRuntimeBaseURL() + "/xsrf-token",
 					method: "GET",
 					headers: {
 						"X-CSRF-Token": "Fetch"
@@ -27,12 +28,15 @@ sap.ui.define([
 
 		// RL: Cancela por multiples includes
 		_getWorkflowRuntimeBaseURL: function () {
-			var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id");
+			//var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id");
+			var appId = AppManagementHelper.getModel("appId").getData()
 			var appPath = appId.replaceAll(".", "/");
 			var appModulePath = jQuery.sap.getModulePath(appPath);
-  
+
 			return appModulePath + "/bpmworkflowruntime/v1";
-		  },
+			//return appModulePath 
+	
+		},
 
 		formatMailsARO: function (aMails) {
 			var sMails = [];
@@ -47,7 +51,8 @@ sap.ui.define([
 			return new Promise((resolve, reject) => {
 				this.getToken().then((token) => {
 					$.ajax({
-						url: "/bpmworkflowruntime/rest/v1/workflow-instances",
+						url: this._getWorkflowRuntimeBaseURL() + "/workflow-instances",
+						//url: "/bpmworkflowruntime/rest/v1/workflow-instances",
 						method: "POST",
 						async: false,
 						contentType: "application/json",
@@ -110,7 +115,7 @@ sap.ui.define([
 					timend = FormatHelper.getTimeString(timend);
 				}
 
-                var mailsARO = "";
+				var mailsARO = "";
 				if (AppManagementHelper.getModel("MailsAROModel").getData().Mails && AppManagementHelper.getModel("MailsAROModel").getData().Mails.length !== 0 && licencia.Licstat !== "30") {
 					mailsARO = those.formatMailsARO(AppManagementHelper.getModel("MailsAROModel").getData().Mails);
 				}
@@ -221,7 +226,7 @@ sap.ui.define([
 				context.JefeSuplente = usuariosAsignados.JefeSuplente || "";
 
 				context.Observador = licencia.Licstat === "02" ? nameLegacyObservator : "";
-                context.Anulador = licencia.Licstat === "03" ? licencia.Anulador : "";
+				context.Anulador = licencia.Licstat === "03" ? licencia.Anulador : "";
 				context.Coordinador = licencia.Licstat === "11" || licencia.Licstat === "07" || licencia.Licstat === "03" || licencia.Licstat === "01" || licencia.Licstat === "06" ? nameLegacyCoordinator || "" : "";
 				context.Tramitador = (licencia.Licstat === "01" || licencia.Licstat === "06" || licencia.Licstat === "03" || licencia.Licstat === "11") ? nameLegacyTramitador || "" : "";
 

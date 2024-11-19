@@ -305,245 +305,6 @@ sap.ui.define([
 			});
 		},
 
-		// generateDeliveryDevolution: function (oLicense) {
-		// 	var oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
-		// 	var aDataTODOS = oModel.getProperty("/Todos");
-
-		// 	var aDevolution = [];
-		// 	var aDelivery = [];
-
-		// 	if (oLicense.Period === "C") {
-		// 		// #513 -> Si la licencia tiene entregas:
-		// 		// "Asimismo, deben persistir los datos de las entregas aunque el usuario no aparezca según los criterios para el data source del combo."
-		// 		if (oLicense.EntregasLicencia_nav.length > 0) {
-		// 			let aCloneEntregas = jQuery.extend(true, [], oLicense.EntregasLicencia_nav);
-		// 			aCloneEntregas.forEach(oEntrega => {
-		// 				oEntrega.showPrevValue = true;
-		// 				let oTejtPrev = aDataTODOS.find(oItem => oItem.Legajo === oEntrega.Tejt);
-		// 				oEntrega.TejtPrev = oTejtPrev ? oTejtPrev : {
-		// 					Legajo: "",
-		// 					Nombre: "",
-		// 				};
-		// 				let oTecETPrev = aDataTODOS.find(oItem => oItem.Legajo === oEntrega.TecET);
-		// 				oEntrega.TecETPrev = oTecETPrev ? oTecETPrev : {
-		// 					Legajo: "",
-		// 					Nombre: "",
-		// 				};
-		// 			});
-
-		// 			// Assign data
-		// 			aDelivery = aDelivery.concat(aCloneEntregas);
-		// 		}
-		// 		this.formatUTCDates(aDelivery);
-
-		// 		var oDelivery = {
-		// 			Anio: oLicense.Anio,
-		// 			Empresa: oLicense.Empresa,
-		// 			sameDayValidation: true,
-		// 			Devolutiondate: new Date(),
-		// 			Datelicencia: new Date() > FormatHelper.formatDatesGMT(oLicense.Solbeg) && new Date() < FormatHelper.formatDatesGMT(oLicense.Solend) ?
-		// 				new Date() : oLicense.Solend,
-		// 			Id: oLicense.Id,
-		// 			Time: new Date(),
-		// 			Cot: AppManagementHelper.getStringUserLegacy(),
-		// 			Tejt: "",
-		// 			TecET: "",
-		// 			Folio: "",
-		// 			Motivono: "",
-		// 			Commen: "",
-		// 			enabled: this.getEnabledEstatusDelivery(oLicense.Period, oLicense.Substatus, "E"),
-		// 			showPrevValue: false,
-		// 			TejtPrev: {
-		// 				Legajo: "",
-		// 				Nombre: "",
-		// 			},
-		// 			TecETPrev: {
-		// 				Legajo: "",
-		// 				Nombre: "",
-		// 			}
-		// 		};
-
-		// 		var oDevolutionFromService = oLicense.DevolucionLicencia_nav.length ? oLicense.DevolucionLicencia_nav.shift() : null;
-		// 		if (oDevolutionFromService) {
-		// 			oDevolutionFromService.Datelicencia = FormatHelper.formatDatesGMT(oDevolutionFromService.Datelicencia);
-		// 			oDevolutionFromService.showPrevValue = true;
-		// 			let oTejtPrev = aDataTODOS.find(oItem => oItem.Legajo === oDevolutionFromService.Tejt);
-		// 			oDevolutionFromService.TejtPrev = oTejtPrev ? oTejtPrev : {
-		// 				Legajo: "",
-		// 				Nombre: "",
-		// 			};
-		// 			let oTecETPrev = aDataTODOS.find(oItem => oItem.Legajo === oDevolutionFromService.TecET);
-		// 			oDevolutionFromService.TecETPrev = oTecETPrev ? oTecETPrev : {
-		// 				Legajo: "",
-		// 				Nombre: "",
-		// 			};
-		// 		}
-
-		// 		var oDevolution = oDevolutionFromService ? oDevolutionFromService : {
-		// 			Anio: oLicense.Anio,
-		// 			Empresa: oLicense.Empresa,
-		// 			sameDayValidation: true,
-		// 			Devolutiondate: new Date(),
-		// 			Datelicencia: new Date() > FormatHelper.formatDatesGMT(oLicense.Solbeg) && new Date() < FormatHelper.formatDatesGMT(oLicense.Solend) ?
-		// 				new Date() : oLicense.Solend,
-		// 			Id: oLicense.Id,
-		// 			Time: new Date(),
-		// 			Devindex: "",
-		// 			Personal: AppManagementHelper.getStringUserLegacy(),
-		// 			Tejt: "",
-		// 			TecET: "",
-		// 			Commen: "",
-		// 			Cancel: "",
-		// 			enabled: this.getEnabledEstatusDelivery(oLicense.Period, oLicense.Substatus, "D"),
-		// 			enabledContinua: true,
-		// 			showPrevValue: false,
-		// 			TejtPrev: {
-		// 				Legajo: "",
-		// 				Nombre: "",
-		// 			},
-		// 			TecETPrev: {
-		// 				Legajo: "",
-		// 				Nombre: "",
-		// 			}
-		// 		};
-
-		// 		aDevolution.push(oDevolution);
-		// 		aDelivery.push(oDelivery);
-
-		// 	} else {
-		// 		// #513 -> Si la licencia tiene entregas:
-		// 		// "Asimismo, deben persistir los datos de las entregas aunque el usuario no aparezca según los criterios para el data source del combo."
-		// 		if (oLicense.EntregasLicencia_nav.length > 0) {
-		// 			let aCloneEntregas = jQuery.extend(true, [], oLicense.EntregasLicencia_nav);
-		// 			aCloneEntregas.forEach(oEntrega => {
-		// 				oEntrega.showPrevValue = true;
-		// 				let oTejtPrev = aDataTODOS.find(oItem => oItem.Legajo === oEntrega.Tejt);
-		// 				oEntrega.TejtPrev = oTejtPrev ? oTejtPrev : {
-		// 					Legajo: "",
-		// 					Nombre: "",
-		// 				};
-		// 				let oTecETPrev = aDataTODOS.find(oItem => oItem.Legajo === oEntrega.TecET);
-		// 				oEntrega.TecETPrev = oTecETPrev ? oTecETPrev : {
-		// 					Legajo: "",
-		// 					Nombre: "",
-		// 				};
-		// 			});
-
-		// 			// Assign data
-		// 			aDelivery = aDelivery.concat(aCloneEntregas);
-		// 		}
-
-		// 		this.formatUTCDates(aDelivery);
-		// 		aDelivery.push({
-		// 			Anio: oLicense.Anio,
-		// 			enabledInputMotivo: false,
-		// 			Devolutiondate: new Date(),
-		// 			Empresa: oLicense.Empresa,
-		// 			Datelicencia: new Date() > oLicense.Solbeg && new Date() < oLicense.Solend ? new Date() : oLicense.Solend,
-		// 			Id: oLicense.Id,
-		// 			Time: new Date(),
-		// 			Cot: AppManagementHelper.getStringUserLegacy(),
-		// 			Tejt: "",
-		// 			TecET: "",
-		// 			Folio: "",
-		// 			Motivono: "",
-		// 			Commen: "",
-		// 			enabled: this.getEnabledEstatusDelivery(oLicense.Period, oLicense.Substatus, "E") && oLicense.Licstat !== "11",
-		// 			showPrevValue: false,
-		// 			TejtPrev: {
-		// 				Legajo: "",
-		// 				Nombre: "",
-		// 			},
-		// 			TecETPrev: {
-		// 				Legajo: "",
-		// 				Nombre: "",
-		// 			}
-		// 		});
-
-		// 		// #513 -> Si la licencia tiene entregas:
-		// 		// "Asimismo, deben persistir los datos de las entregas aunque el usuario no aparezca según los criterios para el data source del combo."
-		// 		if (oLicense.DevolucionLicencia_nav.length > 0) {
-		// 			let aCloneDevoluciones = jQuery.extend(true, [], oLicense.DevolucionLicencia_nav);
-		// 			aCloneDevoluciones.forEach(oDevolucion => {
-		// 				oDevolucion.showPrevValue = true;
-		// 				let oTejtPrev = aDataTODOS.find(oItem => oItem.Legajo === oDevolucion.Tejt);
-		// 				oDevolucion.TejtPrev = oTejtPrev ? oTejtPrev : {
-		// 					Legajo: "",
-		// 					Nombre: "",
-		// 				};
-		// 				let oTecETPrev = aDataTODOS.find(oItem => oItem.Legajo === oDevolucion.TecET);
-		// 				oDevolucion.TecETPrev = oTecETPrev ? oTecETPrev : {
-		// 					Legajo: "",
-		// 					Nombre: "",
-		// 				};
-		// 			});
-
-		// 			// Assign data
-		// 			aDevolution = aDevolution.concat(aCloneDevoluciones);
-		// 		}
-
-		// 		this.formatUTCDates(aDevolution);
-		// 		aDevolution.push({
-		// 			Anio: oLicense.Anio,
-		// 			Empresa: oLicense.Empresa,
-		// 			Devolutiondate: new Date(),
-		// 			Datelicencia: new Date().getTime() < oLicense.Solbeg.getTime() ? oLicense.Solbeg : new Date(), //null,
-		// 			Id: oLicense.Id,
-		// 			Time: new Date(),
-		// 			Devindex: "",
-		// 			Personal: AppManagementHelper.getStringUserLegacy(),
-		// 			Tejt: "",
-		// 			TecET: "",
-		// 			Commen: "",
-		// 			Cancel: "",
-		// 			enabled: this.getEnabledEstatusDelivery(oLicense.Period, oLicense.Substatus, "D"),
-		// 			enabledContinua: true,
-		// 			showPrevValue: false,
-		// 			TejtPrev: {
-		// 				Legajo: "",
-		// 				Nombre: "",
-		// 			},
-		// 			TecETPrev: {
-		// 				Legajo: "",
-		// 				Nombre: "",
-		// 			}
-		// 		});
-		// 	}
-
-		// 	this.checkIfDeliveryHasMade(aDelivery, aDevolution);
-
-		// 	aDelivery.forEach((e) => {
-		// 		e.TejtValueState = "Success";
-		// 		e.TejtValueStateText = "";
-		// 	});
-		// 	aDevolution.forEach((e) => {
-		// 		e.TejtValueState = "Success";
-		// 		e.TejtValueStateText = "";
-		// 	});
-
-		// 	LegacyValidationHelper.validateLegaciesFromDeliveryDevolution(oLicense, aDelivery);
-		// 	LegacyValidationHelper.validateLegaciesFromDeliveryDevolution(oLicense, aDevolution);
-
-		// 	AppManagementHelper.getModel("DevolutionTableJsonModel").setData({
-		// 		Devolutions: aDevolution
-		// 	});
-
-		// 	AppManagementHelper.getModel("DeliveryTableJsonModel").setData({
-		// 		Deliveries: aDelivery
-		// 	});
-
-		// 	//para chequear que el menos una entrega se ha hecho.
-		// 	AppManagementHelper.getModel("ValidateFirstDeliveryJsonModel");
-		// 	AppManagementHelper.getModel("ValidateFirstDeliveryJsonModel").setData({
-		// 		FirstDeliveryHasBeenMade: !aDelivery.some(e => e.Entindex && e.Entindex !== "")
-		// 	});
-
-		// 	AppManagementHelper.getModel("ValidateFirstContModel").setData({
-		// 		fd: oLicense.Period === "C" ? !aDelivery.some(e => e.Entindex && e.Entindex !== "" && e.Motivono === "") : true
-		// 	});
-
-		// 	this.generateTable();
-		// },
 		generateDeliveryDevolution: function (oLicense) {
 			var oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
 			var aDataTODOS = oModel.getProperty("/Todos");
@@ -551,121 +312,228 @@ sap.ui.define([
 			var aDevolution = [];
 			var aDelivery = [];
 
-			// Helper to find previous values for Tejt and TecET
-			var findPrevValues = function (legajo, key) {
-				let foundItem = aDataTODOS.find(oItem => oItem.Legajo === legajo);
-				return foundItem ? foundItem : {
-					Legajo: "",
-					Nombre: ""
-				};
-			};
-
-			// Helper to process delivery or devolution nav data
-			var processNavData = function (navData, isDelivery) {
-				let cloneData = jQuery.extend(true, [], navData);
-				cloneData.forEach(item => {
-					item.showPrevValue = true;
-					item.TejtPrev = findPrevValues(item.Tejt);
-					item.TecETPrev = findPrevValues(item.TecET);
-				});
-				return cloneData;
-			};
-
-			// Helper to create new delivery or devolution objects
-			var createDeliveryDevolutionObject = function (isDevolution, defaults) {
-				return Object.assign({
-					Anio: oLicense.Anio,
-					Empresa: oLicense.Empresa,
-					Devolutiondate: new Date(),
-					Datelicencia: (new Date() > FormatHelper.formatDatesGMT(oLicense.Solbeg) && new Date() < FormatHelper.formatDatesGMT(oLicense.Solend)) ?
-						new Date() : oLicense.Solend,
-					Id: oLicense.Id,
-					Time: new Date(),
-					enabled: this.getEnabledEstatusDelivery(oLicense.Period, oLicense.Substatus, isDevolution ? "D" : "E"),
-					showPrevValue: false,
-					TejtPrev: {
-						Legajo: "",
-						Nombre: ""
-					},
-					TecETPrev: {
-						Legajo: "",
-						Nombre: ""
-					}
-				}, defaults);
-			}.bind(this);
-
 			if (oLicense.Period === "C") {
-				// Process existing deliveries
+				// #513 -> Si la licencia tiene entregas:
+				// "Asimismo, deben persistir los datos de las entregas aunque el usuario no aparezca según los criterios para el data source del combo."
 				if (oLicense.EntregasLicencia_nav.length > 0) {
-					aDelivery = processNavData(oLicense.EntregasLicencia_nav, true);
+					let aCloneEntregas = jQuery.extend(true, [], oLicense.EntregasLicencia_nav);
+					aCloneEntregas.forEach(oEntrega => {
+						oEntrega.showPrevValue = true;
+						let oTejtPrev = aDataTODOS.find(oItem => oItem.Legajo === oEntrega.Tejt);
+						oEntrega.TejtPrev = oTejtPrev ? oTejtPrev : {
+							Legajo: "",
+							Nombre: "",
+						};
+						let oTecETPrev = aDataTODOS.find(oItem => oItem.Legajo === oEntrega.TecET);
+						oEntrega.TecETPrev = oTecETPrev ? oTecETPrev : {
+							Legajo: "",
+							Nombre: "",
+						};
+					});
+
+					// Assign data
+					aDelivery = aDelivery.concat(aCloneEntregas);
 				}
 				this.formatUTCDates(aDelivery);
 
-				// Create new delivery and devolution objects
-				aDelivery.push(createDeliveryDevolutionObject(false, {
+				var oDelivery = {
+					Anio: oLicense.Anio,
+					Empresa: oLicense.Empresa,
+					sameDayValidation: true,
+					Devolutiondate: new Date(),
+					Datelicencia: new Date() > FormatHelper.formatDatesGMT(oLicense.Solbeg) && new Date() < FormatHelper.formatDatesGMT(oLicense.Solend) ?
+						new Date() : oLicense.Solend,
+					Id: oLicense.Id,
+					Time: new Date(),
 					Cot: AppManagementHelper.getStringUserLegacy(),
+					Tejt: "",
+					TecET: "",
 					Folio: "",
 					Motivono: "",
 					Commen: "",
-					enabled: this.getEnabledEstatusDelivery(oLicense.Period, oLicense.Substatus, "E")
-				}));
+					enabled: this.getEnabledEstatusDelivery(oLicense.Period, oLicense.Substatus, "E"),
+					showPrevValue: false,
+					TejtPrev: {
+						Legajo: "",
+						Nombre: "",
+					},
+					TecETPrev: {
+						Legajo: "",
+						Nombre: "",
+					}
+				};
 
 				var oDevolutionFromService = oLicense.DevolucionLicencia_nav.length ? oLicense.DevolucionLicencia_nav.shift() : null;
 				if (oDevolutionFromService) {
 					oDevolutionFromService.Datelicencia = FormatHelper.formatDatesGMT(oDevolutionFromService.Datelicencia);
 					oDevolutionFromService.showPrevValue = true;
-					oDevolutionFromService.TejtPrev = findPrevValues(oDevolutionFromService.Tejt);
-					oDevolutionFromService.TecETPrev = findPrevValues(oDevolutionFromService.TecET);
+					let oTejtPrev = aDataTODOS.find(oItem => oItem.Legajo === oDevolutionFromService.Tejt);
+					oDevolutionFromService.TejtPrev = oTejtPrev ? oTejtPrev : {
+						Legajo: "",
+						Nombre: "",
+					};
+					let oTecETPrev = aDataTODOS.find(oItem => oItem.Legajo === oDevolutionFromService.TecET);
+					oDevolutionFromService.TecETPrev = oTecETPrev ? oTecETPrev : {
+						Legajo: "",
+						Nombre: "",
+					};
 				}
 
-				aDevolution.push(oDevolutionFromService || createDeliveryDevolutionObject(true, {
-					Personal: AppManagementHelper.getStringUserLegacy(),
+				var oDevolution = oDevolutionFromService ? oDevolutionFromService : {
+					Anio: oLicense.Anio,
+					Empresa: oLicense.Empresa,
+					sameDayValidation: true,
+					Devolutiondate: new Date(),
+					Datelicencia: new Date() > FormatHelper.formatDatesGMT(oLicense.Solbeg) && new Date() < FormatHelper.formatDatesGMT(oLicense.Solend) ?
+						new Date() : oLicense.Solend,
+					Id: oLicense.Id,
+					Time: new Date(),
 					Devindex: "",
+					Personal: AppManagementHelper.getStringUserLegacy(),
+					Tejt: "",
+					TecET: "",
 					Commen: "",
 					Cancel: "",
-					enabledContinua: true
-				}));
+					enabled: this.getEnabledEstatusDelivery(oLicense.Period, oLicense.Substatus, "D"),
+					enabledContinua: true,
+					showPrevValue: false,
+					TejtPrev: {
+						Legajo: "",
+						Nombre: "",
+					},
+					TecETPrev: {
+						Legajo: "",
+						Nombre: "",
+					}
+				};
+
+				aDevolution.push(oDevolution);
+				aDelivery.push(oDelivery);
 
 			} else {
-				// Process existing deliveries for non-C period
+				// #513 -> Si la licencia tiene entregas:
+				// "Asimismo, deben persistir los datos de las entregas aunque el usuario no aparezca según los criterios para el data source del combo."
 				if (oLicense.EntregasLicencia_nav.length > 0) {
-					aDelivery = processNavData(oLicense.EntregasLicencia_nav, true);
+					let aCloneEntregas = jQuery.extend(true, [], oLicense.EntregasLicencia_nav);
+					aCloneEntregas.forEach(oEntrega => {
+						oEntrega.showPrevValue = true;
+						let oTejtPrev = aDataTODOS.find(oItem => oItem.Legajo === oEntrega.Tejt);
+						oEntrega.TejtPrev = oTejtPrev ? oTejtPrev : {
+							Legajo: "",
+							Nombre: "",
+						};
+						let oTecETPrev = aDataTODOS.find(oItem => oItem.Legajo === oEntrega.TecET);
+						oEntrega.TecETPrev = oTecETPrev ? oTecETPrev : {
+							Legajo: "",
+							Nombre: "",
+						};
+					});
+
+					// Assign data
+					aDelivery = aDelivery.concat(aCloneEntregas);
 				}
 
 				this.formatUTCDates(aDelivery);
-				aDelivery.push(createDeliveryDevolutionObject(false, {
+				aDelivery.push({
+					Anio: oLicense.Anio,
+					enabledInputMotivo: false,
+					Devolutiondate: new Date(),
+					Empresa: oLicense.Empresa,
+					Datelicencia: new Date() > oLicense.Solbeg && new Date() < oLicense.Solend ? new Date() : oLicense.Solend,
+					Id: oLicense.Id,
+					Time: new Date(),
 					Cot: AppManagementHelper.getStringUserLegacy(),
+					Tejt: "",
+					TecET: "",
 					Folio: "",
 					Motivono: "",
 					Commen: "",
-					enabledInputMotivo: false,
-					enabled: this.getEnabledEstatusDelivery(oLicense.Period, oLicense.Substatus, "E") && oLicense.Licstat !== "11"
-				}));
+					enabled: this.getEnabledEstatusDelivery(oLicense.Period, oLicense.Substatus, "E") && oLicense.Licstat !== "11",
+					showPrevValue: false,
+					TejtPrev: {
+						Legajo: "",
+						Nombre: "",
+					},
+					TecETPrev: {
+						Legajo: "",
+						Nombre: "",
+					}
+				});
 
-				// Process devolutions
+				// #513 -> Si la licencia tiene entregas:
+				// "Asimismo, deben persistir los datos de las entregas aunque el usuario no aparezca según los criterios para el data source del combo."
 				if (oLicense.DevolucionLicencia_nav.length > 0) {
-					aDevolution = processNavData(oLicense.DevolucionLicencia_nav, false);
+					let aCloneDevoluciones = jQuery.extend(true, [], oLicense.DevolucionLicencia_nav);
+					aCloneDevoluciones.forEach(oDevolucion => {
+						oDevolucion.showPrevValue = true;
+						let oTejtPrev = aDataTODOS.find(oItem => oItem.Legajo === oDevolucion.Tejt);
+						oDevolucion.TejtPrev = oTejtPrev ? oTejtPrev : {
+							Legajo: "",
+							Nombre: "",
+						};
+						let oTecETPrev = aDataTODOS.find(oItem => oItem.Legajo === oDevolucion.TecET);
+						oDevolucion.TecETPrev = oTecETPrev ? oTecETPrev : {
+							Legajo: "",
+							Nombre: "",
+						};
+					});
+
+					// Assign data
+					aDevolution = aDevolution.concat(aCloneDevoluciones);
 				}
 
 				this.formatUTCDates(aDevolution);
-				aDevolution.push(createDeliveryDevolutionObject(true, {
-					Personal: AppManagementHelper.getStringUserLegacy(),
+				aDevolution.push({
+					Anio: oLicense.Anio,
+					Empresa: oLicense.Empresa,
+					Devolutiondate: new Date(),
+					Datelicencia: new Date().getTime() < oLicense.Solbeg.getTime() ? oLicense.Solbeg : new Date(), //null,
+					Id: oLicense.Id,
+					Time: new Date(),
 					Devindex: "",
+					Personal: AppManagementHelper.getStringUserLegacy(),
+					Tejt: "",
+					TecET: "",
 					Commen: "",
 					Cancel: "",
-					enabledContinua: true
-				}));
+					enabled: this.getEnabledEstatusDelivery(oLicense.Period, oLicense.Substatus, "D"),
+					enabledContinua: true,
+					showPrevValue: false,
+					TejtPrev: {
+						Legajo: "",
+						Nombre: "",
+					},
+					TecETPrev: {
+						Legajo: "",
+						Nombre: "",
+					}
+				});
 			}
 
-			// Set models with processed data
+			this.checkIfDeliveryHasMade(aDelivery, aDevolution);
+
+			aDelivery.forEach((e) => {
+				e.TejtValueState = "Success";
+				e.TejtValueStateText = "";
+			});
+			aDevolution.forEach((e) => {
+				e.TejtValueState = "Success";
+				e.TejtValueStateText = "";
+			});
+
+			LegacyValidationHelper.validateLegaciesFromDeliveryDevolution(oLicense, aDelivery);
+			LegacyValidationHelper.validateLegaciesFromDeliveryDevolution(oLicense, aDevolution);
+
 			AppManagementHelper.getModel("DevolutionTableJsonModel").setData({
 				Devolutions: aDevolution
 			});
+
 			AppManagementHelper.getModel("DeliveryTableJsonModel").setData({
 				Deliveries: aDelivery
 			});
 
-			// Check if at least one delivery was made
+			//para chequear que el menos una entrega se ha hecho.
+			AppManagementHelper.getModel("ValidateFirstDeliveryJsonModel");
 			AppManagementHelper.getModel("ValidateFirstDeliveryJsonModel").setData({
 				FirstDeliveryHasBeenMade: !aDelivery.some(e => e.Entindex && e.Entindex !== "")
 			});
@@ -674,23 +542,155 @@ sap.ui.define([
 				fd: oLicense.Period === "C" ? !aDelivery.some(e => e.Entindex && e.Entindex !== "" && e.Motivono === "") : true
 			});
 
-			this.checkIfDeliveryHasMade(aDelivery, aDevolution);
-
-			// Apply success state for legacy validation
-			aDelivery.forEach(e => {
-				e.TejtValueState = "Success";
-				e.TejtValueStateText = "";
-			});
-			aDevolution.forEach(e => {
-				e.TejtValueState = "Success";
-				e.TejtValueStateText = "";
-			});
-
-			LegacyValidationHelper.validateLegaciesFromDeliveryDevolution(oLicense, aDelivery);
-			LegacyValidationHelper.validateLegaciesFromDeliveryDevolution(oLicense, aDevolution);
-
 			this.generateTable();
 		},
+		// generateDeliveryDevolution: function (oLicense) {
+		// 	var oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
+		// 	var aDataTODOS = oModel.getProperty("/Todos");
+
+		// 	var aDevolution = [];
+		// 	var aDelivery = [];
+
+		// 	// Helper to find previous values for Tejt and TecET
+		// 	var findPrevValues = function (legajo, key) {
+		// 		let foundItem = aDataTODOS.find(oItem => oItem.Legajo === legajo);
+		// 		return foundItem ? foundItem : {
+		// 			Legajo: "",
+		// 			Nombre: ""
+		// 		};
+		// 	};
+
+		// 	// Helper to process delivery or devolution nav data
+		// 	var processNavData = function (navData, isDelivery) {
+		// 		let cloneData = jQuery.extend(true, [], navData);
+		// 		cloneData.forEach(item => {
+		// 			item.showPrevValue = true;
+		// 			item.TejtPrev = findPrevValues(item.Tejt);
+		// 			item.TecETPrev = findPrevValues(item.TecET);
+		// 		});
+		// 		return cloneData;
+		// 	};
+
+		// 	// Helper to create new delivery or devolution objects
+		// 	var createDeliveryDevolutionObject = function (isDevolution, defaults) {
+		// 		return Object.assign({
+		// 			Anio: oLicense.Anio,
+		// 			Empresa: oLicense.Empresa,
+		// 			Devolutiondate: new Date(),
+		// 			Datelicencia: (new Date() > FormatHelper.formatDatesGMT(oLicense.Solbeg) && new Date() < FormatHelper.formatDatesGMT(oLicense.Solend)) ?
+		// 				new Date() : oLicense.Solend,
+		// 			Id: oLicense.Id,
+		// 			Time: new Date(),
+		// 			enabled: this.getEnabledEstatusDelivery(oLicense.Period, oLicense.Substatus, isDevolution ? "D" : "E"),
+		// 			showPrevValue: false,
+		// 			TejtPrev: {
+		// 				Legajo: "",
+		// 				Nombre: ""
+		// 			},
+		// 			TecETPrev: {
+		// 				Legajo: "",
+		// 				Nombre: ""
+		// 			}
+		// 		}, defaults);
+		// 	}.bind(this);
+
+		// 	if (oLicense.Period === "C") {
+		// 		// Process existing deliveries
+		// 		if (oLicense.EntregasLicencia_nav.length > 0) {
+		// 			aDelivery = processNavData(oLicense.EntregasLicencia_nav, true);
+		// 		}
+		// 		this.formatUTCDates(aDelivery);
+
+		// 		// Create new delivery and devolution objects
+		// 		aDelivery.push(createDeliveryDevolutionObject(false, {
+		// 			Cot: AppManagementHelper.getStringUserLegacy(),
+		// 			Folio: "",
+		// 			Motivono: "",
+		// 			Commen: "",
+		// 			enabled: this.getEnabledEstatusDelivery(oLicense.Period, oLicense.Substatus, "E")
+		// 		}));
+
+		// 		var oDevolutionFromService = oLicense.DevolucionLicencia_nav.length ? oLicense.DevolucionLicencia_nav.shift() : null;
+		// 		if (oDevolutionFromService) {
+		// 			oDevolutionFromService.Datelicencia = FormatHelper.formatDatesGMT(oDevolutionFromService.Datelicencia);
+		// 			oDevolutionFromService.showPrevValue = true;
+		// 			oDevolutionFromService.TejtPrev = findPrevValues(oDevolutionFromService.Tejt);
+		// 			oDevolutionFromService.TecETPrev = findPrevValues(oDevolutionFromService.TecET);
+		// 		}
+
+		// 		aDevolution.push(oDevolutionFromService || createDeliveryDevolutionObject(true, {
+		// 			Personal: AppManagementHelper.getStringUserLegacy(),
+		// 			Devindex: "",
+		// 			Commen: "",
+		// 			Cancel: "",
+		// 			enabledContinua: true
+		// 		}));
+
+		// 	} else {
+		// 		// Process existing deliveries for non-C period
+		// 		if (oLicense.EntregasLicencia_nav.length > 0) {
+		// 			aDelivery = processNavData(oLicense.EntregasLicencia_nav, true);
+		// 		}
+
+		// 		this.formatUTCDates(aDelivery);
+		// 		aDelivery.push(createDeliveryDevolutionObject(false, {
+		// 			Cot: AppManagementHelper.getStringUserLegacy(),
+		// 			Folio: "",
+		// 			Motivono: "",
+		// 			Commen: "",
+		// 			enabledInputMotivo: false,
+		// 			enabled: this.getEnabledEstatusDelivery(oLicense.Period, oLicense.Substatus, "E") && oLicense.Licstat !== "11"
+		// 		}));
+
+		// 		// Process devolutions
+		// 		if (oLicense.DevolucionLicencia_nav.length > 0) {
+		// 			aDevolution = processNavData(oLicense.DevolucionLicencia_nav, false);
+		// 		}
+
+		// 		this.formatUTCDates(aDevolution);
+		// 		aDevolution.push(createDeliveryDevolutionObject(true, {
+		// 			Personal: AppManagementHelper.getStringUserLegacy(),
+		// 			Devindex: "",
+		// 			Commen: "",
+		// 			Cancel: "",
+		// 			enabledContinua: true
+		// 		}));
+		// 	}
+
+		// 	// Set models with processed data
+		// 	AppManagementHelper.getModel("DevolutionTableJsonModel").setData({
+		// 		Devolutions: aDevolution
+		// 	});
+		// 	AppManagementHelper.getModel("DeliveryTableJsonModel").setData({
+		// 		Deliveries: aDelivery
+		// 	});
+
+		// 	// Check if at least one delivery was made
+		// 	AppManagementHelper.getModel("ValidateFirstDeliveryJsonModel").setData({
+		// 		FirstDeliveryHasBeenMade: !aDelivery.some(e => e.Entindex && e.Entindex !== "")
+		// 	});
+
+		// 	AppManagementHelper.getModel("ValidateFirstContModel").setData({
+		// 		fd: oLicense.Period === "C" ? !aDelivery.some(e => e.Entindex && e.Entindex !== "" && e.Motivono === "") : true
+		// 	});
+
+		// 	this.checkIfDeliveryHasMade(aDelivery, aDevolution);
+
+		// 	// Apply success state for legacy validation
+		// 	aDelivery.forEach(e => {
+		// 		e.TejtValueState = "Success";
+		// 		e.TejtValueStateText = "";
+		// 	});
+		// 	aDevolution.forEach(e => {
+		// 		e.TejtValueState = "Success";
+		// 		e.TejtValueStateText = "";
+		// 	});
+
+		// 	LegacyValidationHelper.validateLegaciesFromDeliveryDevolution(oLicense, aDelivery);
+		// 	LegacyValidationHelper.validateLegaciesFromDeliveryDevolution(oLicense, aDevolution);
+
+		// 	this.generateTable();
+		// },
 			generateTurno: function (oLicense) {
 			var oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
 			var aDataTODOS = oModel.getProperty("/Todos");

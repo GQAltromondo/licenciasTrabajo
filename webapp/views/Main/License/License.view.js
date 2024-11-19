@@ -1352,14 +1352,14 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								})
 							},
 							change: $.proxy(oController.handleDateChange, oController, "DeliveryTableJsonModel"),
-							// enabled: {
-							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles"
-							// 		, "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"DeliveryTableJsonModel>enabled",
-							// 		"DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition2("entregas/")
-							// },
+						 enabled: {
+								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles"
+							 		, "statusModel>/", "LicenseJsonModel>/Werks",
+								"DeliveryTableJsonModel>enabled",
+									"DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("entregas/")
+							},
 							dateValue: "{DeliveryTableJsonModel>Datelicencia}",
 							minDate: "{LicenseJsonModel>/Solbeg}",
 							maxDate: "{LicenseJsonModel>/Solend}",
@@ -1372,7 +1372,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									"DeliveryTableJsonModel>enabled",
 									"DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
 								],
-								formatter: oController.rolStatusEdition2("entregas/")
+								formatter: oController.rolStatusEdition("entregas/")
 							},
 							dateValue: "{DeliveryTableJsonModel>Time}",
 							displayFormat: "HH:mm"
@@ -1390,7 +1390,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 											"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
 											"DeliveryTableJsonModel>enabled", "DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
 										],
-										formatter: oController.rolStatusEdition2("entregas/")
+										formatter: oController.rolStatusEdition("entregas/")
 									},
 									change: [oController.handleLegacyValidationDeliveries, oController],
 									valueState: "{DeliveryTableJsonModel>TejtValueState}",
@@ -1416,17 +1416,17 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								new sap.m.ComboBox({
 									visible: "{= !${DeliveryTableJsonModel>showPrevValue}}",
 									width: "100%",
-									// enabled: {
-									// 	parts: [
-									// 		"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-									// 		"DeliveryTableJsonModel>enabled", "DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-									// 	],
-									// 	formatter: oController.rolStatusEdition2("entregas/")
-									// },
+									enabled: {
+										parts: [
+											"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+											"DeliveryTableJsonModel>enabled", "DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+										],
+										formatter: oController.rolStatusEdition("entregas/")
+									},
 									change: [oController.handleLegacyValidationDeliveries, oController],
-									valueState: "{DeliveryTableJsonModel>TejtValueState}",
-									valueStateText: "{DeliveryTableJsonModel>TejtValueStateText}",
-									selectedKey: "{DeliveryTableJsonModel>TecET}",
+									// valueState: "{DeliveryTableJsonModel>TejtValueState}",
+									// valueStateText: "{DeliveryTableJsonModel>TejtValueStateText}",
+									// selectedKey: "{DeliveryTableJsonModel>TecET}",
 									items: {
 										templateShareable: false,
 										path: "PersonalHabilitadoModel>/TecnicosEt",
@@ -1434,16 +1434,16 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 											key: "{PersonalHabilitadoModel>Legajo}",
 											text: "{PersonalHabilitadoModel>Nombre} {PersonalHabilitadoModel>Legajo}"
 										}),
-										filters: new sap.ui.model.Filter([
-											new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M04"),
-											new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M08"),
-											new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M12"),
-											new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M16"),
-											new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M20"),
-											new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M24"),
-											new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M28"),
-											new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "PE5")
-										], false)
+										// filters: new sap.ui.model.Filter([
+										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M04"),
+										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M08"),
+										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M12"),
+										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M16"),
+										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M20"),
+										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M24"),
+										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M28"),
+										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "PE5")
+										// ], false)
 									}
 								}),
 								new sap.m.Text({
@@ -1453,24 +1453,24 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							]
 						}),
 						new sap.m.Input({
-							// enabled: {
-							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"DeliveryTableJsonModel>enabled",
-							// 		"DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition2("entregas/")
-							// },
+							enabled: {
+								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"DeliveryTableJsonModel>enabled",
+									"DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("entregas/")
+							},
 							value: "{DeliveryTableJsonModel>Folio}",
 							maxLength: 10
 						}),
 						new sap.m.ComboBox({
-							// enabled: {
-							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"DeliveryTableJsonModel>enabled",
-							// 		"DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("entregas/")
-							// },
+							enabled: {
+								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"DeliveryTableJsonModel>enabled",
+									"DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("entregas/")
+							},
 							selectedKey: "{DeliveryTableJsonModel>Motivono}",
 							change: [oController.onMotivoNoEntregaChange, oController],
 							items: {
@@ -1483,25 +1483,25 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							}
 						}),
 						new sap.m.Input({
-							// enabled: {
-							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"DeliveryTableJsonModel>enabled",
-							// 		"DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition2("entregas/")
-							// },
+							enabled: {
+								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"DeliveryTableJsonModel>enabled",
+									"DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("entregas/")
+							},
 							value: "{DeliveryTableJsonModel>Commen}",
 							tooltip: "{DeliveryTableJsonModel>Commen}"
 						}),
 						new sap.m.Button({
 							text: "Entrega",
-							// enabled: {
-							// 	parts: [
-							// 		"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"DeliveryTableJsonModel>enabled", "DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition2("entregas/")
-							// },
+							enabled: {
+								parts: [
+									"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"DeliveryTableJsonModel>enabled", "DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("entregas/")
+							},
 							visible: {
 								parts: [{
 									path: "DeliveryTableJsonModel>enabled"
