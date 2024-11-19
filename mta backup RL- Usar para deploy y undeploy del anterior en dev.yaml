@@ -17,10 +17,6 @@ modules:
     parameters:
       service-key:
         name: TransenerOperacionesLicenciasTrabajo-uaa-key
-  - name: sap_wf_sendmail
-    parameters:
-      service-key:
-        name: sap_wf_sendmail-key
   parameters:
     content:
       instance:
@@ -34,9 +30,6 @@ modules:
           ServiceInstanceName: TransenerOperacionesLicenciasTrabajo-xsuaa-srv
           ServiceKeyName: TransenerOperacionesLicenciasTrabajo-uaa-key
           sap.cloud.service: TransenerOperacionesLicenciasTrabajo
-        - Name: sap_wf_sendmail
-          ServiceInstanceName: sap_wf_sendmail
-          ServiceKeyName: sap_wf_sendmail-key
         existing_destinations_policy: ignore
   build-parameters:
     no-source: true
@@ -96,13 +89,6 @@ resources:
     service: html5-apps-repo
     service-name: TransenerOperacionesLicenciasTrabajo-html5-srv
     service-plan: app-host
-- name: sap_wf_sendmail
-  type: org.cloudfoundry.managed-service
-  parameters:
-    service: process-automation-service
-    service-plan: standard
-  properties:
-    key: sap_wf_sendmail-key
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true

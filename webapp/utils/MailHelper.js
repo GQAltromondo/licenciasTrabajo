@@ -7,11 +7,11 @@ sap.ui.define([
 	"use strict";
 
 	return {
-
+		// RL: Cancela por multiples includes
 		getToken: function () {
 			return new Promise((resolve, reject) => {
 				$.ajax({
-					url: "/bpmworkflowruntime/rest/v1/xsrf-token",
+					url: this._getWorkflowRuntimeBaseURL() + "/bpmworkflowruntime/rest/v1/xsrf-token",
 					method: "GET",
 					headers: {
 						"X-CSRF-Token": "Fetch"
@@ -24,6 +24,15 @@ sap.ui.define([
 				});
 			});
 		},
+
+		// RL: Cancela por multiples includes
+		_getWorkflowRuntimeBaseURL: function () {
+			var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id");
+			var appPath = appId.replaceAll(".", "/");
+			var appModulePath = jQuery.sap.getModulePath(appPath);
+  
+			return appModulePath + "/bpmworkflowruntime/v1";
+		  },
 
 		formatMailsARO: function (aMails) {
 			var sMails = [];
