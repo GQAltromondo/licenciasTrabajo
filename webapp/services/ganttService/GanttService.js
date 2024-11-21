@@ -1,1 +1,51 @@
-sap.ui.define(["Transener/Operaciones/LicenciasTrabajo/services/ganttService/oDataService"],function(e){"use strict";return{getGanttData:function(r,a,t,o,i,p){let n=[new sap.ui.model.Filter({path:"Empresa",operator:sap.ui.model.FilterOperator.EQ,value1:r}),new sap.ui.model.Filter({path:"Anio",operator:sap.ui.model.FilterOperator.EQ,value1:t}),new sap.ui.model.Filter({path:"Semana",operator:sap.ui.model.FilterOperator.EQ,value1:a}),new sap.ui.model.Filter({path:"Tipo",operator:sap.ui.model.FilterOperator.EQ,value1:o}),new sap.ui.model.Filter({path:"Region",operator:sap.ui.model.FilterOperator.EQ,value1:i})];for(var l=0;p.length>l;l++){n.push(new sap.ui.model.Filter({path:"StatLicencia",operator:sap.ui.model.FilterOperator.EQ,value1:p[l]}))}return new Promise((r,a)=>{e.getModel("TransenerOperaciones").read("/GantLicenciasSet",{filters:n,success:function(e){r(e)},error:function(e){a(e)}})})}}});
+sap.ui.define([
+	"Transener/Operaciones/LicenciasTrabajo/services/ganttService/oDataService"
+], function (oDataService) {
+	"use strict";
+
+	return {
+		getGanttData: function (empresa, week, year, tipo, region, aStatus) {
+			let filters = [new sap.ui.model.Filter({
+				path: "Empresa",
+				operator: sap.ui.model.FilterOperator.EQ,
+				value1: empresa
+			}), new sap.ui.model.Filter({
+				path: "Anio",
+				operator: sap.ui.model.FilterOperator.EQ,
+				value1: year
+			}), new sap.ui.model.Filter({
+				path: "Semana",
+				operator: sap.ui.model.FilterOperator.EQ,
+				value1: week
+			}), new sap.ui.model.Filter({
+				path: "Tipo",
+				operator: sap.ui.model.FilterOperator.Contains,
+				value1: tipo
+			}), new sap.ui.model.Filter({
+				path: "Region",
+				operator: sap.ui.model.FilterOperator.EQ,
+				value1: region
+			})];
+
+			for (var i = 0; aStatus.length > i; i++) {
+				filters.push(new sap.ui.model.Filter({
+					path: "StatLicencia",
+					operator: sap.ui.model.FilterOperator.EQ,
+					value1: aStatus[i]
+				}));
+			}
+
+			return new Promise((resolve, reject) => {
+				oDataService.getModel("TransenerOperaciones").read("/GantLicenciasSet", {
+					filters: filters,
+					success: function (data) {
+						resolve(data);
+					},
+					error: function (error) {
+						reject(error);
+					}
+				});
+			});
+		}
+	};
+});
