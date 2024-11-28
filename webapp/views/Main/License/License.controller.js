@@ -89,10 +89,35 @@ sap.ui.define([
 			// Fix issue #498 ID de solicitud y unifilres.
 			var oLicencia = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			var sLicenciaCreada = (oLicencia.Id && oLicencia.Tipo === "L") ? oLicencia.Id : "";
+		
 
-			var sHost =
-				`https://${window.location.host}/sites/fiorilaunchpad#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`;
-			window.open(sHost, "_blank");
+					// Obtén los parámetros de la URL
+					var searchParams = new URLSearchParams(window.location.search);
+
+					// Obtén el valor de 'siteId'
+					var siteId = searchParams.get("siteId");
+
+			// var sHost =
+			// 	`https://${window.location.host}/sites/fiorilaunchpad#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`;
+			// window.open(sHost, "_blank");
+
+			//	location.hash = `GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`
+			var Hash =
+				`#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`;
+
+			const currentHash = Hash;
+
+			// Crear la URL para la nueva pestaña
+			const newUrl = `${location.origin}/site?siteId=${siteId}${currentHash}`;
+
+		
+			 window.open(newUrl, '_blank');
+
+
+
+
+
+
 		},
 
 		onSuccessGetUnifilares: function (data) {
@@ -418,9 +443,36 @@ sap.ui.define([
 					var oLicencia = AppManagementHelper.getModel("LicenseJsonModel").getData();
 					var sLicenciaCreada = (oLicencia.Id && oLicencia.Tipo === "L") ? oLicencia.Id : "";
 
-					var sHost =
-						`https://${window.location.host}/sites/fiorilaunchpad#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${oLicense.Empresa}&Anio=${oLicense.Anio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&RealIdUnifilar=${sRealIdUnifilar}&Centro=${oModelSelectionData.Region}&ET=${oModelSelectionData.ET}&Mode=C`;
-					window.open(sHost, "_blank");
+
+					// Obtén los parámetros de la URL
+					var searchParams = new URLSearchParams(window.location.search);
+
+					// Obtén el valor de 'siteId'
+					var siteId = searchParams.get("siteId");
+
+					console.log("siteId:", siteId);
+
+					// console.log("URL", window.location.hostname + "/site?siteId=" + siteId)
+					var Hash = `#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${oLicense.Empresa}&Anio=${oLicense.Anio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&RealIdUnifilar=${sRealIdUnifilar}&Centro=${oModelSelectionData.Region}&ET=${oModelSelectionData.ET}&Mode=C`;
+					// const sHost = (window.location.hostname + "/site?siteId=" + siteId + Hash)
+					// window.location.href = (sHost, "_blank")
+
+
+					// //window.open(sHost, "_blank");
+					// // var sHost =
+					// // 	`https://${window.location.host}/sites/fiorilaunchpad#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`;
+					// // window.open(sHost, "_blank");
+
+					//location.hash = Hash
+
+					const currentHash = Hash;
+
+					// Crear la URL para la nueva pestaña
+					const newUrl = `${location.origin}/site?siteId=${siteId}${currentHash}`;
+
+					// Abrir una nueva pestaña con la URL y el hash
+					const newTab = window.open(newUrl, '_blank');
+
 				}
 			}, $.proxy(this.onErrorGetUnifilares, this));
 		},
@@ -657,8 +709,8 @@ sap.ui.define([
 					oDialog.open();
 					this.nonRelationatedMarkerDialog = oDialog;
 				}).catch((e) => {
-				console.log(e)
-			})
+					console.log(e)
+				})
 		},
 
 		showMedidasTerceros: function (oEvent) {
@@ -732,22 +784,22 @@ sap.ui.define([
 		formatOpcionSeleccionada: function (iOption) {
 			var sOption = iOption.toString();
 			switch (sOption) {
-			case "0":
-				return "Interruptor abierto";
-			case "1":
-				return "Seccionador abierto bloqueado y trabado";
-			case "2":
-				return "Seccionador PAT cerrado";
-			case "3":
-				return "Equipos a mover (Interruptores)";
-			case "4":
-				return "Equipos a mover (Seccionadores)";
-			case "5":
-				return "Equipos a mover (Seccionadores)";
-			case "6":
-				return "Interruptor extraído"
-			default:
-				return "";
+				case "0":
+					return "Interruptor abierto";
+				case "1":
+					return "Seccionador abierto bloqueado y trabado";
+				case "2":
+					return "Seccionador PAT cerrado";
+				case "3":
+					return "Equipos a mover (Interruptores)";
+				case "4":
+					return "Equipos a mover (Seccionadores)";
+				case "5":
+					return "Equipos a mover (Seccionadores)";
+				case "6":
+					return "Interruptor extraído"
+				default:
+					return "";
 			}
 		},
 
@@ -889,8 +941,8 @@ sap.ui.define([
 		verifySameUser: function (legajo, solicitanteLic, ...extra) {
 			//first i check the extras
 			if (!extra.every(function (el) {
-					return !!el
-				})) {
+				return !!el
+			})) {
 				return false;
 			}
 			return legajo == solicitanteLic;
@@ -899,8 +951,8 @@ sap.ui.define([
 		verifySameUserObservation: function (status, legajo, solicitanteLic, ...extra) {
 			//first i check the extras
 			if (!extra.every(function (el) {
-					return !!el
-				})) {
+				return !!el
+			})) {
 				return false;
 			}
 			//i check if the status is observation
@@ -1002,7 +1054,7 @@ sap.ui.define([
 			var licencia = this.getView().getModel("LicenseJsonModel").getData();
 			var Entregas = this.getView().getModel("DeliveryTableJsonModel").getData().Deliveries;
 			var Devoluciones = this.getView().getModel("DevolutionTableJsonModel").getData().Devolutions;
-		
+
 			//var Suspensiones = this.getView().getModel("SuspensionTableJsonModel").getData().Suspensions;
 			//var Reanudaciones = this.getView().getModel("ReanudationTableJsonModel").getData().Reanudations;
 			//var Observaciones = this.getView().getModel("ObservationTableJsonModel").getData().Observations;
@@ -1150,7 +1202,7 @@ sap.ui.define([
 					SecPatCr: "",
 					PatAdic: ""
 				});
-			} catch (err) {}
+			} catch (err) { }
 			//FIN TRNS126
 			var oHistory = History.getInstance();
 			var sPreviousHash = oHistory.getPreviousHash();
@@ -1440,22 +1492,22 @@ sap.ui.define([
 
 		getItemsFromAppModel: function (oModel, sModel) {
 			switch (sModel) {
-			case "ReanudationTableJsonModel":
-				return oModel.getData().Reanudations;
-			case "SuspensionTableJsonModel":
-				return oModel.getData().Suspensions;
-			case "DevolutionTableJsonModel":
-				return oModel.getData().Devolutions;
-			case "CoordinationTableJsonModel":
-				return oModel.getData().Coordinations;
-			case "ObservationTableJsonModel":
-				return oModel.getData().Observations;
-			case "DeliveryTableJsonModel":
-				return oModel.getData().Deliveries;
-			case "TransferListJsonModel":
-				return oModel.getData().Transfers;
-			case "TramitacionListJsonModel":
-				return oModel.getData().Tramitaciones;
+				case "ReanudationTableJsonModel":
+					return oModel.getData().Reanudations;
+				case "SuspensionTableJsonModel":
+					return oModel.getData().Suspensions;
+				case "DevolutionTableJsonModel":
+					return oModel.getData().Devolutions;
+				case "CoordinationTableJsonModel":
+					return oModel.getData().Coordinations;
+				case "ObservationTableJsonModel":
+					return oModel.getData().Observations;
+				case "DeliveryTableJsonModel":
+					return oModel.getData().Deliveries;
+				case "TransferListJsonModel":
+					return oModel.getData().Transfers;
+				case "TramitacionListJsonModel":
+					return oModel.getData().Tramitaciones;
 			}
 		},
 
@@ -1895,10 +1947,10 @@ sap.ui.define([
 			var oInhibicion = oEvent.getSource().getParent().getBindingContext("InhibicionTableJsonModel").getObject();
 			var oValidation = this.validateSend(oInhibicion)
 			if (!oValidation.valid) {
-			
+
 				MessageBoxHelper.showAlert("Alerta", oValidation.message);
 			} else {
-					BusyDialogHelper.open();
+				BusyDialogHelper.open();
 				LicenseService.InhibicionLicence(oInhibicion);
 			}
 		},
@@ -2775,7 +2827,8 @@ sap.ui.define([
 			// Para evitar este issue se leen los unifilares para actualizar el modelo de licencia justo antes de grabar
 			BusyDialogHelper.open();
 			//EXT-MSUELDIA - se hace un chequeo de los unifilares
-			var oDatosAnteriores = {...AppManagementHelper.getModel("LicenseJsonModel").getData()
+			var oDatosAnteriores = {
+				...AppManagementHelper.getModel("LicenseJsonModel").getData()
 			};
 			var oFinished = this.refreshUnifilar();
 			oFinished.then(() => {
@@ -2905,7 +2958,7 @@ sap.ui.define([
 								return MessageBoxHelper.showAlert("Alerta", "Si elige ninguna, no puede seleccionar otra señal");
 							}
 						} else if (!(data.Precaucionesok || data.Senalestados ||
-								data.Senalalarmas || data.Senalmedicion)) {
+							data.Senalalarmas || data.Senalmedicion)) {
 							return MessageBoxHelper.showAlert("Alerta", "Debe haber al menos una señal seleccionada");
 						}
 						var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
@@ -3102,7 +3155,7 @@ sap.ui.define([
 											return MessageBoxHelper.showAlert("Alerta", "Si elige ninguna, no puede seleccionar otra señal");
 										}
 									} else if (!(data.Precaucionesok || data.Senalestados ||
-											data.Senalalarmas || data.Senalmedicion)) {
+										data.Senalalarmas || data.Senalmedicion)) {
 										return MessageBoxHelper.showAlert("Alerta", "Debe haber al menos una señal seleccionada");
 									}
 									//TODO pasar al handlesollic?
@@ -3110,8 +3163,8 @@ sap.ui.define([
 										AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Gdate", new Date());
 									}
 									AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Licstat", "09")
-										// Issue 547 - La fecha se debe actualizar solo si el status actual no es observado
-										//		data.Gdate = new Date();
+									// Issue 547 - La fecha se debe actualizar solo si el status actual no es observado
+									//		data.Gdate = new Date();
 									this.handleSolLic("Licencia", true);
 								}
 							}),
@@ -3163,22 +3216,22 @@ sap.ui.define([
 			if (iOption) {
 				var sOption = iOption.toString();
 				switch (sOption) {
-				case "00":
-					return "Interruptor abierto";
-				case "01":
-					return "Seccionador abierto bloqueado y trabado";
-				case "02":
-					return "Seccionador PAT cerrado";
-				case "03":
-					return "Equipos a mover (Interruptores)";
-				case "04":
-					return "Equipos a mover (Seccionadores)";
-				case "05":
-					return "Equipos a mover (Seccionadores)";
-				case "06":
-					return "Interruptor extraído"
-				default:
-					return "";
+					case "00":
+						return "Interruptor abierto";
+					case "01":
+						return "Seccionador abierto bloqueado y trabado";
+					case "02":
+						return "Seccionador PAT cerrado";
+					case "03":
+						return "Equipos a mover (Interruptores)";
+					case "04":
+						return "Equipos a mover (Seccionadores)";
+					case "05":
+						return "Equipos a mover (Seccionadores)";
+					case "06":
+						return "Interruptor extraído"
+					default:
+						return "";
 				}
 			} else {
 				return "";
@@ -3768,7 +3821,7 @@ sap.ui.define([
 			var sLegacy = oData.Jefetra;
 			LegacyValidationHelper.handleLegacyValidationForDDSR(sLegacy, sPath, oModel, "/JefetraValueState", "/JefetraValueStateText",
 				oEvent
-				.getSource().mBindingInfos.items.path);
+					.getSource().mBindingInfos.items.path);
 			if (oEvent.getSource) {
 				if (oEvent.getSource().getValueState() === "Error") {
 					oEvent.getSource().setSelectedKey("");
@@ -4026,38 +4079,38 @@ sap.ui.define([
 
 		handleSignal: function (name) {
 			return function (oEvent) {
-				(oEvent.getParameter("selected")) ? AppManagementHelper.getModel("LicenseJsonModel").setProperty(name, "X"):
+				(oEvent.getParameter("selected")) ? AppManagementHelper.getModel("LicenseJsonModel").setProperty(name, "X") :
 					AppManagementHelper.getModel("LicenseJsonModel").setProperty(name, "");
 			}
 		},
 
 		handleBlock: function (oEvent) {
-			(oEvent.getParameter("selected")) ? AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Bloqueo", "X"):
+			(oEvent.getParameter("selected")) ? AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Bloqueo", "X") :
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Bloqueo", "");
 		},
 
 		handleNoSignal: function (oEvent) {
-			(oEvent.getParameter("selected")) ? AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Senalninguna", "X"):
+			(oEvent.getParameter("selected")) ? AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Senalninguna", "X") :
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Senalninguna", "");
 		},
 
 		handleCautions: function (oEvent) {
-			(oEvent.getParameter("selected")) ? AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Precaucionesok", "X"):
+			(oEvent.getParameter("selected")) ? AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Precaucionesok", "X") :
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Precaucionesok", "");
 		},
 
 		handleStates: function (oEvent) {
-			(oEvent.getParameter("selected")) ? AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Senalestados", "X"):
+			(oEvent.getParameter("selected")) ? AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Senalestados", "X") :
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Senalestados", "");
 		},
 
 		handleAlarms: function (oEvent) {
-			(oEvent.getParameter("selected")) ? AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Senalalarmas", "X"):
+			(oEvent.getParameter("selected")) ? AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Senalalarmas", "X") :
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Senalalarmas", "");
 		},
 
 		handleSignalMeasure: function (oEvent) {
-			(oEvent.getParameter("selected")) ? AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Senalmedicion", "X"):
+			(oEvent.getParameter("selected")) ? AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Senalmedicion", "X") :
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Senalmedicion", "");
 		},
 
@@ -4287,18 +4340,18 @@ sap.ui.define([
 			}
 
 			switch (sState) {
-			case "CC":
-				sState = "Condicionado";
-				break;
-			case "AS":
-				sState = "Anulada por el Solicitante";
-				break;
-			case "NA":
-				sState = "No Autorizada";
-				break;
-			default:
-				sState = "Sin Estado";
-				break;
+				case "CC":
+					sState = "Condicionado";
+					break;
+				case "AS":
+					sState = "Anulada por el Solicitante";
+					break;
+				case "NA":
+					sState = "No Autorizada";
+					break;
+				default:
+					sState = "Sin Estado";
+					break;
 			}
 			if (sState !== "Sin Estado") {
 				let DialogStatus = new sap.m.Dialog({
@@ -4568,27 +4621,27 @@ sap.ui.define([
 				});
 				if (sValue === "04" || sValue === "05") {
 					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items",
-						"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate): "";
+						"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate) : "";
 					(sap.ui.getCore().byId("JefeTrabajoSupComb")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items",
-						"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate): "";
+						"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate) : "";
 					(sap.ui.getCore().byId("jefeTrabTrComb")) ? sap.ui.getCore().byId("jefeTrabTrComb").bindAggregation("items",
-						"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate): "";
+						"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate) : "";
 				} else if (sValue) {
 					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items",
-						"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate): "";
+						"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate) : "";
 					(sap.ui.getCore().byId("JefeTrabajoSupComb")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items",
-						"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate): "";
+						"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate) : "";
 					(sap.ui.getCore().byId("jefeTrabTrComb")) ? sap.ui.getCore().byId("jefeTrabTrComb").bindAggregation("items",
-						"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate): "";
+						"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate) : "";
 				} else {
-					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items"): "";
-					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items"): "";
-					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("jefeTrabTrComb").unbindAggregation("items"): "";
+					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items") : "";
+					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items") : "";
+					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("jefeTrabTrComb").unbindAggregation("items") : "";
 				}
 			} else {
-				(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items"): "";
-				(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items"): "";
-				(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("jefeTrabTrComb").unbindAggregation("items"): "";
+				(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items") : "";
+				(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items") : "";
+				(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("jefeTrabTrComb").unbindAggregation("items") : "";
 			}
 
 		},

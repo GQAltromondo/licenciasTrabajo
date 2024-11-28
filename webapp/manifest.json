@@ -14,6 +14,19 @@
       "id": "ui5template.basicSAPUI5ApplicationProject",
       "version": "1.40.12",
       "toolsId": "3ff90f29-f15d-46e4-a3a9-0b0779af2449"
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "TransOpeLicenTrabajo-Display": {
+          "semanticObject": "TransOpeLicenTrabajo",
+          "action": "Display",
+          "title": "{{flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
     }
   },
   "sap.ui": {

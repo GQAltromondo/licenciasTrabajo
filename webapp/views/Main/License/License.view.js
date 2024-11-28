@@ -1202,7 +1202,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 											"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
 											"DevolutionTableJsonModel>enabled", "DevolutionTableJsonModel>sameDayValidation"
 										],
-										formatter: oController.rolEdition("entregas/")
+										formatter: oController.rolStatusEdition("entregas/")
 									},
 									// valueState: "{DevolutionTableJsonModel>TejtValueState}",
 									// valueStateText: "{DevolutionTableJsonModel>TejtValueStateText}",
@@ -1423,10 +1423,10 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 										],
 										formatter: oController.rolStatusEdition("entregas/")
 									},
-									change: [oController.handleLegacyValidationDeliveries, oController],
+									//change: [oController.handleLegacyValidationDeliveries, oController],
 									// valueState: "{DeliveryTableJsonModel>TejtValueState}",
 									// valueStateText: "{DeliveryTableJsonModel>TejtValueStateText}",
-									// selectedKey: "{DeliveryTableJsonModel>TecET}",
+									selectedKey: "{DeliveryTableJsonModel>TecET}",
 									items: {
 										templateShareable: false,
 										path: "PersonalHabilitadoModel>/TecnicosEt",

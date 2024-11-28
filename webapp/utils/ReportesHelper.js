@@ -24,13 +24,19 @@ sap.ui.define([
 		getImageUrl: function (society, fnCallback) {
 			var that = this;
 			var xhr = new XMLHttpRequest();
-			//test webide images/transener.png
+
 			if (society === "100") {
-				xhr.open("GET", "images/transener_top.png", true);
-				//	xhr.open("GET", "/sap/fiori/transeneroperacionesworklicens/images/transener.png", true);
+				//Ruta para BAS Desarrollo
+				//xhr.open("GET", "images/transener_top.png"), true);
+				//Ruta para CF Launchpad
+				xhr.open("GET", sap.ui.require.toUrl("Transener/Operaciones/LicenciasTrabajo/images/transener_top.png"), true);
+
 			} else {
-				xhr.open("GET", "images/transba_top.png", true);
-				// xhr.open("GET", "/sap/fiori/transeneroperacionesworklicens/images/TRANSBA.png", true);
+				//Ruta para BAS Desarrollo
+				//xhr.open("GET", "images/transba_top.png"), true);
+				//Ruta para CF Launchpad
+				xhr.open("GET", sap.ui.require.toUrl("Transener/Operaciones/LicenciasTrabajo/images/transba_top.png"), true);
+
 			}
 
 			xhr.responseType = "blob";
@@ -265,7 +271,7 @@ sap.ui.define([
 
 					aPromises.push(this.promisePacker(oData.Id, doc))
 				}
-				Promise.all(aPromises).then(() => {})
+				Promise.all(aPromises).then(() => { })
 			});
 
 		},
@@ -441,14 +447,14 @@ sap.ui.define([
 			//Ticket 578 punto 6
 			if (campo === 'R500kv') {
 				switch (value) {
-				case "X":
-					return "SI"
-				case "N":
-					return "NO"
-				case "Y":
-					return "NO CORRESPONDE"
-				default:
-					return ""
+					case "X":
+						return "SI"
+					case "N":
+						return "NO"
+					case "Y":
+						return "NO CORRESPONDE"
+					default:
+						return ""
 				}
 			}
 			if (campo === 'Barrafs') {
@@ -772,7 +778,7 @@ sap.ui.define([
 						if (fechaInicio.getDay() === 6) {
 							//contar si es Sabado
 							count += 1;
-						} else {}
+						} else { }
 					}
 
 				} else {
@@ -808,7 +814,7 @@ sap.ui.define([
 						if (fechaInicio.getDay() === 0) {
 							//contar si es Domingo
 							count += 1;
-						} else {}
+						} else { }
 					}
 
 				} else {
@@ -1063,9 +1069,9 @@ sap.ui.define([
 					var tzoffset = (new Date()).getTimezoneOffset() * 60000;
 					LicenciasToExport.push(
 						["ENTREGAS"], ["Año", "Num. de Licencia", "Id de evento", "Fecha", "Hora", "COT/COTDT", "Jefes de Trabajo", "Tecnico ET",
-							"Folio",
-							"Motivo de la NO entrega", "Comentarios"
-						]
+						"Folio",
+						"Motivo de la NO entrega", "Comentarios"
+					]
 					);
 					for (var oLicencia of aLicencias) {
 						var aEntregas = oLicencia.EntregasLicencia_nav.results;
@@ -1090,16 +1096,16 @@ sap.ui.define([
 					return LicenciasToExport;
 				}
 
-				var Hoja3ToExport =[]
+				var Hoja3ToExport = []
 				function getColocaciones(aLicencias) {
 					Hoja3ToExport.push(
-					 ["COLOCACIONES"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Comentarios"]
+						["COLOCACIONES"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Comentarios"]
 					);
 					for (var oLicencia of aLicencias) {
-						var aColocaciones = oLicencia.ColocacionPAT_nav.results 
+						var aColocaciones = oLicencia.ColocacionPAT_nav.results
 						if (aColocaciones.length !== 0) {
 							for (var Colocacion of aColocaciones) {
-						
+
 								var numLic = Colocacion.Id;
 								var fecha = Colocacion.Datehab; // TODO: este campo correcto ???
 								var hora = that.getHoraMin(Colocacion.Time); // TODO: este campo correcto ???
@@ -1112,16 +1118,16 @@ sap.ui.define([
 					}
 					return Hoja3ToExport;
 				}
-				
+
 				function getRetiros(aLicencias) {
 					Hoja3ToExport.push(
-					[''], ["RETIROS"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Comentarios"]
+						[''], ["RETIROS"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Comentarios"]
 					);
 					for (var oLicencia of aLicencias) {
-						var aRetiros = oLicencia.RetiroPAT_nav.results 
+						var aRetiros = oLicencia.RetiroPAT_nav.results
 						if (aRetiros.length !== 0) {
 							for (var Retiro of aRetiros) {
-						
+
 								var numLic = Retiro.Id;
 								var fecha = Retiro.Datehab; // TODO: este campo correcto ???
 								var hora = that.getHoraMin(Retiro.Time); // TODO: este campo correcto ???
@@ -1134,15 +1140,15 @@ sap.ui.define([
 					}
 					return Hoja3ToExport;
 				}
-					function getHabilitaciones(aLicencias) {
+				function getHabilitaciones(aLicencias) {
 					Hoja3ToExport.push(
-					[''], ["HABILITACIONES"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Comentarios"]
+						[''], ["HABILITACIONES"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Comentarios"]
 					);
 					for (var oLicencia of aLicencias) {
-						var aHabilitaciones = oLicencia.HabilitacionRecierre_nav.results 
+						var aHabilitaciones = oLicencia.HabilitacionRecierre_nav.results
 						if (aHabilitaciones.length !== 0) {
 							for (var Habilitacion of aHabilitaciones) {
-						
+
 								var numLic = Habilitacion.Id;
 								var fecha = Habilitacion.Datehab; // TODO: este campo correcto ???
 								var hora = that.getHoraMin(Habilitacion.Time); // TODO: este campo correcto ???
@@ -1155,15 +1161,15 @@ sap.ui.define([
 					}
 					return Hoja3ToExport;
 				}
-					function getInhibiciones(aLicencias) {
+				function getInhibiciones(aLicencias) {
 					Hoja3ToExport.push(
-					[''], ["INHIBICIONES"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Comentarios"]
+						[''], ["INHIBICIONES"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Comentarios"]
 					);
 					for (var oLicencia of aLicencias) {
-						var aInhibiciones = oLicencia.InhibicionRecierre_nav.results 
+						var aInhibiciones = oLicencia.InhibicionRecierre_nav.results
 						if (aInhibiciones.length !== 0) {
 							for (var Inhibicion of aInhibiciones) {
-						
+
 								var numLic = Inhibicion.Id;
 								var fecha = Inhibicion.Datehab; // TODO: este campo correcto ???
 								var hora = that.getHoraMin(Inhibicion.Time); // TODO: este campo correcto ???
@@ -1182,8 +1188,8 @@ sap.ui.define([
 				function getDevoluciones(aLicencias) {
 					LicenciasToExport.push(
 						[" "], ["DEVOLUCIONES"], ["Año", "Num. de Licencia", "Id de evento", "Fecha", "Hora", "TE/JT/JTG", "COT/COTDT", "Tecnico ET",
-							"Comentarios"
-						]
+						"Comentarios"
+					]
 					);
 					for (var oLicencia of aLicencias) {
 						var aItems = oLicencia.DevolucionLicencia_nav.results;
@@ -1209,8 +1215,8 @@ sap.ui.define([
 				function getSuspensiones(aLicencias) {
 					LicenciasToExport.push(
 						[" "], ["SUSPENSIONES"], ["Año", "Num. de Licencia", "Id de evento", "Fecha", "Hora", "COT/COTDT", "Tecnico ET", /* "Folio", "Motivo de la NO entrega",*/
-							"Comentarios"
-						]
+						"Comentarios"
+					]
 					);
 					for (var oLicencia of aLicencias) {
 						var aItems = oLicencia.SuspensionLicencia_nav.results;
@@ -1260,9 +1266,9 @@ sap.ui.define([
 				function getCancelaciones(aLicencias) {
 					LicenciasToExport.push(
 						[" "], ["CANCELACIONES"], ["Año", "Num. de Licencia", "Fecha", "Hora", "TE/JT/JTG", "COT/COTDT",
-							"Tecnico ET", "Comentarios",
-							"Cancelado"
-						]
+						"Tecnico ET", "Comentarios",
+						"Cancelado"
+					]
 					);
 					for (var oLicencia of aLicencias) {
 						var anio = oLicencia.Anio;
@@ -1314,8 +1320,8 @@ sap.ui.define([
 					var tzoffset = (new Date()).getTimezoneOffset() * 60000;
 					ObsLicenciasToExport.push(
 						["Observaciones de las Licencias"], ["Año", "Num. de Licencia", "Id de evento", "Fecha", "Hora", "Usuario",
-							"Tipificación de la obs", "Observación"
-						]
+						"Tipificación de la obs", "Observación"
+					]
 					);
 					for (let oLicencia of aLicencias) {
 						let aItems = oLicencia.ObservacionesLicencia_nav.results;
@@ -1377,7 +1383,7 @@ sap.ui.define([
 					getRetiros(data),
 					getHabilitaciones(data),
 					getInhibiciones(data)
-					
+
 				);
 				var Tab4Content = XLSX.utils.aoa_to_sheet(
 					getTransferencias(data)
@@ -1412,9 +1418,9 @@ sap.ui.define([
 				function getTramitaciones(aLicencias) {
 					TramitacionesToExport.push(
 						["TRAMITACIONES"], ["Sociedad", "Num. de Licencia", "Fecha y Hora de Tramitación", "Empresa", "Estado de la Tramitación",
-							"Causa de la NO Autoriza.", "Aviso de programación", "Motivo de la NO Autoriz.", "Estado diario, Fecha",
-							"Estado diario, Estado", "Estado diario, Observaciones"
-						]
+						"Causa de la NO Autoriza.", "Aviso de programación", "Motivo de la NO Autoriz.", "Estado diario, Fecha",
+						"Estado diario, Estado", "Estado diario, Observaciones"
+					]
 					);
 					for (var oLicencia of aLicencias) {
 						var aItems = oLicencia.TramitacionesLicencia_nav.results;
@@ -1495,7 +1501,7 @@ sap.ui.define([
 
 		reporteSemanalCammesa: function (fechadesde, fechahasta, society, daysInBetWeen) {
 			return new Promise((resolve, reject) => {
-				ReportesService.semanalCamesa(society, fechadesde, fechahasta).then(async(data) => {
+				ReportesService.semanalCamesa(society, fechadesde, fechahasta).then(async (data) => {
 					var aData = data.results;
 					if (aData.length > 0) {
 						aData.forEach((e) => {
@@ -1621,7 +1627,7 @@ sap.ui.define([
 		},
 
 		_getDateTextFormat: async function (aData, dateArray) {
-			let aFormatData = await Promise.all(aData.map(async(e) => {
+			let aFormatData = await Promise.all(aData.map(async (e) => {
 				let sTipo = e.Tipo === "Licencias" ? "L" : "S";
 				let ID = e.Id;
 				let sID = sTipo === 'S' ? `${sTipo}${ID.slice(2)}` : `${sTipo}${ID.slice(1)}`;
@@ -1647,9 +1653,9 @@ sap.ui.define([
 			})
 			if (sDateFound) {
 				const foundDays = horarios.find(element => element.stringDate === sDateFound.stringDate)
-					//INI TRNS99 - ver si la fecha esta autorizada o no
+				//INI TRNS99 - ver si la fecha esta autorizada o no
 				const foundNoAutorizado = aDiasAnulados.find(element => FormatHelper.formatDateLicense(element.Fecha) === sDateFound.stringDate)
-					//FIN TNRS99
+				//FIN TNRS99
 
 				//INI - 10/03/2023 - EXT-MSUELDIA - Se agrega validacion segun license.Timend
 				//si tiene el valor "Continua" se debe calcular valor de enserv por mas que no encuentre dias
@@ -1708,38 +1714,38 @@ sap.ui.define([
 			// Tipo de interveción
 			if (license.Tipinterv !== "") {
 				switch (license.Tipinterv) {
-				case "1":
-					aStringParts.push("Preventivo");
-					break;
-				case "2":
-					aStringParts.push("Correctivo");
-					break;
-				case "6":
-					aStringParts.push("Obra / Mejora");
-					break;
-				default:
-					aStringParts.push(license.Tipinterv);
-					break;
+					case "1":
+						aStringParts.push("Preventivo");
+						break;
+					case "2":
+						aStringParts.push("Correctivo");
+						break;
+					case "6":
+						aStringParts.push("Obra / Mejora");
+						break;
+					default:
+						aStringParts.push(license.Tipinterv);
+						break;
 				}
 			}
 
 			// Estacional
 			switch (license.Estacional) {
-			case "1":
-				aStringParts.push("Estacional Pendiente");
-				break;
-			case "2":
-				aStringParts.push("Estacional Vigente");
-				break;
-			case "3":
-				aStringParts.push("Estacional Adelantado");
-				break;
-			case "4":
-				aStringParts.push("No estacional");
-				break;
-			default:
-				aStringParts.push("No estacional");
-				break;
+				case "1":
+					aStringParts.push("Estacional Pendiente");
+					break;
+				case "2":
+					aStringParts.push("Estacional Vigente");
+					break;
+				case "3":
+					aStringParts.push("Estacional Adelantado");
+					break;
+				case "4":
+					aStringParts.push("No estacional");
+					break;
+				default:
+					aStringParts.push("No estacional");
+					break;
 			}
 
 			if (license.R500kv === "X") aStringParts.push("Requiere calle de 500 KV abierta");
@@ -1884,8 +1890,8 @@ sap.ui.define([
 
 				license.Rdisparo === "X" ? license.Rdisparo = "SI" : license.Rdisparo = "NO";
 				license.DescEstacion = license.DescEstacion //FormatterHelper.getDescEstacion(license.Tplnr);
-					// issue 504 - el campo Tipoequipo trae un valor incorrecto , se remplazo por el campo tipoEquipo
-					//	license.tipoEquipo = license.Tipoequipo;
+				// issue 504 - el campo Tipoequipo trae un valor incorrecto , se remplazo por el campo tipoEquipo
+				//	license.tipoEquipo = license.Tipoequipo;
 				if (license.tipoEquipo) {
 					license.tipoEquipo = license.tipoEquipo;
 				} else {
@@ -1912,17 +1918,17 @@ sap.ui.define([
 		formatTipinterv: function (sTpinterv) {
 			var sTpintervDesc = "";
 			switch (sTpinterv) {
-			case "1":
-				sTpintervDesc = "PREVENTIVO";
-				break;
-			case "2":
-				sTpintervDesc = "CORRECTIVO";
-				break;
-			case "6":
-				sTpintervDesc = "OBRA / MEJORA";
-				break;
-			default:
-				sTpintervDesc = "";
+				case "1":
+					sTpintervDesc = "PREVENTIVO";
+					break;
+				case "2":
+					sTpintervDesc = "CORRECTIVO";
+					break;
+				case "6":
+					sTpintervDesc = "OBRA / MEJORA";
+					break;
+				default:
+					sTpintervDesc = "";
 			}
 			return sTpintervDesc;
 		},
@@ -1956,7 +1962,8 @@ sap.ui.define([
 					return e.Fecha.getTime()
 				});
 				var aDataMapped = aIntersection.map((e) => {
-					return {...oLicense,
+					return {
+						...oLicense,
 						... {
 							Solbeg: e.Fecha
 						}
@@ -2166,7 +2173,7 @@ sap.ui.define([
 										var name = "";
 
 										if (programa === "Semanal") {
-											name = `MTSsem${FormatHelper.getWeekNumber(desde)[1]}_${desde.getFullYear().toString().substr(2,2)}.xlsx`
+											name = `MTSsem${FormatHelper.getWeekNumber(desde)[1]}_${desde.getFullYear().toString().substr(2, 2)}.xlsx`
 										} else {
 											name = `MTD${FormatHelper.formatDate(desde).split("-").join("")}.xlsx`
 										}
