@@ -77,15 +77,23 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Dialogs.Massive
 									selectedKey: "{TramitacionMasivaListJsonModel>Estado}",
 									items: {
 										templateShareable: false,
-										path: "SelectModel>/FixedValuesSet",
-										filters: [new sap.ui.model.Filter("Tabname", sap.ui.model.FilterOperator.EQ, "ZTAB_OP_TRALIC"),
-											new sap.ui.model.Filter("Fieldname", sap.ui.model.FilterOperator.EQ, "ESTADO")
-										],
+										path: "TramitacionMasiva>/TramitacionMasiva",
 										template: new sap.ui.core.Item({
-											key: "{SelectModel>Valkey}",
-											text: "{SelectModel>Valtext}"
+											key: "{TramitacionMasiva>Valkey}",
+											text: "{TramitacionMasiva>Valtext}"
 										})
 									}
+									// items: {
+									// 	templateShareable: false,
+									// 	path: "SelectModel>/FixedValuesSet",
+									// 	filters: [new sap.ui.model.Filter("Tabname", sap.ui.model.FilterOperator.EQ, "ZTAB_OP_TRALIC"),
+									// 		new sap.ui.model.Filter("Fieldname", sap.ui.model.FilterOperator.EQ, "ESTADO")
+									// 	],
+									// 	template: new sap.ui.core.Item({
+									// 		key: "{SelectModel>Valkey}",
+// 													text: "{SelectModel>Valtext}"
+// 											})
+// 									}
 								}),
 								new sap.m.ComboBox({
 									selectedKey: "{TramitacionMasivaListJsonModel>CausaNo}",

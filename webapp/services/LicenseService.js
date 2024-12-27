@@ -149,7 +149,9 @@ sap.ui.define([
 			var aData = [];
 
 			var bJefeTurnoCOT = aRoles.find((r) => {
-				return r === "ope_jefe_cot" || r === "ope_jefe_cotdt"
+				// return r === "ope_jefe_cot" || r === "ope_jefe_cotdt"
+				 return r === "ope_jefe_turno_cot" || r === "ope_jefe_turno_cotdt"
+
 			});
 
 			var bProgramacion = aRoles.find((r) => {

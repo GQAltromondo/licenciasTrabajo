@@ -32,6 +32,7 @@ sap.ui.define([
 	"Transener/Operaciones/LicenciasTrabajo/services/EstadoTramitacionService",
 	"Transener/Operaciones/LicenciasTrabajo/services/MotivoNoAutorizacionService",
 	"Transener/Operaciones/LicenciasTrabajo/services/RepositionTimeService",
+	"Transener/Operaciones/LicenciasTrabajo/services/TramitacionMasivaService",
 	"Transener/Operaciones/LicenciasTrabajo/services/InterventionTypesService",
 	"Transener/Operaciones/LicenciasTrabajo/services/TipoOfEstacionalListService",
 	"Transener/Operaciones/LicenciasTrabajo/services/StatusService",
@@ -56,7 +57,7 @@ sap.ui.define([
 	RegionesService,
 	PersonalHabilitadoService, WorkPlaceService,
 	oDataService, EmpresaTramitacionService, TipoEquipoService, EquiposService, OrdenesService, EstacionesService, JobCondService, EstadoTramitacionService, MotivoNoAutorizacionService,
-	RepositionTimeService, InterventionTypesService, TipoOfEstacionalListService, StatusService, GrupoPlanificadorService, ReportesService,
+	RepositionTimeService,TramitacionMasivaService, InterventionTypesService, TipoOfEstacionalListService, StatusService, GrupoPlanificadorService, ReportesService,
 	ReportesHelper, LimitacionesTecnicas,
 	ExcelDownloadHelper, BusyDialogHelper, FioriHelper, LicenceHelper, RolAuthorizationHelper, FormatterHelper, LegacyValidationHelper,
 	UnifilarHelper, checkAlternativeLabelService, UserService) {
@@ -102,8 +103,11 @@ sap.ui.define([
 			});
 			UserService.loadModel()
 			oDataService.getModel("SelectModel")
-			//		oRouter.attachRoutePatternMatched(this._onHomeRouteMatched, this);
-
+			
+		},
+		loadPuestosTrabajo: async function (empresa) {
+			let aPuestosTrabajo = await LicenseService.getPuestosTrabajo(empresa)
+			return aPuestosTrabajo;
 		},
 		getBaseURL: function () {
 
@@ -607,7 +611,7 @@ sap.ui.define([
 			AppManagementHelper.getModel("FilterSelectionJsonModel").setProperty("/annulateCreatedStatus", !!oLicense.Id);
 
 			// Issue #518 -> Set Tipo de Licencia por defecto según rol.
-			var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "ope_jefe_cot" || sRol === "ope_jefe_cotdt");
+			var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "ope_jefe_turno_cot" || sRol === "ope_jefe_turno_cotdt");
 			var bOperador = aUserRoles.find(sRol => sRol === "ope_oper-turno_cot" || sRol === "ope_oper-turno_cotdt");
 			if (bJefeTurnoCOT || bOperador) {
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "EM");
@@ -1257,6 +1261,7 @@ sap.ui.define([
 				this.loadStatusModel();
 				this.loadMotivoNoAutorizacionModel();
 				this.loadJobCondModel()
+				this.loadTramitacionsModel()
 			}
 
 		},
@@ -1499,6 +1504,14 @@ sap.ui.define([
 			MotivoNoAutorizacionService.loadMotivos()
 			EmpresaTramitacionService.loadTramitacion(this.society);
 			PersonalHabilitadoService.getPersonalPromise(this.society);
+			this.loadPuestosTrabajo(this.society).then((aPuestosTrabajo) => {
+				AppManagementHelper.getModel("PuestosTrabajoJsonModel");
+				AppManagementHelper.getModel("PuestosTrabajoJsonModel").setData({
+					PuestosTrabajo: aPuestosTrabajo
+				})
+				//		oRouter.attachRoutePatternMatched(this._onHomeRouteMatched, this);
+
+			})
 			EstacionesService.loadEstaciones(filtersEstaciones);
 			//ReportesHelper.workReportCammesa(this.society, new Date(0), new Date(), false);
 			//RepositionTimeService.loadEstaciones(filters);
@@ -3137,6 +3150,12 @@ sap.ui.define([
 					this.onErrorLoad("JobConditions").bind(this)
 				);
 		},
+		loadTramitacionsModel: function () {
+			TramitacionMasivaService.getPromise()
+				.then(this.onSuccessLoad("TramitacionMasiva").bind(this),
+					this.onErrorLoad("TramitacionMasiva").bind(this)
+				);
+		},
 
 		loadTipoIntModel: function () {
 			InterventionTypesService.getPromise()
@@ -3763,7 +3782,7 @@ sap.ui.define([
 					operator: sap.ui.model.FilterOperator.GE,
 					value1: new Date(localFilterData.Solbeg - timeZoneOffset)
 				}) : null;
-
+	
 				this.localFilters.fechaFin = localFilterData.Solend ? new sap.ui.model.Filter({
 					path: "Solend",
 					operator: sap.ui.model.FilterOperator.LE,
@@ -4246,9 +4265,9 @@ sap.ui.define([
 							"results": []
 						};
 						var licencia = lic;
-							var Colocaciones = lic.ColocacionPAT_nav.results;
-						
-					
+						var Colocaciones = lic.ColocacionPAT_nav.results;
+
+
 						var Retiros = lic.RetiroPAT_nav.results;
 						var Habilitaciones = lic.HabilitacionRecierre_nav.results;
 						var Inhibiciones = lic.InhibicionRecierre_nav.results;
@@ -4283,7 +4302,7 @@ sap.ui.define([
 								Observaciones, Coordinaciones, Tramitaciones,
 								Transferencias, oTextos, oModelExportMultiLicsModel.ExportType
 							);
-							
+
 						}, (e) => {
 							console.log(e);
 						}, {
