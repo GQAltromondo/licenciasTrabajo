@@ -643,10 +643,15 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Request.Request
 							valueStateText: "{LicenseJsonModel>/ArbplStateMessage}",
 							items: {
 								//filters: [new sap.ui.model.Filter("Objid", sap.ui.model.FilterOperator.EQ, "10000845")],
-								path: "WorkPlacesJsonModel>/FilteredWorkPlaces",
+								// path: "WorkPlacesJsonModel>/FilteredWorkPlaces",
+								// template: new sap.ui.core.Item({
+								// 	key: "{WorkPlacesJsonModel>Arbpl}",
+								// 	text: "{WorkPlacesJsonModel>Ktext}"
+								// })
+								path: "PuestoTrabajoJsonModel>/PuestosTrabajo",
 								template: new sap.ui.core.Item({
-									key: "{WorkPlacesJsonModel>Arbpl}",
-									text: "{WorkPlacesJsonModel>Ktext}"
+									key: "{PuestoTrabajoJsonModel>Arbpl}",
+									text: "{PuestoTrabajoJsonModel>Ktext}"
 								})
 							},
 							layoutData: new sap.ui.layout.GridData({

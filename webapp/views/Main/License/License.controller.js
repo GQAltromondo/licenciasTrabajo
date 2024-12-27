@@ -89,13 +89,13 @@ sap.ui.define([
 			// Fix issue #498 ID de solicitud y unifilres.
 			var oLicencia = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			var sLicenciaCreada = (oLicencia.Id && oLicencia.Tipo === "L") ? oLicencia.Id : "";
-		
 
-					// Obtén los parámetros de la URL
-					var searchParams = new URLSearchParams(window.location.search);
 
-					// Obtén el valor de 'siteId'
-					var siteId = searchParams.get("siteId");
+			// Obtén los parámetros de la URL
+			var searchParams = new URLSearchParams(window.location.search);
+
+			// Obtén el valor de 'siteId'
+			var siteId = searchParams.get("siteId");
 
 			// var sHost =
 			// 	`https://${window.location.host}/sites/fiorilaunchpad#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`;
@@ -110,8 +110,8 @@ sap.ui.define([
 			// Crear la URL para la nueva pestaña
 			const newUrl = `${location.origin}/site?siteId=${siteId}${currentHash}`;
 
-		
-			 window.open(newUrl, '_blank');
+
+			window.open(newUrl, '_blank');
 
 
 
@@ -452,31 +452,49 @@ sap.ui.define([
 
 					console.log("siteId:", siteId);
 
+					// RL 10/12
+					
+					var navigationService = sap.ushell.Container.getService('CrossApplicationNavigation');
+					var hash = navigationService.hrefForExternal({
+						target: {semanticObject : 'GestionUnifilares', action: 'Display'} ,
+						params: {LicenciaCreada: sLicenciaCreada,
+							Tipo: sTipo,
+							Version: sVersion,
+							Empresa: oLicense.Empresa,
+							Anio: oLicense.Anio,
+							Id: oLicense.Idunifilar,
+							IdUnifilar: sIndex,
+							RealIdUnifilar: sRealIdUnifilar,
+							Centro: oModelSelectionData.Region,
+							ET: oModelSelectionData.ET,
+							Mode: "C"}
+					  });
+					var url = window.location.href.split('#')[0] + hash;
+					sap.m.URLHelper.redirect(url, true);
+					// Fin RL 10/12
+
 					// console.log("URL", window.location.hostname + "/site?siteId=" + siteId)
-					var Hash = `#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${oLicense.Empresa}&Anio=${oLicense.Anio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&RealIdUnifilar=${sRealIdUnifilar}&Centro=${oModelSelectionData.Region}&ET=${oModelSelectionData.ET}&Mode=C`;
+					// RL 10/12 var Hash = `#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${oLicense.Empresa}&Anio=${oLicense.Anio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&RealIdUnifilar=${sRealIdUnifilar}&Centro=${oModelSelectionData.Region}&ET=${oModelSelectionData.ET}&Mode=C`;
 					// const sHost = (window.location.hostname + "/site?siteId=" + siteId + Hash)
 					// window.location.href = (sHost, "_blank")
 
 
 					// //window.open(sHost, "_blank");
 					// // var sHost =
-					// // 	`https://${window.location.host}/sites/fiorilaunchpad#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`;
+					// // 	`https://${window.location.host}/sites/fiorilaunchpad#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${oLicense.Empresa}&Anio=${oLicense.Anio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&RealIdUnifilar=${sRealIdUnifilar}&Centro=${oModelSelectionData.Region}&ET=${oModelSelectionData.ET}&Mode=C`;
 					// // window.open(sHost, "_blank");
-
+					// RL 10/12 location.hash = "GestionUnifilares-Display?Empresa=" + `LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${oLicense.Empresa}&Anio=${oLicense.Anio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&RealIdUnifilar=${sRealIdUnifilar}&Centro=${oModelSelectionData.Region}&ET=${oModelSelectionData.ET}&Mode=C`;
 					//location.hash = Hash
 
-					const currentHash = Hash;
+					// const currentHash = Hash;
 
-					// Crear la URL para la nueva pestaña
-					const newUrl = `${location.origin}/site?siteId=${siteId}${currentHash}`;
+					// // Crear la URL para la nueva pestaña
+					// const newUrl = `${location.origin}/site?siteId=${siteId}${currentHash}`;
 
-					// Abrir una nueva pestaña con la URL y el hash
-					const newTab = window.open(newUrl, '_blank');
-
+				//}
 				}
 			}, $.proxy(this.onErrorGetUnifilares, this));
 		},
-
 		openUnifilarURL: function (oEvent) {
 			var oUnifilar = oEvent.getSource().getBindingContext("UnifilaresFileListModel").getObject()
 			this.unifilarValid(oUnifilar)

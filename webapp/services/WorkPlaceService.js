@@ -95,7 +95,7 @@ sap.ui.define([
 			} else {
 				filteredWorkPlaces = workPlaces;
 			}
-			
+			console.log(filteredWorkPlaces)
 			AppManagementHelper.getModel("WorkPlacesJsonModel").setProperty("/FilteredWorkPlaces", filteredWorkPlaces)
 		}
 

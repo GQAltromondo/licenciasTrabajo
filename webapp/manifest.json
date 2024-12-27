@@ -17,7 +17,7 @@
     },
     "crossNavigation": {
       "inbounds": {
-        "TransOpeLicenTrabajo-Display": {
+        "TransOpeLicenTrabajo-display": {
           "semanticObject": "TransOpeLicenTrabajo",
           "action": "Display",
           "title": "{{flpTitle}}",
