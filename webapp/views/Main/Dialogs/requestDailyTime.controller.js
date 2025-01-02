@@ -67,7 +67,7 @@ sap.ui.define([
 			var minDate = _.minBy(horarios, 'Fecha');
 			var maxDate = _.maxBy(horarios, 'Fecha');
 
-			if (minDate < object.timeFrom || maxDate > object.timeTo) {
+			if (minDate.Fecha > object.date || maxDate.Fecha < object.date) {
 
 				MessageBoxHelper.showAlert("Alerta", "Solo podra modificar los horarios ya asignados, si quieren agregar mas dias, debera hacerlo desde la pantalla de licencia.")
 				return;
