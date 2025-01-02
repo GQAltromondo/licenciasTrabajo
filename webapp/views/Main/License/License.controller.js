@@ -103,7 +103,7 @@ sap.ui.define([
 
 			//	location.hash = `GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`
 			var Hash =
-				`#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`;
+				`#GestionUnifilaresV1-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`;
 
 			const currentHash = Hash;
 
@@ -453,11 +453,12 @@ sap.ui.define([
 					console.log("siteId:", siteId);
 
 					// RL 10/12
-					
+
 					var navigationService = sap.ushell.Container.getService('CrossApplicationNavigation');
 					var hash = navigationService.hrefForExternal({
-						target: {semanticObject : 'GestionUnifilares', action: 'Display'} ,
-						params: {LicenciaCreada: sLicenciaCreada,
+						target: { semanticObject: 'GestionUnifilaresV1', action: 'Display' },
+						params: {
+							LicenciaCreada: sLicenciaCreada,
 							Tipo: sTipo,
 							Version: sVersion,
 							Empresa: oLicense.Empresa,
@@ -467,8 +468,9 @@ sap.ui.define([
 							RealIdUnifilar: sRealIdUnifilar,
 							Centro: oModelSelectionData.Region,
 							ET: oModelSelectionData.ET,
-							Mode: "C"}
-					  });
+							Mode: "C"
+						}
+					});
 					var url = window.location.href.split('#')[0] + hash;
 					sap.m.URLHelper.redirect(url, true);
 					// Fin RL 10/12
@@ -491,7 +493,7 @@ sap.ui.define([
 					// // Crear la URL para la nueva pestaña
 					// const newUrl = `${location.origin}/site?siteId=${siteId}${currentHash}`;
 
-				//}
+					//}
 				}
 			}, $.proxy(this.onErrorGetUnifilares, this));
 		},
@@ -4233,6 +4235,8 @@ sap.ui.define([
 			var sEquipo = obj.CodigoEquipo;
 			var oModelLim = AppManagementHelper.getModel("LimitacionesJsonModel");
 			var aLimitaciones = oModelLim.getData().Limitaciones;
+			//GQ
+			if (!aLimitaciones) return obj
 			// Filtrar el array
 			var aFilteredLim = aLimitaciones.filter(function (limitacion) {
 				return limitacion.Equipo === sEquipo;

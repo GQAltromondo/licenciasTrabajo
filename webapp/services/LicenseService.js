@@ -2114,9 +2114,9 @@ sap.ui.define([
 					}
 					if (e.oValue1 === "") {
 						//FIX GQ 26-12
-						//e.oValue1 = "N"
-						//return true
-						return false;
+						e.oValue1 = "N"
+						return true
+						//return false;
 					}
 				}
 				return true;

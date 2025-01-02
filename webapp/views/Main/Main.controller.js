@@ -611,7 +611,7 @@ sap.ui.define([
 			AppManagementHelper.getModel("FilterSelectionJsonModel").setProperty("/annulateCreatedStatus", !!oLicense.Id);
 
 			// Issue #518 -> Set Tipo de Licencia por defecto según rol.
-			var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "ope_jefe_turno_cot" || sRol === "ope_jefe_turno_cotdt");
+			var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "ope_jefe_cot" || sRol === "ope_jefe_cotdt");
 			var bOperador = aUserRoles.find(sRol => sRol === "ope_oper-turno_cot" || sRol === "ope_oper-turno_cotdt");
 			if (bJefeTurnoCOT || bOperador) {
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "EM");
