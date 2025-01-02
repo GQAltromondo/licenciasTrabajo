@@ -25,7 +25,14 @@ sap.ui.define([
 
 			];
 			// Issue 582 - Se debe enviar correo a Tecnicos  de extremos de lineas cuando la ET es de tipo L ( Linea )
-		    var sEquipo =  AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Equnr");
+
+			console.log("LicenseModel", AppManagementHelper.getModel("LicenseJsonModel").getData())
+
+
+			var sEquipo = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Equnr");
+		//FIX GQ
+			if (!sEquipo) return []
+
 			let oEquipo = AppManagementHelper.getModel("EquiposJsonModel").getProperty("/Equipos").find((oEquipo) => oEquipo
 				.CodigoEquipo === sEquipo);
 			if (oEquipo) {
