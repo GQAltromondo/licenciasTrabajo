@@ -22,6 +22,11 @@ sap.ui.define([
 			if (!object.date || !object.timeFrom || !object.timeTo) {
 				return;
 			}
+
+
+
+
+
 			if (object.isEdit) {
 				this.onAcceptEdit(object);
 				return;
@@ -47,8 +52,8 @@ sap.ui.define([
 							MessageBoxHelper.showAlert("Alerta", "Se ha realizado el proceso de manera exitosa", () => {
 								LicenseService.FIND(oLicense)
 							})
-						}).catch(() => {})
-														return;
+						}).catch(() => { })
+						return;
 					} else {
 						dia.Horainicio = object.timeFrom;
 						dia.Horafin = object.timeTo;
@@ -61,6 +66,14 @@ sap.ui.define([
 
 			var minDate = _.minBy(horarios, 'Fecha');
 			var maxDate = _.maxBy(horarios, 'Fecha');
+
+			if (minDate < object.timeFrom || maxDate > object.timeTo) {
+
+				MessageBoxHelper.showAlert("Alerta", "Solo podra modificar los horarios ya asignados, si quieren agregar mas dias, debera hacerlo desde la pantalla de licencia.")
+				return;
+			}
+
+
 
 			if (bEdition) {
 				if (object.date.getTime() > maxDate.Fecha.getTime()) {
@@ -128,7 +141,7 @@ sap.ui.define([
 							MessageBoxHelper.showAlert("Alerta", "Se ha realizado el proceso de manera exitosa", () => {
 								LicenseService.FIND(oLicense)
 							})
-						}).catch(() => {})
+						}).catch(() => { })
 					} else {
 						AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Solbeg", object.date);
 						AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Timbeg", object.timeFrom);
@@ -275,30 +288,30 @@ sap.ui.define([
 		},
 
 		dateInTheMiddle: function (dateInTheMiddle) {
-		/*	var aSplitedDateInTheMiddle = dateInTheMiddle.toISOString().split("T")[0].split("-");
-			var parsedMiddleDate = aSplitedDateInTheMiddle[1] + "/" + aSplitedDateInTheMiddle[2] + "/" + aSplitedDateInTheMiddle[0];
+			/*	var aSplitedDateInTheMiddle = dateInTheMiddle.toISOString().split("T")[0].split("-");
+				var parsedMiddleDate = aSplitedDateInTheMiddle[1] + "/" + aSplitedDateInTheMiddle[2] + "/" + aSplitedDateInTheMiddle[0];
+	
+				var initDate = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Solbeg");
+				var aSplitedInitDate = initDate.toISOString().split("T")[0].split("-");
+				var parsedInitDate = aSplitedInitDate[1] + "/" + aSplitedInitDate[2] + "/" + aSplitedInitDate[0]
+	
+				var endDate = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Solend");
+				var aSplitedEndDate = endDate.toISOString().split("T")[0].split("-");
+				var parsedEndDate = aSplitedEndDate[1] + "/" + aSplitedEndDate[2] + "/" + aSplitedEndDate[0]
+	
+				var d1 = parsedInitDate.split("/");
+				var d2 = parsedEndDate.split("/");
+				var c = parsedMiddleDate.split("/");
+	
+				var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
+				var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
+				var check = new Date(c[2], parseInt(c[1]) - 1, c[0]);*/
 
-			var initDate = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Solbeg");
-			var aSplitedInitDate = initDate.toISOString().split("T")[0].split("-");
-			var parsedInitDate = aSplitedInitDate[1] + "/" + aSplitedInitDate[2] + "/" + aSplitedInitDate[0]
-
-			var endDate = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Solend");
-			var aSplitedEndDate = endDate.toISOString().split("T")[0].split("-");
-			var parsedEndDate = aSplitedEndDate[1] + "/" + aSplitedEndDate[2] + "/" + aSplitedEndDate[0]
-
-			var d1 = parsedInitDate.split("/");
-			var d2 = parsedEndDate.split("/");
-			var c = parsedMiddleDate.split("/");
-
-			var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
-			var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
-			var check = new Date(c[2], parseInt(c[1]) - 1, c[0]);*/
-			
-			var from =  AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Solbeg"); // -1 because months are from 0 to 11
+			var from = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Solbeg"); // -1 because months are from 0 to 11
 			var to = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Solend");
 			var check = dateInTheMiddle;
-			
-			
+
+
 
 			return check > from && check < to;
 
@@ -342,7 +355,7 @@ sap.ui.define([
 					AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Period", "D");
 				}
 				// Se debe borrar el la fecha de la entidad "Horarios por licencia" antes de hacer el update en el servicio
-                aItems.splice(iIndex, 1);
+				aItems.splice(iIndex, 1);
 				LicenseService.editLicense().then(() => {
 					LicenseService.deleteDay(oSelectedDate).then(() => {
 						MessageBoxHelper.showAlert("Alerta", "Se ha eliminado el dia de manera exitosa.", () => {
@@ -393,7 +406,7 @@ sap.ui.define([
 
 		},
 
-		regenerateDaysEdition: function () {},
+		regenerateDaysEdition: function () { },
 
 		regenerateDays: function () {
 			var dateArray = [];
