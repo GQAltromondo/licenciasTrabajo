@@ -98,12 +98,20 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Dialogs.Massive
 								new sap.m.ComboBox({
 									selectedKey: "{TramitacionMasivaListJsonModel>CausaNo}",
 									enabled: "{TramitacionMasivaListJsonModel>Enabled}",
+									// items: {
+									// 	templateShareable: false,
+									// 	path: "SelectModel>/MotivoNoAutorizacionSet",
+									// 	template: new sap.ui.core.Item({
+									// 		key: "{SelectModel>Status}",
+									// 		text: "{SelectModel>Descripcion}"
+									// 	})
+									// }
 									items: {
 										templateShareable: false,
-										path: "SelectModel>/MotivoNoAutorizacionSet",
+										path: "MotivoNoAutorizacion>/",
 										template: new sap.ui.core.Item({
-											key: "{SelectModel>Status}",
-											text: "{SelectModel>Descripcion}"
+											key: "{MotivoNoAutorizacion>Status}",
+											text: "{MotivoNoAutorizacion>Descripcion}"
 										})
 									}
 								}),
