@@ -8,47 +8,47 @@ sap.ui.define([
 ], function (oDataService, MessageBoxHelper, FormatHelper, AppManagementHelper, BusyDialogHelper, FioriHelper) {
 	"use strict";
 	return {
-		loadModel: function(callback) {
+		loadModel: function (callback) {
 			var UserDataService = this;
 			this.callback = callback;
-					 
-			const url =   sap.ui.getCore().getModel("appCurrentInfo").appUrl  + "/user-api/currentUser";
-            var oModel = new sap.ui.model.json.JSONModel() ;
-            var mock = {
-                firstname: "Dummy",
-                lastname: "User",
-                email: "dummy.user@com",
-                name: "dummy.user@com",
-                displayName: "Dummy User (dummy.user@com)",
-				groups: [ "Mantenimiento_GerRegional",   
-							"Examinadores_PT15",
-							"Selector_evaluadores_PT15",
-							"seguridadH_PT15",
-							"Rep_Direccion_PT15",
-							"MedicinaLaboral_PT15",
-							"Gestion_Calidad_PT152",
-							"Direccion_TecnicaPT15",
-							"Auditor_Externo",
-						    "Gestion_habilitaciones",
-							"Solicitante_PT15",
-						 	"Mantenimiento_Secretaria",
-							"Director_Tecnico",
- 							"Ger_Operaciones",
-						  "Aprobacion_Habilitaciones" 
-						]
+
+			const url = sap.ui.getCore().getModel("appCurrentInfo").appUrl + "/user-api/currentUser";
+			var oModel = new sap.ui.model.json.JSONModel();
+			var mock = {
+				firstname: "Dummy",
+				lastname: "User",
+				email: "dummy.user@com",
+				name: "dummy.user@com",
+				displayName: "Dummy User (dummy.user@com)",
+				groups: ["Mantenimiento_GerRegional",
+					"Examinadores_PT15",
+					"Selector_evaluadores_PT15",
+					"seguridadH_PT15",
+					"Rep_Direccion_PT15",
+					"MedicinaLaboral_PT15",
+					"Gestion_Calidad_PT152",
+					"Direccion_TecnicaPT15",
+					"Auditor_Externo",
+					"Gestion_habilitaciones",
+					"Solicitante_PT15",
+					"Mantenimiento_Secretaria",
+					"Director_Tecnico",
+					"Ger_Operaciones",
+					"Aprobacion_Habilitaciones"
+				]
 
 
-            };
+			};
 
 			oModel.loadData(url);
-			var that = this;  
-            oModel.dataLoaded()
-                .then(() => {
-                    //check if data has been loaded
-                    //for local testing, set mock data
-                    if (oModel.getData().name) {
+			var that = this;
+			oModel.dataLoaded()
+				.then(() => {
+					//check if data has been loaded
+					//for local testing, set mock data
+					if (oModel.getData().name) {
 
-						var cUrl = sap.ui.getCore().getModel("appCurrentInfo").appUrl + '/IAS/service/scim/Users?filter=userName eq "' + oModel.getData().name + '"' 
+						var cUrl = sap.ui.getCore().getModel("appCurrentInfo").appUrl + '/IAS/service/scim/Users?filter=userName eq "' + oModel.getData().name + '"'
 
 						//Llamar a API del IAS
 						$.ajax({
@@ -59,77 +59,77 @@ sap.ui.define([
 							xhrFields: { withCredentials: false },
 							dataType: "json",
 							async: false,
-		
-							success:  (data, textStatus, jqXHR) => {
-								 
+
+							success: (data, textStatus, jqXHR) => {
+
 								var oModelUser = new sap.ui.model.json.JSONModel();
 								oModelUser.setData(data.Resources);
-		
-								var  aDatosUsuario = that.armarDatos(data.Resources);
-								
-								 this.onReadUserApiSuccess(aDatosUsuario)
+
+								var aDatosUsuario = that.armarDatos(data.Resources);
+
+								this.onReadUserApiSuccess(aDatosUsuario)
 								oModel.setData(aDatosUsuario);
-//							
-		
+								//							
+
 							},
-							error:  (data, xhr, textStatus) =>{ 
+							error: (data, xhr, textStatus) => {
 								this.onReadUserApiError(data)
 								console.log(data);
 								console.log(xhr);
 								console.log(textStatus);
-							
-								window.alert("error"); 
+
+								window.alert("error");
 							}
 						});
 
 
 						// Fin llamar a API del IAS
 					}
-					else{	
-                        oModel.setData(mock);
-                    }
-                  
+					else {
+						oModel.setData(mock);
+					}
 
-                    //this.setModel(oModel, "UserJsonModel");
-                    
-                })
-                .catch(() => {
-                    oModel.setData(mock);
-                     
-                     
-                });
 
- 
+					//this.setModel(oModel, "UserJsonModel");
+
+				})
+				.catch(() => {
+					oModel.setData(mock);
+
+
+				});
+
+
 
 
 		},
 
-		armarDatos: function(datos) {
+		armarDatos: function (datos) {
 
 			debugger;
 
 			var aGroupsTemporal = datos[0].groups;
 
-			var aGroups = aGroupsTemporal.map(function(fila) {
+			var aGroups = aGroupsTemporal.map(function (fila) {
 				return fila.value;
-			  });
+			});
 
 			var aUserData = {
-                firstName: datos[0].name.givenName,
-                lastName:  datos[0].name.familyName,
-                email: datos[0].emails[0].value,
-                name: datos[0].emails[0].value,
-                displayName: datos[0].displayName,
-				login_name:datos[0].userName,
+				firstName: datos[0].name.givenName,
+				lastName: datos[0].name.familyName,
+				email: datos[0].emails[0].value,
+				name: datos[0].emails[0].value,
+				displayName: datos[0].displayName,
+				login_name: datos[0].userName,
 				groups: aGroups
 
 
-            };
+			};
 
-			return aUserData; 
+			return aUserData;
 
 		},
-		
+
 		getRoles: function (groupData) {
 			var aData = [];
 			if (groupData.constructor === Array) {
@@ -143,7 +143,7 @@ sap.ui.define([
 		},
 
 		onReadUserApiSuccess: function (data, textStatus, jqXHR) {
-			
+
 			AppManagementHelper.getModel("UserJsonModel").setData({
 				nombre: data.firstName,
 				apellido: data.lastName,
@@ -153,29 +153,31 @@ sap.ui.define([
 
 				// Paso 1 para creacion de licencias.
 				// roles: ["ope_solic-lic_transener", "ope_solic-lic_transener"],
-                // (Nuevo rol ope_solic-lic_transba Issue #518).
-                // roles: ["ope_solic-lic_transba"],
+				// (Nuevo rol ope_solic-lic_transba Issue #518).
+				// roles: ["ope_solic-lic_transba"],
 
 				// Paso 2 Coordinador.
 				// roles: ["Coordinador_Mantenimiento"],
 				// roles: ["Coordinador_Mantenimiento"],
 
 				// Paso 3 Tramitado -> tramita u observa.
-			    //roles: ["Tramitador"],
+				//roles: ["Tramitador"],
 
 				// Paso 4 Entraga, devolución y cancelación definitiva.
-				// roles: ["ope_jefe_cot"],
+				//roles: ["ope_jefe_cot"],
+				//roles: ["Jefe_COT"]
 				// roles: ["ope_programacion_cotdt"],
+				//roles:["Programacion_COTDT"]
 				// roles: ["ope_oper-turno_cot"],
 
-                // IMPORTANTE: deployear siempre con este descomentado.
-                // ##########################################################################
-                // ############################## IMPORTANTE ################################
-                // ##########################################################################
-                roles: this.getRoles(data.groups)
-                // ##########################################################################
-                // ##########################################################################
-            });
+				// IMPORTANTE: deployear siempre con este descomentado.
+				// ##########################################################################
+				// ############################## IMPORTANTE ################################
+				// ##########################################################################
+				 roles: this.getRoles(data.groups)
+				// ##########################################################################
+				// ##########################################################################
+			});
 		},
 
 		onReadUserApiError: function (jqXHR, textStatus, error) {
@@ -205,7 +207,7 @@ sap.ui.define([
 				}
 			}
 		},
-	
+
 
 	};
 });
