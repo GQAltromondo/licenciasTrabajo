@@ -4452,7 +4452,7 @@ sap.ui.define([
 		},
 
 		showAllContent: function (oEvent) {
-			debugger;
+			//debugger;
 		},
 
 		CausaNoFormatter: function (causaNo) {

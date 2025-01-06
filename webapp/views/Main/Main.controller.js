@@ -111,7 +111,7 @@ sap.ui.define([
 		},
 		getBaseURL: function () {
 
-			debugger;
+			//debugger;
 
 			var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id");
 
@@ -3441,7 +3441,7 @@ sap.ui.define([
 						} else if(oFilterData["Equstat"].value==="") {
 							oFilterData["Equstat"].value = "N";
 						}
-						debugger;
+					//	debugger;
 					}*/
 
 					if (this.acceptEmptyValues(attribute, oFilterData[attribute])) {

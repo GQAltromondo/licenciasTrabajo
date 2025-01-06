@@ -106,7 +106,7 @@ sap.ui.define([
 
 		armarDatos: function (datos) {
 
-			debugger;
+			//debugger;
 
 			var aGroupsTemporal = datos[0].groups;
 
