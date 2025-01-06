@@ -2475,6 +2475,11 @@ sap.ui.define([
 		onSendTransfer: function (oEvent) {
 			BusyDialogHelper.open();
 			var oTransfer = oEvent.getSource().getParent().getParent().getBindingContext("TransferListJsonModel").getObject();
+			if (oTransfer.Jefetra == "") {
+				MessageBoxHelper.showAlert("Alerta", "Debe seleccionar un Jefe de Trabajo para realizar la transferencia");
+				BusyDialogHelper.close();
+				return
+			}
 			oTransfer.Autcot = AppManagementHelper.getUser();
 			delete oTransfer.JefetraValueState;
 			delete oTransfer.JefetraValueStateText;

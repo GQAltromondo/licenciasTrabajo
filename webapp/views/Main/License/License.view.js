@@ -70,6 +70,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							layoutData: new sap.ui.layout.GridData({
 								span: "L4 M12 S12"
 							}),
+							
 							valueState: "{TransferListJsonModel>JefetraValueState}",
 							id: "jefeTrabTrComb",
 							valueStateText: "{TransferListJsonModel>JefetraValueStateText}",
