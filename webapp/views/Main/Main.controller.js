@@ -520,7 +520,8 @@ sap.ui.define([
 		//	var aInvalidRolesForEdit = ["ope_programacion_cot", "ope_programacion_cotdt"];
 		//FIX GQ
 		var aValidRolesForEdit = ["ope_solic-lic_transba","Solicitante_Lic","ope_solic-lic_transener"];
-			return aUserRoles.some(r => aValidRolesForEdit.includes(r)) && sLicstat === "30";
+		 return aUserRoles.some(r => aValidRolesForEdit.includes(r)) && (sLicstat === "30" || sLicstat === "02");
+		//return aUserRoles.some(r => aValidRolesForEdit.includes(r)) && sLicstat === "30" 
 		},
 
 		findEstacionCode: function (Tplnr) {
