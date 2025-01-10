@@ -57,7 +57,7 @@ sap.ui.define([
 	RegionesService,
 	PersonalHabilitadoService, WorkPlaceService,
 	oDataService, EmpresaTramitacionService, TipoEquipoService, EquiposService, OrdenesService, EstacionesService, JobCondService, EstadoTramitacionService, MotivoNoAutorizacionService,
-	RepositionTimeService,TramitacionMasivaService, InterventionTypesService, TipoOfEstacionalListService, StatusService, GrupoPlanificadorService, ReportesService,
+	RepositionTimeService, TramitacionMasivaService, InterventionTypesService, TipoOfEstacionalListService, StatusService, GrupoPlanificadorService, ReportesService,
 	ReportesHelper, LimitacionesTecnicas,
 	ExcelDownloadHelper, BusyDialogHelper, FioriHelper, LicenceHelper, RolAuthorizationHelper, FormatterHelper, LegacyValidationHelper,
 	UnifilarHelper, checkAlternativeLabelService, UserService) {
@@ -103,7 +103,7 @@ sap.ui.define([
 			});
 			UserService.loadModel()
 			oDataService.getModel("SelectModel")
-			
+
 		},
 		loadPuestosTrabajo: async function (empresa) {
 			let aPuestosTrabajo = await LicenseService.getPuestosTrabajo(empresa)
@@ -489,17 +489,17 @@ sap.ui.define([
 
 			var sLicenseUrl = FormatterHelper.getLicenseUrl(oLicense);
 
-			// if (this.isProgrammerRol(oLicense.Licstat)) {
-			// 	oDisableControlsJsonModel.setProperty("/enabledForProgrammer", false);
-			// } else {
-			// 	oDisableControlsJsonModel.setProperty("/enabledForProgrammer", true);
-			// }
-
 			if (this.isProgrammerRol(oLicense.Licstat)) {
-				oDisableControlsJsonModel.setProperty("/enabledForProgrammer", true);
-			} else {
 				oDisableControlsJsonModel.setProperty("/enabledForProgrammer", false);
+			} else {
+				oDisableControlsJsonModel.setProperty("/enabledForProgrammer", true);
 			}
+
+			// if (this.isProgrammerRol(oLicense.Licstat)) {
+			// 	oDisableControlsJsonModel.setProperty("/enabledForProgrammer", true);
+			// } else {
+			// 	oDisableControlsJsonModel.setProperty("/enabledForProgrammer", false);
+			// }
 
 
 			if (isLicense) {
@@ -517,11 +517,12 @@ sap.ui.define([
 
 		isProgrammerRol: function (sLicstat) {
 			var aUserRoles = AppManagementHelper.getModel("UserJsonModel").getData().roles;
-		//	var aInvalidRolesForEdit = ["ope_programacion_cot", "ope_programacion_cotdt"];
-		//FIX GQ
-		var aValidRolesForEdit = ["ope_solic-lic_transba","Solicitante_Lic","ope_solic-lic_transener"];
-		 return aUserRoles.some(r => aValidRolesForEdit.includes(r)) && (sLicstat === "30" || sLicstat === "02");
-		//return aUserRoles.some(r => aValidRolesForEdit.includes(r)) && sLicstat === "30" 
+			var aInvalidRolesForEdit = ["ope_programacion_cot", "ope_programacion_cotdt", "Programacion_COT", "Programacion_COTDT"];
+
+			return aUserRoles.some(r => aInvalidRolesForEdit.includes(r)) && sLicstat === "30";
+			// //FIX GQ
+			// var aValidRolesForEdit = ["ope_solic-lic_transba","Solicitante_Lic","ope_solic-lic_transener"];
+			//  return aUserRoles.some(r => aValidRolesForEdit.includes(r)) && (sLicstat === "30" || sLicstat === "02");
 		},
 
 		findEstacionCode: function (Tplnr) {
@@ -635,22 +636,22 @@ sap.ui.define([
 			// if (bSolicitanteLicTBA) {
 			// 	AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "N");
 			// }
-				// Issue #518 -> Set Tipo de Licencia por defecto según rol.
-				var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "Jefe_Turno_COT" || sRol === "Jefe_Turno_COTDT");
-				var bOperador = aUserRoles.find(sRol => sRol === "Operador_COT" || sRol === "Operador_COTDT");
-				if (bJefeTurnoCOT || bOperador) {
-					AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "EM");
-				}
-	
-				var bProgramacion = aUserRoles.find(sRol => sRol === "Programacion_COT" || sRol === "Programacion_COTDT");
-				if (bProgramacion) {
-					AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "TE");
-				}
-	
-				var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "Solicitante_Lic_TBA");
-				if (bSolicitanteLicTBA) {
-					AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "N");
-				}
+			// Issue #518 -> Set Tipo de Licencia por defecto según rol.
+			var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "Jefe_Turno_COT" || sRol === "Jefe_Turno_COTDT");
+			var bOperador = aUserRoles.find(sRol => sRol === "Operador_COT" || sRol === "Operador_COTDT");
+			if (bJefeTurnoCOT || bOperador) {
+				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "EM");
+			}
+
+			var bProgramacion = aUserRoles.find(sRol => sRol === "Programacion_COT" || sRol === "Programacion_COTDT");
+			if (bProgramacion) {
+				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "TE");
+			}
+
+			var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "Solicitante_Lic_TBA");
+			if (bSolicitanteLicTBA) {
+				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "N");
+			}
 		},
 
 		duplicateLicense: function (evt) {

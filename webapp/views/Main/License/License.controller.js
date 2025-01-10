@@ -102,8 +102,7 @@ sap.ui.define([
 			// window.open(sHost, "_blank");
 
 			//	location.hash = `GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`
-			var Hash =
-				`#GestionUnifilaresV1-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`;
+			var Hash =`#GestionUnifilaresV1-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`;
 
 			const currentHash = Hash;
 
@@ -1084,7 +1083,7 @@ sap.ui.define([
 			var Habilitaciones = licencia.HabilitacionRecierre_nav;
 			var Inhibiciones = licencia.InhibicionRecierre_nav;
 
-			var oModeld = this.getView().getModel("TransenerOperaciones").getData();
+		
 			var Coordinaciones = licencia.CoordinacionesLicencia_nav;
 
 			var Suspensiones = licencia.SuspensionLicencia_nav;

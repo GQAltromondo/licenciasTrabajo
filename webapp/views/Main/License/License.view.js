@@ -4113,10 +4113,10 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								}),
 								new sap.m.IconTabFilter({
 									visible: "{DisableControlsJsonModel>/tabVisibility}",
-									visible: {
-										parts: ["UserJsonModel>/roles", "permisosModel>/", "DisableControlsJsonModel>/tabVisibility"],
-										formatter: oController.rolVisualization("entregasDevoluciones/")
-									},
+									// visible: {
+									// 	parts: ["UserJsonModel>/roles", "permisosModel>/", "DisableControlsJsonModel>/tabVisibility"],
+									// 	formatter: oController.rolVisualization("entregasDevoluciones/")
+									// },
 									design: sap.m.IconTabFilterDesign.Horizontal,
 									icon: "sap-icon://paper-plane",
 									text: "Entregas/Cancelaciones",

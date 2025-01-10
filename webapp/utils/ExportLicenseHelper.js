@@ -14,36 +14,36 @@ sap.ui.define([
 			var tableFillColor2 = '#2980ba';
 			content.push({
 				columns: [{
-						width: '*',
-						fontSize: 9,
-						margin: [0, 0, 5, 0],
-						bold: true,
-						text: 'ET:'
-					}, {
-						width: '*',
-						fontSize: 9,
-						text: licencia.Tplnr
-					}, {
-						width: '*',
-						fontSize: 9,
-						margin: [0, 0, 5, 0],
-						bold: true,
-						text: 'Pto. Resp. De Trabajo:'
-					}, {
-						width: '*',
-						fontSize: 9,
-						text: FormatterHelper.getPuestoDescription(licencia.Arbpl)
-					}, {
-						width: '*',
-						fontSize: 9,
-						margin: [0, 0, 5, 0],
-						bold: true,
-						text: 'Region/Distrito:'
-					}, {
-						width: '*',
-						fontSize: 9,
-						text: this.getText(licencia.Werks, 'Regiones')
-					}
+					width: '*',
+					fontSize: 9,
+					margin: [0, 0, 5, 0],
+					bold: true,
+					text: 'ET:'
+				}, {
+					width: '*',
+					fontSize: 9,
+					text: licencia.Tplnr
+				}, {
+					width: '*',
+					fontSize: 9,
+					margin: [0, 0, 5, 0],
+					bold: true,
+					text: 'Pto. Resp. De Trabajo:'
+				}, {
+					width: '*',
+					fontSize: 9,
+					text: FormatterHelper.getPuestoDescription(licencia.Arbpl)
+				}, {
+					width: '*',
+					fontSize: 9,
+					margin: [0, 0, 5, 0],
+					bold: true,
+					text: 'Region/Distrito:'
+				}, {
+					width: '*',
+					fontSize: 9,
+					text: this.getText(licencia.Werks, 'Regiones')
+				}
 					// {
 					// 	width: '*',
 					// 	fontSize: 9,
@@ -93,37 +93,37 @@ sap.ui.define([
 			}, {
 				margin: [0, 0, 0, 10],
 				columns: [{
-						width: '*',
-						fontSize: 9,
-						margin: [0, 0, 5, 0],
-						bold: true,
-						text: 'Equipo/s a intervenir:'
-					}, {
-						width: '*',
-						fontSize: 9,
-						margin: [0, 0, 5, 0],
-						text: licencia.Equiinterv //this.getText(licencia.Equstatnocam, 'Equstatnocam')
-					}, {
-						width: '*',
-						fontSize: 9,
-						margin: [0, 0, 5, 0],
-						bold: true,
-						text: 'Estado Equipo/s a intervenir:'
-					}, {
-						width: '*',
-						fontSize: 9,
-						text: this.getText(licencia.Equstatnocam, 'Equstatnocam')
-					}, {
-						width: '*',
-						fontSize: 9,
-						margin: [0, 0, 5, 0],
-						bold: true,
-						text: 'Solicitante'
-					}, {
-						width: '*',
-						fontSize: 9,
-						text: licencia.Solicitante + ' ' + FormatterHelper.getSolicitanteName(licencia.Solicitante)
-					},
+					width: '*',
+					fontSize: 9,
+					margin: [0, 0, 5, 0],
+					bold: true,
+					text: 'Equipo/s a intervenir:'
+				}, {
+					width: '*',
+					fontSize: 9,
+					margin: [0, 0, 5, 0],
+					text: licencia.Equiinterv //this.getText(licencia.Equstatnocam, 'Equstatnocam')
+				}, {
+					width: '*',
+					fontSize: 9,
+					margin: [0, 0, 5, 0],
+					bold: true,
+					text: 'Estado Equipo/s a intervenir:'
+				}, {
+					width: '*',
+					fontSize: 9,
+					text: this.getText(licencia.Equstatnocam, 'Equstatnocam')
+				}, {
+					width: '*',
+					fontSize: 9,
+					margin: [0, 0, 5, 0],
+					bold: true,
+					text: 'Solicitante'
+				}, {
+					width: '*',
+					fontSize: 9,
+					text: licencia.Solicitante + ' ' + FormatterHelper.getSolicitanteName(licencia.Solicitante)
+				},
 
 				]
 			}, {
@@ -176,7 +176,7 @@ sap.ui.define([
 					width: '*',
 					fontSize: 9,
 					text: this.getText(licencia.Period, 'Period')
-				}, ]
+				},]
 			}, {
 				margin: [0, 0, 0, 10],
 				columns: [{
@@ -228,7 +228,7 @@ sap.ui.define([
 					fontSize: 9,
 					text: licencia.Jefe + " - " + FormatterHelper.getPersonalHabilitadoName(licencia.Jefe)
 				}]
-			}, );
+			},);
 
 			content.push({
 				margin: [0, 0, 0, 10],
@@ -242,7 +242,7 @@ sap.ui.define([
 					width: '*',
 					fontSize: 9,
 					text: this.getText(licencia.Jobcond, 'Jobcond')
-				}, ]
+				},]
 			}, {
 				margin: [0, 0, 0, 10],
 				columns: [{
@@ -454,10 +454,10 @@ sap.ui.define([
 					fontSize: 9,
 					text: licencia.Precauciones
 				}]
-			}, );
+			},);
 			return content;
 		},
-		createNormalPDFBody: function (content, licencia, oTextos,Colocaciones, Retiros,Habilitaciones,Inhibiciones, Entregas,
+		createNormalPDFBody: function (content, licencia, oTextos, Colocaciones, Retiros, Habilitaciones, Inhibiciones, Entregas,
 			Devoluciones, Suspensiones, Reanudaciones,
 			Observaciones, Coordinaciones, Tramitaciones,
 			Transferencias) {
@@ -494,9 +494,9 @@ sap.ui.define([
 					width: '*',
 					fontSize: 9,
 					text: FormatHelper.formatTime(licencia.Gdate)
-				}, ],
+				},],
 				margin: [0, 0, 0, 10]
-			}, );
+			},);
 
 			content.push({
 				columns: [{
@@ -529,7 +529,7 @@ sap.ui.define([
 					width: '*',
 					fontSize: 9,
 					text: licencia.Solicitante + ' ' + FormatterHelper.getSolicitanteName(licencia.Solicitante)
-				}, ],
+				},],
 				margin: [0, 0, 0, 10]
 			}, {
 				columns: [{
@@ -628,7 +628,7 @@ sap.ui.define([
 					width: '*',
 					fontSize: 9,
 					text: this.getText(licencia.Period, 'Period')
-				}, ]
+				},]
 			}, {
 				margin: [0, 0, 0, 10],
 				columns: [{
@@ -881,7 +881,7 @@ sap.ui.define([
 					fontSize: 9,
 					text: licencia.SolSuplenteAux ? this.getText(licencia.SolSuplenteAux, 'SolSuplenteAux') : '' //licencia.SolSuplenteAux ? licencia.SolSuplenteAux + ' ' + FormatterHelper.getSolicitanteName(licencia.SolSuplenteAux) : ''
 				}]
-			}, );
+			},);
 
 			content.push({
 				table: {
@@ -999,7 +999,7 @@ sap.ui.define([
 					fontSize: 9,
 					text: licencia.Precauciones
 				}]
-			}, );
+			},);
 
 			content.push({
 				margin: [0, 0, 0, 10],
@@ -1115,9 +1115,9 @@ sap.ui.define([
 			content = this.createTramitacion(Tramitaciones, content);
 			content = this.createAnulacion(licencia, content);
 			content = this.createEntregasDevoluciones(licencia, Entregas, content, Devoluciones);
-			content = this.createColocacionesRetiros(licencia,Colocaciones,content,Retiros)
-			content = this.createHabilitacionesInhibiciones(licencia,Habilitaciones,content,Inhibiciones)
-			content = this.createSuspensionReanudacion(content, Suspensiones, Reanudaciones, );
+			// content = this.createColocacionesRetiros(licencia,Colocaciones,content,Retiros)
+			//	 content = this.createHabilitacionesInhibiciones(licencia,Habilitaciones,content,Inhibiciones)
+			content = this.createSuspensionReanudacion(content, Suspensiones, Reanudaciones,);
 			content = this.createCancelacion(licencia, content);
 			content = this.createLicTrabAutorizNoEntregEnTiempoReal(content, Entregas);
 			content = this.transferenciaJefeTrabajo(Transferencias, content);
@@ -1127,7 +1127,8 @@ sap.ui.define([
 		},
 
 		createPdfLicense: function (
-			data, licencia,Colocaciones, Retiros,Habilitaciones,Inhibiciones, Entregas,
+			data, licencia,
+			 Colocaciones, Retiros, Habilitaciones, Inhibiciones, Entregas,
 			Devoluciones, Suspensiones, Reanudaciones,
 			Observaciones, Coordinaciones, Tramitaciones,
 			Transferencias, oTextos, bExportType
@@ -1180,7 +1181,7 @@ sap.ui.define([
 									fontSize: 10,
 									alignment: 'center',
 									fillColor: tableFillColor2
-								}, ]
+								},]
 							]
 						}
 					}, {
@@ -1294,7 +1295,7 @@ sap.ui.define([
 			content.push({
 				margin: [0, 0, 0, 20],
 				table: {
-					widths: ['*', '*', '*', ],
+					widths: ['*', '*', '*',],
 					body: [
 						[{
 							width: 100,
@@ -1317,7 +1318,8 @@ sap.ui.define([
 			if (!bExportType) {
 				content = this.createPdfSimpBody(content, licencia, oTextos);
 			} else {
-				content = this.createNormalPDFBody(content, licencia, oTextos,Colocaciones,Retiros,Habilitaciones,Inhibiciones, Entregas,
+				content = this.createNormalPDFBody(content, licencia, oTextos,
+									  Entregas,
 					Devoluciones, Suspensiones, Reanudaciones,
 					Observaciones, Coordinaciones, Tramitaciones,
 					Transferencias);
@@ -1615,47 +1617,47 @@ sap.ui.define([
 				var numeroLicencia = licencia.Id;
 				var aImagesRotated = aImages.length === 0 ? [oBlankImage] : aImages;
 				content.push({
-						margin: [0, 0, 0, 20],
-						columns: []
+					margin: [0, 0, 0, 20],
+					columns: []
 
-					},
+				},
 					...aImagesRotated, {
-						table: {
-							pageBreak: 'before',
-							widths: ['*'],
-							body: [
-								[{
-									text: "",
-									alignment: 'center',
-									fillColor: tableFillColor
-								}]
-							]
-						},
-						margin: [0, 0, 0, 10]
-					});
+					table: {
+						pageBreak: 'before',
+						widths: ['*'],
+						body: [
+							[{
+								text: "",
+								alignment: 'center',
+								fillColor: tableFillColor
+							}]
+						]
+					},
+					margin: [0, 0, 0, 10]
+				});
 
 				var fileType = licencia.Tipo == "L" ? "L-" : "S-";
 				var fileName = fileType + numeroLicencia;
-				
+
 				var docDefinition = {
-					header: (currentPage, pageCount) => { 
-				        if (currentPage != 1) {
-				            return { 
-				              columns: [
-				    		            {
-				    		                margin: [40,10,10,10],
-				    		                text: 'N° ' + licencia.Id,
-				    		                fontSize: 15,
-				    		                style: { alignment: 'left', color: '#3c3c3c' },
-				    		                bold: true,
-				    		            },
-				    		        ]
-				                 } 			   
-				            }
-				    },
+					header: (currentPage, pageCount) => {
+						if (currentPage != 1) {
+							return {
+								columns: [
+									{
+										margin: [40, 10, 10, 10],
+										text: 'N° ' + licencia.Id,
+										fontSize: 15,
+										style: { alignment: 'left', color: '#3c3c3c' },
+										bold: true,
+									},
+								]
+							}
+						}
+					},
 					content: content
 				};
-			
+
 				pdfMake.createPdf(docDefinition).download(fileName);
 				BusyDialogHelper.close();
 			}
@@ -1690,7 +1692,7 @@ sap.ui.define([
 							alignment: 'center',
 							fontSize: 10,
 							fillColor: tableFillColor2
-						}, ]
+						},]
 					]
 				}
 			});
@@ -1839,291 +1841,291 @@ sap.ui.define([
 			});
 			return content;
 		},
-		createColocacionesRetiros:function (licencia, Colocaciones, content,Retiros) {
-			var tableFillColor = '#c4bd96';
-			var tableFillColor2 = '#2980ba';
-			content.push({
-				table: {
-					widths: ['*'],
-					body: [
-						[{
-							text: "COLOCACION y RETIRO DE PAT",
-							alignment: 'center',
-							fillColor: tableFillColor
-						}]
-					]
-				},
-				margin: [0, 0, 0, 0]
-			}, {
-				table: {
-					widths: ['*', '*'],
-					body: [
-						[{
-							text: "Colocacion",
-							alignment: 'center',
-							fontSize: 10,
-							fillColor: tableFillColor2
-						}, {
-							text: "Retiro",
-							alignment: 'center',
-							fontSize: 10,
-							fillColor: tableFillColor2
-						}, ]
-					]
-				}
-			});
-			var colocacionTableRow = [
-				[{
-					text: "Fecha",
-					alignment: 'center',
-					bold: true,
-					fontSize: 8,
-					border: [false, false, false, false]
-				}, {
-					text: "ET",
-					alignment: 'center',
-					bold: true,
-					fontSize: 8,
-					border: [false, false, false, false]
-				}, {
-					text: "Comentarios ",
-					alignment: 'center',
-					bold: true,
-					fontSize: 8,
-					border: [false, false, false, false]
-				}]
-			];
-			 var retiroTableRow = [
-				[{
-					text: "Fecha",
-					alignment: 'center',
-					bold: true,
-					fontSize: 8,
-					border: [true, false, false, false]
-				}, {
-					text: "ET",
-					alignment: 'center',
-					bold: true,
-					fontSize: 8,
-					border: [false, false, false, false]
-				}, {
-					text: "Comentarios ",
-					alignment: 'center',
-					bold: true,
-					fontSize: 8,
-					border: [false, false, false, false]
-				}]
-			];
-			$.each(Colocaciones, function (index, item) {
-				if (item.Time) {
-					var time = FormatterHelper.msTohoursSeconds(item.Time.getTime());
-				} else {
-					var time = 'N/A';
-				}
-				colocacionTableRow.push(
-					[{
-						text: FormatHelper.formatDateLicense(item.Datehab) + " \n " + time,
-						alignment: 'center',
-						fontSize: 8,
-						border: [false, false, false, false]
-					}, {
-						text: item.Tplnr,
-						alignment: 'center',
-						fontSize: 8,
-						border: [false, false, false, false]
-					}, {
-						text: item.Coment,
-						alignment: 'center',
-						fontSize: 8,
-						border: [false, false, false, false]
-					}]
-				);
-			});
-			$.each(Retiros, function (index, item) {
-				if (item.Time) {
-					var time = FormatterHelper.msTohoursSeconds(item.Time.getTime());
-				} else {
-					var time = 'N/A';
-				}
-				retiroTableRow.push(
-					[{
-						text: FormatHelper.formatDateLicense(item.Datehab) + " \n " + time,
-						alignment: 'center',
-						fontSize: 8,
-						border: [true, false, false, false]
-					}, {
-						text: item.Tplnr,
-						alignment: 'center',
-						fontSize: 8,
-						border: [false, false, false, false]
-					}, {
-						text: item.Coment,
-						alignment: 'center',
-						fontSize: 8,
-						border: [false, false, false, false]
-					}]
-				);
-			});
-			content.push({
-				columns: [{
-					table: {
-						widths: ['30%', '30%', '30%'],
-						body: colocacionTableRow
-					}
-				}, {
-					table: {
-						widths: ['30%', '30%', '30%'],
-						body: retiroTableRow
-					}
+		// createColocacionesRetiros: function (licencia, Colocaciones, content, Retiros) {
+		// 	var tableFillColor = '#c4bd96';
+		// 	var tableFillColor2 = '#2980ba';
+		// 	content.push({
+		// 		table: {
+		// 			widths: ['*'],
+		// 			body: [
+		// 				[{
+		// 					text: "COLOCACION y RETIRO DE PAT",
+		// 					alignment: 'center',
+		// 					fillColor: tableFillColor
+		// 				}]
+		// 			]
+		// 		},
+		// 		margin: [0, 0, 0, 0]
+		// 	}, {
+		// 		table: {
+		// 			widths: ['*', '*'],
+		// 			body: [
+		// 				[{
+		// 					text: "Colocacion",
+		// 					alignment: 'center',
+		// 					fontSize: 10,
+		// 					fillColor: tableFillColor2
+		// 				}, {
+		// 					text: "Retiro",
+		// 					alignment: 'center',
+		// 					fontSize: 10,
+		// 					fillColor: tableFillColor2
+		// 				},]
+		// 			]
+		// 		}
+		// 	});
+		// 	var colocacionTableRow = [
+		// 		[{
+		// 			text: "Fecha",
+		// 			alignment: 'center',
+		// 			bold: true,
+		// 			fontSize: 8,
+		// 			border: [false, false, false, false]
+		// 		}, {
+		// 			text: "ET",
+		// 			alignment: 'center',
+		// 			bold: true,
+		// 			fontSize: 8,
+		// 			border: [false, false, false, false]
+		// 		}, {
+		// 			text: "Comentarios ",
+		// 			alignment: 'center',
+		// 			bold: true,
+		// 			fontSize: 8,
+		// 			border: [false, false, false, false]
+		// 		}]
+		// 	];
+		// 	var retiroTableRow = [
+		// 		[{
+		// 			text: "Fecha",
+		// 			alignment: 'center',
+		// 			bold: true,
+		// 			fontSize: 8,
+		// 			border: [true, false, false, false]
+		// 		}, {
+		// 			text: "ET",
+		// 			alignment: 'center',
+		// 			bold: true,
+		// 			fontSize: 8,
+		// 			border: [false, false, false, false]
+		// 		}, {
+		// 			text: "Comentarios ",
+		// 			alignment: 'center',
+		// 			bold: true,
+		// 			fontSize: 8,
+		// 			border: [false, false, false, false]
+		// 		}]
+		// 	];
+		// 	$.each(Colocaciones, function (index, item) {
+		// 		if (item.Time) {
+		// 			var time = FormatterHelper.msTohoursSeconds(item.Time.getTime());
+		// 		} else {
+		// 			var time = 'N/A';
+		// 		}
+		// 		colocacionTableRow.push(
+		// 			[{
+		// 				text: FormatHelper.formatDateLicense(item.Datehab) + " \n " + time,
+		// 				alignment: 'center',
+		// 				fontSize: 8,
+		// 				border: [false, false, false, false]
+		// 			}, {
+		// 				text: item.Tplnr,
+		// 				alignment: 'center',
+		// 				fontSize: 8,
+		// 				border: [false, false, false, false]
+		// 			}, {
+		// 				text: item.Coment,
+		// 				alignment: 'center',
+		// 				fontSize: 8,
+		// 				border: [false, false, false, false]
+		// 			}]
+		// 		);
+		// 	});
+		// 	$.each(Retiros, function (index, item) {
+		// 		if (item.Time) {
+		// 			var time = FormatterHelper.msTohoursSeconds(item.Time.getTime());
+		// 		} else {
+		// 			var time = 'N/A';
+		// 		}
+		// 		retiroTableRow.push(
+		// 			[{
+		// 				text: FormatHelper.formatDateLicense(item.Datehab) + " \n " + time,
+		// 				alignment: 'center',
+		// 				fontSize: 8,
+		// 				border: [true, false, false, false]
+		// 			}, {
+		// 				text: item.Tplnr,
+		// 				alignment: 'center',
+		// 				fontSize: 8,
+		// 				border: [false, false, false, false]
+		// 			}, {
+		// 				text: item.Coment,
+		// 				alignment: 'center',
+		// 				fontSize: 8,
+		// 				border: [false, false, false, false]
+		// 			}]
+		// 		);
+		// 	});
+		// 	content.push({
+		// 		columns: [{
+		// 			table: {
+		// 				widths: ['30%', '30%', '30%'],
+		// 				body: colocacionTableRow
+		// 			}
+		// 		}, {
+		// 			table: {
+		// 				widths: ['30%', '30%', '30%'],
+		// 				body: retiroTableRow
+		// 			}
 
-				}],
-				margin: [0, 0, 0, 20]
-			});
-			return content;
-		},
-		createHabilitacionesInhibiciones:function (licencia, Habilitaciones, content,Inhibiciones) {
-			var tableFillColor = '#c4bd96';
-			var tableFillColor2 = '#2980ba';
-			content.push({
-				table: {
-					widths: ['*'],
-					body: [
-						[{
-							text: "HABILITACION e INHIBICION DE RECIERRE",
-							alignment: 'center',
-							fillColor: tableFillColor
-						}]
-					]
-				},
-				margin: [0, 0, 0, 0]
-			}, {
-				table: {
-					widths: ['*', '*'],
-					body: [
-						[{
-							text: "Habilitacion",
-							alignment: 'center',
-							fontSize: 10,
-							fillColor: tableFillColor2
-						}, {
-							text: "Inhibicion",
-							alignment: 'center',
-							fontSize: 10,
-							fillColor: tableFillColor2
-						}, ]
-					]
-				}
-			});
-			var habilitacionTableRow = [
-				[{
-					text: "Fecha",
-					alignment: 'center',
-					bold: true,
-					fontSize: 8,
-					border: [false, false, false, false]
-				}, {
-					text: "ET",
-					alignment: 'center',
-					bold: true,
-					fontSize: 8,
-					border: [false, false, false, false]
-				}, {
-					text: "Comentarios ",
-					alignment: 'center',
-					bold: true,
-					fontSize: 8,
-					border: [false, false, false, false]
-				}]
-			];
-			 var inhibicionTableRow = [
-				[{
-					text: "Fecha",
-					alignment: 'center',
-					bold: true,
-					fontSize: 8,
-					border: [true, false, false, false]
-				}, {
-					text: "ET",
-					alignment: 'center',
-					bold: true,
-					fontSize: 8,
-					border: [false, false, false, false]
-				}, {
-					text: "Comentarios ",
-					alignment: 'center',
-					bold: true,
-					fontSize: 8,
-					border: [false, false, false, false]
-				}]
-			];
-			$.each(Habilitaciones, function (index, item) {
-				if (item.Time) {
-					var time = FormatterHelper.msTohoursSeconds(item.Time.getTime());
-				} else {
-					var time = 'N/A';
-				}
-				habilitacionTableRow.push(
-					[{
-						text: FormatHelper.formatDateLicense(item.Datehab) + " \n " + time,
-						alignment: 'center',
-						fontSize: 8,
-						border: [false, false, false, false]
-					}, {
-						text: item.Tplnr,
-						alignment: 'center',
-						fontSize: 8,
-						border: [false, false, false, false]
-					}, {
-						text: item.Coment,
-						alignment: 'center',
-						fontSize: 8,
-						border: [false, false, false, false]
-					}]
-				);
-			});
-			$.each(Inhibiciones, function (index, item) {
-				if (item.Time) {
-					var time = FormatterHelper.msTohoursSeconds(item.Time.getTime());
-				} else {
-					var time = 'N/A';
-				}
-				inhibicionTableRow.push(
-					[{
-						text: FormatHelper.formatDateLicense(item.Datehab) + " \n " + time,
-						alignment: 'center',
-						fontSize: 8,
-						border: [true, false, false, false]
-					}, {
-						text: item.Tplnr,
-						alignment: 'center',
-						fontSize: 8,
-						border: [false, false, false, false]
-					}, {
-						text: item.Coment,
-						alignment: 'center',
-						fontSize: 8,
-						border: [false, false, false, false]
-					}]
-				);
-			});
-			content.push({
-				columns: [{
-					table: {
-						widths: ['30%', '30%', '30%'],
-						body: habilitacionTableRow
-					}
-				}, {
-					table: {
-						widths: ['30%', '30%', '30%'],
-						body: inhibicionTableRow
-					}
+		// 		}],
+		// 		margin: [0, 0, 0, 20]
+		// 	});
+		// 	return content;
+		// },
+		// createHabilitacionesInhibiciones: function (licencia, Habilitaciones, content, Inhibiciones) {
+		// 	var tableFillColor = '#c4bd96';
+		// 	var tableFillColor2 = '#2980ba';
+		// 	content.push({
+		// 		table: {
+		// 			widths: ['*'],
+		// 			body: [
+		// 				[{
+		// 					text: "HABILITACION e INHIBICION DE RECIERRE",
+		// 					alignment: 'center',
+		// 					fillColor: tableFillColor
+		// 				}]
+		// 			]
+		// 		},
+		// 		margin: [0, 0, 0, 0]
+		// 	}, {
+		// 		table: {
+		// 			widths: ['*', '*'],
+		// 			body: [
+		// 				[{
+		// 					text: "Habilitacion",
+		// 					alignment: 'center',
+		// 					fontSize: 10,
+		// 					fillColor: tableFillColor2
+		// 				}, {
+		// 					text: "Inhibicion",
+		// 					alignment: 'center',
+		// 					fontSize: 10,
+		// 					fillColor: tableFillColor2
+		// 				},]
+		// 			]
+		// 		}
+		// 	});
+		// 	var habilitacionTableRow = [
+		// 		[{
+		// 			text: "Fecha",
+		// 			alignment: 'center',
+		// 			bold: true,
+		// 			fontSize: 8,
+		// 			border: [false, false, false, false]
+		// 		}, {
+		// 			text: "ET",
+		// 			alignment: 'center',
+		// 			bold: true,
+		// 			fontSize: 8,
+		// 			border: [false, false, false, false]
+		// 		}, {
+		// 			text: "Comentarios ",
+		// 			alignment: 'center',
+		// 			bold: true,
+		// 			fontSize: 8,
+		// 			border: [false, false, false, false]
+		// 		}]
+		// 	];
+		// 	var inhibicionTableRow = [
+		// 		[{
+		// 			text: "Fecha",
+		// 			alignment: 'center',
+		// 			bold: true,
+		// 			fontSize: 8,
+		// 			border: [true, false, false, false]
+		// 		}, {
+		// 			text: "ET",
+		// 			alignment: 'center',
+		// 			bold: true,
+		// 			fontSize: 8,
+		// 			border: [false, false, false, false]
+		// 		}, {
+		// 			text: "Comentarios ",
+		// 			alignment: 'center',
+		// 			bold: true,
+		// 			fontSize: 8,
+		// 			border: [false, false, false, false]
+		// 		}]
+		// 	];
+		// 	$.each(Habilitaciones, function (index, item) {
+		// 		if (item.Time) {
+		// 			var time = FormatterHelper.msTohoursSeconds(item.Time.getTime());
+		// 		} else {
+		// 			var time = 'N/A';
+		// 		}
+		// 		habilitacionTableRow.push(
+		// 			[{
+		// 				text: FormatHelper.formatDateLicense(item.Datehab) + " \n " + time,
+		// 				alignment: 'center',
+		// 				fontSize: 8,
+		// 				border: [false, false, false, false]
+		// 			}, {
+		// 				text: item.Tplnr,
+		// 				alignment: 'center',
+		// 				fontSize: 8,
+		// 				border: [false, false, false, false]
+		// 			}, {
+		// 				text: item.Coment,
+		// 				alignment: 'center',
+		// 				fontSize: 8,
+		// 				border: [false, false, false, false]
+		// 			}]
+		// 		);
+		// 	});
+		// 	$.each(Inhibiciones, function (index, item) {
+		// 		if (item.Time) {
+		// 			var time = FormatterHelper.msTohoursSeconds(item.Time.getTime());
+		// 		} else {
+		// 			var time = 'N/A';
+		// 		}
+		// 		inhibicionTableRow.push(
+		// 			[{
+		// 				text: FormatHelper.formatDateLicense(item.Datehab) + " \n " + time,
+		// 				alignment: 'center',
+		// 				fontSize: 8,
+		// 				border: [true, false, false, false]
+		// 			}, {
+		// 				text: item.Tplnr,
+		// 				alignment: 'center',
+		// 				fontSize: 8,
+		// 				border: [false, false, false, false]
+		// 			}, {
+		// 				text: item.Coment,
+		// 				alignment: 'center',
+		// 				fontSize: 8,
+		// 				border: [false, false, false, false]
+		// 			}]
+		// 		);
+		// 	});
+		// 	content.push({
+		// 		columns: [{
+		// 			table: {
+		// 				widths: ['30%', '30%', '30%'],
+		// 				body: habilitacionTableRow
+		// 			}
+		// 		}, {
+		// 			table: {
+		// 				widths: ['30%', '30%', '30%'],
+		// 				body: inhibicionTableRow
+		// 			}
 
-				}],
-				margin: [0, 0, 0, 20]
-			});
-			return content;
-		},
-	createAnulacion: function (licencia, content) {
+		// 		}],
+		// 		margin: [0, 0, 0, 20]
+		// 	});
+		// 	return content;
+		// },
+		createAnulacion: function (licencia, content) {
 			var tableFillColor = '#c4bd96';
 			var tableFillColor2 = '#2980ba';
 			content.push({
@@ -2239,7 +2241,7 @@ sap.ui.define([
 			if (!licencia) return
 			cancelacionTableRow.push(
 				[{
-					text: licencia.CotCotdt + " - "+ FormatterHelper.getPersonalHabilitadoName(licencia.CotCotdt),
+					text: licencia.CotCotdt + " - " + FormatterHelper.getPersonalHabilitadoName(licencia.CotCotdt),
 					alignment: 'center',
 					fontSize: 8,
 					border: [false, false, false, false]
@@ -2372,78 +2374,78 @@ sap.ui.define([
 						margin: [0, 0, 0, 5],
 						alignment: 'center',
 						columns: [{
-								width: '*',
-								fontSize: 9,
-								margin: [0, 0, 5, 0],
-								bold: true,
-								text: 'Empresa'
-							},
-							/*{
-								width: '*',
-								fontSize: 9,
-								margin: [0, 0, 5, 0],
-								bold: true,
-								text: 'Transmitió desde COT- Programación'
-							}, */
-							{
-								width: '*',
-								fontSize: 9,
-								margin: [0, 0, 5, 0],
-								bold: true,
-								text: 'Estado Tramitación'
-							}, {
-								width: '*',
-								fontSize: 9,
-								margin: [0, 0, 5, 0],
-								bold: true,
-								text: 'Causa No autorización'
-							}, {
-								width: '*',
-								fontSize: 9,
-								margin: [0, 0, 5, 0],
-								bold: true,
-								text: 'Avisó desde Programación'
-							}, {
-								width: '*',
-								fontSize: 9,
-								margin: [0, 0, 5, 0],
-								bold: true,
-								text: 'Motivo de No autorización'
-							}
-						]
-					});
-				};
- 
-				content.push({
-					margin: [0, 0, 0, 15],
-					alignment: 'center',
-					columns: [{
 							width: '*',
 							fontSize: 9,
-							text: this.getEmpresaNameByCode(item)
+							margin: [0, 0, 5, 0],
+							bold: true,
+							text: 'Empresa'
 						},
 						/*{
 							width: '*',
 							fontSize: 9,
-							text: this.getText(item.Trascot, 'Trascot')
-						},*/
+							margin: [0, 0, 5, 0],
+							bold: true,
+							text: 'Transmitió desde COT- Programación'
+						}, */
 						{
 							width: '*',
 							fontSize: 9,
-							text: this.getText(item.Estado, 'EstadoDeTramitacion')
+							margin: [0, 0, 5, 0],
+							bold: true,
+							text: 'Estado Tramitación'
 						}, {
 							width: '*',
 							fontSize: 9,
-							text: this.getText(item.CausaNo, 'CausaNo')
+							margin: [0, 0, 5, 0],
+							bold: true,
+							text: 'Causa No autorización'
 						}, {
 							width: '*',
 							fontSize: 9,
-							text: item.Avisoprog
+							margin: [0, 0, 5, 0],
+							bold: true,
+							text: 'Avisó desde Programación'
 						}, {
 							width: '*',
 							fontSize: 9,
-							text: item.MotivoNo
+							margin: [0, 0, 5, 0],
+							bold: true,
+							text: 'Motivo de No autorización'
 						}
+						]
+					});
+				};
+
+				content.push({
+					margin: [0, 0, 0, 15],
+					alignment: 'center',
+					columns: [{
+						width: '*',
+						fontSize: 9,
+						text: this.getEmpresaNameByCode(item)
+					},
+					/*{
+						width: '*',
+						fontSize: 9,
+						text: this.getText(item.Trascot, 'Trascot')
+					},*/
+					{
+						width: '*',
+						fontSize: 9,
+						text: this.getText(item.Estado, 'EstadoDeTramitacion')
+					}, {
+						width: '*',
+						fontSize: 9,
+						text: this.getText(item.CausaNo, 'CausaNo')
+					}, {
+						width: '*',
+						fontSize: 9,
+						text: item.Avisoprog
+					}, {
+						width: '*',
+						fontSize: 9,
+						text: item.MotivoNo
+					}
 					]
 				});
 			}.bind(this));
@@ -2501,7 +2503,7 @@ sap.ui.define([
 			*/
 			return content;
 		},
-		createSuspensionReanudacion: function (content, Suspensiones, Reanudaciones, ) {
+		createSuspensionReanudacion: function (content, Suspensiones, Reanudaciones,) {
 			var tableFillColor = '#c4bd96';
 			var tableFillColor2 = '#2980ba';
 			content.push({
@@ -2530,7 +2532,7 @@ sap.ui.define([
 							fontSize: 10,
 							alignment: 'center',
 							fillColor: tableFillColor2
-						}, ]
+						},]
 					]
 				}
 			});
