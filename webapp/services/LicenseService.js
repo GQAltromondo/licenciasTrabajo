@@ -152,7 +152,7 @@ sap.ui.define([
 			// 	// return r === "ope_jefe_cot" || r === "ope_jefe_cotdt"
 			// 	//FIX GQ 26-12
 			// 	 return r === "ope_jefe_turno_cot" || r === "ope_jefe_turno_cotdt"
-				
+
 			// });
 
 			// var bProgramacion = aRoles.find((r) => {
@@ -175,8 +175,10 @@ sap.ui.define([
 			var bOperador = aRoles.find((r) => {
 				return r === "Operador_COT" || r === "Operador_COTDT"
 			});
-
-			var bSolicitanteLicTBA = aRoles.find(sRol => sRol === "ope_solic-lic_transba");
+			
+			var bSolicitanteLicTBA = aRoles.find(sRol => {
+				return sRol === "ope_solic-lic_transba" || sRol === "Solicitante_Lic_TBA"
+			})
 
 			if (bJefeTurnoCOT) {
 				oModelBlockEnviarCoord.setProperty("/visibleEnviarCoord", false);

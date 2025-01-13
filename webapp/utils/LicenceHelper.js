@@ -1641,15 +1641,15 @@ sap.ui.define([
 					})
 					break;
 				}
-				// case "Solictext":
-				// 	if (value !== "") {
-				// 		break;
-				// 	} else {
-				// 		aRequiredFields.push({
-				// 			value: "- Comentarios del solicitante / Descripcion de las Condiciones Especiales"
-				// 		})
-				// 		break;
-				// 	}
+				case "Solictext":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Comentarios del solicitante / Descripcion de las Condiciones Especiales"
+						})
+						break;
+					}
 			case "Aro":
 				if (value !== "") {
 					break;
