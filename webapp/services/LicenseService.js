@@ -3397,7 +3397,7 @@ sap.ui.define([
 							"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso =>
 								permiso &&
 								permiso.Mail ||
-								"hzea@inclusion.cloud")
+								"juan.marone@transener.com.ar")
 					} else {
 						var aEmailsPermisos = []
 					}
@@ -3577,7 +3577,7 @@ sap.ui.define([
 							"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso =>
 								permiso &&
 								permiso.Mail ||
-								"hzea@inclusion.cloud")
+								"juan.marone@transener.com.ar")
 					} else {
 						// Issue 581 - Se debe enviar correo al Solicitante ,  Creador y Coordinador de Mantenimiento cuando se genere una solicitud
 						var aEmailsPermisos = [hashPermisos["ope_solic-lic_transener"], hashPermisos["Creador"]].map(permiso =>

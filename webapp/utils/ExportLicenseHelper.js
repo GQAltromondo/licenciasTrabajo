@@ -457,7 +457,9 @@ sap.ui.define([
 			},);
 			return content;
 		},
-		createNormalPDFBody: function (content, licencia, oTextos, Colocaciones, Retiros, Habilitaciones, Inhibiciones, Entregas,
+		createNormalPDFBody: function (content, licencia, oTextos, 
+			// Colocaciones, Retiros, Habilitaciones, Inhibiciones,
+			 Entregas,
 			Devoluciones, Suspensiones, Reanudaciones,
 			Observaciones, Coordinaciones, Tramitaciones,
 			Transferencias) {
@@ -1128,7 +1130,7 @@ sap.ui.define([
 
 		createPdfLicense: function (
 			data, licencia,
-			 Colocaciones, Retiros, Habilitaciones, Inhibiciones, Entregas,
+			Colocaciones, Retiros, Habilitaciones, Inhibiciones, Entregas,
 			Devoluciones, Suspensiones, Reanudaciones,
 			Observaciones, Coordinaciones, Tramitaciones,
 			Transferencias, oTextos, bExportType
@@ -1319,7 +1321,7 @@ sap.ui.define([
 				content = this.createPdfSimpBody(content, licencia, oTextos);
 			} else {
 				content = this.createNormalPDFBody(content, licencia, oTextos,
-									  Entregas,
+					Entregas,
 					Devoluciones, Suspensiones, Reanudaciones,
 					Observaciones, Coordinaciones, Tramitaciones,
 					Transferencias);
@@ -2165,8 +2167,8 @@ sap.ui.define([
 			if (!licencia) return
 			anulacionTableRow.push(
 				[{
-					text: FormatHelper.formatDateLicense(licencia.FechaAnulacion) + " " + FormatHelper.getTimeString(licencia.HoraAnulacion
-						.ms),
+					text: licencia.FechaAnulacion ? FormatHelper.formatDateLicense(licencia.FechaAnulacion) + " " + FormatHelper.getTimeString(licencia.HoraAnulacion
+						.ms) : "",
 					alignment: 'center',
 					fontSize: 8,
 					border: [false, false, false, false]
@@ -2241,24 +2243,24 @@ sap.ui.define([
 			if (!licencia) return
 			cancelacionTableRow.push(
 				[{
-					text: licencia.CotCotdt + " - " + FormatterHelper.getPersonalHabilitadoName(licencia.CotCotdt),
+					text: licencia.CancFecha !== null ? licencia.CotCotdt + " - " + FormatterHelper.getPersonalHabilitadoName(licencia.CotCotdt) : "",
 					alignment: 'center',
 					fontSize: 8,
 					border: [false, false, false, false]
 				},
 				{
-					text: licencia.JefeTrab + " - " + FormatterHelper.getJefeName(licencia.JefeTrab),
+					text: licencia.CancFecha !== null ? licencia.JefeTrab + " - " + FormatterHelper.getJefeName(licencia.JefeTrab) : "",
 					alignment: 'center',
 					fontSize: 8,
 					border: [false, false, false, false]
 				}, {
-					text: licencia.Tecet + " - " + FormatterHelper.getPersonalHabilitadoName(licencia.Tecet),
+					text: licencia.CancFecha !== null ? licencia.Tecet + " - " + FormatterHelper.getPersonalHabilitadoName(licencia.Tecet) : "",
 					alignment: 'center',
 					fontSize: 8,
 					border: [false, false, false, false]
 				}, {
-					text: FormatHelper.formatDateLicense(licencia.CancFecha) + " " + FormatHelper.getTimeString(licencia.CancHora
-						.ms),
+					text: licencia.CancFecha !== null ? FormatHelper.formatDateLicense(licencia.CancFecha) + " " + FormatHelper.getTimeString(licencia.CancHora
+						.ms) : " ",
 					alignment: 'center',
 					fontSize: 8,
 					border: [false, false, false, false]

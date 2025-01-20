@@ -239,7 +239,8 @@ sap.ui.define([
 		},
 
 		getPuestoDescription: function (key) {
-			let estaciones = AppManagementHelper.getModel("WorkPlacesJsonModel").getProperty("/WorkPlaces");
+			//let estaciones = AppManagementHelper.getModel("WorkPlacesJsonModel").getProperty("/WorkPlaces");
+			let estaciones = AppManagementHelper.getModel("PuestosTrabajoJsonModel").getProperty("/PuestosTrabajo");
 			var Ktext = estaciones.find(x => x.Arbpl == key) ? estaciones.find(x => x.Arbpl == key).Ktext : "";
 			return Ktext
 		},

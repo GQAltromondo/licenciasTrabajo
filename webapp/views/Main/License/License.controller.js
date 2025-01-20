@@ -102,7 +102,7 @@ sap.ui.define([
 			// window.open(sHost, "_blank");
 
 			//	location.hash = `GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`
-			var Hash =`#GestionUnifilaresV1-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`;
+			var Hash = `#GestionUnifilaresV1-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`;
 
 			const currentHash = Hash;
 
@@ -1083,7 +1083,7 @@ sap.ui.define([
 			var Habilitaciones = licencia.HabilitacionRecierre_nav;
 			var Inhibiciones = licencia.InhibicionRecierre_nav;
 
-		
+
 			var Coordinaciones = licencia.CoordinacionesLicencia_nav;
 
 			var Suspensiones = licencia.SuspensionLicencia_nav;
@@ -4253,7 +4253,7 @@ sap.ui.define([
 			} else {
 				sMensaje += "No hay limitaciones técnicas activas.";
 			}
-			MessageBoxHelper.showMessage(sMensaje);
+			//	MessageBoxHelper.showMessage(sMensaje);
 
 			return obj;
 		},
@@ -4450,7 +4450,7 @@ sap.ui.define([
 			LicenseJsonModelData.Intnooperar = "";
 		},
 
-		showAllContent: function (oEvent) { 
+		showAllContent: function (oEvent) {
 			//debugger;
 		},
 
