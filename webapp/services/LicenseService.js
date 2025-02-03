@@ -487,7 +487,7 @@ sap.ui.define([
 
 						emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"],
 						hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]
-						].map(permiso => permiso && permiso.Mail || "nurrestarazu@inclusion.cloud");
+						].map(permiso => permiso && permiso.Mail || "juan.marone@transener.com.ar");
 
 						let usuariosAsignados = {
 							Coordinador: currentUser.Legajo + ", " + currentName,
@@ -896,10 +896,10 @@ sap.ui.define([
 				if (Tipo === "L") {
 					aEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 						"Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]].map(permiso => permiso &&
-							permiso.Mail || "nurrestarazu@inclusion.cloud");
+							permiso.Mail || "juan.marone@transener.com.ar");
 				} else {
 					aEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail ||
-						"nurrestarazu@inclusion.cloud");
+						"juan.marone@transener.com.ar");
 				}
 
 				var sEmails = aEmails.join(",");
@@ -1300,12 +1300,12 @@ sap.ui.define([
 				var sEmailEt = "";
 				if (licencia.Tipo === "S") {
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail ||
-						"nurrestarazu@inclusion.cloud");
+						"juan.marone@transener.com.ar");
 					sEmailEt = "";
 				} else {
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos["Jefe_Trabajo"],
 					hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]
-					].map(permiso => permiso && permiso.Mail || "nurrestarazu@inclusion.cloud");
+					].map(permiso => permiso && permiso.Mail || "juan.marone@transener.com.ar");
 					sEmailEt = res[2].results && res[2].results !== 0 ? res[2].results.map(e => (e.Mail)).join(",") : "";
 				}
 
@@ -1443,7 +1443,7 @@ sap.ui.define([
 				let stringEmails = "";
 
 				stringEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail ||
-					"nurrestarazu@inclusion.cloud").join(",");
+					"juan.marone@transener.com.ar").join(",");
 
 				var usuariosAsignados = {
 					Coordinador: hashPermisos["COORDINADOR"] ? hashPermisos["COORDINADOR"].Legajo + ", " + hashPermisos["COORDINADOR"].Nombre : "",
@@ -1863,7 +1863,7 @@ sap.ui.define([
 					hashPermisos["COORDINADOR"] = hashPermisos["COORDINADOR"] || "";
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 						"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
-							permiso.Mail || "nurrestarazu@inclusion.cloud").join(",");
+							permiso.Mail || "juan.marone@transener.com.ar").join(",");
 
 					var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 					var sCurrentUserMail = oUserJson.email;
@@ -1944,7 +1944,7 @@ sap.ui.define([
 				hashPermisos["COORDINADOR"] = hashPermisos["COORDINADOR"] || "";
 				emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 					"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
-						permiso.Mail || "nurrestarazu@inclusion.cloud").join(",");
+						permiso.Mail || "juan.marone@transener.com.ar").join(",");
 
 				var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 				var sCurrentUserMail = oUserJson.email;

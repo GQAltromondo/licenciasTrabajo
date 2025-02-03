@@ -1052,14 +1052,21 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Request.Request
 							selectedKey: "{LicenseJsonModel>/Jobcond}",
 							valueState: "{LicenseJsonModel>/JobcondState}",
 							valueStateText: "{LicenseJsonModel>/JobcondStateMessage}",
+							// items: {
+							// 	path: "JobCondJsonModel>/FixedValuesSet",
+							// 	filters: [new sap.ui.model.Filter("Tabname", sap.ui.model.FilterOperator.EQ, "ZTAB_LICENCIAS"),
+							// 		new sap.ui.model.Filter("Fieldname", sap.ui.model.FilterOperator.EQ, "JOBCOND")
+							// 	],
+							// 	template: new sap.ui.core.Item({
+							// 		key: "{JobCondJsonModel>Valkey}",
+							// 		text: "{JobCondJsonModel>Valtext}"
+							// 	})
+							// },
 							items: {
-								path: "SelectModel>/FixedValuesSet",
-								filters: [new sap.ui.model.Filter("Tabname", sap.ui.model.FilterOperator.EQ, "ZTAB_LICENCIAS"),
-									new sap.ui.model.Filter("Fieldname", sap.ui.model.FilterOperator.EQ, "JOBCOND")
-								],
+								path: "JobConditions>/JobConditions",
 								template: new sap.ui.core.Item({
-									key: "{SelectModel>Valkey}",
-									text: "{SelectModel>Valtext}"
+									key: "{JobConditions>Valkey}",
+									text: "{JobConditions>Valtext}"
 								})
 							},
 							/*items: [
