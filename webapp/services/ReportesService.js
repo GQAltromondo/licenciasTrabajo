@@ -142,8 +142,23 @@ sap.ui.define([
 			return new Promise((resolve, reject) => {
 				oDataService.getModel("TransenerOperaciones").read("/ReporteLTProgramacionSemanalSet", {
 					filters: aFilters,
-					success: function (data) {
-						resolve(data);
+					success: async (data) => {
+						try {
+							let aResults = data.results || [];
+
+
+							let aPromises = aResults.map(async (item) => {
+								let horarios = await this._getHorariosLicencia(item.Empresa, item.Id, item.Tipo, item.Anio);
+								item.Horarios = horarios.HorariosPorLicencia_nav;
+							});
+
+
+							await Promise.all(aPromises);
+
+							resolve(aResults);
+						} catch (error) {
+							reject(error);
+						}
 					},
 					error: function (error) {
 						reject(error)
@@ -264,54 +279,54 @@ sap.ui.define([
 
 		//INI TRNS99 - obtener dias anulados
 		getDiasAnulados: function (aLicencias) {
-				return new Promise((resolve, reject) => {
-					let aFilters = [];
-					var aFilterLicencias = [];
-					for (var oLic of aLicencias) {
-						aFilterLicencias.push(new sap.ui.model.Filter({
-							path: "Id",
-							operator: sap.ui.model.FilterOperator.EQ,
-							value1: oLic.Id
-						}))
-					}
-					if (aFilterLicencias.length > 0) {
-						aFilters.push(new sap.ui.model.Filter({
-							filters: aFilterLicencias,
-							and: false,
-						}));
-					}
-					//estados
+			return new Promise((resolve, reject) => {
+				let aFilters = [];
+				var aFilterLicencias = [];
+				for (var oLic of aLicencias) {
+					aFilterLicencias.push(new sap.ui.model.Filter({
+						path: "Id",
+						operator: sap.ui.model.FilterOperator.EQ,
+						value1: oLic.Id
+					}))
+				}
+				if (aFilterLicencias.length > 0) {
 					aFilters.push(new sap.ui.model.Filter({
-						filters: [
-							new sap.ui.model.Filter({
-								path: "Estado",
-								operator: sap.ui.model.FilterOperator.EQ,
-								value1: "NA"
-							}),
-							new sap.ui.model.Filter({
-								path: "Estado",
-								operator: sap.ui.model.FilterOperator.EQ,
-								value1: "02"
-							}),
-							new sap.ui.model.Filter({
-								path: "Estado",
-								operator: sap.ui.model.FilterOperator.EQ,
-								value1: "AS"
-							})
-						],
+						filters: aFilterLicencias,
 						and: false,
 					}));
-					oDataService.getModel("TransenerOperaciones").read("/LicenciaDiasSet", {
-						filters: aFilters,
-						success: function (data) {
-							resolve(data.results);
-						},
-						error: function (error) {
-							resolve([]);
-						}
-					});
-				})
-			}
-			//FIN TNRS99
+				}
+				//estados
+				aFilters.push(new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter({
+							path: "Estado",
+							operator: sap.ui.model.FilterOperator.EQ,
+							value1: "NA"
+						}),
+						new sap.ui.model.Filter({
+							path: "Estado",
+							operator: sap.ui.model.FilterOperator.EQ,
+							value1: "02"
+						}),
+						new sap.ui.model.Filter({
+							path: "Estado",
+							operator: sap.ui.model.FilterOperator.EQ,
+							value1: "AS"
+						})
+					],
+					and: false,
+				}));
+				oDataService.getModel("TransenerOperaciones").read("/LicenciaDiasSet", {
+					filters: aFilters,
+					success: function (data) {
+						resolve(data.results);
+					},
+					error: function (error) {
+						resolve([]);
+					}
+				});
+			})
+		}
+		//FIN TNRS99
 	};
 });

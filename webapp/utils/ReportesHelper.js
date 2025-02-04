@@ -1502,7 +1502,7 @@ sap.ui.define([
 		reporteSemanalCammesa: function (fechadesde, fechahasta, society, daysInBetWeen) {
 			return new Promise((resolve, reject) => {
 				ReportesService.semanalCamesa(society, fechadesde, fechahasta).then(async (data) => {
-					var aData = data.results;
+					var aData = data;
 					if (aData.length > 0) {
 						aData.forEach((e) => {
 							e.Solend = this.getDateFormat(e.Solend);
