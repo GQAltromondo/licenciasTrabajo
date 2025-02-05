@@ -1648,30 +1648,30 @@ sap.ui.define([
 		},
 
 		findDate: function (attr, aDays, license, value, horarios, aDiasAnulados) {
-			var sDateFound = aDays.find((oDate) => {
-				return oDate.stringDate === attr;
-			})
-			if (sDateFound) {
-				const foundDays = horarios.find(element => element.stringDate === sDateFound.stringDate)
-				//INI TRNS99 - ver si la fecha esta autorizada o no
-				const foundNoAutorizado = aDiasAnulados.find(element => FormatHelper.formatDateLicense(element.Fecha) === sDateFound.stringDate)
-				//FIN TNRS99
+			const sDateFound = aDays.find(oDate => oDate.stringDate === attr);
+			if (!sDateFound) return value; // Retorna antes si no encuentra la fecha
 
-				//INI - 10/03/2023 - EXT-MSUELDIA - Se agrega validacion segun license.Timend
-				//si tiene el valor "Continua" se debe calcular valor de enserv por mas que no encuentre dias
-				if ((foundDays || license.Timend === 'Continua') && !foundNoAutorizado) {
-					//FIN - 10/03/2023 - EXT-MSUELDIA - Se agrega validacion segun license.Timend
-					var enserv = "";
-					enserv = license.Equstat === "" ? "F/S" : "E/S";
-					enserv = license.Jobcond === "04" || license.Jobcond === "05" ? "TcT" : enserv;
-					return enserv;
-				} else {
-					return "."
-				}
-			} else {
-				return value;
+			// Buscar si hay un día en license.Horarios.results que coincida con sDateFound
+			const foundDays = license.Horarios.results.find(element => {
+
+				return FormatHelper.formatDateLicense(element.Fecha) === sDateFound.stringDate;
+			});
+
+			// Definir foundNoAutorizado antes de usarla
+			const foundNoAutorizado = aDiasAnulados.some(element =>
+				FormatHelper.formatDateLicense(element.Fecha) === sDateFound.stringDate
+			);
+
+			if (foundNoAutorizado) return ".";
+
+			if (foundDays || license.Timend === "Continua") {
+				let enserv = license.Equstat === "" ? "F/S" : "E/S";
+				return (license.Jobcond === "04" || license.Jobcond === "05") ? "TcT" : enserv;
 			}
-		},
+
+			return ".";
+		}
+		,
 
 		setEquipmentStatus: async function (license, horarios, aDiasAnulados) {
 			var aDaysIntervalFromLicense = this.getDayIntervalsOfLicense(license.Solbeg, license.Solend);

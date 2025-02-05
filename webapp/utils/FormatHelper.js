@@ -37,34 +37,25 @@ sap.ui.define([
 			// Return array of year and week number
 			return [d.getUTCFullYear(), weekNo];
 		},
-
-		// formatDateLicense: function (dDate) {
-		// 	if (typeof (dDate) === "object") {
-		// 		let dDateFormatted = new Date(dDate.getTime() + dDate.getTimezoneOffset() * 60 * 1000);
-		// 		let d = new Date(dDateFormatted);
-		// 		let month = '' + (d.getMonth() + 1);
-		// 		let day = '' + d.getDate();
-		// 		let year = d.getFullYear();
-
-		// 		if (month.length < 2) month = '0' + month;
-		// 		if (day.length < 2) day = '0' + day;
-
-		// 		return [day, month, year].join('-');
-		// 	}
-		// 	return dDate;
-		// },
 		formatDateLicense: function (dDate) {
-			if (typeof (dDate) === "object" && dDate != null) {
-				let dDateFormatted = new Date(dDate.getTime() + dDate.getTimezoneOffset() * 60 * 1000);
-				let d = new Date(dDateFormatted);
-				let month = '' + (d.getMonth() + 1);
-				let day = '' + d.getDate();
-				let year = d.getFullYear();
-
-				if (month.length < 2) month = '0' + month;
-				if (day.length < 2) day = '0' + day;
-
-				return [day, month, year].join('-');
+			if (typeof dDate === "object" && dDate !== null) {
+				let d = new Date(dDate); // No ajustar timezone manualmente
+				let day = String(d.getUTCDate()).padStart(2, "0"); 
+				let month = String(d.getUTCMonth() + 1).padStart(2, "0");
+				let year = d.getUTCFullYear();
+		
+				return `${day}-${month}-${year}`;
+			}
+			return dDate;
+		},
+		formatDateLicense: function (dDate) {
+			if (typeof dDate === "object" && dDate !== null) {
+				let d = new Date(dDate); // No ajustar timezone manualmente
+				let day = String(d.getUTCDate()).padStart(2, "0"); 
+				let month = String(d.getUTCMonth() + 1).padStart(2, "0");
+				let year = d.getUTCFullYear();
+		
+				return `${day}-${month}-${year}`;
 			}
 			return dDate;
 		},
