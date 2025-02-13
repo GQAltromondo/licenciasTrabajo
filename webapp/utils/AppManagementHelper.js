@@ -20,6 +20,9 @@ sap.ui.define([
 			}
 			return jsonModel;
 		},
+		setModel: function (sModel, sModelName) {
+			this.getApp().setModel(sModel, sModelName);
+		},
 
 		getApp: function () {
 			return this._oApp;

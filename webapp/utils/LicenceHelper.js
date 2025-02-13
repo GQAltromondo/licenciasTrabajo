@@ -738,7 +738,7 @@ sap.ui.define([
 				Tplnr: "",
 			};
 
-			if (oLicense.ColocacionPAT_nav.length > 0) {
+			if (oLicense?.ColocacionPAT_nav?.length) {
 				let aCloneColocaciones = jQuery.extend(true, [], oLicense.ColocacionPAT_nav);
 				aColocaciones = aColocaciones.concat(aCloneColocaciones);
 				aColocaciones.push(oColocacion)
