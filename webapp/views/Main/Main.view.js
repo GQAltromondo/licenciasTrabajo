@@ -334,7 +334,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Main", {
 																src: "sap-icon://filter"
 															}),
 															new sap.m.Text({
-																text: "Filtrar licencias",
+																text: "Filtrar licencias - Doc 2",
 																customData: {
 																	Type: "sap.ui.core.CustomData",
 																	key: "colorFiltrar",

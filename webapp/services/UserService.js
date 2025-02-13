@@ -20,23 +20,23 @@ sap.ui.define([
 				email: "dummy.user@com",
 				name: "dummy.user@com",
 				displayName: "Dummy User (dummy.user@com)",
-				// roles: ["Mantenimiento_GerRegional",
-				// 	"Examinadores_PT15",
-				// 	"Selector_evaluadores_PT15",
-				// 	"seguridadH_PT15",
-				// 	"Rep_Direccion_PT15",
-				// 	"MedicinaLaboral_PT15",
-				// 	"Gestion_Calidad_PT152",
-				// 	"Direccion_TecnicaPT15",
-				// 	"Auditor_Externo",
-				// 	"Gestion_habilitaciones",
-				// 	"Solicitante_PT15",
-				// 	"Mantenimiento_Secretaria",
-				// 	"Director_Tecnico",
-				// 	"Ger_Operaciones",
-				// 	"Aprobacion_Habilitaciones"
-				// ]
-				roles:["Programacion_COTDT"]
+				roles: ["Mantenimiento_GerRegional",
+					"Examinadores_PT15",
+					"Selector_evaluadores_PT15",
+					"seguridadH_PT15",
+					"Rep_Direccion_PT15",
+					"MedicinaLaboral_PT15",
+					"Gestion_Calidad_PT152",
+					"Direccion_TecnicaPT15",
+					"Auditor_Externo",
+					"Gestion_habilitaciones",
+					"Solicitante_PT15",
+					"Mantenimiento_Secretaria",
+					"Director_Tecnico",
+					"Ger_Operaciones",
+					"Aprobacion_Habilitaciones"
+				]
+			
 
 
 			};
@@ -88,11 +88,8 @@ sap.ui.define([
 					}
 					else {
 						oModel.setData(mock);
+						//AppManagementHelper.setModel(oModel, "UserJsonModel");
 					}
-
-
-					AppManagementHelper.setModel(oModel, "UserJsonModel");
-
 				})
 				.catch(() => {
 					oModel.setData(mock);
@@ -168,14 +165,14 @@ sap.ui.define([
 				//roles: ["ope_jefe_cot"],
 				//roles: ["Jefe_COT"]
 				// roles: ["ope_programacion_cotdt"],
-				roles:["Programacion_COTDT"]
+				//roles:["Programacion_COTDT"]
 				// roles: ["ope_oper-turno_cot"],
 
 				// IMPORTANTE: deployear siempre con este descomentado.
 				// ##########################################################################
 				// ############################## IMPORTANTE ################################
 				// ##########################################################################
-				// roles: this.getRoles(data.groups)
+				roles: this.getRoles(data.groups)
 				// ##########################################################################
 				// ##########################################################################
 			});
