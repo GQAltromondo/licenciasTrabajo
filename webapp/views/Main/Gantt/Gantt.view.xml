@@ -175,18 +175,19 @@
 									<m:Label text="{TempSeleccionado>DescEquipo}"/>
 								</template>
 							</Column>
-							<Column sortProperty="IdLicencia" filterProperty="IdLicencia" width="120px">
-								<m:Text text="Nro. Licencia" wrapping="false"/>
-								<template>
-									<m:Label text="{TempSeleccionado>IdLicencia}"/>
-								</template>
-							</Column>
 								<Column sortProperty="Solicitante" filterProperty="Solicitante" width="140px">
 								<m:Text text="Solicitante" wrapping="false"/>
 								<template>
 									<m:Label text="{TempSeleccionado>Solicitante}"/>
 								</template>
 							</Column>
+							<Column sortProperty="IdLicencia" filterProperty="IdLicencia" width="120px">
+								<m:Text text="Nro. Licencia" wrapping="false"/>
+								<template>
+									<m:Label text="{TempSeleccionado>IdLicencia}"/>
+								</template>
+							</Column>
+							
 							<Column sortProperty="Tiemporep" filterProperty="TiemporepText" width="140px">
 								<m:Text text="Tiempo Reposición" wrapping="false"/>
 								<template>
@@ -307,18 +308,19 @@
 									<m:Label text="{RequerimentsModel>DescEquipo}"/>
 								</template>
 							</Column>
-							<Column sortProperty="IdLicencia" filterProperty="IdLicencia" width="120px">
-								<m:Text text="Nro. Licencia" wrapping="false"/>
-								<template>
-									<m:Label text="{RequerimentsModel>IdLicencia}"/>
-								</template>
-							</Column>
 								<Column sortProperty="Solicitante" filterProperty="Solicitante" width="140px">
 								<m:Text text="Solicitante" wrapping="false"/>
 								<template>
 									<m:Label text="{RequerimentsModel>Solicitante}"/>
 								</template>
 							</Column>
+							<Column sortProperty="IdLicencia" filterProperty="IdLicencia" width="120px">
+								<m:Text text="Nro. Licencia" wrapping="false"/>
+								<template>
+									<m:Label text="{RequerimentsModel>IdLicencia}"/>
+								</template>
+							</Column>
+							
 							<Column sortProperty="Tiemporep" filterProperty="TiemporepText" width="140px">
 								<m:Text text="Tiempo Reposición" wrapping="false"/>
 								<template>
