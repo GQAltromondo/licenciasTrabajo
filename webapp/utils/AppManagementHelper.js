@@ -71,6 +71,9 @@ sap.ui.define([
 		},
 
 		setNavigationProperties: function (oObject) {
+
+			console.log(oObject)
+			
 			this.getModel("CoordinationTableJsonModel").setData({
 				Coordinations: oObject.CoordinacionesLicencia_nav
 			});
@@ -80,6 +83,12 @@ sap.ui.define([
 			this.getModel("ObservationTableJsonModel").setData({
 				Observations: oObject.ObservacionesLicencia_nav
 			});
+
+
+			this.getModel("ColocacionTableJsonModel").setData({
+				Colocacion: oObject.ColocacionPAT_nav
+			});
+
 			this.getModel("SuspensionTableJsonModel").setData({
 				Suspensions: oObject.SuspensionLicencia_nav
 			});

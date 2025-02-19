@@ -175,7 +175,7 @@ sap.ui.define([
 			var bOperador = aRoles.find((r) => {
 				return r === "Operador_COT" || r === "Operador_COTDT"
 			});
-			
+
 			var bSolicitanteLicTBA = aRoles.find(sRol => {
 				return sRol === "ope_solic-lic_transba" || sRol === "Solicitante_Lic_TBA"
 			})
@@ -737,17 +737,14 @@ sap.ui.define([
 			});
 		},
 		successPOSTHabilitacion: function (data) {
-			var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			BusyDialogHelper.close();
-			var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
 			var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
-			MessageBoxHelper.showAlert("Alerta", "Se ha realizado la colocacion de manera correcta", $.proxy(this.FIND, this, license));
-
+			MessageBoxHelper.showAlert("Alerta", "Se ha realizado la habilitación de manera correcta", $.proxy(this.FIND, this, license));
 		},
 
 		errorPOSTHabilitacion: function (error) {
 			BusyDialogHelper.close();
-			MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al crear el registro de colocacion");
+			MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al crear el registro de habilitación");
 		},
 		InhibicionLicence: function (oInhibicion) {
 			var oLicence = AppManagementHelper.getModel("LicenseJsonModel").getData();
@@ -798,9 +795,7 @@ sap.ui.define([
 			});
 		},
 		successPOSTColocacionPAT: function (data) {
-			var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			BusyDialogHelper.close();
-			var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
 			var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			MessageBoxHelper.showAlert("Alerta", "Se ha realizado la colocacion de manera correcta", $.proxy(this.FIND, this, license));
 

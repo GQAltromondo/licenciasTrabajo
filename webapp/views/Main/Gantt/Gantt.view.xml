@@ -181,6 +181,12 @@
 									<m:Label text="{TempSeleccionado>IdLicencia}"/>
 								</template>
 							</Column>
+								<Column sortProperty="Solicitante" filterProperty="Solicitante" width="140px">
+								<m:Text text="Solicitante" wrapping="false"/>
+								<template>
+									<m:Label text="{TempSeleccionado>Solicitante}"/>
+								</template>
+							</Column>
 							<Column sortProperty="Tiemporep" filterProperty="TiemporepText" width="140px">
 								<m:Text text="Tiempo Reposición" wrapping="false"/>
 								<template>
@@ -205,12 +211,7 @@
 									<m:Label text="{TempSeleccionado>Comentarios}"/>
 								</template>
 							</Column>
-							<Column sortProperty="Solicitante" filterProperty="Solicitante" width="140px">
-								<m:Text text="Solicitante" wrapping="false"/>
-								<template>
-									<m:Label text="{TempSeleccionado>Solicitante}"/>
-								</template>
-							</Column>
+						
 							<Column sortProperty="StatLicencia" filterProperty="StatLicenciaText" width="120px">
 								<m:Text text="Est. Licen." wrapping="false"/>
 								<template>
@@ -312,6 +313,12 @@
 									<m:Label text="{RequerimentsModel>IdLicencia}"/>
 								</template>
 							</Column>
+								<Column sortProperty="Solicitante" filterProperty="Solicitante" width="140px">
+								<m:Text text="Solicitante" wrapping="false"/>
+								<template>
+									<m:Label text="{RequerimentsModel>Solicitante}"/>
+								</template>
+							</Column>
 							<Column sortProperty="Tiemporep" filterProperty="TiemporepText" width="140px">
 								<m:Text text="Tiempo Reposición" wrapping="false"/>
 								<template>
@@ -336,12 +343,7 @@
 									<m:Label text="{RequerimentsModel>Comentarios}"/>
 								</template>
 							</Column>
-							<Column sortProperty="Solicitante" filterProperty="Solicitante" width="140px">
-								<m:Text text="Solicitante" wrapping="false"/>
-								<template>
-									<m:Label text="{RequerimentsModel>Solicitante}"/>
-								</template>
-							</Column>
+						
 							<Column sortProperty="StatLicencia" filterProperty="StatLicenciaText" width="120px">
 								<m:Text text="Est. Licen." wrapping="false"/>
 								<template>

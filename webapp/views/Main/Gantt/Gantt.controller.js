@@ -10,7 +10,7 @@ sap.ui.define([
 	"Transener/Operaciones/LicenciasTrabajo/services/ganttService/WorkConditionService",
 	"Transener/Operaciones/LicenciasTrabajo/services/StatusService",
 	"Transener/Operaciones/LicenciasTrabajo/services/ganttService/ReportesService",
-	"Transener/Operaciones/LicenciasTrabajo/services/PersonalHabilitadoService",
+	"Transener/Operaciones/LicenciasTrabajo/services/ganttService/PersonalHabilitadoService",
 	"Transener/Operaciones/LicenciasTrabajo/services/ganttService/TiposIntervencionService",
 
 	//helpers
@@ -43,9 +43,9 @@ sap.ui.define([
 			this.prepareSelectsModel();
 			this.loadListModels();
 			this.loadRegiones(this.empresa);
-			PersonalHabilitadoService.getPersonalPromise("100")
+			PersonalHabilitadoService.getPersonalPromise(this.empresa)
 			TiposIntervencionService.getPromise()
-			TipoEquipoService.loadTipoEquipo("100")
+			TipoEquipoService.loadTipoEquipo(this.empresa)
 			ModelHelper.getModel("PersonalHabilitadoModel", this.getView())
 			ModelHelper.getModel("TransenerIntervention", this.getView())
 			ModelHelper.getModel("TipoEquipo", this.getView())
@@ -127,8 +127,10 @@ sap.ui.define([
 
 			let SolicitanteModel = this.getView().getModel("PersonalHabilitadoModel").getData().Solicitante
 			let JefeTrabajoModel = this.getView().getModel("PersonalHabilitadoModel").getData().JefeDeTrabajo
+			// let SolicitanteModel = this.getView().getModel("PersonalHabilitadoModel").getData()
+			// let JefeTrabajoModel = this.getView().getModel("PersonalHabilitadoModel").getData()
 			let IntervencionesModel = this.getView().getModel("TransenerIntervention").getData()
-			let empresa = "100";
+			let empresa = this.empresa;
 			let filtersData = this.getView().getModel("filters").getData();
 			let semana = filtersData.week || "01";
 			let anio = filtersData.year || new Date().getFullYear();
@@ -161,17 +163,17 @@ sap.ui.define([
 				}
 
 				console.log(dataSoloLosQueTenganFechas)
-					// const groupedData = dataSoloLosQueTenganFechas.reduce((acc, item) => {
-					// 	const existingGroup = acc.find(group => group.EquipoSoli === item.EquipoSoli);
-					// 	if (existingGroup) {
-					// 		existingGroup.children.push(item);
-					// 	} else {
-					// 		acc.push({
-					// 			EquipoSoli: item.EquipoSoli,
-					// 			//	DescEquipo: item.DescEquipo, // Any other relevant information for the parent node
-					// 			children: [item]
-					// 		});
-					// 	}
+				// const groupedData = dataSoloLosQueTenganFechas.reduce((acc, item) => {
+				// 	const existingGroup = acc.find(group => group.EquipoSoli === item.EquipoSoli);
+				// 	if (existingGroup) {
+				// 		existingGroup.children.push(item);
+				// 	} else {
+				// 		acc.push({
+				// 			EquipoSoli: item.EquipoSoli,
+				// 			//	DescEquipo: item.DescEquipo, // Any other relevant information for the parent node
+				// 			children: [item]
+				// 		});
+				// 	}
 
 				// 	return acc;
 				// }, []);
@@ -380,9 +382,9 @@ sap.ui.define([
 			var iMonthHasta = daysInBetWeen.fechahasta.getMonth() + 1;
 
 			var fechahasta = daysInBetWeen.fechahasta.getFullYear().toString() + iMonthHasta.toString().padStart(2,
-				"00") + daysInBetWeen.fechahasta.getDate().toString();
+				"00") + daysInBetWeen.fechahasta.getDate().toString().padStart(2,"00");
 			var fechadesde = daysInBetWeen.fechadesde.getFullYear().toString() + iMonthDesde.toString().padStart(2,
-				"00") + daysInBetWeen.fechadesde.getDate().toString();
+				"00") + daysInBetWeen.fechadesde.getDate().toString().padStart(2,"00");
 			this.reporteSemanalCammesa(fechadesde, fechahasta, this.empresa, daysInBetWeen, aData).then((oMessage) => {
 				BusyDialogHelper.close();
 				sap.m.MessageToast.show(
@@ -391,52 +393,7 @@ sap.ui.define([
 				oMessage.message));
 
 		},
-		// onExport: function (oEvent) {
-		// 	var oTable = this.getView().byId("ganntTable");
-
-		// 	var aSelectedIndices = oTable.getSelectedIndices(); // Get the selected indices of rows
-
-		// 	if (aSelectedIndices.length === 0) {
-		// 		sap.m.MessageToast.show("Debe seleccionar las licencias a exportar");
-		// 		return;
-		// 	}
-
-		// 	var aData = [];
-		// 	// Loop through selected indices and extract IdLicencia
-		// 	for (let iIndex of aSelectedIndices) {
-		// 		let oRowData = oTable.getContextByIndex(iIndex).getObject(); // Get row data by index
-		// 		aData.push(oRowData.IdLicencia); // Extract IdLicencia and push to array
-		// 	}
-
-		// 	// Proceed with your logic if aData is populated
-		// 	BusyDialogHelper.open("Exportando...");
-		// 	let filtersData = this.getView().getModel("filters").getData();
-		// 	let semana = filtersData.week || "01";
-		// 	let anio = filtersData.year || new Date().getFullYear();
-
-		// 	let inicio = DateHelper.getDateOfWeek(semana, anio);
-		// 	let fin = new Date(inicio.getTime() + 7 * 24 * 60 * 60 * 1000);
-
-		// 	var daysInBetWeen = {
-		// 		fechadesde: inicio,
-		// 		fechahasta: fin
-		// 	};
-
-		// 	var iMonthDesde = daysInBetWeen.fechadesde.getMonth() + 1;
-		// 	var iMonthHasta = daysInBetWeen.fechahasta.getMonth() + 1;
-
-		// 	var fechahasta = daysInBetWeen.fechahasta.getFullYear().toString() + iMonthHasta.toString().padStart(2, "00") + daysInBetWeen.fechahasta
-		// 		.getDate().toString();
-		// 	var fechadesde = daysInBetWeen.fechadesde.getFullYear().toString() + iMonthDesde.toString().padStart(2, "00") + daysInBetWeen.fechadesde
-		// 		.getDate().toString();
-
-		// 	this.reporteSemanalCammesa(fechadesde, fechahasta, this.empresa, daysInBetWeen, aData).then((oMessage) => {
-		// 		BusyDialogHelper.close();
-		// 		sap.m.MessageToast.show(oMessage.message);
-		// 	}).catch((oMessage) => sap.m.MessageBox.error(oMessage.message));
-		// },
-
-			reporteSemanalCammesa: function (fechadesde, fechahasta, society, daysInBetWeen, aData) {
+		reporteSemanalCammesa: function (fechadesde, fechahasta, society, daysInBetWeen, aData) {
 
 			console.log("Reporte", aData)
 			return new Promise((resolve, reject) => {
@@ -558,38 +515,38 @@ sap.ui.define([
 			// Tipo de interveción
 			if (license.Tipinterv !== "") {
 				switch (license.Tipinterv) {
-				case "1":
-					aStringParts.push("Preventivo");
-					break;
-				case "2":
-					aStringParts.push("Correctivo");
-					break;
-				case "6":
-					aStringParts.push("Obra / Mejora");
-					break;
-				default:
-					aStringParts.push(license.Tipinterv);
-					break;
+					case "1":
+						aStringParts.push("Preventivo");
+						break;
+					case "2":
+						aStringParts.push("Correctivo");
+						break;
+					case "6":
+						aStringParts.push("Obra / Mejora");
+						break;
+					default:
+						aStringParts.push(license.Tipinterv);
+						break;
 				}
 			}
 
 			// Estacional
 			switch (license.Estacional) {
-			case "1":
-				aStringParts.push("Estacional Pendiente");
-				break;
-			case "2":
-				aStringParts.push("Estacional Vigente");
-				break;
-			case "3":
-				aStringParts.push("Estacional Adelantado");
-				break;
-			case "4":
-				aStringParts.push("No estacional");
-				break;
-			default:
-				aStringParts.push("No estacional");
-				break;
+				case "1":
+					aStringParts.push("Estacional Pendiente");
+					break;
+				case "2":
+					aStringParts.push("Estacional Vigente");
+					break;
+				case "3":
+					aStringParts.push("Estacional Adelantado");
+					break;
+				case "4":
+					aStringParts.push("No estacional");
+					break;
+				default:
+					aStringParts.push("No estacional");
+					break;
 			}
 
 			if (license.R500kv === "X") aStringParts.push("Requiere calle de 500 KV abierta");

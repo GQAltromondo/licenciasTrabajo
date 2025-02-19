@@ -4151,54 +4151,54 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									// 		oTurnoTable
 									// 	]
 									// }),
-									// new sap.m.Panel({
-									// 	expandable: true,
-									// 	expanded: true,
-									// 	headerText: "Colocacion y retiro de PAT",
-									// 	content: [
-									// 		new sap.m.Panel({
-									// 			expandable: true,
-									// 			expanded: true,
-									// 			headerText: "Colocacion",
-									// 			content: [
-									// 				oColocacionTable
-									// 			]
+									new sap.m.Panel({
+										expandable: true,
+										expanded: true,
+										headerText: "Colocacion y retiro de PAT",
+										content: [
+											new sap.m.Panel({
+												expandable: true,
+												expanded: true,
+												headerText: "Colocacion",
+												content: [
+													oColocacionTable
+												]
 
-									// 		}),
-									// 		new sap.m.Panel({
-									// 			expandable: true,
-									// 			expanded: true,
-									// 			headerText: "Retiro de PAT",
-									// 			content: [
-									// 				oRetiroTable
-									// 			]
-									// 		})
-									// 	]
-									// }),
-									// new sap.m.Panel({
-									// 	expandable: true,
-									// 	expanded: true,
-									// 	headerText: "Inhibicion y habilitacion de PAT",
-									// 	content: [
-									// 		new sap.m.Panel({
-									// 			expandable: true,
-									// 			expanded: true,
-									// 			headerText: "Inhibicion",
-									// 			content: [
-									// 				oInhibicionTable
-									// 			]
+											}),
+											new sap.m.Panel({
+												expandable: true,
+												expanded: true,
+												headerText: "Retiro de PAT",
+												content: [
+													oRetiroTable
+												]
+											})
+										]
+									}),
+									new sap.m.Panel({
+										expandable: true,
+										expanded: true,
+										headerText: "Inhibicion y habilitacion de PAT",
+										content: [
+											new sap.m.Panel({
+												expandable: true,
+												expanded: true,
+												headerText: "Inhibicion",
+												content: [
+													oInhibicionTable
+												]
 
-									// 		}),
-									// 		new sap.m.Panel({
-									// 			expandable: true,
-									// 			expanded: true,
-									// 			headerText: "Habilitacion",
-									// 			content: [
-									// 				oHabilitacionTable
-									// 			]
-									// 		})
-									// 	]
-									// }),
+											}),
+											new sap.m.Panel({
+												expandable: true,
+												expanded: true,
+												headerText: "Habilitacion",
+												content: [
+													oHabilitacionTable
+												]
+											})
+										]
+									}),
 									new sap.m.Panel({
 										expandable: true,
 										expanded: true,

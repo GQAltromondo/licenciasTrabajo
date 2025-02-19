@@ -422,7 +422,7 @@ sap.ui.define([
 		goToEdit: function (oEvent, bManualPress) {
 			BusyDialogHelper.open();
 			var oFilterSelectionModel = AppManagementHelper.getModel("FilterSelectionJsonModel");
-			var oDeliveryModel = AppManagementHelper.getModel("DeliveryTableJsonModel");
+			//var oDeliveryModel = AppManagementHelper.getModel("DeliveryTableJsonModel");
 			var oDisableControlsJsonModel = AppManagementHelper.getModel("DisableControlsJsonModel");
 			oDisableControlsJsonModel.setProperty("/DaysDeleteVisible", false);
 			oFilterSelectionModel.setProperty("/textFlowSol", "Guardar Cambios");
