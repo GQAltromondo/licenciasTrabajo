@@ -2927,7 +2927,7 @@ sap.ui.define([
 				this.getFullTramitacionesWithCalendarDates();
 
 			}).catch((e) => {
-				console.error(e);
+				console.error("ACA",e);
 				BusyDialogHelper.close();
 				MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al obtener permisos")
 			})

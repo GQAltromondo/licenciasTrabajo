@@ -469,10 +469,11 @@ sap.ui.define([
 			}
 
 			AppManagementHelper.setNavigationProperties(oLicense);
-			LicenceHelper.generateDeliveryDevolution(oLicense);
+		
 			LicenceHelper.generatePlacementRemoval(oLicense);
 			LicenceHelper.generateTurno(oLicense);
 			LicenceHelper.generateInhibicionHabilitacion(oLicense);
+			LicenceHelper.generateDeliveryDevolution(oLicense);
 
 			this.findEstacionCode(oLicense.Tplnr);
 			this.loadCatalogData(oLicense.Werks).then((oCatalogData) => {

@@ -770,7 +770,7 @@ sap.ui.define([
 					let aCloneHabilitaciones = jQuery.extend(true, [], oLicense.HabilitacionRecierre_nav);
 					aHabilitacion = aHabilitacion.concat(aCloneHabilitaciones);
 				}
-				this.formatUTCDates(aInhibicion);
+				//this.formatUTCDates(aInhibicion);
 				aInhibicion.push({
 					Empresa: oLicense.Empresa,
 					Datehab: new Date() > oLicense.Solbeg && new Date() < oLicense.Solend ? new Date() : oLicense.Solend,
@@ -818,7 +818,7 @@ sap.ui.define([
 
 					aRetiros = aRetiros.concat(aCloneRetiros);
 				}
-				this.formatUTCDates(aColocaciones);
+				//this.formatUTCDates(aColocaciones);
 
 				var oRetiro = {
 					Id: oLicense.Id,
@@ -853,7 +853,7 @@ sap.ui.define([
 					let aCloneRetiros = jQuery.extend(true, [], oLicense.RetiroPAT_nav);
 					aRetiros = aRetiros.concat(aCloneRetiros);
 				}
-				this.formatUTCDates(aColocaciones);
+				//this.formatUTCDates(aColocaciones);
 				aColocaciones.push({
 					Empresa: oLicense.Empresa,
 					Datehab: new Date() > oLicense.Solbeg && new Date() < oLicense.Solend ? new Date() : oLicense.Solend,
