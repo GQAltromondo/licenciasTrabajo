@@ -1923,7 +1923,7 @@ sap.ui.define([
 
 			let aFiltered = aLicenses
 				.filter(license => categoriasPorTipoEquipo[license.Tipoequipo] === sheetType)
-				.filter(license => license.Timbeg && license.Timend); // Filtrar si Timbeg o Timend están vacíos
+				.filter(license => license.Timbeg && license.Timend); // GQ FIX 2102
 
 			var header = this.getHeaderObject(sheetType);
 
@@ -1957,7 +1957,7 @@ sap.ui.define([
 				license.Tension = license.Tension;
 				license.ID = license.Id;
 
-				// Ajuste de horas para Timbeg y Timend
+			
 				license.Timbeg = FormatterHelper.msTohoursSeconds(license.Timbeg.ms + 3 * 60 * 60 * 1000);
 				license.Timend = FormatterHelper.msTohoursSeconds(license.Timend.ms + 3 * 60 * 60 * 1000);
 
