@@ -1858,14 +1858,74 @@ sap.ui.define([
 
 		},
 
+		// createHeaderWithFilteredData: function (aLicenses, sheetType) {
+		// 	const categoriasPorTipoEquipo = this.dictionary;
+		// 	//Primer del 70, hacer get a nueva entidad filtrado por empresa y matchear con el nuevo diccionario.
+
+		// 	let aFiltered = aLicenses.filter((license) => categoriasPorTipoEquipo[license.Tipoequipo] == sheetType);
+		// 	//categoriasPorTipoEquipo[license.Tipoequipo]
+		// 	//funcion que retorne objeto especificopara es et o lineas
+		// 	var header = this.getHeaderObject(sheetType)
+
+		// 	let mapExcelData = license => {
+		// 		if (license.Licstat === "01") {
+		// 			license.usersAgreement = "SI";
+		// 		} else if (license.Licstat === "06") {
+		// 			license.usersAgreement = "NO";
+		// 		} else {
+		// 			license.usersAgreement = ""
+		// 		}
+
+		// 		if (license.Tipolicencia === "EM") {
+		// 			license.TipMante = 'De Emergencia';
+		// 		} else if (license.Tipolicencia === "N" || license.Tipolicencia === "TE") {
+		// 			license.TipMante = 'No Urgente';
+		// 		} else {
+		// 			license.TipMante = '';
+		// 		}
+		// 		license.Equnr = license.Equnr;
+		// 		license.Solbeg = FormatHelper.formatDateLicenseReportDiary(license.Solbeg);
+		// 		license.TrabajoFS = license.Equstat === "" ? "X" : "";
+		// 		license.TrabajoES = license.Equstat === "X" ? "X" : "";
+
+		// 		license.Rdisparo === "X" ? license.Rdisparo = "SI" : license.Rdisparo = "NO";
+		// 		license.DescEstacion = license.DescEstacion //FormatterHelper.getDescEstacion(license.Tplnr);
+		// 		// issue 504 - el campo Tipoequipo trae un valor incorrecto , se remplazo por el campo tipoEquipo
+		// 		//	license.tipoEquipo = license.Tipoequipo;
+		// 		if (license.tipoEquipo) {
+		// 			license.tipoEquipo = license.tipoEquipo;
+		// 		} else {
+		// 			license.tipoEquipo = license.Tipoequipo;
+		// 		}
+		// 		license.Tipinterv = this.formatTipinterv(license.Tipinterv);
+		// 		license.Tension = license.Tension;
+		// 		license.ID = license.Id;
+
+		// 		//GQ FIX ParteCammesa 21-02
+		// 		if (license.Timbeg === "" || license.Timend === "") return
+
+		// 		license.Timbeg = license.Timbeg ? FormatterHelper.msTohoursSeconds(license.Timbeg.ms + 3 * 60 * 60 * 1000) : "";
+		// 		license.Timend = license.Timend ? FormatterHelper.msTohoursSeconds(license.Timend.ms + 3 * 60 * 60 * 1000) : "";
+
+		// 		license.Tiemporep = FormatterHelper.getTiempoReposicionDesc(license.Tiemporep)
+
+		// 		let obj = {};
+		// 		for (let key in header) {
+		// 			obj[header[key]] = license[key] || "";
+		// 		}
+		// 		return obj;
+		// 	};
+
+		// 	return aFiltered.map(mapExcelData);
+		// },
 		createHeaderWithFilteredData: function (aLicenses, sheetType) {
 			const categoriasPorTipoEquipo = this.dictionary;
-			//Primer del 70, hacer get a nueva entidad filtrado por empresa y matchear con el nuevo diccionario.
 
-			let aFiltered = aLicenses.filter((license) => categoriasPorTipoEquipo[license.Tipoequipo] == sheetType);
-			//categoriasPorTipoEquipo[license.Tipoequipo]
-			//funcion que retorne objeto especificopara es et o lineas
-			var header = this.getHeaderObject(sheetType)
+			let aFiltered = aLicenses
+				.filter(license => categoriasPorTipoEquipo[license.Tipoequipo] === sheetType)
+				.filter(license => license.Timbeg && license.Timend); // Filtrar si Timbeg o Timend están vacíos
+
+			var header = this.getHeaderObject(sheetType);
 
 			let mapExcelData = license => {
 				if (license.Licstat === "01") {
@@ -1873,37 +1933,35 @@ sap.ui.define([
 				} else if (license.Licstat === "06") {
 					license.usersAgreement = "NO";
 				} else {
-					license.usersAgreement = ""
+					license.usersAgreement = "";
 				}
 
 				if (license.Tipolicencia === "EM") {
-					license.TipMante = 'De Emergencia';
+					license.TipMante = "De Emergencia";
 				} else if (license.Tipolicencia === "N" || license.Tipolicencia === "TE") {
-					license.TipMante = 'No Urgente';
+					license.TipMante = "No Urgente";
 				} else {
-					license.TipMante = '';
+					license.TipMante = "";
 				}
+
 				license.Equnr = license.Equnr;
 				license.Solbeg = FormatHelper.formatDateLicenseReportDiary(license.Solbeg);
 				license.TrabajoFS = license.Equstat === "" ? "X" : "";
 				license.TrabajoES = license.Equstat === "X" ? "X" : "";
 
-				license.Rdisparo === "X" ? license.Rdisparo = "SI" : license.Rdisparo = "NO";
-				license.DescEstacion = license.DescEstacion //FormatterHelper.getDescEstacion(license.Tplnr);
-				// issue 504 - el campo Tipoequipo trae un valor incorrecto , se remplazo por el campo tipoEquipo
-				//	license.tipoEquipo = license.Tipoequipo;
-				if (license.tipoEquipo) {
-					license.tipoEquipo = license.tipoEquipo;
-				} else {
-					license.tipoEquipo = license.Tipoequipo;
-				}
+				license.Rdisparo = license.Rdisparo === "X" ? "SI" : "NO";
+				license.DescEstacion = license.DescEstacion;
+
+				license.tipoEquipo = license.tipoEquipo || license.Tipoequipo;
 				license.Tipinterv = this.formatTipinterv(license.Tipinterv);
 				license.Tension = license.Tension;
 				license.ID = license.Id;
-				license.Timbeg = license.Timbeg ? FormatterHelper.msTohoursSeconds(license.Timbeg.ms + 3 * 60 * 60 * 1000) : "";
-				license.Timend = license.Timend ? FormatterHelper.msTohoursSeconds(license.Timend.ms + 3 * 60 * 60 * 1000) : "";
 
-				license.Tiemporep = FormatterHelper.getTiempoReposicionDesc(license.Tiemporep)
+				// Ajuste de horas para Timbeg y Timend
+				license.Timbeg = FormatterHelper.msTohoursSeconds(license.Timbeg.ms + 3 * 60 * 60 * 1000);
+				license.Timend = FormatterHelper.msTohoursSeconds(license.Timend.ms + 3 * 60 * 60 * 1000);
+
+				license.Tiemporep = FormatterHelper.getTiempoReposicionDesc(license.Tiemporep);
 
 				let obj = {};
 				for (let key in header) {
