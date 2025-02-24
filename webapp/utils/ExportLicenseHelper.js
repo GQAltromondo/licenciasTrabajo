@@ -457,9 +457,9 @@ sap.ui.define([
 			},);
 			return content;
 		},
-		createNormalPDFBody: function (content, licencia, oTextos, 
+		createNormalPDFBody: function (content, licencia, oTextos,
 			Colocaciones, Retiros, Habilitaciones, Inhibiciones,
-			 Entregas,
+			Entregas,
 			Devoluciones, Suspensiones, Reanudaciones,
 			Observaciones, Coordinaciones, Tramitaciones,
 			Transferencias) {
@@ -1117,8 +1117,8 @@ sap.ui.define([
 			content = this.createTramitacion(Tramitaciones, content);
 			content = this.createAnulacion(licencia, content);
 			content = this.createEntregasDevoluciones(licencia, Entregas, content, Devoluciones);
-			content = this.createColocacionesRetiros(licencia,Colocaciones,content,Retiros)
-			content = this.createHabilitacionesInhibiciones(licencia,Habilitaciones,content,Inhibiciones)
+			content = this.createColocacionesRetiros(licencia, Colocaciones, content, Retiros)
+			content = this.createHabilitacionesInhibiciones(licencia, Habilitaciones, content, Inhibiciones)
 			content = this.createSuspensionReanudacion(content, Suspensiones, Reanudaciones,);
 			content = this.createCancelacion(licencia, content);
 			content = this.createLicTrabAutorizNoEntregEnTiempoReal(content, Entregas);
@@ -1321,7 +1321,7 @@ sap.ui.define([
 				content = this.createPdfSimpBody(content, licencia, oTextos);
 			} else {
 				content = this.createNormalPDFBody(content, licencia, oTextos,
-					Entregas,
+					Colocaciones, Retiros, Habilitaciones, Inhibiciones, Entregas,
 					Devoluciones, Suspensiones, Reanudaciones,
 					Observaciones, Coordinaciones, Tramitaciones,
 					Transferencias);
