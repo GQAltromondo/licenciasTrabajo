@@ -469,7 +469,7 @@ sap.ui.define([
 			}
 
 			AppManagementHelper.setNavigationProperties(oLicense);
-		
+
 			LicenceHelper.generatePlacementRemoval(oLicense);
 			LicenceHelper.generateTurno(oLicense);
 			LicenceHelper.generateInhibicionHabilitacion(oLicense);
@@ -1568,8 +1568,9 @@ sap.ui.define([
 			centroToRegion.loadData(sPath + "/conf/centroToRegion.json", "", false);
 
 			//	AppManagementHelper.getModel("FiltersJsonModel").setProperty("/Werks/value", werks);
-			var empresa = this.society === "100" ? "TRANSENER" : "TRANSBA";
-			LimitacionesTecnicas.loadLimitacionesTecnicas(empresa);
+			// var empresa = this.society === "100" ? "TRANSENER" : "TRANSBA";
+			//GQ 2402 Fix Doc 9 paso numero Empresa
+			LimitacionesTecnicas.loadLimitacionesTecnicas(this.society);
 
 		},
 

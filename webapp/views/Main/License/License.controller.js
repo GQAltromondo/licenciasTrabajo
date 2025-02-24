@@ -4242,18 +4242,22 @@ sap.ui.define([
 			//GQ
 			if (!aLimitaciones) return obj
 			// Filtrar el array
-			var aFilteredLim = aLimitaciones.filter(function (limitacion) {
-				return limitacion.Equipo === sEquipo;
+			var aFilteredLim = aLimitaciones.filter(limitacion => {
+					return limitacion.Estacion === sEquipo;
 			});
+
+			if (aFilteredLim?.length == 0) return
+
 			var sMensaje = `El equipo ${sEquipo}, tiene activas las siguientes Limitaciones técnicas:\n`;
 			if (aFilteredLim && aFilteredLim.length > 0) {
 				aFilteredLim.forEach(function (limitacion) {
 					sMensaje += `- ${limitacion.Idlimitacion}\n`;
 				});
-			} else {
-				sMensaje += "No hay limitaciones técnicas activas.";
 			}
-			//	MessageBoxHelper.showMessage(sMensaje);
+			// else {
+			// 	sMensaje += "No hay limitaciones técnicas activas.";
+			// }
+			MessageBoxHelper.showMessage(sMensaje);
 
 			return obj;
 		},
