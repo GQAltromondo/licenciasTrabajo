@@ -4243,7 +4243,7 @@ sap.ui.define([
 			if (!aLimitaciones) return obj
 			// Filtrar el array
 			var aFilteredLim = aLimitaciones.filter(limitacion => {
-					return limitacion.Estacion === sEquipo;
+				return limitacion.Estacion === sEquipo;
 			});
 
 			if (aFilteredLim?.length == 0) return
