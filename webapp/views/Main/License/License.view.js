@@ -4178,7 +4178,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									new sap.m.Panel({
 										expandable: true,
 										expanded: true,
-										headerText: "Inhibicion y habilitacion de PAT",
+										headerText: "Inhibicion y habilitacion de Recierre",
 										content: [
 											new sap.m.Panel({
 												expandable: true,
