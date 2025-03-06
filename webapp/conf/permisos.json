@@ -3,46 +3,56 @@
     "comentario": "Para el negado se aplica la logistica, signo de exclamacion, nombre de boton de la vista path, y quien NO lo va a ver",
     "comentario2": "casos de licencias de emergencia, ellos no generan solicitud",
     "all": [
-      "Jefe_Turno_COT",
-      "Jefe_Turno_COTDT",
-      "Jefe_COTDT",
-      "Jefe_COT",
+      "ope_jefe_turno_cot",
+      "ope_jefe_turno_cotdt",
+      "ope_jefe_cotdt",
+      "ope_jefe_cot",
       "preguntar_lucas",
       "Solicitante_Lic_S",
-      "Solicitante_Lic",
-      "Solicitante_Lic_TBA",
+      "ope_solic-lic_transener",
+      "ope_solic-lic_transba",
       "Jefe_Trabajo",
       "Jefe_Trabajo_Suplente",
-      "Programacion_COTDT",
-      "Programacion_COT",
+      "ope_programacion_cotdt",
+      "ope_programacion_cot",
       "Tramitador",
-      "Operador_COTDT",
-      "Operador_COT"
+      "ope_tramitador",
+      "ope_oper-turno_cotdt",
+      "ope_oper-turno_cot"
     ],
     "view": [
-      "Coordinador_Mantenimiento"
+      "ope_coord-mant_3001",
+      "ope_coord-mant_3002",
+      "ope_coord-mant_1001",
+      "ope_coord-mant_1002",
+      "ope_coord-mant_1003"
     ],
     "!ButtonLicense": [
-      "Coordinador_Mantenimiento"
+      "ope_coord-mant_3001",
+      "ope_coord-mant_3002", 
+      "ope_coord-mant_1001",
+      "ope_coord-mant_1002",
+      "ope_coord-mant_1003"
     ],
     "!ButtonSolicitud": [
-      "Jefe_Turno_COT",
-      "Jefe_Turno_COTDT",
-      "Programacion_COT",
-      "Programacion_COTDT"
+      "ope_jefe_turno_cot",
+      "ope_jefe_turno_cotdt",
+      "ope_programacion_cot",
+      "ope_programacion_cotdt"
     ],
     "!ButtonTipoLicencia": [
-      "Jefe_COTDT",
-      "Jefe_COT",
+      "ope_jefe_cotdt",
+      "ope_jefe_cot",
       "preguntar_lucas",
       "Solicitante_Lic_S",
-      "Solicitante_Lic",
-      "Solicitante_Lic_TBA",
+      "ope_solic-lic_transener",  
+      "ope_solic-lic_transba",
       "Jefe_Trabajo",
       "Jefe_Trabajo_Suplente",
       "Tramitador",
-      "Operador_COTDT",
-      "Operador_COT"
+      "ope_tramitador",
+      "ope_oper-turno_cotdt",
+      "ope_oper-turno_cot"
     ]
   },
   "!general": {
@@ -52,127 +62,160 @@
   },
   "entregasDevoluciones": {
     "all": [
-      "Jefe_Turno_COT",
-      "Jefe_Turno_COTDT",
-      "Operador_COTDT",
-      "Operador_COT"
+      "ope_jefe_turno_cot",
+      "ope_jefe_turno_cotdt",
+      "ope_oper-turno_cotdt",
+      "ope_oper-turno_cot"
     ]
   },
   "medidasSeguridad": {
     "all": [
-      "Jefe_COTDT",
-      "Jefe_COT",
+      "ope_jefe_cotdt",
+      "ope_jefe_cot",
       "Jefe_Trabajo",
       "Jefe_Trabajo_Suplente",
-      "Jefe_Turno_COT",
-      "Jefe_Turno_COTDT",
-      "Operador_COTDT",
-      "Operador_COT",
-      "Programacion_COTDT",
-      "Programacion_COT",
-      "Solicitante_Lic",
+      "ope_jefe_turno_cot",
+      "ope_jefe_turno_cotdt",
+      "ope_oper-turno_cotdt",
+      "ope_oper-turno_cot",
+      "ope_programacion_cotdt",
+      "ope_programacion_cot",
+      "ope_solic-lic_transener",
       "Solicitante_Lic_S",
-      "Solicitante_Lic_TBA",
+      "ope_solic-lic_transba",
       "preguntar lucas",
-      "Tramitador"
+      "Tramitador",
+      "ope_tramitador"
     ],
     "view": [
-      "Coordinador_Mantenimiento"
+      "ope_coord-mant_3001",
+      "ope_coord-mant_3002",
+      "ope_coord-mant_1001",
+      "ope_coord-mant_1002",
+      "ope_coord-mant_1003"
     ]
   },
   "observaciones": {
     "botonAnulacion": [
       "Asistencia_Mantenimiento",
-      "Coordinador_Mantenimiento",
-      "Jefe_Turno_COTDT",
-      "Jefe_Turno_COT",
-      "Programacion_COT",
-      "Programacion_COTDT"
+      "ope_coord-mant_3001",
+      "ope_coord-mant_3002",
+      "ope_coord-mant_1001",
+      "ope_coord-mant_1002",
+      "ope_coord-mant_1003",
+      "ope_jefe_turno_cotdt",
+      "ope_jefe_turno_cot",
+      "ope_programacion_cot",
+      "ope_programacion_cotdt"
     ]
   },
   "listado": {
     "botonCoordinar": [
-      "Coordinador_Mantenimiento",
+      "ope_coord-mant_3001",
+      "ope_coord-mant_3002",
+      "ope_coord-mant_1001",
+      "ope_coord-mant_1002",
+      "ope_coord-mant_1003",
       "Asistencia_Mantenimiento"
     ],
     "botonTramitar": [
-      "Jefe_Turno_COT",
-      "Jefe_Turno_COTDT",
-      "Operador_COT",
-      "Operador_COTDT",
-      "Programacion_COT",
-      "Programacion_COTDT"
+      "ope_jefe_turno_cot",
+      "ope_jefe_turno_cotdt",
+      "ope_oper-turno_cot",
+      "ope_oper-turno_cotdt",
+      "ope_programacion_cot",
+      "ope_programacion_cotdt"
     ],
     "BotonSolicitudListado": [
       "Jefe_Trabajo",
       "Jefe_Trabajo_Suplente",
       "Tramitador",
-      "Coordinador_Mantenimiento"
+      "ope_tramitador",
+      "ope_coord-mant_3001",
+      "ope_coord-mant_3002",
+      "ope_coord-mant_1001",
+      "ope_coord-mant_1002",
+      "ope_coord-mant_1003"
     ],
     "!BotonSolicitudListado": [
-      "Jefe_Turno_COT",
-      "Jefe_Turno_COTDT",
-      "Jefe_COTDT",
-      "Programacion_COTDT",
-      "Programacion_COT",
-      "Operador_COTDT",
-      "Operador_COT",
-      "Solicitante_Lic",
+      "ope_jefe_turno_cot",
+      "ope_jefe_turno_cotdt",
+      "ope_jefe_cotdt",
+      "ope_programacion_cotdt",
+      "ope_programacion_cot",
+      "ope_oper-turno_cotdt",
+      "ope_oper-turno_cot",
+      "ope_solic-lic_transener",
       "Solicitante_Lic_S",
-      "Solicitante_Lic_TBA"
+      "ope_solic-lic_transba"
     ],
     "!ButonDuplicateLicenseCoordinator": [
-      "Coordinador_Mantenimiento"
+      "ope_coord-mant_3001",
+      "ope_coord-mant_3002",
+      "ope_coord-mant_1001",
+      "ope_coord-mant_1002",
+      "ope_coord-mant_1003"
     ],
     "BotonLicenciaListado": [
-      "Jefe_COTDT",
-      "Jefe_COT",
+      "ope_jefe_cotdt",
+      "ope_jefe_cot",
       "Jefe_Trabajo",
       "Jefe_Trabajo_Suplente",
-      "Jefe_Turno_COT",
-      "Jefe_Turno_COTDT",
-      "Operador_COTDT",
-      "Operador_COT",
-      "Programacion_COTDT",
-      "Programacion_COT",
-      "Solicitante_Lic",
+      "ope_jefe_turno_cot",
+      "ope_jefe_turno_cotdt",
+      "ope_oper-turno_cotdt",
+      "ope_oper-turno_cot",
+      "ope_programacion_cotdt",
+      "ope_programacion_cot",
+      "ope_solic-lic_transener",
       "Solicitante_Lic_S",
-      "Solicitante_Lic_TBA",
-      "Tramitador"
+      "ope_solic-lic_transba",
+      "Tramitador",
+      "ope_tramitador"
     ],
     "!BotonLicenciaListado": [
-      "Coordinador_Mantenimiento"
+      "ope_coord-mant_3001",
+      "ope_coord-mant_3002",
+      "ope_coord-mant_1001",
+      "ope_coord-mant_1002",
+      "ope_coord-mant_1003"
     ],
     "tramitacionMasiva": [
       "Tramitador",
-      "Jefe_Turno_COT",
-      "Jefe_Turno_COTDT",
-      "Operador_COT",
-      "Operador_COTDT",
-      "Programacion_COT",
-      "Programacion_COTDT"
+      "ope_tramitador",
+      "ope_jefe_turno_cot",
+      "ope_jefe_turno_cotdt",
+      "ope_oper-turno_cot",
+      "ope_oper-turno_cotdt",
+      "ope_programacion_cot",
+      "ope_programacion_cotdt"
     ]
   },
   "default": {
     "view": [
       "Asistencia_Mantenimiento",
-      "Coordinador_Mantenimiento",
-      "Jefe_COTDT",
-      "Jefe_COT",
+      "ope_coord-mant_3001",
+      "ope_coord-mant_3002",
+      "ope_coord-mant_1001",
+      "ope_coord-mant_1002",
+      "ope_coord-mant_1003",
+      "ope_jefe_cotdt",
+      "ope_jefe_cot",
       "Jefe_Trabajo",
       "Jefe_Trabajo_Suplente",
-      "Jefe_Turno_COT",
-      "Jefe_Turno_COTDT",
-      "Operador_COTDT",
-      "Operador_COT",
-      "Programacion_COTDT",
-      "Programacion_COT",
-      "Solicitante_Lic",
+      "ope_jefe_turno_cot",
+      "ope_jefe_turno_cotdt",
+      "ope_oper-turno_cotdt",
+      "ope_oper-turno_cot",
+      "ope_programacion_cotdt",
+      "ope_programacion_cot",
+      "ope_solic-lic_transener",
       "Solicitante_Lic_S",
-      "Solicitante_Lic_TBA",
+      "ope_solic-lic_transba",
       "preguntar lucas",
       "Tramitador",
-      "Visualizador"
+      "ope_tramitador",
+      "ope_visualizador"
     ]
   }
 }

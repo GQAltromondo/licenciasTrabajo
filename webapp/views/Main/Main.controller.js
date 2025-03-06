@@ -594,7 +594,7 @@ sap.ui.define([
 
 			var sTxtFlox = "Crear Licencia";
 			if (aUserRoles.includes("ope_solic-lic_transener") || aUserRoles.includes("Solicitante_Lic_S") || aUserRoles.includes(
-				"ope_solic-lic_transba")|| aUserRoles.includes("Solicitante_Lic_TBA")) {
+				"ope_solic-lic_transba") || aUserRoles.includes("Solicitante_Lic_TBA")) {
 				sTxtFlox = "Crear Borrador de Licencia";
 			}
 			AppManagementHelper.getModel("FilterSelectionJsonModel").setProperty("/textFlow", sTxtFlox);
@@ -620,35 +620,27 @@ sap.ui.define([
 			AppManagementHelper.getModel("FilterSelectionJsonModel").setProperty("/enabledEspecifyBarra", false);
 			AppManagementHelper.getModel("FilterSelectionJsonModel").setProperty("/annulateCreatedStatus", !!oLicense.Id);
 
-			// // Issue #518 -> Set Tipo de Licencia por defecto según rol.
-			// var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "ope_jefe_cot" || sRol === "ope_jefe_cotdt");
-			// var bOperador = aUserRoles.find(sRol => sRol === "ope_oper-turno_cot" || sRol === "ope_oper-turno_cotdt");
-			// if (bJefeTurnoCOT || bOperador) {
-			// 	AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "EM");
-			// }
 
-			// var bProgramacion = aUserRoles.find(sRol => sRol === "ope_programacion_cot" || sRol === "ope_programacion_cotdt");
-			// if (bProgramacion) {
-			// 	AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "TE");
-			// }
-
-			// var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "ope_solic-lic_transba");
-			// if (bSolicitanteLicTBA) {
-			// 	AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "N");
-			// }
 			// Issue #518 -> Set Tipo de Licencia por defecto según rol.
-			var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "Jefe_Turno_COT" || sRol === "Jefe_Turno_COTDT");
-			var bOperador = aUserRoles.find(sRol => sRol === "Operador_COT" || sRol === "Operador_COTDT");
+			//var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "Jefe_Turno_COT" || sRol === "Jefe_Turno_COTDT");
+			 var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "ope_jefe_turno_cot" || sRol === "ope_jefe_turno_cotdt");
+
+			//var bOperador = aUserRoles.find(sRol => sRol === "Operador_COT" || sRol === "Operador_COTDT");
+			 var bOperador = aUserRoles.find(sRol => sRol === "ope_oper-turno_cot" || sRol === "ope_oper-turno_cotdt");
 			if (bJefeTurnoCOT || bOperador) {
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "EM");
 			}
 
-			var bProgramacion = aUserRoles.find(sRol => sRol === "Programacion_COT" || sRol === "Programacion_COTDT");
+			//var bProgramacion = aUserRoles.find(sRol => sRol === "Programacion_COT" || sRol === "Programacion_COTDT");
+			 var bProgramacion = aUserRoles.find(sRol => sRol === "ope_programacion_cot" || sRol === "ope_programacion_cotdt");
+
 			if (bProgramacion) {
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "TE");
 			}
 
-			var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "Solicitante_Lic_TBA");
+			//var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "Solicitante_Lic_TBA");
+			 var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "ope_solic-lic_transba");
+
 			if (bSolicitanteLicTBA) {
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "N");
 			}

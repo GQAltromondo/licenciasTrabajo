@@ -3425,12 +3425,12 @@ sap.ui.define([
 		openFileList: function () {
 			var userInfo = AppManagementHelper.getModel("UserJsonModel");
 			var permisosEliminarDocumento = userInfo.oData.roles[0];
-			/*var EnablePermiso = undefined;
+			var EnablePermiso = undefined;
 			if (permisosEliminarDocumento === 'ope_jefe_cot' || 'ope_oper-turno_cot' || 'ope_programacion_cotdt') {
 				EnablePermiso = false;
 			} else {
 				EnablePermiso = true;
-			}*/
+			}
 
 			this.handleRefreshUploadedFilesList();
 
