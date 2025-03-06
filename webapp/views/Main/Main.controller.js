@@ -594,7 +594,7 @@ sap.ui.define([
 
 			var sTxtFlox = "Crear Licencia";
 			if (aUserRoles.includes("ope_solic-lic_transener") || aUserRoles.includes("Solicitante_Lic_S") || aUserRoles.includes(
-				"ope_solic-lic_transba")) {
+				"ope_solic-lic_transba")|| aUserRoles.includes("Solicitante_Lic_TBA")) {
 				sTxtFlox = "Crear Borrador de Licencia";
 			}
 			AppManagementHelper.getModel("FilterSelectionJsonModel").setProperty("/textFlow", sTxtFlox);

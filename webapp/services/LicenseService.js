@@ -3131,7 +3131,10 @@ sap.ui.define([
 				sLicStat = "07";
 
 				// Si el usuario tiene el nuevo rol -> ope_solic-lic_transba
-				var bSolicitanteLicTBA = aRoles.find(sRol => sRol === "ope_solic-lic_transba");
+			//	var bSolicitanteLicTBA = aRoles.find(sRol => sRol === "ope_solic-lic_transba");
+
+				var bSolicitanteLicTBA = aRoles.some(sRol => sRol === "ope_solic-lic_transba" || sRol === "Solicitante_Lic_TBA");
+
 				// Issue # 545 - Solo se debe cambiar el estatus si se uso el boton "Generar Licencia" , si se creo usando el boton "Crear Borrador Licencia"
 				// se debe mantener el estado 30 "Creada"
 				if (bSolicitanteLicTBA && sLicStatAux === "09") {

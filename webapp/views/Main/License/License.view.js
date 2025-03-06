@@ -70,7 +70,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							layoutData: new sap.ui.layout.GridData({
 								span: "L4 M12 S12"
 							}),
-							
+
 							valueState: "{TransferListJsonModel>JefetraValueState}",
 							id: "jefeTrabTrComb",
 							valueStateText: "{TransferListJsonModel>JefetraValueStateText}",
@@ -1353,10 +1353,10 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								})
 							},
 							change: $.proxy(oController.handleDateChange, oController, "DeliveryTableJsonModel"),
-						 enabled: {
+							enabled: {
 								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles"
-							 		, "statusModel>/", "LicenseJsonModel>/Werks",
-								"DeliveryTableJsonModel>enabled",
+									, "statusModel>/", "LicenseJsonModel>/Werks",
+									"DeliveryTableJsonModel>enabled",
 									"DeliveryTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
 								],
 								formatter: oController.rolStatusEdition("entregas/")
@@ -2027,7 +2027,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							parts: ["UserJsonModel>/roles"],
 							formatter: function (aRoles) {
 								if (aRoles.includes("ope_solic-lic_transener") || aRoles.includes("Solicitante_Lic_S") || aRoles.includes(
-									"ope_solic-lic_transba")) {
+									"ope_solic-lic_transba") || aRoles.includes("Solicitante_Lic_TBA")) {
 									return "Generar Licencia";
 								}
 								return "Enviar a Coordinación";
@@ -2037,7 +2037,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							parts: ["UserJsonModel>/roles"],
 							formatter: function (aRoles) {
 								if (aRoles.includes("ope_solic-lic_transener") || aRoles.includes("Solicitante_Lic_S") || aRoles.includes(
-									"ope_solic-lic_transba")) {
+									"ope_solic-lic_transba") || aRoles.includes("Solicitante_Lic_TBA")) {
 									return "Generar Licencia";
 								}
 								return "Enviar a Coordinación";
@@ -2103,7 +2103,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 					]
 				}).addStyleClass("barTransener")
 			],
-		content: [
+			content: [
 				// new sap.m.HBox({
 				// 	visible: {
 				// 		parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "DisableControlsJsonModel>/visibleSol"],
