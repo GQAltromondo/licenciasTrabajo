@@ -21,18 +21,10 @@
       "ope_oper-turno_cot"
     ],
     "view": [
-      "ope_coord-mant_3001",
-      "ope_coord-mant_3002",
-      "ope_coord-mant_1001",
-      "ope_coord-mant_1002",
-      "ope_coord-mant_1003"
+      "ope_coord-mant"
     ],
     "!ButtonLicense": [
-      "ope_coord-mant_3001",
-      "ope_coord-mant_3002", 
-      "ope_coord-mant_1001",
-      "ope_coord-mant_1002",
-      "ope_coord-mant_1003"
+      "ope_coord-mant"
     ],
     "!ButtonSolicitud": [
       "ope_jefe_turno_cot",
@@ -88,21 +80,13 @@
       "ope_tramitador"
     ],
     "view": [
-      "ope_coord-mant_3001",
-      "ope_coord-mant_3002",
-      "ope_coord-mant_1001",
-      "ope_coord-mant_1002",
-      "ope_coord-mant_1003"
+      "ope_coord-mant"
     ]
   },
   "observaciones": {
     "botonAnulacion": [
       "Asistencia_Mantenimiento",
-      "ope_coord-mant_3001",
-      "ope_coord-mant_3002",
-      "ope_coord-mant_1001",
-      "ope_coord-mant_1002",
-      "ope_coord-mant_1003",
+      "ope_coord-mant",
       "ope_jefe_turno_cotdt",
       "ope_jefe_turno_cot",
       "ope_programacion_cot",
@@ -111,11 +95,7 @@
   },
   "listado": {
     "botonCoordinar": [
-      "ope_coord-mant_3001",
-      "ope_coord-mant_3002",
-      "ope_coord-mant_1001",
-      "ope_coord-mant_1002",
-      "ope_coord-mant_1003",
+      "ope_coord-mant",
       "Asistencia_Mantenimiento"
     ],
     "botonTramitar": [
@@ -131,11 +111,7 @@
       "Jefe_Trabajo_Suplente",
       "Tramitador",
       "ope_tramitador",
-      "ope_coord-mant_3001",
-      "ope_coord-mant_3002",
-      "ope_coord-mant_1001",
-      "ope_coord-mant_1002",
-      "ope_coord-mant_1003"
+      "ope_coord-mant"
     ],
     "!BotonSolicitudListado": [
       "ope_jefe_turno_cot",
@@ -150,11 +126,7 @@
       "ope_solic-lic_transba"
     ],
     "!ButonDuplicateLicenseCoordinator": [
-      "ope_coord-mant_3001",
-      "ope_coord-mant_3002",
-      "ope_coord-mant_1001",
-      "ope_coord-mant_1002",
-      "ope_coord-mant_1003"
+      "ope_coord-mant"  
     ],
     "BotonLicenciaListado": [
       "ope_jefe_cotdt",
@@ -174,11 +146,7 @@
       "ope_tramitador"
     ],
     "!BotonLicenciaListado": [
-      "ope_coord-mant_3001",
-      "ope_coord-mant_3002",
-      "ope_coord-mant_1001",
-      "ope_coord-mant_1002",
-      "ope_coord-mant_1003"
+      "ope_coord-mant"
     ],
     "tramitacionMasiva": [
       "Tramitador",
@@ -194,11 +162,7 @@
   "default": {
     "view": [
       "Asistencia_Mantenimiento",
-      "ope_coord-mant_3001",
-      "ope_coord-mant_3002",
-      "ope_coord-mant_1001",
-      "ope_coord-mant_1002",
-      "ope_coord-mant_1003",
+      "ope_coord-mant",
       "ope_jefe_cotdt",
       "ope_jefe_cot",
       "Jefe_Trabajo",

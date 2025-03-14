@@ -48,11 +48,11 @@ sap.ui.define([
 					//for local testing, set mock data
 					if (oModel.getData().name) {
 
-						var cUrl = sap.ui.getCore().getModel("appCurrentInfo").appUrl + '/IAS/service/scim/Users?filter=userName eq "' + oModel.getData().name + '"'
+						//var cUrl = sap.ui.getCore().getModel("appCurrentInfo").appUrl + '/IAS/service/scim/Users?filter=userName eq "' + oModel.getData().name + '"'
 
 						// debugger
 						
-						// var cUrl = sap.ui.getCore().getModel("appCurrentInfo").appUrl + '/IAS/service/scim/Users?filter=userName eq "BARREFED"'
+						 var cUrl = sap.ui.getCore().getModel("appCurrentInfo").appUrl + '/IAS/service/scim/Users?filter=userName eq "GARRIANA"'
 
 
 						//Llamar a API del IAS

@@ -119,11 +119,7 @@
 		"tramitacion": {
 			"botonCalendario": [
 				"Asistencia_Mantenimiento",
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003",
+				"ope_coord-mant",
 				"ope_jefe_cotdt",
 				"ope_jefe_cot",
 				"Jefe_Trabajo",
@@ -243,11 +239,7 @@
 		"observacion": {
 			"botonVerAnulacion": [
 				"Asistencia_Mantenimiento",
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003",
+				"ope_coord-mant",
 				"ope_jefe_cotdt",
 				"ope_jefe_cot",
 				"Jefe_Trabajo",
@@ -271,11 +263,7 @@
 		"general": {
 			"!ButtonEditLicense": [
 				"Asistencia_Mantenimiento",
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003",
+				"ope_coord-mant",
 				"ope_jefe_cotdt",
 				"ope_jefe_cot",
 				"Jefe_Trabajo",
@@ -296,11 +284,7 @@
 			],
 			"!ButtonAddTramitacion": [
 				"Asistencia_Mantenimiento",
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003",
+				"ope_coord-mant",
 				"ope_jefe_cotdt",
 				"ope_jefe_cot",
 				"Jefe_Trabajo",
@@ -390,12 +374,8 @@
 				"ope_solic-lic_transba",
 				"ope_solic-lic_transba",
 				"Tramitador",
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003"
-			]
+				"ope_coord-mant"
+							]
 		},
 		"headerReq": {
 			"all": [
@@ -405,11 +385,7 @@
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
 				"ope_solic-lic_transba",
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003"
+				"ope_coord-mant"
 			]
 		},
 		"header": {
@@ -482,11 +458,7 @@
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
 				"ope_solic-lic_transba",
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003"
+				"ope_coord-mant"
 			],
 			"ButtonEditSol": [
 				"Asistencia_Mantenimiento",
@@ -549,11 +521,7 @@
 				"ope_solic-lic_transba",
 				"ope_solic-lic_transba",
 				"Tramitador",
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003"
+				"ope_coord-mant"
 			]
 		},
 		"header": {
@@ -586,11 +554,7 @@
 				"ope_solic-lic_transba",
 				"ope_solic-lic_transba",
 				"Tramitador",
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003"
+				"ope_coord-mant"
 			]
 		},
 		"botones": {
@@ -653,11 +617,7 @@
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
 				"ope_solic-lic_transba",
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003"
+				"ope_coord-mant"
 			],
 			"ButtonEditSol": [
 				"Asistencia_Mantenimiento",
@@ -670,11 +630,7 @@
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
 				"ope_solic-lic_transba",
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003"
+				"ope_coord-mant"
 			],
 			"ButtonCreateLicenceFromRequest": [
 				"Asistencia_Mantenimiento",
@@ -690,11 +646,7 @@
 			],
 			"ButtonAddReportSemanalCammesa": [
 				"Asistencia_Mantenimiento",
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003"
+				"ope_coord-mant"
 			],
 			"!ButtonEditSol": [
 				"ope_jefe_turno_cot",
@@ -737,11 +689,7 @@
 				"ope_solic-lic_transener",
 				"ope_solic-lic_transba",
 				"ope_solic-lic_transba",
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003"
+				"ope_coord-mant"
 			]
 		},
 		"header": {
@@ -763,11 +711,7 @@
 				"ope_solic-lic_transener",
 				"ope_solic-lic_transba",
 				"ope_solic-lic_transba",
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003"
+				"ope_coord-mant"
 			]
 		},
 		"botones": {
@@ -824,11 +768,7 @@
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
 				"ope_solic-lic_transba",
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003"
+				"ope_coord-mant"
 			],
 			"ButtonEditSol": [
 				"Asistencia_Mantenimiento",
@@ -841,11 +781,7 @@
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
 				"ope_solic-lic_transba",
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003"
+				"ope_coord-mant"
 			],
 			"ButtonCreateLicenceFromRequest": [
 				"Asistencia_Mantenimiento",
@@ -861,11 +797,7 @@
 			],
 			"ButtonAddReportSemanalCammesa": [
 				"Asistencia_Mantenimiento",
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003"
+				"ope_coord-mant"
 			],
 			"!ButtonEditSol": [
 				"ope_jefe_turno_cot",
@@ -980,12 +912,7 @@
 		"tramitacion": {
 			"botonCalendario": [
 				"Asistencia_Mantenimiento",
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003"
-				,
+				"ope_coord-mant",
 				"ope_jefe_cotdt",
 				"ope_jefe_cot",
 				"Jefe_Trabajo",
@@ -1018,11 +945,7 @@
 	"09": {
 		"coordinacion": {
 			"all": [
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003"
+				"ope_coord-mant"
 			],
 			"!ButtonAddCoordination": [
 				"ope_solic-lic_transener",
@@ -1033,11 +956,7 @@
 		},
 		"observacion": {
 			"all": [
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003"
+				"ope_coord-mant"
 			],
 			"!ButtonAddObservation": [
 				"ope_solic-lic_transener",
@@ -1048,11 +967,7 @@
 		},
 		"botones": {
 			"AnnulateButton": [
-				"ope_coord-mant_3001",
-				"ope_coord-mant_3002",
-				"ope_coord-mant_1001",
-				"ope_coord-mant_1002",
-				"ope_coord-mant_1003"
+				"ope_coord-mant"
 			],
 			"ButtonCreateLicenceFromRequest": [
 				"Asistencia_Mantenimiento",
@@ -1071,11 +986,7 @@
 	"default": {
 		"view": [
 			"Asistencia_Mantenimiento",
-			"ope_coord-mant_3001",
-			"ope_coord-mant_3002",
-			"ope_coord-mant_1001",
-			"ope_coord-mant_1002",
-			"ope_coord-mant_1003",
+			"ope_coord-mant",
 			"ope_jefe_cotdt",
 			"ope_jefe_cot",
 			"Jefe_Trabajo",
