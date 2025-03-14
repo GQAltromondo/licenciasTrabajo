@@ -2868,7 +2868,8 @@ sap.ui.define([
 					oDatosAnteriores.Intercerr !== oDatosARefrescar.Intercerr || oDatosAnteriores.Equimov !== oDatosARefrescar.Equimov ||
 					oDatosAnteriores.Patadic !== oDatosARefrescar.Patadic) {
 					//vuelvo al estado anterior
-					AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Licstat", this._estadoPrevio);
+					//GQ FIX 25/02	
+					//AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Licstat", this._estadoPrevio);
 					BusyDialogHelper.close();
 					return MessageBoxHelper.showAlert("Alerta",
 						"Algunos datos de los unifilares no están actualizados con los ultimos cambios realizados. Se refrescará la información actual. Revise si es correcta e intente guardar nuevamente."
@@ -3424,12 +3425,12 @@ sap.ui.define([
 		openFileList: function () {
 			var userInfo = AppManagementHelper.getModel("UserJsonModel");
 			var permisosEliminarDocumento = userInfo.oData.roles[0];
-			/*var EnablePermiso = undefined;
+			var EnablePermiso = undefined;
 			if (permisosEliminarDocumento === 'ope_jefe_cot' || 'ope_oper-turno_cot' || 'ope_programacion_cotdt') {
 				EnablePermiso = false;
 			} else {
 				EnablePermiso = true;
-			}*/
+			}
 
 			this.handleRefreshUploadedFilesList();
 

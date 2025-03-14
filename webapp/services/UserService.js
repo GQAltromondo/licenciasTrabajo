@@ -51,6 +51,11 @@ sap.ui.define([
 
 						var cUrl = sap.ui.getCore().getModel("appCurrentInfo").appUrl + '/IAS/service/scim/Users?filter=userName eq "' + oModel.getData().name + '"'
 
+						// debugger
+						
+						// var cUrl = sap.ui.getCore().getModel("appCurrentInfo").appUrl + '/IAS/service/scim/Users?filter=userName eq "GARRIANA"'
+
+
 						//Llamar a API del IAS
 						$.ajax({
 
@@ -106,7 +111,7 @@ sap.ui.define([
 
 			//debugger;
 
-			var aGroupsTemporal = datos[0].groups;
+			var aGroupsTemporal = datos[0].corporateGroups ? datos[0].corporateGroups : datos[0].groups;
 
 			var aGroups = aGroupsTemporal.map(function (fila) {
 				return fila.value;
