@@ -76,8 +76,7 @@ sap.ui.define([
 		},
 		//mergea esto develop
 		onInit: function () {
-			var cUrl = this.getBaseURL()
-			var oRouter = AppManagementHelper.getAppRouter();
+					var oRouter = AppManagementHelper.getAppRouter();
 			AppManagementHelper.getModel("OrderNumberJsonModel").setData({
 				Odering: "down"
 			});
@@ -101,7 +100,7 @@ sap.ui.define([
 
 
 			});
-			UserService.loadModel()
+
 			oDataService.getModel("SelectModel")
 
 		},
@@ -109,33 +108,6 @@ sap.ui.define([
 			let aPuestosTrabajo = await LicenseService.getPuestosTrabajo(empresa)
 			return aPuestosTrabajo;
 		},
-		getBaseURL: function () {
-
-			//debugger;
-
-			var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id");
-
-			var appModel = AppManagementHelper.getModel("appId")
-			appModel.setData(appId)
-
-			//var appId = this.getManifestEntry("/sap.app/id");
-			var appPath = appId.replaceAll(".", "/");
-			var appModulePath = jQuery.sap.getModulePath(appPath);
-
-			var jsonModel = sap.ui.getCore().getModel("appCurrentInfo");
-			//checks if the model exists
-			if (!jsonModel) {
-				jsonModel = new sap.ui.model.json.JSONModel();
-				jsonModel.setSizeLimit(9999);
-				jsonModel.appUrl = appModulePath;
-				sap.ui.getCore().setModel(jsonModel, "appCurrentInfo");
-				//initilializing = appModulePath; 
-				jsonModel.setData({});
-			}
-			return appModulePath;
-
-		},
-
 		_onHomeRouteMatched: function () {
 			var oRouter = AppManagementHelper.getAppRouter();
 
@@ -216,7 +188,7 @@ sap.ui.define([
 
 			var aRoles = AppManagementHelper.getModel("UserJsonModel").getData().roles;
 			//No se debe validar Visualizadores
-			if (aRoles.indexOf("Visualizador") == -1) {
+			if (!aRoles.includes("Visualizador") && !aRoles.includes("ope_visualizador")) {
 				if (!this._oAlternativeLabelProm) {
 					this._oAlternativeLabelProm = checkAlternativeLabelService.getPromise();
 				}
@@ -624,23 +596,23 @@ sap.ui.define([
 
 			// Issue #518 -> Set Tipo de Licencia por defecto según rol.
 			//var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "Jefe_Turno_COT" || sRol === "Jefe_Turno_COTDT");
-			 var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "ope_jefe_turno_cot" || sRol === "ope_jefe_turno_cotdt");
+			var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "ope_jefe_turno_cot" || sRol === "ope_jefe_turno_cotdt");
 
 			//var bOperador = aUserRoles.find(sRol => sRol === "Operador_COT" || sRol === "Operador_COTDT");
-			 var bOperador = aUserRoles.find(sRol => sRol === "ope_oper-turno_cot" || sRol === "ope_oper-turno_cotdt");
+			var bOperador = aUserRoles.find(sRol => sRol === "ope_oper-turno_cot" || sRol === "ope_oper-turno_cotdt");
 			if (bJefeTurnoCOT || bOperador) {
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "EM");
 			}
 
 			//var bProgramacion = aUserRoles.find(sRol => sRol === "Programacion_COT" || sRol === "Programacion_COTDT");
-			 var bProgramacion = aUserRoles.find(sRol => sRol === "ope_programacion_cot" || sRol === "ope_programacion_cotdt");
+			var bProgramacion = aUserRoles.find(sRol => sRol === "ope_programacion_cot" || sRol === "ope_programacion_cotdt");
 
 			if (bProgramacion) {
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "TE");
 			}
 
 			//var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "Solicitante_Lic_TBA");
-			 var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "ope_solic-lic_transba");
+			var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "ope_solic-lic_transba");
 
 			if (bSolicitanteLicTBA) {
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "N");
