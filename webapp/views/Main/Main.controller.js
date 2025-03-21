@@ -76,7 +76,7 @@ sap.ui.define([
 		},
 		//mergea esto develop
 		onInit: function () {
-			var cUrl = this.getBaseURL()
+			
 			var oRouter = AppManagementHelper.getAppRouter();
 			AppManagementHelper.getModel("OrderNumberJsonModel").setData({
 				Odering: "down"
@@ -101,7 +101,7 @@ sap.ui.define([
 
 
 			});
-			UserService.loadModel()
+			
 			oDataService.getModel("SelectModel")
 
 		},
@@ -109,32 +109,7 @@ sap.ui.define([
 			let aPuestosTrabajo = await LicenseService.getPuestosTrabajo(empresa)
 			return aPuestosTrabajo;
 		},
-		getBaseURL: function () {
-
-			//debugger;
-
-			var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id");
-
-			var appModel = AppManagementHelper.getModel("appId")
-			appModel.setData(appId)
-
-			//var appId = this.getManifestEntry("/sap.app/id");
-			var appPath = appId.replaceAll(".", "/");
-			var appModulePath = jQuery.sap.getModulePath(appPath);
-
-			var jsonModel = sap.ui.getCore().getModel("appCurrentInfo");
-			//checks if the model exists
-			if (!jsonModel) {
-				jsonModel = new sap.ui.model.json.JSONModel();
-				jsonModel.setSizeLimit(9999);
-				jsonModel.appUrl = appModulePath;
-				sap.ui.getCore().setModel(jsonModel, "appCurrentInfo");
-				//initilializing = appModulePath; 
-				jsonModel.setData({});
-			}
-			return appModulePath;
-
-		},
+		
 
 		_onHomeRouteMatched: function () {
 			var oRouter = AppManagementHelper.getAppRouter();
@@ -216,7 +191,7 @@ sap.ui.define([
 
 			var aRoles = AppManagementHelper.getModel("UserJsonModel").getData().roles;
 			//No se debe validar Visualizadores
-			if (aRoles.indexOf("Visualizador") == -1) {
+			if (!aRoles.includes("ope_visualizador")) {
 				if (!this._oAlternativeLabelProm) {
 					this._oAlternativeLabelProm = checkAlternativeLabelService.getPromise();
 				}
