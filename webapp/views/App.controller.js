@@ -13,14 +13,40 @@ sap.ui.define([
 		setApp: function (oApp) {
 			AppManagementHelper.setApp(oApp);
 			this.setApplicationModels();
-		}, //
-		onInit: function () {
-			var cUrl = this.getBaseURL();
 		},
-	
 
+		onInit: function () {
+		
+		},
+
+		getBaseURL: function () {
+
+			//debugger;
+
+			var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id");
+
+			var appModel = AppManagementHelper.getModel("appId")
+			appModel.setData(appId)
+
+			//var appId = this.getManifestEntry("/sap.app/id");
+			var appPath = appId.replaceAll(".", "/");
+			var appModulePath = jQuery.sap.getModulePath(appPath);
+
+			var jsonModel = sap.ui.getCore().getModel("appCurrentInfo");
+			//checks if the model exists
+			if (!jsonModel) {
+				jsonModel = new sap.ui.model.json.JSONModel();
+				jsonModel.setSizeLimit(9999);
+				jsonModel.appUrl = appModulePath;
+				sap.ui.getCore().setModel(jsonModel, "appCurrentInfo");
+				//initilializing = appModulePath; 
+				jsonModel.setData({});
+			}
+			return appModulePath;
+
+		},
 		setApplicationModels: function () {
-
+			var cUrl = this.getBaseURL();
 			var sPath = FioriHelper.getAppPath();
 			var permisosModel = AppManagementHelper.getModel("permisosModel");
 			permisosModel.loadData(sPath + "conf/permisos.json", "", false);
@@ -28,7 +54,7 @@ sap.ui.define([
 			var statusPermisosModel = AppManagementHelper.getModel("statusModel");
 			statusPermisosModel.loadData(sPath + "conf/permisosPorEstado.json", "", false);
 
-			UserService.loadModel()
+			UserService.loadModel();
 
 			AppManagementHelper.getModel("RapidSearchJsonModel").setData({
 				searchCriteria: ""

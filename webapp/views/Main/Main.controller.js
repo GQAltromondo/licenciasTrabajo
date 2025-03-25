@@ -76,11 +76,12 @@ sap.ui.define([
 		},
 		//mergea esto develop
 		onInit: function () {
-			
+
 			var oRouter = AppManagementHelper.getAppRouter();
 			AppManagementHelper.getModel("OrderNumberJsonModel").setData({
 				Odering: "down"
 			});
+			this.validateCheckAlternativeLabel()
 			AppManagementHelper.getModel("vistaSeleccionada");
 			AppManagementHelper.getModel('vistaSeleccionada').setProperty("/vista", 0);
 			oRouter.getRoute("Licencias").attachPatternMatched(this._routePatternMatched, this);
@@ -101,7 +102,7 @@ sap.ui.define([
 
 
 			});
-			
+
 			oDataService.getModel("SelectModel")
 
 		},
@@ -109,7 +110,7 @@ sap.ui.define([
 			let aPuestosTrabajo = await LicenseService.getPuestosTrabajo(empresa)
 			return aPuestosTrabajo;
 		},
-		
+
 
 		_onHomeRouteMatched: function () {
 			var oRouter = AppManagementHelper.getAppRouter();
@@ -183,68 +184,108 @@ sap.ui.define([
 				Reanudations: []
 			});
 		},
-
-		_routePatternMatched: function (oEvent) {
-			var sKey = oEvent.getParameter("arguments").url;
-			// Issue 523 - Se debe verificar el indicador de alternative label cuando inicia la app , en el caso que no se cumplan las condiciones
-			// se debe mostrar un error al usuario y salir de la app
-
+		validateCheckAlternativeLabel: function () {
 			var aRoles = AppManagementHelper.getModel("UserJsonModel").getData().roles;
-			//No se debe validar Visualizadores
-			if (!aRoles.includes("ope_visualizador")) {
-				if (!this._oAlternativeLabelProm) {
-					this._oAlternativeLabelProm = checkAlternativeLabelService.getPromise();
-				}
-				this._oAlternativeLabelProm.then((oData) => {
-					// Se solicita agregar en el toolbar de panel de filtros la sociedad y id de sistema de alternative label
-					this.getView().setModel(new sap.ui.model.json.JSONModel(oData.results[0]), "AlternativeLabel");
-					// Si el status es "ER" - Erroneo ( Si da OK no se debe hacer nada )
-					if (oData.results[0].Status === "ER") {
-						sap.m.MessageBox.error(oData.results[0].Mensaje, {
-							onClose: () => {
-								// Esto solo funciona si se ejecuta dentro del FLP
-								if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
-									var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
-									oCrossAppNavigator.toExternal({
-										target: {
-											semanticObject: "#"
-										}
-									});
-								}
-							}
-						});
-					}
-
-				})
-			} else {
-				this.cleanLicenceInformation();
-				this.validURLToLicense = LicenceHelper.validURLToLicense(sKey);
-				if (this.validURLToLicense) {
-					this._url = sKey;
-				}
-
-				var refreshSearch = AppManagementHelper.getModel("refreshSearch").getData().data;
-
-				if (refreshSearch) {
-					this.makeFilters(0);
-				}
+			if (!this._oAlternativeLabelProm) {
+				this._oAlternativeLabelProm = checkAlternativeLabelService.getPromise();
 			}
-			this._oAlternativeLabelProm.then((oData) => {
-				if (oData.results[0].Status === "OK") {
-					this.cleanLicenceInformation();
-					this.validURLToLicense = LicenceHelper.validURLToLicense(sKey);
-					if (this.validURLToLicense) {
-						this._url = sKey;
+
+			this._oAlternativeLabelProm
+				.then((oData) => {
+
+					if (!oData.results || oData.results.length === 0) {
+						return;
 					}
 
-					var refreshSearch = AppManagementHelper.getModel("refreshSearch").getData().data;
+					var oResult = oData.results[0];
 
-					if (refreshSearch) {
-						this.makeFilters(0);
+					this.getView().setModel(new sap.ui.model.json.JSONModel(oResult), "AlternativeLabel");
+
+					if (oResult.Status === "ER") {
+
+						setTimeout(() => {
+							sap.m.MessageBox.alert(oResult.Mensaje, {
+								onClose: () => {
+
+									if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
+										var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
+										oCrossAppNavigator.toExternal({ target: { semanticObject: "#" } });
+									}
+								}
+							});
+						}, 100);
+						return;
 					}
-				}
-			});
+				})
+				.catch((error) => {
+					sap.m.MessageBox.error("Error al obtener información de Alternative Label. Intente nuevamente.");
+				});
 		},
+		_routePatternMatched: function (oEvent) {
+			var oArgs = oEvent?.getParameter("arguments") || {};
+			var sKey = oArgs.url || ""; // Si no hay URL, asignamos una cadena vacía
+
+
+
+			if (aRoles.includes("ope_visualizador")) {
+				this._handleValidUser(sKey);
+				return;
+			}
+
+			if (!this._oAlternativeLabelProm) {
+				this._oAlternativeLabelProm = checkAlternativeLabelService.getPromise();
+			}
+
+			this._oAlternativeLabelProm
+				.then((oData) => {
+
+					if (!oData.results || oData.results.length === 0) {
+						return;
+					}
+
+					var oResult = oData.results[0];
+
+					this.getView().setModel(new sap.ui.model.json.JSONModel(oResult), "AlternativeLabel");
+
+					if (oResult.Status === "ER") {
+
+						setTimeout(() => {
+							sap.m.MessageBox.alert(oResult.Mensaje, {
+								onClose: () => {
+
+									if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
+										var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
+										oCrossAppNavigator.toExternal({ target: { semanticObject: "#" } });
+									}
+								}
+							});
+						}, 100);
+						return;
+					}
+
+					this._handleValidUser(sKey);
+				})
+				.catch((error) => {
+					sap.m.MessageBox.error("Error al obtener información de Alternative Label. Intente nuevamente.");
+				});
+		},
+
+		_handleValidUser: function (sKey) {
+
+			this.cleanLicenceInformation();
+			this.validURLToLicense = LicenceHelper.validURLToLicense(sKey);
+
+			if (this.validURLToLicense) {
+				this._url = sKey;
+			}
+
+			var refreshSearch = AppManagementHelper.getModel("refreshSearch").getData().data;
+			if (refreshSearch) {
+				this.makeFilters(0);
+			}
+		}
+		,
+
 
 		/******************************************************formatting*****************************************************/
 		formatCurrency: function (amount, currencyKey) {
@@ -569,7 +610,7 @@ sap.ui.define([
 
 			var sTxtFlox = "Crear Licencia";
 			if (aUserRoles.includes("ope_solic-lic_transener") || aUserRoles.includes("Solicitante_Lic_S") || aUserRoles.includes(
-				"ope_solic-lic_transba")|| aUserRoles.includes("Solicitante_Lic_TBA")) {
+				"ope_solic-lic_transba") || aUserRoles.includes("Solicitante_Lic_TBA")) {
 				sTxtFlox = "Crear Borrador de Licencia";
 			}
 			AppManagementHelper.getModel("FilterSelectionJsonModel").setProperty("/textFlow", sTxtFlox);
@@ -1542,7 +1583,8 @@ sap.ui.define([
 			centroToRegion.loadData(sPath + "/conf/centroToRegion.json", "", false);
 
 			//	AppManagementHelper.getModel("FiltersJsonModel").setProperty("/Werks/value", werks);
-			var empresa = this.society === "100" ? "TRANSENER" : "TRANSBA";
+			// var empresa = this.society === "100" ? "TRANSENER" : "TRANSBA";
+			var empresa = this.society
 			LimitacionesTecnicas.loadLimitacionesTecnicas(empresa);
 
 		},
