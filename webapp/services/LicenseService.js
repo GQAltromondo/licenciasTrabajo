@@ -148,36 +148,25 @@ sap.ui.define([
 			var oModel = AppManagementHelper.getModel("TipoLicenciaCatalogModel");
 			var aData = [];
 
-			// var bJefeTurnoCOT = aRoles.find((r) => {
-			// 	// return r === "ope_jefe_cot" || r === "ope_jefe_cotdt"
-			// 	//FIX GQ 26-12
-			// 	 return r === "ope_jefe_turno_cot" || r === "ope_jefe_turno_cotdt"
-
-			// });
-
-			// var bProgramacion = aRoles.find((r) => {
-			// 	return r === "ope_programacion_cot" || r === "ope_programacion_cotdt"
-			// });
-
-			// var bOperador = aRoles.find((r) => {
-			// 	return r === "ope_oper-turno_cot" || r === "ope_oper-turno_cotdt"
-			// });
-
-			// var bSolicitanteLicTBA = aRoles.find(sRol => sRol === "ope_solic-lic_transba");
 			var bJefeTurnoCOT = aRoles.find((r) => {
-				return r === "Jefe_Turno_COT" || r === "Jefe_Turno_COTDT"
+				//return r === "Jefe_Turno_COT" || r === "Jefe_Turno_COTDT"
+				return r === "ope_jefe_turno_cot" || r === "ope_jefe_turno_cotdt"
 			});
 
 			var bProgramacion = aRoles.find((r) => {
-				return r === "Programacion_COT" || r === "Programacion_COTDT"
+				//return r === "Programacion_COT" || r === "Programacion_COTDT"
+				 return r === "ope_programacion_cot" || r === "ope_programacion_cotdt"
 			});
 
 			var bOperador = aRoles.find((r) => {
-				return r === "Operador_COT" || r === "Operador_COTDT"
+				//return r === "Operador_COT" || r === "Operador_COTDT"
+				 return r === "ope_oper-turno_cot" || r === "ope_oper-turno_cotdt"
 			});
-			
+
 			var bSolicitanteLicTBA = aRoles.find(sRol => {
-				return sRol === "ope_solic-lic_transba" || sRol === "Solicitante_Lic_TBA"
+				//return sRol === "Solicitante_Lic_TBA"
+				 return sRol === "ope_solic-lic_transba" 
+
 			})
 
 			if (bJefeTurnoCOT) {
@@ -3131,7 +3120,7 @@ sap.ui.define([
 				sLicStat = "07";
 
 				// Si el usuario tiene el nuevo rol -> ope_solic-lic_transba
-			//	var bSolicitanteLicTBA = aRoles.find(sRol => sRol === "ope_solic-lic_transba");
+				//	var bSolicitanteLicTBA = aRoles.find(sRol => sRol === "ope_solic-lic_transba");
 
 				var bSolicitanteLicTBA = aRoles.some(sRol => sRol === "ope_solic-lic_transba" || sRol === "Solicitante_Lic_TBA");
 
