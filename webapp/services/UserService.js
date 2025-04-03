@@ -108,7 +108,8 @@ sap.ui.define([
 
 			//debugger;
 
-			var aGroupsTemporal = datos[0].groups;
+			var aGroupsTemporal = datos[0].corporateGroups ? datos[0].corporateGroups : datos[0].groups;
+
 
 			var aGroups = aGroupsTemporal.map(function (fila) {
 				return fila.value;
