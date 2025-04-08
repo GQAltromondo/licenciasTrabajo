@@ -76,10 +76,12 @@ sap.ui.define([
 		},
 		//mergea esto develop
 		onInit: function () {
-					var oRouter = AppManagementHelper.getAppRouter();
+
+			var oRouter = AppManagementHelper.getAppRouter();
 			AppManagementHelper.getModel("OrderNumberJsonModel").setData({
 				Odering: "down"
 			});
+			this.validateCheckAlternativeLabel()
 			AppManagementHelper.getModel("vistaSeleccionada");
 			AppManagementHelper.getModel('vistaSeleccionada').setProperty("/vista", 0);
 			oRouter.getRoute("Licencias").attachPatternMatched(this._routePatternMatched, this);
@@ -108,6 +110,8 @@ sap.ui.define([
 			let aPuestosTrabajo = await LicenseService.getPuestosTrabajo(empresa)
 			return aPuestosTrabajo;
 		},
+
+
 		_onHomeRouteMatched: function () {
 			var oRouter = AppManagementHelper.getAppRouter();
 
@@ -180,68 +184,108 @@ sap.ui.define([
 				Reanudations: []
 			});
 		},
-
-		_routePatternMatched: function (oEvent) {
-			var sKey = oEvent.getParameter("arguments").url;
-			// Issue 523 - Se debe verificar el indicador de alternative label cuando inicia la app , en el caso que no se cumplan las condiciones
-			// se debe mostrar un error al usuario y salir de la app
-
+		validateCheckAlternativeLabel: function () {
 			var aRoles = AppManagementHelper.getModel("UserJsonModel").getData().roles;
-			//No se debe validar Visualizadores
-			if (!aRoles.includes("Visualizador") && !aRoles.includes("ope_visualizador")) {
-				if (!this._oAlternativeLabelProm) {
-					this._oAlternativeLabelProm = checkAlternativeLabelService.getPromise();
-				}
-				this._oAlternativeLabelProm.then((oData) => {
-					// Se solicita agregar en el toolbar de panel de filtros la sociedad y id de sistema de alternative label
-					this.getView().setModel(new sap.ui.model.json.JSONModel(oData.results[0]), "AlternativeLabel");
-					// Si el status es "ER" - Erroneo ( Si da OK no se debe hacer nada )
-					if (oData.results[0].Status === "ER") {
-						sap.m.MessageBox.error(oData.results[0].Mensaje, {
-							onClose: () => {
-								// Esto solo funciona si se ejecuta dentro del FLP
-								if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
-									var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
-									oCrossAppNavigator.toExternal({
-										target: {
-											semanticObject: "#"
-										}
-									});
-								}
-							}
-						});
-					}
-
-				})
-			} else {
-				this.cleanLicenceInformation();
-				this.validURLToLicense = LicenceHelper.validURLToLicense(sKey);
-				if (this.validURLToLicense) {
-					this._url = sKey;
-				}
-
-				var refreshSearch = AppManagementHelper.getModel("refreshSearch").getData().data;
-
-				if (refreshSearch) {
-					this.makeFilters(0);
-				}
+			if (!this._oAlternativeLabelProm) {
+				this._oAlternativeLabelProm = checkAlternativeLabelService.getPromise();
 			}
-			this._oAlternativeLabelProm.then((oData) => {
-				if (oData.results[0].Status === "OK") {
-					this.cleanLicenceInformation();
-					this.validURLToLicense = LicenceHelper.validURLToLicense(sKey);
-					if (this.validURLToLicense) {
-						this._url = sKey;
+
+			this._oAlternativeLabelProm
+				.then((oData) => {
+
+					if (!oData.results || oData.results.length === 0) {
+						return;
 					}
 
-					var refreshSearch = AppManagementHelper.getModel("refreshSearch").getData().data;
+					var oResult = oData.results[0];
 
-					if (refreshSearch) {
-						this.makeFilters(0);
+					this.getView().setModel(new sap.ui.model.json.JSONModel(oResult), "AlternativeLabel");
+
+					if (oResult.Status === "ER") {
+
+						setTimeout(() => {
+							sap.m.MessageBox.alert(oResult.Mensaje, {
+								onClose: () => {
+
+									if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
+										var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
+										oCrossAppNavigator.toExternal({ target: { semanticObject: "#" } });
+									}
+								}
+							});
+						}, 100);
+						return;
 					}
-				}
-			});
+				})
+				.catch((error) => {
+					sap.m.MessageBox.error("Error al obtener información de Alternative Label. Intente nuevamente.");
+				});
 		},
+		_routePatternMatched: function (oEvent) {
+			var oArgs = oEvent?.getParameter("arguments") || {};
+			var sKey = oArgs.url || ""; // Si no hay URL, asignamos una cadena vacía
+
+
+
+			if (aRoles.includes("ope_visualizador")) {
+				this._handleValidUser(sKey);
+				return;
+			}
+
+			if (!this._oAlternativeLabelProm) {
+				this._oAlternativeLabelProm = checkAlternativeLabelService.getPromise();
+			}
+
+			this._oAlternativeLabelProm
+				.then((oData) => {
+
+					if (!oData.results || oData.results.length === 0) {
+						return;
+					}
+
+					var oResult = oData.results[0];
+
+					this.getView().setModel(new sap.ui.model.json.JSONModel(oResult), "AlternativeLabel");
+
+					if (oResult.Status === "ER") {
+
+						setTimeout(() => {
+							sap.m.MessageBox.alert(oResult.Mensaje, {
+								onClose: () => {
+
+									if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
+										var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
+										oCrossAppNavigator.toExternal({ target: { semanticObject: "#" } });
+									}
+								}
+							});
+						}, 100);
+						return;
+					}
+
+					this._handleValidUser(sKey);
+				})
+				.catch((error) => {
+					sap.m.MessageBox.error("Error al obtener información de Alternative Label. Intente nuevamente.");
+				});
+		},
+
+		_handleValidUser: function (sKey) {
+
+			this.cleanLicenceInformation();
+			this.validURLToLicense = LicenceHelper.validURLToLicense(sKey);
+
+			if (this.validURLToLicense) {
+				this._url = sKey;
+			}
+
+			var refreshSearch = AppManagementHelper.getModel("refreshSearch").getData().data;
+			if (refreshSearch) {
+				this.makeFilters(0);
+			}
+		}
+		,
+
 
 		/******************************************************formatting*****************************************************/
 		formatCurrency: function (amount, currencyKey) {
@@ -394,7 +438,7 @@ sap.ui.define([
 		goToEdit: function (oEvent, bManualPress) {
 			BusyDialogHelper.open();
 			var oFilterSelectionModel = AppManagementHelper.getModel("FilterSelectionJsonModel");
-			//var oDeliveryModel = AppManagementHelper.getModel("DeliveryTableJsonModel");
+			var oDeliveryModel = AppManagementHelper.getModel("DeliveryTableJsonModel");
 			var oDisableControlsJsonModel = AppManagementHelper.getModel("DisableControlsJsonModel");
 			oDisableControlsJsonModel.setProperty("/DaysDeleteVisible", false);
 			oFilterSelectionModel.setProperty("/textFlowSol", "Guardar Cambios");
@@ -441,11 +485,10 @@ sap.ui.define([
 			}
 
 			AppManagementHelper.setNavigationProperties(oLicense);
-
+			LicenceHelper.generateDeliveryDevolution(oLicense);
 			LicenceHelper.generatePlacementRemoval(oLicense);
 			LicenceHelper.generateTurno(oLicense);
 			LicenceHelper.generateInhibicionHabilitacion(oLicense);
-			LicenceHelper.generateDeliveryDevolution(oLicense);
 
 			this.findEstacionCode(oLicense.Tplnr);
 			this.loadCatalogData(oLicense.Werks).then((oCatalogData) => {
@@ -593,27 +636,35 @@ sap.ui.define([
 			AppManagementHelper.getModel("FilterSelectionJsonModel").setProperty("/enabledEspecifyBarra", false);
 			AppManagementHelper.getModel("FilterSelectionJsonModel").setProperty("/annulateCreatedStatus", !!oLicense.Id);
 
+			// // Issue #518 -> Set Tipo de Licencia por defecto según rol.
+			// var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "ope_jefe_cot" || sRol === "ope_jefe_cotdt");
+			// var bOperador = aUserRoles.find(sRol => sRol === "ope_oper-turno_cot" || sRol === "ope_oper-turno_cotdt");
+			// if (bJefeTurnoCOT || bOperador) {
+			// 	AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "EM");
+			// }
 
+			// var bProgramacion = aUserRoles.find(sRol => sRol === "ope_programacion_cot" || sRol === "ope_programacion_cotdt");
+			// if (bProgramacion) {
+			// 	AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "TE");
+			// }
+
+			// var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "ope_solic-lic_transba");
+			// if (bSolicitanteLicTBA) {
+			// 	AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "N");
+			// }
 			// Issue #518 -> Set Tipo de Licencia por defecto según rol.
-			//var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "Jefe_Turno_COT" || sRol === "Jefe_Turno_COTDT");
-			var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "ope_jefe_turno_cot" || sRol === "ope_jefe_turno_cotdt");
-
-			//var bOperador = aUserRoles.find(sRol => sRol === "Operador_COT" || sRol === "Operador_COTDT");
-			var bOperador = aUserRoles.find(sRol => sRol === "ope_oper-turno_cot" || sRol === "ope_oper-turno_cotdt");
+			var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "Jefe_Turno_COT" || sRol === "Jefe_Turno_COTDT");
+			var bOperador = aUserRoles.find(sRol => sRol === "Operador_COT" || sRol === "Operador_COTDT");
 			if (bJefeTurnoCOT || bOperador) {
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "EM");
 			}
 
-			//var bProgramacion = aUserRoles.find(sRol => sRol === "Programacion_COT" || sRol === "Programacion_COTDT");
-			var bProgramacion = aUserRoles.find(sRol => sRol === "ope_programacion_cot" || sRol === "ope_programacion_cotdt");
-
+			var bProgramacion = aUserRoles.find(sRol => sRol === "Programacion_COT" || sRol === "Programacion_COTDT");
 			if (bProgramacion) {
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "TE");
 			}
 
-			//var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "Solicitante_Lic_TBA");
-			var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "ope_solic-lic_transba");
-
+			var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "Solicitante_Lic_TBA");
 			if (bSolicitanteLicTBA) {
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "N");
 			}
@@ -1533,8 +1584,8 @@ sap.ui.define([
 
 			//	AppManagementHelper.getModel("FiltersJsonModel").setProperty("/Werks/value", werks);
 			// var empresa = this.society === "100" ? "TRANSENER" : "TRANSBA";
-			//GQ 2402 Fix Doc 9 paso numero Empresa
-			LimitacionesTecnicas.loadLimitacionesTecnicas(this.society);
+			var empresa = this.society
+			LimitacionesTecnicas.loadLimitacionesTecnicas(empresa);
 
 		},
 

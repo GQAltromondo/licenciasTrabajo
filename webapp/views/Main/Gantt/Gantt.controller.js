@@ -31,8 +31,8 @@ sap.ui.define([
 
 			var search = location.hash.split("?")[1];
 			var url = new URL(location.origin + "?" + search);
-			//	this.empresa = url.searchParams.get("Empresa"); //TODO sacar este hardcodeo, esto es solo para probar la app localmente
-			this.empresa = "100"; // TODO dejar la linea de arriba antes de commitear
+			this.empresa = url.searchParams.get("Empresa"); //TODO sacar este hardcodeo, esto es solo para probar la app localmente
+			//this.empresa = "100"; // TODO dejar la linea de arriba antes de commitear
 			const oTreeTable = this.byId("ganntTable")
 
 			var filtersModel = new sap.ui.model.json.JSONModel();

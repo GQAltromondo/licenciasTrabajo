@@ -16,7 +16,7 @@ sap.ui.define([
 		},
 
 		onInit: function () {
-			var cUrl = this.getBaseURL();
+		
 		},
 
 		getBaseURL: function () {
@@ -46,7 +46,7 @@ sap.ui.define([
 
 		},
 		setApplicationModels: function () {
-
+			var cUrl = this.getBaseURL();
 			var sPath = FioriHelper.getAppPath();
 			var permisosModel = AppManagementHelper.getModel("permisosModel");
 			permisosModel.loadData(sPath + "conf/permisos.json", "", false);
