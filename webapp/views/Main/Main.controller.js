@@ -4434,11 +4434,7 @@ sap.ui.define([
 		},
 
 		goToGantt: function () {
-
-			//ocation.hash = "Gantt_Licencias-Display?Empresa=" + this.society 
-			//	window.open("#" + "Gantt_Licencias-Display?Empresa=" + this.society);
-			//	AppManagementHelper.getAppRouter().navTo("Gantt")
-			this.getOwnerComponent().getRouter().navTo("Gantt");
+			this.getOwnerComponent().getRouter().navTo("Gantt", {empresa: this.society });
 		},
 
 	});

@@ -115,7 +115,7 @@
 			<gnt2:ganttCharts>
 				<gnt2:GanttChartWithTable id="ganttView2" shapeDragEnd="handleShapeDragEnd" height="100px" >
 					<gnt2:table>
-						<Table selectionMode="None" id="ganntTable2"  visibleRowCount="2" selectionBehavior="RowSelector" enableColumnReordering="true" fixedColumnCount="1"
+						<Table selectionMode="MultiToggle" id="ganntTable2"  visibleRowCount="2" selectionBehavior="RowSelector" enableColumnReordering="true" fixedColumnCount="1"
 							rows="{ path: 'TempSeleccionado>/' }">
 							<extension/>
 							<rowSettingsTemplate>
@@ -248,7 +248,7 @@
 				</gnt2:GanttChartWithTable>
 				<gnt2:GanttChartWithTable id="ganttView" shapeDragEnd="handleShapeDragEnd" heigth="100%" >
 					<gnt2:table>
-						<Table selectionMode="MultiToggle" id="ganntTable" selectionBehavior="RowOnly" rowSelectionChange="onRowSelection" enableColumnReordering="true" fixedColumnCount="1"
+						<Table selectionMode="MultiToggle" id="ganntTable" selectionBehavior="RowSelector" rowSelectionChange="onRowSelection" enableColumnReordering="true" fixedColumnCount="1"
 							rows="{ path: 'RequerimentsModel>/data' }">
 							<extension/>
 							<rowSettingsTemplate>

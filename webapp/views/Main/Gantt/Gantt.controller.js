@@ -28,18 +28,21 @@ sap.ui.define([
 	return Controller.extend("Transener.Operaciones.LicenciasTrabajo.views.Main.Gantt.Gantt", {
 
 		onInit: function () {
-
-			var search = location.hash.split("?")[1];
-			var url = new URL(location.origin + "?" + search);
-			//	this.empresa = url.searchParams.get("Empresa"); //TODO sacar este hardcodeo, esto es solo para probar la app localmente
-			this.empresa = "100"; // TODO dejar la linea de arriba antes de commitear
-			const oTreeTable = this.byId("ganntTable")
-
+			this.getOwnerComponent().getRouter()
+				.getRoute("Gantt")
+				.attachPatternMatched(this._onRouteMatched, this);
 			var filtersModel = new sap.ui.model.json.JSONModel();
 			this.getView().setModel(filtersModel, "filters");
 
 		},
+		_onRouteMatched: function (oEvent) {
+			var sEmpresa = oEvent.getParameter("arguments").empresa;
+			this.empresa = sEmpresa; // Asignar el valor a la propiedad de la instancia
+			console.log("ID recibido:", sEmpresa);
+		},
+		
 		onAfterRendering: function () {
+
 			this.prepareSelectsModel();
 			this.loadListModels();
 			this.loadRegiones(this.empresa);
@@ -382,9 +385,9 @@ sap.ui.define([
 			var iMonthHasta = daysInBetWeen.fechahasta.getMonth() + 1;
 
 			var fechahasta = daysInBetWeen.fechahasta.getFullYear().toString() + iMonthHasta.toString().padStart(2,
-				"00") + daysInBetWeen.fechahasta.getDate().toString().padStart(2,"00");
+				"00") + daysInBetWeen.fechahasta.getDate().toString().padStart(2, "00");
 			var fechadesde = daysInBetWeen.fechadesde.getFullYear().toString() + iMonthDesde.toString().padStart(2,
-				"00") + daysInBetWeen.fechadesde.getDate().toString().padStart(2,"00");
+				"00") + daysInBetWeen.fechadesde.getDate().toString().padStart(2, "00");
 			this.reporteSemanalCammesa(fechadesde, fechahasta, this.empresa, daysInBetWeen, aData).then((oMessage) => {
 				BusyDialogHelper.close();
 				sap.m.MessageToast.show(
