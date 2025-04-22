@@ -28,8 +28,6 @@ sap.ui.define([
 			aPromise.push(this.getPromise(sSociedad));
 			aPromise.push(this.getPersonalHabilitadoTecnicosEt(sSociedad));
 			aPromise.push(this.getJefeTrabajoTctPromise(sSociedad));
-			aPromise.push(this.getJefeTrabajoGuiadoPromise(sSociedad));
-			aPromise.push(this.getJefeTrabajoTctGuiadoPromise(sSociedad));
 			Promise.all(aPromise).then(function (aPromisesResolved) {
 				var oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
 				let all = aPromisesResolved[2].results;
@@ -48,9 +46,6 @@ sap.ui.define([
 					Todos: Array.from(todos),
 					TecnicosEt: aPromisesResolved[3].results,
 					JefeDeTrabajoTct: aPromisesResolved[4].results,
-					// Ticket #86190 GQ
-					JefeDeTrabajoGuiado: aPromisesResolved[5],
-					JefeDeTrabajoTctGuiado: aPromisesResolved[6]
 				})
 			}).catch(function (e) {
 				console.log("aaaa")
@@ -59,51 +54,26 @@ sap.ui.define([
 
 		getFiltersPersonalHabilitado: function (sType, sSociedad, sClase, sLote, sLote2) {
 			let filters = [];
-
-			// Filtro obligatorio por Empresa
 			filters.push(new sap.ui.model.Filter("Empresa", sap.ui.model.FilterOperator.EQ, sSociedad));
-
-			// Filtros múltiples para TipoHab con OR
 			if (sType) {
-				let aTypes = [];
-
-				if (Array.isArray(sType)) {
-					aTypes = sType;
-				} else if (typeof sType === "string") {
-					aTypes = sType.split(" ");
-				}
-
-				let aTypeFilters = aTypes.map(function (type) {
-					return new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, type.toUpperCase());
-				});
-
-				if (aTypeFilters.length > 1) {
-					filters.push(new sap.ui.model.Filter(aTypeFilters, false)); // false = OR
-				} else if (aTypeFilters.length === 1) {
-					filters.push(aTypeFilters[0]);
-				}
+				filters.push(new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, sType));
 			}
-
-			// Filtro para ClaseHab
 			if (sClase) {
 				filters.push(new sap.ui.model.Filter("ClaseHab", sap.ui.model.FilterOperator.EQ, sClase));
 			}
-
-			// Filtro para Lote
 			if (sLote) {
 				filters.push(
 					new sap.ui.model.Filter({
 						path: "Lote",
 						operator: sap.ui.model.FilterOperator.EQ,
 						value1: sLote,
+						value2:sLote2,
 						caseSensitive: false
 					})
 				);
 			}
-
 			return filters;
 		},
-
 
 		getPersonalHabilitadoTecnicosEt: function (sSociedad) {
 			var that = this;
@@ -140,45 +110,6 @@ sap.ui.define([
 				})
 			})
 		},
-		getJefeTrabajoGuiadoPromise: function (sSociedad) {
-			var that = this;
-			return new Promise(function (resolve, reject) {
-				oDataServices.getModel("TransenerOperaciones").read(that._entitySet, {
-					filters: that.getFiltersPersonalHabilitado("JT", sSociedad, "H0001", ""),
-					success: function (oData) {
-						const allowedTypes = ["M03", "M07", "M11", "M15", "M19", "M23", "M27"];
-
-						// Filtrar el array de resultados
-						const filteredResults = oData.results.filter(function (item) {
-							return allowedTypes.includes(item.TipoHab);
-						});
-				
-						resolve(filteredResults); // Devuelve solo los filtrados
-					},
-					error: reject
-				});
-			});
-		},
-		getJefeTrabajoTctGuiadoPromise: function (sSociedad) {
-			var that = this;
-			return new Promise(function (resolve, reject) {
-				oDataServices.getModel("TransenerOperaciones").read(that._entitySet, {
-					filters: that.getFiltersPersonalHabilitado("", sSociedad, "H0002", "J", "JN"),
-					success: function (oData) {
-						const allowedTypes = ["M03", "M07", "M11", "M15", "M19", "M23", "M27"];
-
-						// Filtrar el array de resultados
-						const filteredResults = oData.results.filter(function (item) {
-							return allowedTypes.includes(item.TipoHab);
-						});
-				
-						resolve(filteredResults); // Devuelve solo los filtrados
-					},
-					error: reject
-				});
-			});
-		},
-
 
 		getSolicitantePromise: function (sSociedad) {
 			var that = this;

@@ -4614,26 +4614,23 @@ sap.ui.define([
 					text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre}"
 				});
 				if (sKey === "04" || sKey === "05") {
-					//sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate);
-					//sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate);
+					sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate);
+					sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate);
 					sap.ui.getCore().byId("jefeTrabTrComb").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate);
-					sap.ui.getCore().byId("JefeTrabajoGuiadoCombo").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoTctGuiado", oTemplate);
-					sap.ui.getCore().byId("JefeTrabajoSupGuiadoCombo").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoTctGuiado", oTemplate);
+				
 
 				} else if (sKey) {
-					//sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate);
-					//sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate);
+					sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate);
+					sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate);
 					sap.ui.getCore().byId("jefeTrabTrComb").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate);
-					sap.ui.getCore().byId("JefeTrabajoGuiadoCombo").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoGuiado", oTemplate);
-					sap.ui.getCore().byId("JefeTrabajoSupGuiadoCombo").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoGuiado", oTemplate);
+					
 
 				}
 			} else {
-				//sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items");
-				//sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items");
+				sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items");
+				sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items");
 				sap.ui.getCore().byId("jefeTrabTrComb").unbindAggregation("items");
-				sap.ui.getCore().byId("JefeTrabajoGuiadoCombo").bindAggregation("items");
-				sap.ui.getCore().byId("JefeTrabajoSupGuiadoCombo").bindAggregation("items");
+				
 			}
 
 		},
@@ -4654,37 +4651,28 @@ sap.ui.define([
 					text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre}"
 				});
 				if (sValue === "04" || sValue === "05") {
-					// (sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items",
-					// 	"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate) : "";
-					// (sap.ui.getCore().byId("JefeTrabajoSupComb")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items",
-					// 	"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate) : "";
-						(sap.ui.getCore().byId("JefeTrabajoGuiadoCombo")) ? sap.ui.getCore().byId("JefeTrabajoGuiadoCombo").bindAggregation("items",
-							"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate) : "";
-						(sap.ui.getCore().byId("JefeTrabajoSupGuiadoComb")) ? sap.ui.getCore().byId("JefeTrabajoSupGuiadoComb").bindAggregation("items",
-							"PersonalHabilitadoModel>/JefeDeTrabajoTctGuiado", oTemplate) : "";
+					 (sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items",
+					 	"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate) : "";
+					 (sap.ui.getCore().byId("JefeTrabajoSupComb")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items",
+					 	"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate) : "";
 					(sap.ui.getCore().byId("jefeTrabTrComb")) ? sap.ui.getCore().byId("jefeTrabTrComb").bindAggregation("items",
-						"PersonalHabilitadoModel>/JefeDeTrabajoTctGuiado", oTemplate) : "";
+						"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate) : "";
 				} else if (sValue) {
-					// (sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items",
-					// 	"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate) : "";
-					// (sap.ui.getCore().byId("JefeTrabajoSupComb")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items",
-					// 	"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate) : "";
-						(sap.ui.getCore().byId("JefeTrabajoGuiadoCombo")) ? sap.ui.getCore().byId("JefeTrabajoGuiadoCombo").bindAggregation("items",
-							"PersonalHabilitadoModel>/JefeDeTrabajoGuiado", oTemplate) : "";
-						(sap.ui.getCore().byId("JefeTrabajoSupGuiadoComb")) ? sap.ui.getCore().byId("JefeTrabajoSupGuiadoComb").bindAggregation("items",
-							"PersonalHabilitadoModel>/JefeDeTrabajoGuiado", oTemplate) : "";
+					 (sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items",
+					 	"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate) : "";
+					(sap.ui.getCore().byId("JefeTrabajoSupComb")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items",
+					 	"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate) : "";
+						
 					(sap.ui.getCore().byId("jefeTrabTrComb")) ? sap.ui.getCore().byId("jefeTrabTrComb").bindAggregation("items",
 						"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate) : "";
 				} else {
-					// (sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items") : "";
-					// (sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items") : "";
-					(sap.ui.getCore().byId("JefeTrabajoGuiadoCombo")) ? sap.ui.getCore().byId("JefeTrabajoGuiadoCombo").unbindAggregation("items") : "";
-					(sap.ui.getCore().byId("JefeTrabajoSupGuiadoComb")) ? sap.ui.getCore().byId("JefeTrabajoSupGuiadoComb").unbindAggregation("items") : "";
+					 (sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items") : "";
+					 (sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items") : "";
 					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("jefeTrabTrComb").unbindAggregation("items") : "";
 				}
 			} else {
-				(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoSupGuiadoComb").unbindAggregation("items") : "";
-				(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoSupGuiadoComb").unbindAggregation("items") : "";
+				(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items") : "";
+				(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items") : "";
 				(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("jefeTrabTrComb").unbindAggregation("items") : "";
 			}
 
@@ -4742,6 +4730,43 @@ sap.ui.define([
 			return true;
 
 		},
+		updateJefeLabelText: function (oEvent) {
+			const oComboBox = oEvent.getSource(); 
+			const sSelectedKey = oComboBox.getSelectedKey(); 
+			const oModel = this.getView().getModel("PersonalHabilitadoModel");
+			const aItems = oModel.getProperty("/JefeDeTrabajo");
+		
+			const oJefe = aItems.find(item => item.Legajo === sSelectedKey);
+			const sTipoHab = oJefe?.TipoHab;
+		
+			const oLabel = sap.ui.getCore().byId("jefeLabel");
+			if (oLabel) {
+				if (sTipoHab === "M22") {
+					oLabel.setText("Jefe de trabajo guiado");
+				} else {
+					oLabel.setText("Jefe de trabajo");
+				}
+			}
+		},		
+		updateJefeSupLabelText: function (oEvent) {
+			const oComboBox = oEvent.getSource(); 
+			const sSelectedKey = oComboBox.getSelectedKey(); 
+			const oModel = this.getView().getModel("PersonalHabilitadoModel");
+			const aItems = oModel.getProperty("/JefeDeTrabajo");
+		
+			const oJefe = aItems.find(item => item.Legajo === sSelectedKey);
+			const sTipoHab = oJefe?.TipoHab;
+		
+			const oLabel = sap.ui.getCore().byId("jefeSupLabel");
+			if (oLabel) {
+				if (sTipoHab === "M22") {
+					oLabel.setText("Jefe de trabajo guiado");
+				} else {
+					oLabel.setText("Jefe de trabajo");
+				}
+			}
+		},		
+		
 		setErrorState: function (sValueStateProperty, sValueStateTextProperty, sTextForValueState) {
 			var oModelLegacyValidation = AppManagementHelper.getModel("LegacyValidationJsonModel");
 			oModelLegacyValidation.setProperty(sValueStateProperty, "Error");
