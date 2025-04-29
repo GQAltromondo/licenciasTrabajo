@@ -40,7 +40,7 @@ sap.ui.define([
 			this.empresa = sEmpresa; // Asignar el valor a la propiedad de la instancia
 			console.log("ID recibido:", sEmpresa);
 		},
-		
+
 		onAfterRendering: function () {
 
 			this.prepareSelectsModel();
@@ -61,19 +61,23 @@ sap.ui.define([
 
 		onRowSelection: function (oEvent) {
 			var oTable = this.byId("ganntTable");
-
-			var iSelectedIndex = oTable.getSelectedIndex();
-			if (iSelectedIndex !== -1) {
-				var oContext = oTable.getContextByIndex(iSelectedIndex);
-				var oSelectedRowData = oContext.getObject();
+		
+			var aSelectedIndices = oTable.getSelectedIndices();
+			if (aSelectedIndices.length > 0) {
+				var aSelectedData = aSelectedIndices.map(function(iIndex) {
+					var oContext = oTable.getContextByIndex(iIndex);
+					return oContext.getObject();
+				});
+		
 				var oTempSelectionModel = new sap.ui.model.json.JSONModel();
-				oTempSelectionModel.setData([oSelectedRowData]);
+				oTempSelectionModel.setData(aSelectedData);
 				this.getView().setModel(oTempSelectionModel, "TempSeleccionado");
-
+		
 			} else {
-				sap.m.MessageToast.show("No row selected.");
+				sap.m.MessageToast.show("No rows selected.");
 			}
 		},
+		
 
 		loadLicStatus: function () {
 
@@ -208,9 +212,10 @@ sap.ui.define([
 		formatFill: function (EnServicio) {
 
 			if (EnServicio === "") {
-				return "#34e531";
-			} else {
-				return "#e54431";
+				return "#e54431"; // Rojo
+			}
+			if (EnServicio === "X") {
+				return "#34e531"; //Verde
 			}
 		},
 		prepareSelectsModel: function () {

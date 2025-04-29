@@ -113,14 +113,13 @@
 				</gnt2:ContainerToolbar>
 			</gnt2:toolbar>
 			<gnt2:ganttCharts>
-				<gnt2:GanttChartWithTable id="ganttView2" shapeDragEnd="handleShapeDragEnd" height="100px" >
+				<gnt2:GanttChartWithTable id="ganttView2">
 					<gnt2:table>
-						<Table selectionMode="MultiToggle" id="ganntTable2"  visibleRowCount="2" selectionBehavior="RowSelector" enableColumnReordering="true" fixedColumnCount="1"
-							rows="{ path: 'TempSeleccionado>/' }">
+						<Table id="ganntTable2" fixedColumnCount="1" rows="{ path: 'TempSeleccionado>/' }" selectionMode="None">
 							<extension/>
 							<rowSettingsTemplate>
 								<gnt2:GanttRowSettings>
-									<gnt2:shapes1 width="40%">
+									<gnt2:shapes1 >
 										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>LunesI}"
 											endTime="{TempSeleccionado>LunesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
 											strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}"
@@ -246,14 +245,14 @@
 						</gnt-cal:CalendarDefs>
 					</gnt2:calendarDef>-->
 				</gnt2:GanttChartWithTable>
-				<gnt2:GanttChartWithTable id="ganttView" shapeDragEnd="handleShapeDragEnd" heigth="100%" >
+				<gnt2:GanttChartWithTable id="ganttView" heigth="100%" >
 					<gnt2:table>
-						<Table selectionMode="MultiToggle" id="ganntTable" selectionBehavior="RowSelector" rowSelectionChange="onRowSelection" enableColumnReordering="true" fixedColumnCount="1"
+						<Table selectionMode="MultiToggle" id="ganntTable" selectionBehavior="Row" rowSelectionChange="onRowSelection" enableColumnReordering="true" fixedColumnCount="1"
 							rows="{ path: 'RequerimentsModel>/data' }">
 							<extension/>
 							<rowSettingsTemplate>
 								<gnt2:GanttRowSettings>
-									<gnt2:shapes1 width="40%">
+									<gnt2:shapes1 >
 										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>LunesI}"
 											endTime="{RequerimentsModel>LunesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
 											strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}"
