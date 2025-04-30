@@ -4607,6 +4607,14 @@ sap.ui.define([
 		//Issue 562 - Jefes de Trabajo habilitados para TcT
 		//Se borro el binding de la vista para los campos Jefe de trabajo y Jefe de trabajo Suplente  ya que se determina dinamicamente al valor del combo Condiciones de trabajo
 		onSelectionChangeCond: function (oEvent) {
+
+			sap.ui.getCore().byId("JefeTrabajoCombo").setSelectedKey("")
+			sap.ui.getCore().byId("JefeTrabajoSupComb").setSelectedKey("")
+
+			sap.ui.getCore().byId("jefeLabel").setText("Jefe de trabajo");
+			sap.ui.getCore().byId("jefeSupLabel").setText("Jefe de trabajo suplente");
+
+			jefeSupLabel
 			if (oEvent.getParameter("selectedItem")) {
 				var sKey = oEvent.getParameter("selectedItem").getKey();
 				var oTemplate = new sap.ui.core.Item({
@@ -4617,20 +4625,20 @@ sap.ui.define([
 					sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate);
 					sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate);
 					sap.ui.getCore().byId("jefeTrabTrComb").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate);
-				
+
 
 				} else if (sKey) {
 					sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate);
 					sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate);
 					sap.ui.getCore().byId("jefeTrabTrComb").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate);
-					
+
 
 				}
 			} else {
 				sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items");
 				sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items");
 				sap.ui.getCore().byId("jefeTrabTrComb").unbindAggregation("items");
-				
+
 			}
 
 		},
@@ -4651,23 +4659,23 @@ sap.ui.define([
 					text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre}"
 				});
 				if (sValue === "04" || sValue === "05") {
-					 (sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items",
-					 	"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate) : "";
-					 (sap.ui.getCore().byId("JefeTrabajoSupComb")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items",
-					 	"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate) : "";
+					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items",
+						"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate) : "";
+					(sap.ui.getCore().byId("JefeTrabajoSupComb")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items",
+						"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate) : "";
 					(sap.ui.getCore().byId("jefeTrabTrComb")) ? sap.ui.getCore().byId("jefeTrabTrComb").bindAggregation("items",
 						"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate) : "";
 				} else if (sValue) {
-					 (sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items",
-					 	"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate) : "";
+					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items",
+						"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate) : "";
 					(sap.ui.getCore().byId("JefeTrabajoSupComb")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items",
-					 	"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate) : "";
-						
+						"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate) : "";
+
 					(sap.ui.getCore().byId("jefeTrabTrComb")) ? sap.ui.getCore().byId("jefeTrabTrComb").bindAggregation("items",
 						"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate) : "";
 				} else {
-					 (sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items") : "";
-					 (sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items") : "";
+					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items") : "";
+					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items") : "";
 					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("jefeTrabTrComb").unbindAggregation("items") : "";
 				}
 			} else {
@@ -4731,42 +4739,54 @@ sap.ui.define([
 
 		},
 		updateJefeLabelText: function (oEvent) {
-			const oComboBox = oEvent.getSource(); 
-			const sSelectedKey = oComboBox.getSelectedKey(); 
+			const oComboBox = oEvent.getSource();
+			const sSelectedKey = oComboBox.getSelectedKey();
 			const oModel = this.getView().getModel("PersonalHabilitadoModel");
 			const aItems = oModel.getProperty("/JefeDeTrabajo");
-		
+
 			const oJefe = aItems.find(item => item.Legajo === sSelectedKey);
 			const sTipoHab = oJefe?.TipoHab;
-		
+			const aGuiados = ["M03", "M07", "M11", "M15", "M19", "M23", "M27"];
+
+
+			const oLicenseModel = this.getView().getModel("LicenseJsonModel");
+			const sJobCond = oLicenseModel?.getProperty("/Jobcond");
+
 			const oLabel = sap.ui.getCore().byId("jefeLabel");
 			if (oLabel) {
-				if (sTipoHab === "M22") {
+				if (sJobCond === "06" && aGuiados.includes(sTipoHab)) {
 					oLabel.setText("Jefe de trabajo guiado");
 				} else {
 					oLabel.setText("Jefe de trabajo");
 				}
 			}
-		},		
+		},
+
 		updateJefeSupLabelText: function (oEvent) {
-			const oComboBox = oEvent.getSource(); 
-			const sSelectedKey = oComboBox.getSelectedKey(); 
+			const oComboBox = oEvent.getSource();
+			const sSelectedKey = oComboBox.getSelectedKey();
 			const oModel = this.getView().getModel("PersonalHabilitadoModel");
 			const aItems = oModel.getProperty("/JefeDeTrabajo");
-		
+
 			const oJefe = aItems.find(item => item.Legajo === sSelectedKey);
 			const sTipoHab = oJefe?.TipoHab;
-		
+			const aGuiados = ["M03", "M07", "M11", "M15", "M19", "M23", "M27"];
+
+			const oLicenseModel = this.getView().getModel("LicenseJsonModel");
+			const sJobCond = oLicenseModel?.getProperty("/Jobcond");
+
+
 			const oLabel = sap.ui.getCore().byId("jefeSupLabel");
 			if (oLabel) {
-				if (sTipoHab === "M22") {
-					oLabel.setText("Jefe de trabajo guiado");
+				if (sJobCond === "06" && aGuiados.includes(sTipoHab)) {
+					oLabel.setText("Jefe de trabajo suplente guiado");
 				} else {
-					oLabel.setText("Jefe de trabajo");
+					oLabel.setText("Jefe de trabajo suplente");
 				}
 			}
-		},		
-		
+		},
+
+
 		setErrorState: function (sValueStateProperty, sValueStateTextProperty, sTextForValueState) {
 			var oModelLegacyValidation = AppManagementHelper.getModel("LegacyValidationJsonModel");
 			oModelLegacyValidation.setProperty(sValueStateProperty, "Error");
