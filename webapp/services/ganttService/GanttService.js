@@ -19,7 +19,7 @@ sap.ui.define([
 				value1: week
 			}), new sap.ui.model.Filter({
 				path: "Tipo",
-				operator: sap.ui.model.FilterOperator.Contains,
+				operator: sap.ui.model.FilterOperator.EQ,
 				value1: tipo
 			}), new sap.ui.model.Filter({
 				path: "Region",
