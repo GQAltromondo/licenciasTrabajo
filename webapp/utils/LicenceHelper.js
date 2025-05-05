@@ -921,7 +921,6 @@ sap.ui.define([
 			var oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
 			var aDataTODOS = oModel.getProperty("/Todos");
 
-			console.log("DATA", aDataTODOS)
 			var aOptions = [];
 
 			if (oLicense.EntregasLicencia_nav.length > 0) {
