@@ -67,7 +67,7 @@ sap.ui.define([
 						path: "Lote",
 						operator: sap.ui.model.FilterOperator.EQ,
 						value1: sLote,
-						value2:sLote2,
+						value2: sLote2,
 						caseSensitive: false
 					})
 				);
@@ -105,6 +105,7 @@ sap.ui.define([
 
 					filters: that.getFiltersPersonalHabilitado("", sSociedad, "H0002", "J", "JN"),
 
+					//filters: that.getFiltersPersonalHabilitado("JT", sSociedad, "H0002",""),
 					success: resolve,
 					error: reject
 				})

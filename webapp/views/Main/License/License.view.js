@@ -3148,11 +3148,15 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							}),
 							items: [
 								new sap.m.Label({
+									id: "jefeLabel",
 									design: sap.m.LabelDesign.Bold,
 									text: "Jefe de trabajo"
 								}).addStyleClass("center LicenciaText"),
-								new sap.m.ComboBox({ //sap.m.isComboBox({
-									change: $.proxy(oController.handleLegacyValidation, oController, "JefeTrabajo"),
+								new sap.m.ComboBox({ 
+									change: function (oEvent) {
+										oController.updateJefeLabelText(oEvent);
+										$.proxy(oController.handleLegacyValidation, oController, "JefeTrabajo")(oEvent);
+									},
 									valueState: "{LegacyValidationJsonModel>/JefeTrabajoValueState}",
 									valueStateText: "{LegacyValidationJsonModel>/JefeTrabajoValueStateText}",
 									id: "JefeTrabajoCombo",
@@ -3168,14 +3172,6 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 										parts: ["LicenseJsonModel>/Jefe", "i18n>PersonalHabilitadoModel_JefeDeTrabajo", "i18n>Legajo", "i18n>Nombre"],
 										formatter: $.proxy(oController.formatComboTooltip, oController)
 									},
-									// items: {
-									// 	// filters: [new sap.ui.model.Filter("Objid", sap.ui.model.FilterOperator.EQ, "10000845")],
-									// 	path: "PersonalHabilitadoModel>/JefeDeTrabajo",
-									// 	template: new sap.ui.core.Item({
-									// 		key: "{PersonalHabilitadoModel>Legajo}",
-									// 		text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre}"
-									// 	})
-									// },
 								})
 							]
 						}).addStyleClass("sapUiTinyMarginBottom"),
@@ -3185,11 +3181,15 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							}),
 							items: [
 								new sap.m.Label({
+									id: "jefeSupLabel",
 									design: sap.m.LabelDesign.Bold,
 									text: "Jefe de trabajo suplente",
 								}).addStyleClass("center LicenciaText"),
-								new sap.m.ComboBox({ //sap.m.isComboBox({
-									change: $.proxy(oController.handleLegacyValidation, oController, "JefeTrabajoSuplente"),
+								new sap.m.ComboBox({ 
+									change: function (oEvent) {
+										oController.updateJefeSupLabelText(oEvent)
+										$.proxy(oController.handleLegacyValidation, oController, "JefeTrabajoSuplente")(oEvent);
+									},
 									valueState: "{LegacyValidationJsonModel>/JefeTrabajoSuplenteValueState}",
 									valueStateText: "{LegacyValidationJsonModel>/JefeTrabajoSuplenteValueStateText}",
 									enabled: {
@@ -3206,15 +3206,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 											"i18n>Nombre"
 										],
 										formatter: $.proxy(oController.formatComboTooltip, oController)
-									},
-									// items: {
-									// 	// filters: [new sap.ui.model.Filter("Objid", sap.ui.model.FilterOperator.EQ, "10000845")],
-									// 	path: "PersonalHabilitadoModel>/JefeDeTrabajo",
-									// 	template: new sap.ui.core.Item({
-									// 		key: "{PersonalHabilitadoModel>Legajo}",
-									// 		text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre}"
-									// 	})
-									// },
+									}
 								})
 							]
 						}),
