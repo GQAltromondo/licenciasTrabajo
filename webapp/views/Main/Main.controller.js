@@ -225,7 +225,7 @@ sap.ui.define([
 			var oArgs = oEvent?.getParameter("arguments") || {};
 			var sKey = oArgs.url || ""; // Si no hay URL, asignamos una cadena vacía
 
-
+			var aRoles = AppManagementHelper.getModel("UserJsonModel").getData().roles;
 
 			if (aRoles.includes("ope_visualizador")) {
 				this._handleValidUser(sKey);
