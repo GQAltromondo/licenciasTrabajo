@@ -809,7 +809,6 @@ sap.ui.define([
 				
 				if (oLicense.ColocacionPAT_nav.length > 0) {
 					let aCloneColocaciones = jQuery.extend(true, [], oLicense.ColocacionPAT_nav);
-
 					aColocaciones = aColocaciones.concat(aCloneColocaciones);
 				}
 
