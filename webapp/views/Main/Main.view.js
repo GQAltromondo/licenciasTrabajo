@@ -102,97 +102,109 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Main", {
 					],
 					items: {
 						path: "LicencesListJsonModel>/Licenses",
-						template: new sap.m.ColumnListItem({
+						factory: function (sId, oContext) {
+						  var oItem = new sap.m.ColumnListItem({
 							type: sap.m.ListType.Navigation,
 							press: [oController.onSelect, oController],
 							cells: [
-								new sap.m.Text({
-									text: "{LicencesListJsonModel>Id}"
-								}),
-								new sap.ui.core.Icon({
-									src: {
-										path: "LicencesListJsonModel>Tipo",
-										formatter: function (sTipoDoc) {
-											if (sTipoDoc === "L") {
-												this.addStyleClass("isLicense");
-												this.removeStyleClass("isRequest");
-												return "sap-icon://form";
-											} else {
-												this.addStyleClass("isRequest");
-												this.removeStyleClass("isLicense");
-												return "sap-icon://request";
-											}
-										}
+							  new sap.m.Text({ text: "{LicencesListJsonModel>Id}" }),
+					  
+							  new sap.ui.core.Icon({
+								src: {
+								  path: "LicencesListJsonModel>Tipo",
+								  formatter: function (sTipoDoc) {
+									if (sTipoDoc === "L") {
+									  this.addStyleClass("isLicense");
+									  this.removeStyleClass("isRequest");
+									  return "sap-icon://form";
+									} else {
+									  this.addStyleClass("isRequest");
+									  this.removeStyleClass("isLicense");
+									  return "sap-icon://request";
 									}
-								}),
-								new sap.m.Text({
-									textAlign: sap.ui.core.TextAlign.Center,
-									text: "{LicencesListJsonModel>Tplnr}"
-								}),
-								new sap.m.Text({
-									textAlign: sap.ui.core.TextAlign.Center,
-									text: "{LicencesListJsonModel>Equnr}"
-								}),
-								new sap.m.Text({
-									textAlign: sap.ui.core.TextAlign.Center,
-									text: "{LicencesListJsonModel>EqustatText}"
-								}),
-								new sap.m.Text({
-									text: "{LicencesListJsonModel>BloqueoText}"
-								}),
-								new sap.m.Text({
-									text: "{LicencesListJsonModel>ArbplDesc}"
-								}),
-								new sap.m.Text({
-									text: {
-										parts: ["LicencesListJsonModel>Solbeg", "LicencesListJsonModel>Timbeg"],
-										formatter: $.proxy(oController.formatDate, oController)
-									}
-								}),
-								new sap.m.Text({
-									text: {
-										parts: ["LicencesListJsonModel>Solend", "LicencesListJsonModel>Timend"],
-										formatter: $.proxy(oController.formatDate, oController)
-									}
-								}),
-								new sap.m.Text({
-									text: "{LicencesListJsonModel>PeriodoText}"
-								}),
-								new sap.m.Text({
-									text: {
-										parts: ["LicencesListJsonModel>Licstat", "LicencesListJsonModel>Substatus"],
-										formatter: oController.setStatusColor
-									}
-								}),
-								new sap.m.HBox({
-									items: [
-										new sap.m.Button({
-											tooltip: {
-												path: "LicencesListJsonModel>Tipo",
-												formatter: function (sTipo) {
-													return sTipo === "S" ? "Entrar Solicitud" : "Entrar Licencia";
-												}
-											},
-											icon: "sap-icon://arrow-right",
-											press: [oController.goToEdit, oController]
-										}).addStyleClass("buttonInverted sapUiTinyMarginEnd"),
-										new sap.m.Button({
-											visible: {
-												parts: ["LicencesListJsonModel>ValidForDuplicate"],
-												//uso el mismo que el boton del listado principal
-												formatter: (bValid) => {
-													return bValid
-												}
-											},
-											tooltip: "Duplicar",
-											icon: "sap-icon://duplicate",
-											press: [oController.duplicateLicense, oController]
-										}).addStyleClass("buttonInverted")
-									]
-								})
+								  }
+								}
+							  }),
+					  
+							  new sap.m.Text({
+								textAlign: sap.ui.core.TextAlign.Center,
+								text: "{LicencesListJsonModel>Tplnr}"
+							  }),
+							  new sap.m.Text({
+								textAlign: sap.ui.core.TextAlign.Center,
+								text: "{LicencesListJsonModel>Equnr}"
+							  }),
+							  new sap.m.Text({
+								textAlign: sap.ui.core.TextAlign.Center,
+								text: "{LicencesListJsonModel>EqustatText}"
+							  }),
+							  new sap.m.Text({ text: "{LicencesListJsonModel>BloqueoText}" }),
+							  new sap.m.Text({ text: "{LicencesListJsonModel>ArbplDesc}" }),
+					  
+							  new sap.m.Text({
+								text: {
+								  parts: ["LicencesListJsonModel>Solbeg", "LicencesListJsonModel>Timbeg"],
+								  formatter: $.proxy(oController.formatDate, oController)
+								}
+							  }),
+					  
+							  new sap.m.Text({
+								text: {
+								  parts: ["LicencesListJsonModel>Solend", "LicencesListJsonModel>Timend"],
+								  formatter: $.proxy(oController.formatDate, oController)
+								}
+							  }),
+					  
+							  new sap.m.Text({ text: "{LicencesListJsonModel>PeriodoText}" }),
+					  
+							  new sap.m.Text({
+								text: {
+								  parts: ["LicencesListJsonModel>Licstat", "LicencesListJsonModel>Substatus"],
+								  formatter: oController.setStatusColor
+								}
+							  }),
+					  
+							  new sap.m.HBox({
+								items: [
+								  new sap.m.Button({
+									tooltip: {
+									  path: "LicencesListJsonModel>Tipo",
+									  formatter: function (sTipo) {
+										return sTipo === "S" ? "Entrar Solicitud" : "Entrar Licencia";
+									  }
+									},
+									icon: "sap-icon://arrow-right",
+									press: [oController.goToEdit, oController]
+								  }).addStyleClass("buttonInverted sapUiTinyMarginEnd"),
+					  
+								  new sap.m.Button({
+									visible: {
+									  parts: ["LicencesListJsonModel>ValidForDuplicate"],
+									  formatter: (bValid) => bValid
+									},
+									tooltip: "Duplicar",
+									icon: "sap-icon://duplicate",
+									press: [oController.duplicateLicense, oController]
+								  }).addStyleClass("buttonInverted")
+								]
+							  })
 							]
-						})
-					}
+						  });
+					  
+						  // 👉 Estilo condicional para toda la fila
+						  var sHighlight = oContext.getProperty("highlight");
+						  if (sHighlight === "Warning") {
+							oItem.addStyleClass("rowHighlightWarning");
+						  } else if (sHighlight === "Error") {
+							oItem.addStyleClass("rowHighlightError");
+						  } else if (sHighlight === "Success") {
+							oItem.addStyleClass("rowHighlightSuccess");
+						  }
+					  
+						  return oItem;
+						}
+					  }
+					  
 				}).addStyleClass("customTable shortTable");
 				oController.setLicenseTable(oLicenseTable);
 

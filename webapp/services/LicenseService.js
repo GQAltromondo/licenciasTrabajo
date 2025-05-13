@@ -155,17 +155,17 @@ sap.ui.define([
 
 			var bProgramacion = aRoles.find((r) => {
 				//return r === "Programacion_COT" || r === "Programacion_COTDT"
-				 return r === "ope_programacion_cot" || r === "ope_programacion_cotdt"
+				return r === "ope_programacion_cot" || r === "ope_programacion_cotdt"
 			});
 
 			var bOperador = aRoles.find((r) => {
 				//return r === "Operador_COT" || r === "Operador_COTDT"
-				 return r === "ope_oper-turno_cot" || r === "ope_oper-turno_cotdt"
+				return r === "ope_oper-turno_cot" || r === "ope_oper-turno_cotdt"
 			});
 
 			var bSolicitanteLicTBA = aRoles.find(sRol => {
 				//return sRol === "Solicitante_Lic_TBA"
-				 return sRol === "ope_solic-lic_transba" 
+				return sRol === "ope_solic-lic_transba"
 
 			})
 
@@ -2845,6 +2845,35 @@ sap.ui.define([
 			});
 
 		},
+		loadObservacionTramitacion: function (sAnio, sId, Empresa, sPeriod) {
+			return new Promise((resolve, reject) => {
+				var aFilters = [];
+
+				aFilters.push(new sap.ui.model.Filter("Empresa", sap.ui.model.FilterOperator.EQ, Empresa));
+				aFilters.push(new sap.ui.model.Filter("Id", sap.ui.model.FilterOperator.EQ, sId));
+				aFilters.push(new sap.ui.model.Filter("Anio", sap.ui.model.FilterOperator.EQ, sAnio));
+
+				var entity = "/LicenciaEstadoDiarioSet";
+				oDataService.getModel("TransenerOperaciones").read(entity, {
+					filters: aFilters,
+					success: function (data) {
+						var oDataFechas = LicenceHelper.handleSpecialDatesTramitacion(data.results);
+						oDataFechas = LicenceHelper.getOrderSpecialDate(oDataFechas);
+
+						// Guardar en el modelo si es necesario
+						AppManagementHelper.getModel("EspecialDatesTramitacion").setData(oDataFechas);
+
+						// Resolver la Promise con las observaciones si existen
+						const oEntry = oDataFechas.Fechas?.find(f => !!f.Observaciones); // ajusta si necesario
+						resolve(oEntry || null);
+					},
+					error: function (error) {
+						console.log("Error al obtener fechas especiales de tramitación", error);
+						reject(error);
+					}
+				});
+			});
+		},
 
 		successFIND: function (data) {
 			var oData = FormatHelper.removeResults(data);
@@ -3071,9 +3100,38 @@ sap.ui.define([
 			}
 		},
 
+		// successGET: function (bDontSort, data) {
+		// 	var aLicenses = FormatHelper.removeResults(data);
+		// 	FormatHelper.formatTimesFromGetLicenses(aLicenses);
+		// 	aLicenses.forEach((oLicense) => {
+		// 		oLicense.ArbplDesc = this.getArbplDesc(oLicense.Arbpl);
+		// 		oLicense.EqustatText = this.getEqustatText(oLicense.Equstat);
+		// 		oLicense.BloqueoText = this.getBloqueoText(oLicense.Bloqueo);
+		// 		oLicense.PeriodoText = this.getPeriodoText(oLicense.Period);
+		// 		oLicense.StatusText = this.getStatusText(oLicense.Licstat, oLicense.Substatus);
+		// 		oLicense.ValidForDuplicate = this.rolesForDuplication(oLicense.Tipo, oLicense.Werks);
+		// 	});
+
+		// 	//	var aLicensesWithCheck = this.validateChecks(aLicensesOrdered);
+		// 	// Issue 548 - Para las vistas  LTs de equipos y Salidas y Lineas la info viene ya ordenada de back end y no se debe reordenar
+		// 	// para estas llamadas el parametro dontSort vendra en true
+		// 	if (bDontSort !== true) {
+		// 		var aLicensesOrdered = _.orderBy(aLicenses, ['Anio', "Id"], ["desc", "desc"])
+		// 	} else {
+		// 		aLicensesOrdered = aLicenses;
+		// 	}
+
+		// 	AppManagementHelper.getModel("LicencesListJsonModel").setData({
+		// 		Licenses: aLicensesOrdered
+		// 	});
+		// 	BusyDialogHelper.close();
+		// },successGET: function (bDontSort, data) {
 		successGET: function (bDontSort, data) {
 			var aLicenses = FormatHelper.removeResults(data);
 			FormatHelper.formatTimesFromGetLicenses(aLicenses);
+
+			const aPromises = [];
+
 			aLicenses.forEach((oLicense) => {
 				oLicense.ArbplDesc = this.getArbplDesc(oLicense.Arbpl);
 				oLicense.EqustatText = this.getEqustatText(oLicense.Equstat);
@@ -3081,22 +3139,38 @@ sap.ui.define([
 				oLicense.PeriodoText = this.getPeriodoText(oLicense.Period);
 				oLicense.StatusText = this.getStatusText(oLicense.Licstat, oLicense.Substatus);
 				oLicense.ValidForDuplicate = this.rolesForDuplication(oLicense.Tipo, oLicense.Werks);
+
+				// Validación especial para licencias en tramitación
+				if (oLicense.Licstat === "01") {
+					const p = this.loadObservacionTramitacion(oLicense.Anio, oLicense.Id, oLicense.Empresa, oLicense.Period)
+						.then((oData) => {
+							if (oData && oData.Observaciones) {
+								oLicense.highlight = "Warning"; // o "Information", "Error", según tu criterio
+							}
+						}).catch(() => {
+							// Manejo de error si la llamada falla
+							console.warn(`Fallo al obtener observaciones para licencia ${oLicense.Id}`);
+						});
+					aPromises.push(p);
+				}
 			});
 
-			//	var aLicensesWithCheck = this.validateChecks(aLicensesOrdered);
-			// Issue 548 - Para las vistas  LTs de equipos y Salidas y Lineas la info viene ya ordenada de back end y no se debe reordenar
-			// para estas llamadas el parametro dontSort vendra en true
-			if (bDontSort !== true) {
-				var aLicensesOrdered = _.orderBy(aLicenses, ['Anio', "Id"], ["desc", "desc"])
-			} else {
-				aLicensesOrdered = aLicenses;
-			}
+			Promise.all(aPromises).then(() => {
+				let aLicensesOrdered;
+				if (bDontSort !== true) {
+					aLicensesOrdered = _.orderBy(aLicenses, ['Anio', 'Id'], ['desc', 'desc']);
+				} else {
+					aLicensesOrdered = aLicenses;
+				}
 
-			AppManagementHelper.getModel("LicencesListJsonModel").setData({
-				Licenses: aLicensesOrdered
+				AppManagementHelper.getModel("LicencesListJsonModel").setData({
+					Licenses: aLicensesOrdered
+				});
+
+				BusyDialogHelper.close();
 			});
-			BusyDialogHelper.close();
 		},
+
 
 		errorGET: function (error) {
 			var sError = FormatHelper.parseJsonError(error);

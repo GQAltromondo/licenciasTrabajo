@@ -1059,3 +1059,6 @@ html.sap-desktop .sapContrast.sapMIBar.sapMFooter-CTX {
 }
 
 
+.Warning {
+    background-color: #fff4e5 !important; /* fondo amarillo claro */
+  }
