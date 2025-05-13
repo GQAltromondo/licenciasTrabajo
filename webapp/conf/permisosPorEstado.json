@@ -40,6 +40,14 @@
 				"Operador_COT"
 			]
 		},
+		"habilitacion": {
+			"all": [
+				"Jefe_Turno_COT",
+				"Jefe_Turno_COTDT",
+				"Operador_COTDT",
+				"Operador_COT"
+			]
+		},
 		"transferencia": {
 			"all": [
 				"Jefe_Turno_COT",
@@ -102,6 +110,14 @@
 			]
 		},
 		"inhibicion": {
+			"all": [
+				"Jefe_Turno_COT",
+				"Jefe_Turno_COTDT",
+				"Operador_COTDT",
+				"Operador_COT"
+			]
+		},
+		"habilitacion": {
 			"all": [
 				"Jefe_Turno_COT",
 				"Jefe_Turno_COTDT",

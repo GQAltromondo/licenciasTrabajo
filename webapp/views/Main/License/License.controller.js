@@ -1959,6 +1959,10 @@ sap.ui.define([
 				MessageBoxHelper.showAlert("Alerta", oValidation.message);
 			} else {
 				BusyDialogHelper.open();
+				delete oHabilitacion.sameDayValidation;
+				delete oHabilitacion.enabled;
+				delete oHabilitacion.TejtValueStateText;
+				delete oHabilitacion.showPrevValue;
 				LicenseService.HabilitacionLicence(oHabilitacion);
 			}
 		},
@@ -1970,6 +1974,10 @@ sap.ui.define([
 				MessageBoxHelper.showAlert("Alerta", oValidation.message);
 			} else {
 				BusyDialogHelper.open();
+				delete oInhibicion.sameDayValidation;
+				delete oInhibicion.enabled;
+				delete oInhibicion.TejtValueStateText;
+				delete oInhibicion.showPrevValue;
 				LicenseService.InhibicionLicence(oInhibicion);
 			}
 		},
@@ -1980,6 +1988,10 @@ sap.ui.define([
 				MessageBoxHelper.showAlert("Alerta", oValidation.message);
 			} else {
 				BusyDialogHelper.open();
+				delete oColocacionPAT.sameDayValidation;
+				delete oColocacionPAT.enabled;
+				delete oColocacionPAT.TejtValueStateText;
+				delete oColocacionPAT.showPrevValue;
 				LicenseService.ColocacionPATLicence(oColocacionPAT);
 			}
 		},
@@ -1990,6 +2002,10 @@ sap.ui.define([
 				MessageBoxHelper.showAlert("Alerta", oValidation.message);
 			} else {
 				BusyDialogHelper.open();
+				delete oRetiroPAT.sameDayValidation;
+				delete oRetiroPAT.enabled;
+				delete oRetiroPAT.TejtValueStateText;
+				delete oRetiroPAT.showPrevValue;
 				LicenseService.RetiroPATLicence(oRetiroPAT);
 			}
 		},
@@ -2349,11 +2365,11 @@ sap.ui.define([
 				oValidationObject.message = "La hora es requerida";
 			}
 
-			// Validate Coment
-			if (oObject.Coment === '') {
-				oValidationObject.valid = false;
-				oValidationObject.message = "Debe completar un comentario";
-			}
+			// // Validate Coment
+			// if (oObject.Coment === '') {
+			// 	oValidationObject.valid = false;
+			// 	oValidationObject.message = "Debe completar un comentario";
+			// }
 
 			// Validate Tplnr
 			if (oObject.Tplnr === "") {
