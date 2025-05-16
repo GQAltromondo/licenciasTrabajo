@@ -2848,24 +2848,22 @@ sap.ui.define([
 		loadObservacionTramitacion: function (sAnio, sId, Empresa, sPeriod) {
 			return new Promise((resolve, reject) => {
 				var aFilters = [];
-
+		
 				aFilters.push(new sap.ui.model.Filter("Empresa", sap.ui.model.FilterOperator.EQ, Empresa));
 				aFilters.push(new sap.ui.model.Filter("Id", sap.ui.model.FilterOperator.EQ, sId));
 				aFilters.push(new sap.ui.model.Filter("Anio", sap.ui.model.FilterOperator.EQ, sAnio));
-
+		
 				var entity = "/LicenciaEstadoDiarioSet";
 				oDataService.getModel("TransenerOperaciones").read(entity, {
 					filters: aFilters,
 					success: function (data) {
 						var oDataFechas = LicenceHelper.handleSpecialDatesTramitacion(data.results);
 						oDataFechas = LicenceHelper.getOrderSpecialDate(oDataFechas);
-
-						// Guardar en el modelo si es necesario
+		
 						AppManagementHelper.getModel("EspecialDatesTramitacion").setData(oDataFechas);
-
-						// Resolver la Promise con las observaciones si existen
-						const oEntry = oDataFechas.Fechas?.find(f => !!f.Observaciones); // ajusta si necesario
-						resolve(oEntry || null);
+		
+						const aConObservaciones = oDataFechas.Fechas?.filter(f => !!f.Observaciones) || [];
+						resolve(aConObservaciones);
 					},
 					error: function (error) {
 						console.log("Error al obtener fechas especiales de tramitación", error);
@@ -2874,6 +2872,7 @@ sap.ui.define([
 				});
 			});
 		},
+		
 
 		successFIND: function (data) {
 			var oData = FormatHelper.removeResults(data);
@@ -3126,7 +3125,7 @@ sap.ui.define([
 		// 	});
 		// 	BusyDialogHelper.close();
 		// },successGET: function (bDontSort, data) {
-		successGET: function (bDontSort, data) {
+		successGET:  function (bDontSort, data) {
 			var aLicenses = FormatHelper.removeResults(data);
 			FormatHelper.formatTimesFromGetLicenses(aLicenses);
 
@@ -3140,15 +3139,15 @@ sap.ui.define([
 				oLicense.StatusText = this.getStatusText(oLicense.Licstat, oLicense.Substatus);
 				oLicense.ValidForDuplicate = this.rolesForDuplication(oLicense.Tipo, oLicense.Werks);
 
-				// Validación especial para licencias en tramitación
 				if (oLicense.Licstat === "01") {
 					const p = this.loadObservacionTramitacion(oLicense.Anio, oLicense.Id, oLicense.Empresa, oLicense.Period)
 						.then((oData) => {
-							if (oData && oData.Observaciones) {
-								oLicense.highlight = "Warning"; // o "Information", "Error", según tu criterio
+							if (Array.isArray(oData) && oData.length > 0) {
+								const hasError = oData.some(item => item.Estado === "E");
+								oLicense.highlight = hasError ? "Error" : "Warning";
 							}
-						}).catch(() => {
-							// Manejo de error si la llamada falla
+						})
+						.catch(() => {
 							console.warn(`Fallo al obtener observaciones para licencia ${oLicense.Id}`);
 						});
 					aPromises.push(p);

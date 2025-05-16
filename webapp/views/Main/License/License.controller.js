@@ -32,14 +32,15 @@ sap.ui.define([
 	"Transener/Operaciones/LicenciasTrabajo/services/MailAROService",
 	"Transener/Operaciones/LicenciasTrabajo/utils/LegacyValidationHelper",
 	"Transener/Operaciones/LicenciasTrabajo/utils/TramitacionCalendarHelper",
-	"sap/ui/core/Fragment"
+	"sap/ui/core/Fragment",
+	"sap/m/MessageBox"
 ], function (Controller, Models, NavigationHelper, FormatHelper, FormatterHelper, AppManagementHelper, RolAuthorizationHelper,
 	oDataService, History,
 	MessageBoxHelper,
 	FioriComponentHelper, LicenseService, FioriHelper, MailHelper, BusyDialogHelper, ValidateHelper, LicenceHelper, ExportLicenseHelper,
 	UnifilarHelper,
 	EquiposService, OrdenesService, TipoEquipoService, PersonalHabilitadoService, EmpresaTramitacionService,
-	EstacionesService, WorkPlaceService, OrdenesDialogHelper, MailAROService, LegacyValidationHelper, TramitacionCalendarHelper, Fragment) {
+	EstacionesService, WorkPlaceService, OrdenesDialogHelper, MailAROService, LegacyValidationHelper, TramitacionCalendarHelper, Fragment, MessageBox) {
 	"use strict";
 
 	return Controller.extend("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License", {
@@ -4644,12 +4645,44 @@ sap.ui.define([
 		},
 		// Funcion callback llamada luego de cargar el modelo json que tendra los datos de la vista 
 		//En este caso lo utilizo para determinar dinamicamente el binding de algunos campos
-		findSuccess: function (oLicence) {
+		findSuccess: async function (oLicence) {
 			this.bindJefes(oLicence);
+			console.log("Licencia para probar", oLicence);
 
+			try {
+				const aDatos = await LicenseService.loadObservacionTramitacion(
+					oLicence.Anio, oLicence.Id, oLicence.Empresa, oLicence.Period
+				);
+
+				if (aDatos.length === 0) {
+					MessageBox.information("No hay datos disponibles.");
+					return;
+				}
+
+				let sMensaje = "";
+
+				aDatos.forEach(item => {
+					const fecha = FormatHelper.formatDateLicenseWithoutUtc(item.Fecha)
+
+
+					const estado = FormatHelper.getEstadoTramitacion(item.Estado);
+					const observaciones = item.Observaciones?.trim() || "Sin observaciones";
+
+					sMensaje += `${ fecha } - Comentario: ${ observaciones } - Estado: ${ estado } \n`;
+				});
+
+				MessageBox.alert(sMensaje.trim(), {
+					title: "Estado Diario"
+				});
+			} catch (error) {
+				console.error("Error al cargar observaciones:", error);
+				MessageBox.error("Ocurrió un error al obtener los datos.");
+			}
 		},
+
 		//Issue 562 - Jefes de Trabajo habilitados para TcT
 		//Se borro el binding de la vista para los campos Jefe de trabajo y Jefe de trabajo Suplente  ya que se determina dinamicamente al valor del combo Condiciones de trabajo
+
 		bindJefes(oLicence) {
 			if (oLicence) {
 

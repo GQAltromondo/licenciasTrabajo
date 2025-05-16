@@ -104,6 +104,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Main", {
 						path: "LicencesListJsonModel>/Licenses",
 						factory: function (sId, oContext) {
 						  var oItem = new sap.m.ColumnListItem({
+							highlight:"{LicencesListJsonModel>highlight}",
 							type: sap.m.ListType.Navigation,
 							press: [oController.onSelect, oController],
 							cells: [
