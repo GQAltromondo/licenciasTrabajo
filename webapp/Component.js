@@ -28,8 +28,17 @@ sap.ui.define([
 
 			// call the base component's init function
 			UIComponent.prototype.init.apply(this, arguments);
-		},
 
+			const version = this.getManifestEntry("sap.app").applicationVersion.version;
+		
+			const versionModel = new sap.ui.model.json.JSONModel({
+				version: version
+			  });
+			  this.setModel(versionModel, "appVersion");
+		},
+		getAppVersion: function () {
+			return this.version || "v?";
+		  },
 		createContent: function () {
 			//sets component
 			FioriComponentHelper.setComponent(this);
