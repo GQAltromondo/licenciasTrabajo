@@ -893,7 +893,6 @@ sap.ui.define([
 			var oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
 			var aDataTODOS = oModel.getProperty("/Todos");
 
-			console.log("DATA",aDataTODOS)
 			var aOptions = [];
 
 			if (oLicense.EntregasLicencia_nav.length > 0) {
@@ -907,8 +906,6 @@ sap.ui.define([
 				var oLastJefeTransferido = aDataTODOS.find(oItem => oItem.Legajo === oLastTranfer.Jefetra);
 				aOptions.push(oLastJefeTransferido);
 			}
-
-			console.log("Options",aOptions)
 
 			oModel.setProperty("/CboJefeCancelacion", aOptions);
 		},

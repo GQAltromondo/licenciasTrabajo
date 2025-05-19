@@ -3098,33 +3098,6 @@ sap.ui.define([
 				aFilters.push(new sap.ui.model.Filter("Tipo", sap.ui.model.FilterOperator.EQ, "S"));
 			}
 		},
-
-		// successGET: function (bDontSort, data) {
-		// 	var aLicenses = FormatHelper.removeResults(data);
-		// 	FormatHelper.formatTimesFromGetLicenses(aLicenses);
-		// 	aLicenses.forEach((oLicense) => {
-		// 		oLicense.ArbplDesc = this.getArbplDesc(oLicense.Arbpl);
-		// 		oLicense.EqustatText = this.getEqustatText(oLicense.Equstat);
-		// 		oLicense.BloqueoText = this.getBloqueoText(oLicense.Bloqueo);
-		// 		oLicense.PeriodoText = this.getPeriodoText(oLicense.Period);
-		// 		oLicense.StatusText = this.getStatusText(oLicense.Licstat, oLicense.Substatus);
-		// 		oLicense.ValidForDuplicate = this.rolesForDuplication(oLicense.Tipo, oLicense.Werks);
-		// 	});
-
-		// 	//	var aLicensesWithCheck = this.validateChecks(aLicensesOrdered);
-		// 	// Issue 548 - Para las vistas  LTs de equipos y Salidas y Lineas la info viene ya ordenada de back end y no se debe reordenar
-		// 	// para estas llamadas el parametro dontSort vendra en true
-		// 	if (bDontSort !== true) {
-		// 		var aLicensesOrdered = _.orderBy(aLicenses, ['Anio', "Id"], ["desc", "desc"])
-		// 	} else {
-		// 		aLicensesOrdered = aLicenses;
-		// 	}
-
-		// 	AppManagementHelper.getModel("LicencesListJsonModel").setData({
-		// 		Licenses: aLicensesOrdered
-		// 	});
-		// 	BusyDialogHelper.close();
-		// },successGET: function (bDontSort, data) {
 		successGET:  function (bDontSort, data) {
 			var aLicenses = FormatHelper.removeResults(data);
 			FormatHelper.formatTimesFromGetLicenses(aLicenses);
@@ -3139,7 +3112,7 @@ sap.ui.define([
 				oLicense.StatusText = this.getStatusText(oLicense.Licstat, oLicense.Substatus);
 				oLicense.ValidForDuplicate = this.rolesForDuplication(oLicense.Tipo, oLicense.Werks);
 
-				if (oLicense.Licstat === "01") {
+				if (oLicense.Licstat) {
 					const p = this.loadObservacionTramitacion(oLicense.Anio, oLicense.Id, oLicense.Empresa, oLicense.Period)
 						.then((oData) => {
 							if (Array.isArray(oData) && oData.length > 0) {

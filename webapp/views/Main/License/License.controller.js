@@ -4653,24 +4653,25 @@ sap.ui.define([
 				const aDatos = await LicenseService.loadObservacionTramitacion(
 					oLicence.Anio, oLicence.Id, oLicence.Empresa, oLicence.Period
 				);
-
+			
 				if (aDatos.length === 0) {
 					MessageBox.information("No hay datos disponibles.");
 					return;
 				}
-
+			
+				// Ordenar por fecha ascendente (más viejo a más nuevo)
+				aDatos.sort((a, b) => new Date(a.Fecha) - new Date(b.Fecha));
+			
 				let sMensaje = "";
-
+			
 				aDatos.forEach(item => {
-					const fecha = FormatHelper.formatDateLicenseWithoutUtc(item.Fecha)
-
-
+					const fecha = FormatHelper.formatDateLicenseWithoutUtc(item.Fecha);
 					const estado = FormatHelper.getEstadoTramitacion(item.Estado);
 					const observaciones = item.Observaciones?.trim() || "Sin observaciones";
-
+			
 					sMensaje += `${ fecha } - Comentario: ${ observaciones } - Estado: ${ estado } \n`;
 				});
-
+			
 				MessageBox.alert(sMensaje.trim(), {
 					title: "Estado Diario"
 				});
@@ -4678,6 +4679,7 @@ sap.ui.define([
 				console.error("Error al cargar observaciones:", error);
 				MessageBox.error("Ocurrió un error al obtener los datos.");
 			}
+			
 		},
 
 		//Issue 562 - Jefes de Trabajo habilitados para TcT
