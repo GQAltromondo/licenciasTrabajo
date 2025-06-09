@@ -11,7 +11,7 @@ sap.ui.define([
 
 
 		loadLimitacionesTecnicas: function (empresa) {
-			
+						
 			var aFilter = [new sap.ui.model.Filter("Empresa", sap.ui.model.FilterOperator.EQ, empresa)];
 			this.getLimitacionesPromise(aFilter).then($.proxy(this.successGetLimitaciones, this)).catch($.proxy(this.errorGetLimitaciones, this));
 		},

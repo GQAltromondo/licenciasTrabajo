@@ -1575,8 +1575,8 @@ sap.ui.define([
 			centroToRegion.loadData(sPath + "/conf/centroToRegion.json", "", false);
 
 			//	AppManagementHelper.getModel("FiltersJsonModel").setProperty("/Werks/value", werks);
-			// var empresa = this.society === "100" ? "TRANSENER" : "TRANSBA";
-			var empresa = this.society
+			 var empresa = this.society === "100" ? "TRANSENER" : "TRANSBA";
+			
 			LimitacionesTecnicas.loadLimitacionesTecnicas(empresa);
 
 		},

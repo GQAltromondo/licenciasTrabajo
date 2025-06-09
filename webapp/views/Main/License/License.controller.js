@@ -4655,7 +4655,7 @@ sap.ui.define([
 				);
 			
 				if (aDatos.length === 0) {
-					MessageBox.information("No hay datos disponibles.");
+					//MessageBox.information("No hay datos disponibles.");
 					return;
 				}
 			
