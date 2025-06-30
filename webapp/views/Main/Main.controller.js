@@ -773,7 +773,7 @@ sap.ui.define([
 								}, () => {
 									MessageBoxHelper.showAlert("Alerta", "Error al obtener unifilares")
 								}, {
-									"$select": "Nombre,Idunifilar,NumVersion,Region,TipoUnifilar,Et,Empresa,Anio,Region,IntAbLe,SecAbBt,SecPatCr,PatAdic,Numerolicencia,Mapa,Doctype,Imagenunifilar"
+									"$select": "Nombre,Idunifilar,NumVersion,Region,TipoUnifilar,Et,Empresa,Anio,Region,IntAbLe,SecAbBt,SecPatCr,PatAdic,Numerolicencia,Mapa,Doctype,Imagenunifilar,RealIdUnifilar"
 								})
 							} else {
 								BusyDialogHelper.close();
@@ -924,7 +924,7 @@ sap.ui.define([
 				let oUnifilarNewVersion = aActualVersions.find(e => e.Centro === oUnifilarFromOldLicense.Region && e.Et ===
 					oUnifilarFromOldLicense.Et && e.TipoUnifilar === oUnifilarFromOldLicense.TipoUnifilar)
 				if (oUnifilarNewVersion) {
-					if (oUnifilarFromOldLicense.NumVersion !== oUnifilarNewVersion.NumVersion) {
+					if (oUnifilarFromOldLicense.RealIdUnifilar !== oUnifilarNewVersion.NumVersion) {
 						aUnifilaresToCreate.push({
 							data: oUnifilarFromOldLicense,
 							create: false
@@ -4341,7 +4341,7 @@ sap.ui.define([
 						}, (e) => {
 							console.log(e);
 						}, {
-							"$select": "Nombre,Idunifilar,NumVersion,Region,TipoUnifilar,Et,Empresa,Anio,Region,IntAbLe,SecAbBt,SecPatCr,PatAdic,Numerolicencia,Imagenunifilar,Doctype"
+							"$select": "Nombre,Idunifilar,NumVersion,Region,TipoUnifilar,Et,Empresa,Anio,Region,IntAbLe,SecAbBt,SecPatCr,PatAdic,Numerolicencia,Imagenunifilar,Doctype,RealIdUnifilar"
 						});
 
 

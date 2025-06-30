@@ -1376,7 +1376,8 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								formatter: oController.rolStatusEdition("entregas/")
 							},
 							dateValue: "{DeliveryTableJsonModel>Time}",
-							displayFormat: "HH:mm"
+							displayFormat: "HH:mm",
+							width:"100px"
 						}),
 						new sap.m.Text({
 							text: "{DeliveryTableJsonModel>Cot}"
@@ -1462,7 +1463,8 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								formatter: oController.rolStatusEdition("entregas/")
 							},
 							value: "{DeliveryTableJsonModel>Folio}",
-							maxLength: 10
+							maxLength: 10,
+							width: "120px"
 						}),
 						new sap.m.ComboBox({
 							enabled: {

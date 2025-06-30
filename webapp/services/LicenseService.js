@@ -1893,6 +1893,7 @@ sap.ui.define([
 						var fechaAnulacion = '';
 						var vieneDeTramitacion = false;
 						var vieneDeObservacion = false;
+						var vienDeCalendarioTramitacion=false;
 						var comentObserCoord = "";
 						var nameLegacyObservator = "";
 						var vieneDeCoordinacion = false;
@@ -1905,7 +1906,86 @@ sap.ui.define([
 						var ComentariosNoAut = "";
 
 						MailHelper.sendEmail(oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion, MotivoDeAnulacion,
-							ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, comentObserCoord, nameLegacyObservator,
+							ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion,vienDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
+							vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador, MotivoObservacion,
+							ComentarioObservacion, MotivoNoAut, ComentariosNoAut).then(() => {
+								resolve();
+							}).catch((e) => {
+								console.error(e);
+								reject();
+							});
+					});
+				});
+			});
+		},
+		sendCalendarioTramitacionEmail: function (oLicence) {
+			return new Promise((resolve, reject) => {
+				this.getPermisos(oLicence).then((aPermisos) => {
+					let sInfAdicional = "";
+					let emails = [];
+					let hashPermisos = {};
+
+					aPermisos.forEach(permiso => {
+						hashPermisos[permiso.Rol] = permiso;
+					});
+					hashPermisos["COORDINADOR"] = hashPermisos["COORDINADOR"] || "";
+					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
+						"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
+							permiso.Mail || "nurrestarazu@inclusion.cloud").join(",");
+
+					var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
+					var sCurrentUserMail = oUserJson.email;
+					var sCurrentUserName = oUserJson.nombre + ", " + oUserJson.apellido;
+					var oCurrentUser = AppManagementHelper.getModel("CurrentUser").getData();
+					var sLicenseId = oLicence.Id;
+					var sAnio = oLicence.Anio;
+					var aPromises = [];
+					var oPromiseCoord = this.PostPromesa(sAnio, "L", sLicenseId, oCurrentUser.Legajo, sCurrentUserName, sCurrentUserMail,
+						oCurrentUser.Empresa, "TRAMITADOR");
+					aPromises.push(oPromiseCoord);
+
+					var oUsuariosAsignados = {
+						Coordinador: hashPermisos["COORDINADOR"] ? hashPermisos["COORDINADOR"].Legajo + ", " + hashPermisos["COORDINADOR"].Nombre : "",
+						Creador: hashPermisos["Creador"] ? hashPermisos["Creador"].Legajo + ", " + hashPermisos["Creador"].Nombre : "",
+						Solicitante: hashPermisos["ope_solic-lic_transener"] ? hashPermisos["ope_solic-lic_transener"].Legajo + ", " + hashPermisos["ope_solic-lic_transener"].Nombre : "",
+						SolicitanteSuplente: hashPermisos["Solicitante_Suplente"] ? hashPermisos["Solicitante_Suplente"].Legajo + ", " + hashPermisos[
+							"Solicitante_Suplente"].Nombre : "",
+						Jefe: hashPermisos["Jefe_Trabajo"] ? hashPermisos["Jefe_Trabajo"].Legajo + ", " + hashPermisos["Jefe_Trabajo"].Nombre : "",
+						JefeSuplente: hashPermisos["Jefe_Trabajo_Suplente"] ? hashPermisos["Jefe_Trabajo_Suplente"].Legajo + ", " + hashPermisos[
+							"Jefe_Trabajo_Suplente"].Nombre : "",
+						SolSuplenteAux: hashPermisos["Solicitante_Suplente_Auxiliar"].Legajo + ", " + hashPermisos["Solicitante_Suplente_Auxiliar"].Nombre
+					};
+					aPromises.push(EtMailService.getPromise(oLicence.Empresa, oLicence.Tplnr, this.getSelectionArea(oLicence.Tipo, "01")));
+
+					Promise.all(aPromises).then((res) => {
+						var sEmailEt = "";
+						// issue 514 - Se deben enviar correos a los tecnicos incluyendo no autorizados "06"
+						//		if (this.stateOfTramit === "06") {
+						//			sEmailEt = "";
+						//		} else {
+						sEmailEt = sEmailEt = res[1].results && res[1].results !== 0 ? res[1].results.map(e => (e.Mail)).join(",") : "";
+						//		}
+
+						var esAnulacion = false;
+						var MotivoDeAnulacion = '';
+						var ObservacionDeAnulacion = '';
+						var fechaAnulacion = '';
+						var vieneDeTramitacion = false;
+						var vieneDeObservacion = false;
+						var vienDeCalendarioTramitacion=false;
+						var comentObserCoord = "";
+						var nameLegacyObservator = "";
+						var vieneDeCoordinacion = false;
+						var vieneDeCancelacion = false;
+						var nameLegacyCoordinator = this.getLastCoordinator();
+						var nameLegacyTramitador = oLicence.Tramitador;
+						var MotivoObservacion = "";
+						var ComentarioObservacion = "";
+						var MotivoNoAut = "";
+						var ComentariosNoAut = "";
+
+						MailHelper.sendEmail(oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion, MotivoDeAnulacion,
+							ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion,vienDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
 							vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador, MotivoObservacion,
 							ComentarioObservacion, MotivoNoAut, ComentariosNoAut).then(() => {
 								resolve();
@@ -1933,8 +2013,9 @@ sap.ui.define([
 				hashPermisos["COORDINADOR"] = hashPermisos["COORDINADOR"] || "";
 				emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 					"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
-						permiso.Mail || "nurrestarazu@inclusion.cloud").join(",");
-
+					
+						 permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar").join(",");
+	// permiso.Mail || "nurrestarazu@inclusion.cloud").join(",");
 				var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 				var sCurrentUserMail = oUserJson.email;
 				var sCurrentUserName = oUserJson.nombre + ", " + oUserJson.apellido;
@@ -2002,7 +2083,28 @@ sap.ui.define([
 								BusyDialogHelper.close();
 								var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
 								var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
-								MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
+								{
+									MailHelper.sendEmail(oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion, MotivoDeAnulacion,
+										ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, comentObserCoord, nameLegacyObservator,
+										vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador,
+										MotivoObservacion,
+										ComentarioObservacion,
+										MotivoNoAut,
+										ComentariosNoAut).then(() => {
+										
+												BusyDialogHelper.close();
+												var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
+												var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
+												MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
+										
+										}).catch((e) => {
+											BusyDialogHelper.close();
+											console.error(e);
+											MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al enviar mail para la coordinacion.", $.proxy(this.goToHome,
+												this));
+										});
+								}
+							//	MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
 							}).catch((e) => {
 								BusyDialogHelper.close();
 								console.error(e);
@@ -2598,7 +2700,7 @@ sap.ui.define([
 			oDataService.getModel("TransenerOperaciones").read(entity, {
 				filters: aFilters,
 				urlParameters: oParameter ? oParameter : {
-					"$select": "Nombre,Idunifilar,NumVersion,Region,TipoUnifilar,Et,Empresa,Anio,Region,IntAbLe,SecAbBt,SecPatCr,PatAdic,Numerolicencia"
+					"$select": "Nombre,Idunifilar,NumVersion,Region,TipoUnifilar,Et,Empresa,Anio,Region,IntAbLe,SecAbBt,SecPatCr,PatAdic,Numerolicencia,RealIdUnifilar"
 				},
 				success: fnCallback,
 				error: fnError

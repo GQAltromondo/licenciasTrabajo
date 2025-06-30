@@ -120,7 +120,8 @@ sap.ui.define([
 					mailsARO = those.formatMailsARO(AppManagementHelper.getModel("MailsAROModel").getData().Mails);
 				}
 
-				context.Destinatario = destinatario;
+				//context.Destinatario = destinatario;
+				context.Destinatario = "guillermo.quattrocchi@altromondo.com.ar";
 
 				// Si viene de anulacion
 				if (esAnulacion === true) {
