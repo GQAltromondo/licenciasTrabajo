@@ -61,7 +61,7 @@ sap.ui.define([
 		successGetRegiones: function (data) {
 			var oModel = AppManagementHelper.getModel("RegionesJsonModel")
 			oModel.setData({
-				Regiones: this.getRegiones()
+				Regiones: data.results
 			})
 			return this.getRegiones();
 		},
