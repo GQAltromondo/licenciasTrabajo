@@ -1893,7 +1893,6 @@ sap.ui.define([
 						var fechaAnulacion = '';
 						var vieneDeTramitacion = false;
 						var vieneDeObservacion = false;
-						var vienDeCalendarioTramitacion=false;
 						var comentObserCoord = "";
 						var nameLegacyObservator = "";
 						var vieneDeCoordinacion = false;
@@ -1972,7 +1971,7 @@ sap.ui.define([
 						var fechaAnulacion = '';
 						var vieneDeTramitacion = false;
 						var vieneDeObservacion = false;
-						var vienDeCalendarioTramitacion=false;
+						var vieneDeCalendarioTramitacion=false;
 						var comentObserCoord = "";
 						var nameLegacyObservator = "";
 						var vieneDeCoordinacion = false;
@@ -1985,7 +1984,7 @@ sap.ui.define([
 						var ComentariosNoAut = "";
 
 						MailHelper.sendEmail(oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion, MotivoDeAnulacion,
-							ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion,vienDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
+							ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion,vieneDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
 							vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador, MotivoObservacion,
 							ComentarioObservacion, MotivoNoAut, ComentariosNoAut).then(() => {
 								resolve();

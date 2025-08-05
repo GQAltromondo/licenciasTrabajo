@@ -71,7 +71,7 @@ sap.ui.define([
 			});
 
 			function prepareContext(licencia, usuariosAsignados, destinatario, mailEt, infAdicional, esAnulacion, MotivoDeAnulacion,
-				ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, comentObserCoord, nameLegacyObservator,
+				ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion,vieneDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
 				vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador, MotivoObservacion, ComentarioObservacion,
 				MotivoNoAut, ComentariosNoAut) {
 
@@ -120,8 +120,8 @@ sap.ui.define([
 					mailsARO = those.formatMailsARO(AppManagementHelper.getModel("MailsAROModel").getData().Mails);
 				}
 
-				//context.Destinatario = destinatario;
-				context.Destinatario = "guillermo.quattrocchi@altromondo.com.ar";
+				context.Destinatario = destinatario;
+				//context.Destinatario = "guillermo.quattrocchi@altromondo.com.ar";
 
 				// Si viene de anulacion
 				if (esAnulacion === true) {
@@ -154,6 +154,19 @@ sap.ui.define([
 						}
 					}
 				}
+						// Si viene de tramitacion
+						if (vieneDeCalendarioTramitacion === true) {
+							if (licencia.Licstat === '07' || licencia.Licstat === '01' || licencia.Licstat === '23' || licencia.Licstat === '06') { //Si se esta tramitando por primera vez el estado llega como coordinada 07
+								var estadoSegunTramitaciones = AppManagementHelper.getModel("TramitacionStatusModel").getData().StatusText;
+								if (estadoSegunTramitaciones === 'Trámite Autorizado') {
+									licencia.Licstat = '01';
+								} else if (estadoSegunTramitaciones === 'Trámite No Autorizado') {
+									licencia.Licstat = '06';
+								} else if (estadoSegunTramitaciones === 'En Trámite') {
+									licencia.Licstat = '23';
+								}
+							}
+						}
 
 				// Si viene de Observacion
 				if (vieneDeObservacion) {
@@ -202,6 +215,7 @@ sap.ui.define([
 				context.EqDescript = descEquipo;
 				context.InfAdicional = infAdicional || "";
 				context.Equinterv = licencia.Equiinterv;
+				context.Calendario = "Prueba de calendario"
 
 				// nuevos
 				context.EstadoEQCamm = licencia.Equstat === "N" ? "" : licencia.Equstat === "X" ? "E/S" : "F/S";
