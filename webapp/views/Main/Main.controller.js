@@ -14,6 +14,7 @@ sap.ui.define([
 	"Transener/Operaciones/LicenciasTrabajo/utils/AppManagementHelper",
 	"Transener/Operaciones/LicenciasTrabajo/utils/DateHelper",
 	"Transener/Operaciones/LicenciasTrabajo/utils/ExportLicenseHelper",
+	"Transener/Operaciones/LicenciasTrabajo/utils/ModelHelper",
 	//model
 	"Transener/Operaciones/LicenciasTrabajo/model/HardCodeModel",
 	"Transener/Operaciones/LicenciasTrabajo/model/models",
@@ -53,7 +54,7 @@ sap.ui.define([
 	"Transener/Operaciones/LicenciasTrabajo/services/UserService"
 
 ], function (Controller, NavigationHelper, FormatHelper, FioriComponentHelper, MailHelper, ValidateHelper,
-	MessageBoxHelper, i18nTranslationHelper, AppManagementHelper, DateHelper, ExportLicenseHelper, HardCodeModel, models, LicenseService,
+	MessageBoxHelper, i18nTranslationHelper, AppManagementHelper, DateHelper, ExportLicenseHelper, ModelHelper, HardCodeModel, models, LicenseService,
 	RegionesService,
 	PersonalHabilitadoService, WorkPlaceService,
 	oDataService, EmpresaTramitacionService, TipoEquipoService, EquiposService, OrdenesService, EstacionesService, JobCondService, EstadoTramitacionService, MotivoNoAutorizacionService,
@@ -74,7 +75,10 @@ sap.ui.define([
 			var oTableBindingItems = this.byId("auditTable").getBinding("items");
 			oTableBindingItems.filter(LicenceHelper.getFastSearchFilters(sValue, this));
 		},
-		//mergea esto develop
+		getVersion: function () {
+			const sVersion = this.getOwnerComponent().getManifestEntry("/sap.app/applicationVersion/version");
+			ModelHelper.getModel(this.getView(), "version").setData({ version: sVersion });
+		},
 		onInit: function () {
 
 			var oRouter = AppManagementHelper.getAppRouter();
@@ -104,7 +108,7 @@ sap.ui.define([
 			});
 
 			oDataService.getModel("SelectModel")
-
+			this.getVersion()
 		},
 		loadPuestosTrabajo: async function (empresa) {
 			let aPuestosTrabajo = await LicenseService.getPuestosTrabajo(empresa)
@@ -639,23 +643,23 @@ sap.ui.define([
 
 			// Issue #518 -> Set Tipo de Licencia por defecto según rol.
 			//var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "Jefe_Turno_COT" || sRol === "Jefe_Turno_COTDT");
-			 var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "ope_jefe_turno_cot" || sRol === "ope_jefe_turno_cotdt");
+			var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "ope_jefe_turno_cot" || sRol === "ope_jefe_turno_cotdt");
 
 			//var bOperador = aUserRoles.find(sRol => sRol === "Operador_COT" || sRol === "Operador_COTDT");
-			 var bOperador = aUserRoles.find(sRol => sRol === "ope_oper-turno_cot" || sRol === "ope_oper-turno_cotdt");
+			var bOperador = aUserRoles.find(sRol => sRol === "ope_oper-turno_cot" || sRol === "ope_oper-turno_cotdt");
 			if (bJefeTurnoCOT || bOperador) {
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "EM");
 			}
 
 			//var bProgramacion = aUserRoles.find(sRol => sRol === "Programacion_COT" || sRol === "Programacion_COTDT");
-			 var bProgramacion = aUserRoles.find(sRol => sRol === "ope_programacion_cot" || sRol === "ope_programacion_cotdt");
+			var bProgramacion = aUserRoles.find(sRol => sRol === "ope_programacion_cot" || sRol === "ope_programacion_cotdt");
 
 			if (bProgramacion) {
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "TE");
 			}
 
 			//var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "Solicitante_Lic_TBA");
-			 var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "ope_solic-lic_transba");
+			var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "ope_solic-lic_transba");
 
 			if (bSolicitanteLicTBA) {
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "N");
@@ -1575,8 +1579,8 @@ sap.ui.define([
 			centroToRegion.loadData(sPath + "/conf/centroToRegion.json", "", false);
 
 			//	AppManagementHelper.getModel("FiltersJsonModel").setProperty("/Werks/value", werks);
-			 var empresa = this.society === "100" ? "TRANSENER" : "TRANSBA";
-			
+			var empresa = this.society === "100" ? "TRANSENER" : "TRANSBA";
+
 			LimitacionesTecnicas.loadLimitacionesTecnicas(empresa);
 
 		},

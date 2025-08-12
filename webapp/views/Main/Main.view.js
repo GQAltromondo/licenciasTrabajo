@@ -332,7 +332,10 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Main", {
 							formatter: oController.rolVisualization("listado/tramitacionMasiva")
 						},
 						press: [oController.openMassiveTramitationAddCompanyDialog, oController]
-					}).addStyleClass("buttonInverted")
+					}).addStyleClass("buttonInverted"),
+					new sap.m.Text({
+						text:"{version>/version}"
+					})
 				]
 			}),
 			content: [
@@ -362,7 +365,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Main", {
 									new sap.m.ToolbarSpacer(),
 									new sap.m.Text({
 										text: "Sociedad: {AlternativeLabel>/Sociedad} ID UT: {AlternativeLabel>/AlternativeLabel}"
-									}), new sap.m.Text({ text: "Versión: {appVersion>/version}" })]
+									})]
 							}).addStyleClass("filterToolbar"),
 							expandable: true,
 							content: [
