@@ -1609,8 +1609,9 @@ sap.ui.define([
 						"Jefe_Trabajo_Suplente"].Nombre : "",
 					SolSuplenteAux: hashPermisos["Solicitante_Suplente_Auxiliar"].Legajo + ", " + hashPermisos[
 						"Solicitante_Suplente_Auxiliar"].Nombre,
-					Tramitador: hashPermisos["TRAMITADOR"].Legajo + ", " + hashPermisos[
-						"TRAMITADOR"].Nombre,
+					//	18/08 Ticket
+					// Tramitador: hashPermisos["TRAMITADOR"].Legajo + ", " + hashPermisos[
+					// 	"TRAMITADOR"].Nombre,
 				};
 				aPromises.push(EtMailService.getPromise(oLicence.Empresa, oLicence.Tplnr));
 				Promise.all(aPromises).then((res) => {
@@ -1705,7 +1706,7 @@ sap.ui.define([
 			Promise.all(aTramitePromises).then((aResponses) => {
 				var aPromisesCalendarPost = this.getCalendarDatesPromises(aResponses, aCalendarDates, aTramites);
 				Promise.all(aPromisesCalendarPost).then(() => {
-					this.successPOSTTramitacion(bFinishTramitacion, sMessage, licenseClone);
+					this.successPOSTTramitacion(bFinishTramitacion, sMessage, licenseClone,aCalendarDates);
 				});
 			}).catch((e) => {
 				console.error(e);
@@ -1905,7 +1906,7 @@ sap.ui.define([
 						var ComentariosNoAut = "";
 
 						MailHelper.sendEmail(oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion, MotivoDeAnulacion,
-							ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion,vienDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
+							ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, vienDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
 							vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador, MotivoObservacion,
 							ComentarioObservacion, MotivoNoAut, ComentariosNoAut).then(() => {
 								resolve();
@@ -1971,7 +1972,7 @@ sap.ui.define([
 						var fechaAnulacion = '';
 						var vieneDeTramitacion = false;
 						var vieneDeObservacion = false;
-						var vieneDeCalendarioTramitacion=false;
+						var vieneDeCalendarioTramitacion = false;
 						var comentObserCoord = "";
 						var nameLegacyObservator = "";
 						var vieneDeCoordinacion = false;
@@ -1984,7 +1985,7 @@ sap.ui.define([
 						var ComentariosNoAut = "";
 
 						MailHelper.sendEmail(oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion, MotivoDeAnulacion,
-							ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion,vieneDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
+							ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, vieneDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
 							vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador, MotivoObservacion,
 							ComentarioObservacion, MotivoNoAut, ComentariosNoAut).then(() => {
 								resolve();
@@ -1997,7 +1998,7 @@ sap.ui.define([
 			});
 		},
 
-		successPOSTTramitacion: function (bFinishTramitacion, sMessage, licenseClone) {
+		successPOSTTramitacion: function (bFinishTramitacion, sMessage, licenseClone,aCalendarDates) {
 			var oLicence = licenseClone;
 			this.getPermisos(oLicence).then((aPermisos) => {
 				let sInfAdicional = "";
@@ -2012,9 +2013,9 @@ sap.ui.define([
 				hashPermisos["COORDINADOR"] = hashPermisos["COORDINADOR"] || "";
 				emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 					"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
-					
-						 permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar").join(",");
-	// permiso.Mail || "nurrestarazu@inclusion.cloud").join(",");
+
+						permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar").join(",");
+				// permiso.Mail || "nurrestarazu@inclusion.cloud").join(",");
 				var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 				var sCurrentUserMail = oUserJson.email;
 				var sCurrentUserName = oUserJson.nombre + ", " + oUserJson.apellido;
@@ -2057,25 +2058,41 @@ sap.ui.define([
 					var nameLegacyObservator = "";
 					var vieneDeCoordinacion = false;
 					var vieneDeCancelacion = false;
+					var vienDeCalendarioTramitacion= !bFinishTramitacion;
 					var nameLegacyCoordinator = this.getLastCoordinator();
 					var nameLegacyTramitador = oLicence.Tramitador;
 					var MotivoObservacion = "";
 					var ComentarioObservacion = "";
 					var MotivoNoAut = "";
 					var ComentariosNoAut = "";
+					
 
 					if (!bFinishTramitacion) {
-						this.logTramitationChange(sCurrentUserName).then(() => {
-							BusyDialogHelper.close();
-							var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
-							var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
-							MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
-						}).catch((e) => {
-							BusyDialogHelper.close();
-							console.error(e);
-							MessageBoxHelper.showAlert("Alerta", "Se ha guardado correctamente los cambios, pero ha habido un error en el logueo.", $.proxy(
-								this.goToHome, this));
-						});
+						MailHelper.sendEmail(oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion, MotivoDeAnulacion,
+							ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion,vienDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
+							vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador,
+							MotivoObservacion,
+							ComentarioObservacion,
+							MotivoNoAut,
+							ComentariosNoAut,aCalendarDates).then(() => {
+								this.logTramitationChange(sCurrentUserName).then(() => {
+									BusyDialogHelper.close();
+									var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
+									var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
+									MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
+								}).catch((e) => {
+									BusyDialogHelper.close();
+									console.error(e);
+									MessageBoxHelper.showAlert("Alerta", "Se ha guardado correctamente los cambios, pero ha habido un error en el logueo.",
+										$.proxy(this.goToHome, this));
+								});
+							}).catch((e) => {
+								BusyDialogHelper.close();
+								console.error(e);
+								MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al enviar mail para la coordinacion.", $.proxy(this.goToHome,
+									this));
+							});
+
 					} else {
 						if (this.stateOfTramit === "23") {
 							this.logTramitationChange(sCurrentUserName).then(() => {
@@ -2090,12 +2107,12 @@ sap.ui.define([
 										ComentarioObservacion,
 										MotivoNoAut,
 										ComentariosNoAut).then(() => {
-										
-												BusyDialogHelper.close();
-												var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
-												var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
-												MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
-										
+
+											BusyDialogHelper.close();
+											var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
+											var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
+											MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
+
 										}).catch((e) => {
 											BusyDialogHelper.close();
 											console.error(e);
@@ -2103,7 +2120,7 @@ sap.ui.define([
 												this));
 										});
 								}
-							//	MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
+								//	MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
 							}).catch((e) => {
 								BusyDialogHelper.close();
 								console.error(e);
@@ -2949,20 +2966,20 @@ sap.ui.define([
 		loadObservacionTramitacion: function (sAnio, sId, Empresa, sPeriod) {
 			return new Promise((resolve, reject) => {
 				var aFilters = [];
-		
+
 				aFilters.push(new sap.ui.model.Filter("Empresa", sap.ui.model.FilterOperator.EQ, Empresa));
 				aFilters.push(new sap.ui.model.Filter("Id", sap.ui.model.FilterOperator.EQ, sId));
 				aFilters.push(new sap.ui.model.Filter("Anio", sap.ui.model.FilterOperator.EQ, sAnio));
-		
+
 				var entity = "/LicenciaEstadoDiarioSet";
 				oDataService.getModel("TransenerOperaciones").read(entity, {
 					filters: aFilters,
 					success: function (data) {
 						var oDataFechas = LicenceHelper.handleSpecialDatesTramitacion(data.results);
 						oDataFechas = LicenceHelper.getOrderSpecialDate(oDataFechas);
-		
+
 						AppManagementHelper.getModel("EspecialDatesTramitacion").setData(oDataFechas);
-		
+
 						const aConObservaciones = oDataFechas.Fechas?.filter(f => !!f.Observaciones) || [];
 						resolve(aConObservaciones);
 					},
@@ -2973,7 +2990,7 @@ sap.ui.define([
 				});
 			});
 		},
-		
+
 
 		successFIND: function (data) {
 			var oData = FormatHelper.removeResults(data);
@@ -3199,7 +3216,7 @@ sap.ui.define([
 				aFilters.push(new sap.ui.model.Filter("Tipo", sap.ui.model.FilterOperator.EQ, "S"));
 			}
 		},
-		successGET:  function (bDontSort, data) {
+		successGET: function (bDontSort, data) {
 			var aLicenses = FormatHelper.removeResults(data);
 			FormatHelper.formatTimesFromGetLicenses(aLicenses);
 

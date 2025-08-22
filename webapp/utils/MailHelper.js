@@ -11,7 +11,7 @@ sap.ui.define([
 		getToken: function () {
 			return new Promise((resolve, reject) => {
 				$.ajax({
-				//	url: this._getWorkflowRuntimeBaseURL() + "/bpmworkflowruntime/rest/v1/xsrf-token",
+					//	url: this._getWorkflowRuntimeBaseURL() + "/bpmworkflowruntime/rest/v1/xsrf-token",
 					url: this._getWorkflowRuntimeBaseURL() + "/xsrf-token",
 					method: "GET",
 					headers: {
@@ -35,7 +35,7 @@ sap.ui.define([
 
 			return appModulePath + "/bpmworkflowruntime/v1";
 			//return appModulePath 
-	
+
 		},
 
 		formatMailsARO: function (aMails) {
@@ -71,9 +71,9 @@ sap.ui.define([
 			});
 
 			function prepareContext(licencia, usuariosAsignados, destinatario, mailEt, infAdicional, esAnulacion, MotivoDeAnulacion,
-				ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion,vieneDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
+				ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, vieneDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
 				vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador, MotivoObservacion, ComentarioObservacion,
-				MotivoNoAut, ComentariosNoAut) {
+				MotivoNoAut, ComentariosNoAut, aCalendarDates) {
 
 				var those = that;
 				let workPlaces = AppManagementHelper.getModel("WorkPlacesJsonModel").getProperty("/WorkPlaces");
@@ -120,8 +120,8 @@ sap.ui.define([
 					mailsARO = those.formatMailsARO(AppManagementHelper.getModel("MailsAROModel").getData().Mails);
 				}
 
-				context.Destinatario = destinatario;
-				//context.Destinatario = "guillermo.quattrocchi@altromondo.com.ar";
+				//context.Destinatario = destinatario;
+				context.Destinatario = "guillermo.quattrocchi@altromondo.com.ar";
 
 				// Si viene de anulacion
 				if (esAnulacion === true) {
@@ -154,21 +154,35 @@ sap.ui.define([
 						}
 					}
 				}
-						// Si viene de tramitacion
-						if (vieneDeCalendarioTramitacion === true) {
-							if (licencia.Licstat === '07' || licencia.Licstat === '01' || licencia.Licstat === '23' || licencia.Licstat === '06') { //Si se esta tramitando por primera vez el estado llega como coordinada 07
-								var estadoSegunTramitaciones = AppManagementHelper.getModel("TramitacionStatusModel").getData().StatusText;
-								if (estadoSegunTramitaciones === 'Trámite Autorizado') {
-									licencia.Licstat = '01';
-								} else if (estadoSegunTramitaciones === 'Trámite No Autorizado') {
-									licencia.Licstat = '06';
-								} else if (estadoSegunTramitaciones === 'En Trámite') {
-									licencia.Licstat = '23';
-								}
-							}
-						}
+				// Si viene de tramitacion
+				if (vieneDeCalendarioTramitacion === true) {
 
-				// Si viene de Observacion
+					const fechasTramitacion = AppManagementHelper.getModel("EspecialDatesTramitacion").getData();
+					context.Trami = "S"
+					// Aplana si viene como array de arrays
+					const flatDates = (aCalendarDates || []).flat();
+
+					// Mapea y ordena DESC por "DD-MM-YYYY"
+					const datos = flatDates.map(x => ({
+						Fecha: FormatHelper.formatDateLicenseWithoutUtc(x.Fecha),
+						EstadoDesc: FormatHelper.getEstadoTramitacion(x.Estado),
+						Observaciones: (x.Observaciones || "").trim() || "-"
+					}));
+
+					datos.sort((a, b) => {
+						const [da, ma, aa] = a.Fecha.split("-").map(Number);
+						const [db, mb, ab] = b.Fecha.split("-").map(Number);
+						return new Date(ab, mb - 1, db) - new Date(aa, ma - 1, da);
+					});
+
+					const CRLF = String.fromCharCode(13, 10); // \r\n
+context.fechasTextoPlano = datos
+  .map(it => `${it.Fecha} - ${it.EstadoDesc}: ${it.Observaciones}`)
+  .join(CRLF);
+
+				}
+
+
 				if (vieneDeObservacion) {
 					licencia.Licstat = '02';
 				}
@@ -216,6 +230,7 @@ sap.ui.define([
 				context.InfAdicional = infAdicional || "";
 				context.Equinterv = licencia.Equiinterv;
 				context.Calendario = "Prueba de calendario"
+
 
 				// nuevos
 				context.EstadoEQCamm = licencia.Equstat === "N" ? "" : licencia.Equstat === "X" ? "E/S" : "F/S";
