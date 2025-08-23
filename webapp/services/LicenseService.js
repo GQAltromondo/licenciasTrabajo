@@ -1698,23 +1698,24 @@ sap.ui.define([
 		},
 
 		successPUTLicenceTramit: function (bFinishTramitacion, sMessage, aTramites, licenseClone) {
-			var aCalendarDates = aTramites.map((oTramite) => {
-				return oTramite.CalendarDates;
-			});
+
+			var aTramitesCopy = structuredClone(aTramites);
+
+			var aCalendarDates = aTramites.map(oTramite => oTramite.CalendarDates);
 
 			var aTramitePromises = this.handleTramitePromises(aTramites);
 			Promise.all(aTramitePromises).then((aResponses) => {
 				var aPromisesCalendarPost = this.getCalendarDatesPromises(aResponses, aCalendarDates, aTramites);
 				Promise.all(aPromisesCalendarPost).then(() => {
-					this.successPOSTTramitacion(bFinishTramitacion, sMessage, licenseClone,aCalendarDates);
+					this.successPOSTTramitacion(bFinishTramitacion, sMessage, licenseClone, aTramitesCopy);
 				});
 			}).catch((e) => {
 				console.error(e);
 				BusyDialogHelper.close();
 				MessageBoxHelper.showAlert("Alerta", "Se ha producido un error tramitar", $.proxy(this.goToHome, this));
-			})
-
+			});
 		},
+
 
 		toggleIncludeCammesa: function () {
 			BusyDialogHelper.open();
@@ -1998,7 +1999,7 @@ sap.ui.define([
 			});
 		},
 
-		successPOSTTramitacion: function (bFinishTramitacion, sMessage, licenseClone,aCalendarDates) {
+		successPOSTTramitacion: function (bFinishTramitacion, sMessage, licenseClone, tramitaciones) {
 			var oLicence = licenseClone;
 			this.getPermisos(oLicence).then((aPermisos) => {
 				let sInfAdicional = "";
@@ -2058,23 +2059,23 @@ sap.ui.define([
 					var nameLegacyObservator = "";
 					var vieneDeCoordinacion = false;
 					var vieneDeCancelacion = false;
-					var vienDeCalendarioTramitacion= !bFinishTramitacion;
+					var vienDeCalendarioTramitacion = !bFinishTramitacion;
 					var nameLegacyCoordinator = this.getLastCoordinator();
 					var nameLegacyTramitador = oLicence.Tramitador;
 					var MotivoObservacion = "";
 					var ComentarioObservacion = "";
 					var MotivoNoAut = "";
 					var ComentariosNoAut = "";
-					
+
 
 					if (!bFinishTramitacion) {
 						MailHelper.sendEmail(oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion, MotivoDeAnulacion,
-							ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion,vienDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
+							ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, vienDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
 							vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador,
 							MotivoObservacion,
 							ComentarioObservacion,
 							MotivoNoAut,
-							ComentariosNoAut,aCalendarDates).then(() => {
+							ComentariosNoAut, tramitaciones).then(() => {
 								this.logTramitationChange(sCurrentUserName).then(() => {
 									BusyDialogHelper.close();
 									var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");

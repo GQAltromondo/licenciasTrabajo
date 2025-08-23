@@ -73,7 +73,7 @@ sap.ui.define([
 			function prepareContext(licencia, usuariosAsignados, destinatario, mailEt, infAdicional, esAnulacion, MotivoDeAnulacion,
 				ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, vieneDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
 				vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador, MotivoObservacion, ComentarioObservacion,
-				MotivoNoAut, ComentariosNoAut, aCalendarDates) {
+				MotivoNoAut, ComentariosNoAut, tramitaciones) {
 
 				var those = that;
 				let workPlaces = AppManagementHelper.getModel("WorkPlacesJsonModel").getProperty("/WorkPlaces");
@@ -157,28 +157,118 @@ sap.ui.define([
 				// Si viene de tramitacion
 				if (vieneDeCalendarioTramitacion === true) {
 
-					const fechasTramitacion = AppManagementHelper.getModel("EspecialDatesTramitacion").getData();
+
 					context.Trami = "S"
-					// Aplana si viene como array de arrays
-					const flatDates = (aCalendarDates || []).flat();
 
-					// Mapea y ordena DESC por "DD-MM-YYYY"
-					const datos = flatDates.map(x => ({
-						Fecha: FormatHelper.formatDateLicenseWithoutUtc(x.Fecha),
-						EstadoDesc: FormatHelper.getEstadoTramitacion(x.Estado),
-						Observaciones: (x.Observaciones || "").trim() || "-"
-					}));
+					// === Catálogos ===
+					const empresasCatalogo = AppManagementHelper.getModel("EmpresaTramitacionJsonModel")?.getData().Empresas || [];
+					const estadosCatalogo = AppManagementHelper.getModel("StatusTramitacion")?.getData().Estado || [];
 
-					datos.sort((a, b) => {
-						const [da, ma, aa] = a.Fecha.split("-").map(Number);
-						const [db, mb, ab] = b.Fecha.split("-").map(Number);
-						return new Date(ab, mb - 1, db) - new Date(aa, ma - 1, da);
+					const toArray = (data) => {
+						if (!data) return [];
+						if (Array.isArray(data)) return data;
+						if (Array.isArray(data.results)) return data.results;
+						return [];
+					};
+
+					
+
+					// Diccionario de empresas (código → nombre)
+					const nombreEmpresaPorCodigo = {};
+					empresasCatalogo.forEach(e => {
+						const codigo = String(e.Codigo || "").trim();
+						if (codigo) {
+							nombreEmpresaPorCodigo[codigo] = (e.Descripcion || "").trim() || `Empresa ${codigo}`;
+						}
 					});
 
-					const CRLF = String.fromCharCode(13, 10); // \r\n
-context.fechasTextoPlano = datos
-  .map(it => `${it.Fecha} - ${it.EstadoDesc}: ${it.Observaciones}`)
-  .join(CRLF);
+					// Diccionario de estados (código → descripción)
+					const nombreEstadoPorCodigo = {};
+					estadosCatalogo.forEach(e => {
+						const codigo = String(e.Valkey || e.Id || e.Estado || "").trim();
+						if (codigo) {
+							nombreEstadoPorCodigo[codigo] = (e.Valtext || e.Nombre || "").trim() || codigo;
+						}
+					});
+
+					// === Datos principales ===
+					const tramites = Array.isArray(tramitaciones) ? tramitaciones : [];
+
+					// Agrupar por empresa
+					const agrupadosPorEmpresa = new Map();
+
+					tramites.forEach(tramite => {
+						const codigoEmpresa = tramite.EmpTramita || tramite.Empresa || "N/A";
+						const listaFechas = agrupadosPorEmpresa.get(codigoEmpresa) || [];
+
+						const estadoCodigo = String(tramite.Estado || "").trim();
+						const estadoDescripcion = nombreEstadoPorCodigo[estadoCodigo] || estadoCodigo || "-";
+
+						(tramite.CalendarDates || []).forEach(fecha => {
+							listaFechas.push({
+								Fecha: FormatHelper.formatDateLicenseWithoutUtc(fecha.Fecha),
+								Estado: fecha.Estado,
+								EstadoDescripcion: FormatHelper.getEstadoTramitacion(fecha.Estado),
+								Observaciones: (fecha.Observaciones || "-").trim(),
+								EstadoTramitacion: estadoDescripcion
+							});
+						});
+
+						agrupadosPorEmpresa.set(codigoEmpresa, listaFechas);
+					});
+
+					// === Armar resultados ===
+					const resultadoEmpresas = [];
+					const saltoDeLinea = "\r\n";
+
+					for (const [codigoEmpresa, fechas] of agrupadosPorEmpresa.entries()) {
+						const nombreEmpresa = nombreEmpresaPorCodigo[codigoEmpresa] || `Empresa ${codigoEmpresa}`;
+						const encabezado = `${codigoEmpresa} - ${nombreEmpresa}`;
+
+						// El estado de tramitación lo tomo del primer item que tenga valor
+						const estadoTramitacion = fechas.find(f => f.EstadoTramitacion)?.EstadoTramitacion || "-";
+
+						// Quitar duplicados
+						const vistos = new Set();
+						const fechasUnicas = [];
+						fechas.forEach(f => {
+							const clave = `${f.Fecha}|${f.Estado}|${f.Observaciones}`;
+							if (!vistos.has(clave)) {
+								vistos.add(clave);
+								fechasUnicas.push(f);
+							}
+						});
+
+						// Ordenar descendente por fecha
+						fechasUnicas.sort((a, b) => {
+							const [da, ma, aa] = a.Fecha.split("-").map(Number);
+							const [db, mb, ab] = b.Fecha.split("-").map(Number);
+							return new Date(ab, mb - 1, db) - new Date(aa, ma - 1, da);
+						});
+
+						// Texto plano con saltos de línea
+						const textoFechas = fechasUnicas
+							.map(f => `${f.Fecha} - ${f.EstadoDescripcion}: ${f.Observaciones}`)
+							.join(saltoDeLinea);
+
+						resultadoEmpresas.push({
+							Codigo: codigoEmpresa,
+							Nombre: nombreEmpresa,
+							Encabezado: encabezado,
+							EstadoTramitacion: estadoTramitacion,
+							Fechas: fechasUnicas,
+							TextoPlano: textoFechas
+						});
+					}
+
+					// Guardar en contexto
+					context.empresas = resultadoEmpresas;
+					context.empresasTextoPlano = resultadoEmpresas
+						.map(e => `${e.Encabezado}${saltoDeLinea}Estado de tramitación: ${e.EstadoTramitacion}${saltoDeLinea}${e.TextoPlano}`)
+						.join(saltoDeLinea + saltoDeLinea);
+
+
+
 
 				}
 
