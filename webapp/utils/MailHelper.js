@@ -11,7 +11,7 @@ sap.ui.define([
 		getToken: function () {
 			return new Promise((resolve, reject) => {
 				$.ajax({
-				//	url: this._getWorkflowRuntimeBaseURL() + "/bpmworkflowruntime/rest/v1/xsrf-token",
+					//	url: this._getWorkflowRuntimeBaseURL() + "/bpmworkflowruntime/rest/v1/xsrf-token",
 					url: this._getWorkflowRuntimeBaseURL() + "/xsrf-token",
 					method: "GET",
 					headers: {
@@ -35,7 +35,7 @@ sap.ui.define([
 
 			return appModulePath + "/bpmworkflowruntime/v1";
 			//return appModulePath 
-	
+
 		},
 
 		formatMailsARO: function (aMails) {
@@ -46,7 +46,7 @@ sap.ui.define([
 			return sMails.toString();
 		},
 
-		sendEmail: function (...params) {
+		sendEmail: async function (...params) {
 			var that = this;
 			return new Promise((resolve, reject) => {
 				this.getToken().then((token) => {
@@ -71,9 +71,9 @@ sap.ui.define([
 			});
 
 			function prepareContext(licencia, usuariosAsignados, destinatario, mailEt, infAdicional, esAnulacion, MotivoDeAnulacion,
-				ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, comentObserCoord, nameLegacyObservator,
+				ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, vieneDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
 				vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador, MotivoObservacion, ComentarioObservacion,
-				MotivoNoAut, ComentariosNoAut) {
+				MotivoNoAut, ComentariosNoAut, tramitaciones) {
 
 				var those = that;
 				let workPlaces = AppManagementHelper.getModel("WorkPlacesJsonModel").getProperty("/WorkPlaces");
@@ -120,7 +120,8 @@ sap.ui.define([
 					mailsARO = those.formatMailsARO(AppManagementHelper.getModel("MailsAROModel").getData().Mails);
 				}
 
-				context.Destinatario = destinatario;
+				//context.Destinatario = destinatario;
+				context.Destinatario = "guillermo.quattrocchi@altromondo.com.ar,ivan.steciuk@altromondo.com.ar,mariano.vitelli@transener.com.ar";
 
 				// Si viene de anulacion
 				if (esAnulacion === true) {
@@ -140,7 +141,7 @@ sap.ui.define([
 					context.FechaAnulacion = '';
 				}
 
-				// Si viene de tramitacion
+
 				if (vieneDeTramitacion === true) {
 					if (licencia.Licstat === '07' || licencia.Licstat === '01' || licencia.Licstat === '23' || licencia.Licstat === '06') { //Si se esta tramitando por primera vez el estado llega como coordinada 07
 						var estadoSegunTramitaciones = AppManagementHelper.getModel("TramitacionStatusModel").getData().StatusText;
@@ -152,9 +153,117 @@ sap.ui.define([
 							licencia.Licstat = '23';
 						}
 					}
+
 				}
 
-				// Si viene de Observacion
+				if (vieneDeCalendarioTramitacion === true) {
+					context.Trami = "S";
+
+					// Catálogos
+					const empresasCatalogo = AppManagementHelper.getModel("EmpresaTramitacionJsonModel")?.getData().Empresas || [];
+					const estadosCatalogo = AppManagementHelper.getModel("StatusTramitacion")?.getData().Estado || [];
+
+					const tramites = Array.isArray(tramitaciones) ? tramitaciones : [];
+
+					// ⚠️ Si está vacío → corto acá
+					if (tramites.length === 0) {
+						context.empresas = [];
+						context.empresasTextoPlano = "No hay comentarios";
+						return;
+					}
+
+					// === funciones auxiliares
+					const nombreEmpresaPorCodigo = {};
+					empresasCatalogo.forEach(e => {
+						const codigo = String(e.Codigo || "").trim();
+						if (codigo) {
+							nombreEmpresaPorCodigo[codigo] = (e.Descripcion || "").trim() || `Empresa ${codigo}`;
+						}
+					});
+
+					const nombreEstadoPorCodigo = {};
+					estadosCatalogo.forEach(e => {
+						const codigo = String(e.Valkey || e.Id || e.Estado || "").trim();
+						if (codigo) {
+							nombreEstadoPorCodigo[codigo] = (e.Valtext || e.Nombre || "").trim() || codigo;
+						}
+					});
+
+					// === agrupación por empresa
+					const agrupadosPorEmpresa = new Map();
+
+					tramites.forEach(tramite => {
+						const codigoEmpresa = tramite.EmpTramita || tramite.Empresa || "N/A";
+						const listaFechas = agrupadosPorEmpresa.get(codigoEmpresa) || [];
+
+						const estadoCodigo = String(tramite.Estado || "").trim();
+						const estadoDescripcion = nombreEstadoPorCodigo[estadoCodigo] || estadoCodigo || "-";
+
+						(tramite.CalendarDates || []).forEach(fecha => {
+							listaFechas.push({
+								Fecha: FormatHelper.formatDateLicenseWithoutUtc(fecha.Fecha),
+								Estado: fecha.Estado,
+								EstadoDescripcion: FormatHelper.getEstadoTramitacion(fecha.Estado),
+								Observaciones: (fecha.Observaciones || "-").trim(),
+								EstadoTramitacion: estadoDescripcion
+							});
+						});
+
+						agrupadosPorEmpresa.set(codigoEmpresa, listaFechas);
+					});
+
+					const resultadoEmpresas = [];
+					const saltoDeLinea = "\r\n";
+
+					for (const [codigoEmpresa, fechas] of agrupadosPorEmpresa.entries()) {
+						const nombreEmpresa = nombreEmpresaPorCodigo[codigoEmpresa] || `Empresa ${codigoEmpresa}`;
+						const encabezado = `${codigoEmpresa} - ${nombreEmpresa}`;
+
+						const estadoTramitacion = fechas.find(f => f.EstadoTramitacion)?.EstadoTramitacion || "-";
+
+						const vistos = new Set();
+						const fechasUnicas = [];
+						fechas.forEach(f => {
+							const clave = `${f.Fecha}|${f.Estado}|${f.Observaciones}`;
+							if (!vistos.has(clave)) {
+								vistos.add(clave);
+								fechasUnicas.push(f);
+							}
+						});
+
+						fechasUnicas.sort((a, b) => {
+							const [da, ma, aa] = a.Fecha.split("-").map(Number);
+							const [db, mb, ab] = b.Fecha.split("-").map(Number);
+							return new Date(ab, mb - 1, db) - new Date(aa, ma - 1, da);
+						});
+
+						const textoFechas = fechasUnicas
+							.map(f => `${f.Fecha} - ${f.EstadoDescripcion}: ${f.Observaciones}`)
+							.join(saltoDeLinea);
+
+						resultadoEmpresas.push({
+							Codigo: codigoEmpresa,
+							Nombre: nombreEmpresa,
+							Encabezado: encabezado,
+							EstadoTramitacion: estadoTramitacion,
+							Fechas: fechasUnicas,
+							TextoPlano: textoFechas
+						});
+					}
+
+					context.empresas = resultadoEmpresas;
+					context.empresasTextoPlano =
+						resultadoEmpresas.length === 0
+							? "No hay comentarios"
+							: resultadoEmpresas
+								.map(e =>
+									`${e.Encabezado}${saltoDeLinea}Estado de tramitación: ${e.EstadoTramitacion}${saltoDeLinea}${e.TextoPlano}`
+								)
+								.join(saltoDeLinea + saltoDeLinea);
+				}
+
+
+
 				if (vieneDeObservacion) {
 					licencia.Licstat = '02';
 				}
@@ -201,6 +310,8 @@ sap.ui.define([
 				context.EqDescript = descEquipo;
 				context.InfAdicional = infAdicional || "";
 				context.Equinterv = licencia.Equiinterv;
+				context.Calendario = "Prueba de calendario"
+
 
 				// nuevos
 				context.EstadoEQCamm = licencia.Equstat === "N" ? "" : licencia.Equstat === "X" ? "E/S" : "F/S";

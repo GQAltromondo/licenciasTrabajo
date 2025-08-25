@@ -168,3 +168,15 @@ tbody tr:nth-child(odd) {
 .sapUiFup:not(.sapUiFupButtonOnly) .sapUiFupGroup>div>div:last-child {
 	padding-left: 0 !important;
 }
+/* style.css */
+.rowHighlightWarning {
+    background-color: #fff3cd !important; /* light yellow */
+  }
+  
+  .rowHighlightError {
+    background-color: #f8d7da !important; /* light red */
+  }
+  
+  .rowHighlightSuccess {
+    background-color: #d4edda !important; /* light green */
+  }
