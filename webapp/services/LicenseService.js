@@ -476,7 +476,7 @@ sap.ui.define([
 
 						emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"],
 						hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]
-						].map(permiso => permiso && permiso.Mail || "nurrestarazu@inclusion.cloud");
+						].map(permiso => permiso && permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar");
 
 						let usuariosAsignados = {
 							Coordinador: currentUser.Legajo + ", " + currentName,
@@ -885,10 +885,10 @@ sap.ui.define([
 				if (Tipo === "L") {
 					aEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 						"Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]].map(permiso => permiso &&
-							permiso.Mail || "nurrestarazu@inclusion.cloud");
+							permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar");
 				} else {
 					aEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail ||
-						"nurrestarazu@inclusion.cloud");
+						"guillermo.quattrocchi@altromondo.com.ar");
 				}
 
 				var sEmails = aEmails.join(",");
@@ -1289,12 +1289,12 @@ sap.ui.define([
 				var sEmailEt = "";
 				if (licencia.Tipo === "S") {
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail ||
-						"nurrestarazu@inclusion.cloud");
+						"guillermo.quattrocchi@altromondo.com.ar");
 					sEmailEt = "";
 				} else {
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos["Jefe_Trabajo"],
 					hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]
-					].map(permiso => permiso && permiso.Mail || "nurrestarazu@inclusion.cloud");
+					].map(permiso => permiso && permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar");
 					sEmailEt = res[2].results && res[2].results !== 0 ? res[2].results.map(e => (e.Mail)).join(",") : "";
 				}
 
@@ -1432,7 +1432,7 @@ sap.ui.define([
 				let stringEmails = "";
 
 				stringEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail ||
-					"nurrestarazu@inclusion.cloud").join(",");
+					"guillermo.quattrocchi@altromondo.com.ar").join(",");
 
 				var usuariosAsignados = {
 					Coordinador: hashPermisos["COORDINADOR"] ? hashPermisos["COORDINADOR"].Legajo + ", " + hashPermisos["COORDINADOR"].Nombre : "",
@@ -1583,7 +1583,7 @@ sap.ui.define([
 					"Solicitante_Suplente_Auxiliar"], hashPermisos[
 				"TRAMITADOR"],
 				hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["COORDINADOR"]
-				].map(permiso => permiso && permiso.Mail || "pgotelli@inclusion.cloud");
+				].map(permiso => permiso && permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar");
 
 				//emails = "hzea@inclusion.cloud"
 
@@ -1854,7 +1854,7 @@ sap.ui.define([
 					hashPermisos["COORDINADOR"] = hashPermisos["COORDINADOR"] || "";
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 						"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
-							permiso.Mail || "nurrestarazu@inclusion.cloud").join(",");
+							permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar").join(",");
 
 					var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 					var sCurrentUserMail = oUserJson.email;
@@ -1932,7 +1932,7 @@ sap.ui.define([
 					hashPermisos["COORDINADOR"] = hashPermisos["COORDINADOR"] || "";
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 						"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
-							permiso.Mail || "nurrestarazu@inclusion.cloud").join(",");
+							permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar").join(",");
 
 					var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 					var sCurrentUserMail = oUserJson.email;
@@ -1999,7 +1999,7 @@ sap.ui.define([
 			});
 		},
 
-		successPOSTTramitacion: function (bFinishTramitacion, sMessage, licenseClone, tramitaciones) {
+		successPOSTTramitacion: async function (bFinishTramitacion, sMessage, licenseClone, tramitaciones) {
 			var oLicence = licenseClone;
 			this.getPermisos(oLicence).then((aPermisos) => {
 				let sInfAdicional = "";
@@ -2016,7 +2016,7 @@ sap.ui.define([
 					"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
 
 						permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar").join(",");
-				// permiso.Mail || "nurrestarazu@inclusion.cloud").join(",");
+				// permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar").join(",");
 				var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 				var sCurrentUserMail = oUserJson.email;
 				var sCurrentUserName = oUserJson.nombre + ", " + oUserJson.apellido;
@@ -2059,7 +2059,7 @@ sap.ui.define([
 					var nameLegacyObservator = "";
 					var vieneDeCoordinacion = false;
 					var vieneDeCancelacion = false;
-					var vienDeCalendarioTramitacion = !bFinishTramitacion;
+					var vieneDeCalendarioTramitacion = !bFinishTramitacion;
 					var nameLegacyCoordinator = this.getLastCoordinator();
 					var nameLegacyTramitador = oLicence.Tramitador;
 					var MotivoObservacion = "";
@@ -2070,7 +2070,7 @@ sap.ui.define([
 
 					if (!bFinishTramitacion) {
 						MailHelper.sendEmail(oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion, MotivoDeAnulacion,
-							ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, vienDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
+							ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, vieneDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
 							vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador,
 							MotivoObservacion,
 							ComentarioObservacion,
@@ -2096,30 +2096,72 @@ sap.ui.define([
 
 					} else {
 						if (this.stateOfTramit === "23") {
+
 							this.logTramitationChange(sCurrentUserName).then(() => {
 								BusyDialogHelper.close();
 								var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
 								var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
 								{
-									MailHelper.sendEmail(oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion, MotivoDeAnulacion,
-										ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, comentObserCoord, nameLegacyObservator,
-										vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador,
-										MotivoObservacion,
-										ComentarioObservacion,
-										MotivoNoAut,
-										ComentariosNoAut).then(() => {
+									// MailHelper.sendEmail(oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion, MotivoDeAnulacion,
+									// 	ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, comentObserCoord, nameLegacyObservator,
+									// 	vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador,
+									// 	MotivoObservacion,
+									// 	ComentarioObservacion,
+									// 	MotivoNoAut,
+									// 	ComentariosNoAut).then(() => {
 
-											BusyDialogHelper.close();
-											var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
-											var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
-											MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
+									// 		BusyDialogHelper.close();
+									// 		var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
+									// 		var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
+									// 		MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
 
-										}).catch((e) => {
-											BusyDialogHelper.close();
-											console.error(e);
-											MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al enviar mail para la coordinacion.", $.proxy(this.goToHome,
-												this));
-										});
+									// 	}).catch((e) => {
+									// 		BusyDialogHelper.close();
+									// 		console.error(e);
+									// 		MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al enviar mail para la coordinacion.", $.proxy(this.goToHome,
+									// 			this));
+									// 	});
+									try {
+										// --- Primer envío (normal) ---
+										MailHelper.sendEmail(
+											oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion,
+											MotivoDeAnulacion, ObservacionDeAnulacion, fechaAnulacion,
+											vieneDeTramitacion, vieneDeObservacion, false, // vieneDeCalendarioTramitacion = false
+											comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
+											nameLegacyCoordinator, nameLegacyTramitador,
+											MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut
+										);
+
+										// --- Segundo envío (desde calendario de tramitación) ---
+										MailHelper.sendEmail(
+											oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion,
+											MotivoDeAnulacion, ObservacionDeAnulacion, fechaAnulacion,
+											vieneDeTramitacion, vieneDeObservacion, true, // vieneDeCalendarioTramitacion = true
+											comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
+											nameLegacyCoordinator, nameLegacyTramitador,
+											MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut,
+											tramitaciones // 👈 parámetro adicional
+										);
+
+										// --- Log después de los dos envíos ---
+										this.logTramitationChange(sCurrentUserName);
+
+										BusyDialogHelper.close();
+										var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
+										var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
+										MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
+
+									} catch (e) {
+										BusyDialogHelper.close();
+										console.error(e);
+										MessageBoxHelper.showAlert(
+											"Alerta",
+											"Se ha producido un error al enviar mail o en el logueo.",
+											$.proxy(this.goToHome, this)
+										);
+									}
+
+
 								}
 								//	MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
 							}).catch((e) => {
@@ -2129,30 +2171,69 @@ sap.ui.define([
 									this.goToHome, this));
 							});
 						} else {
-							MailHelper.sendEmail(oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion, MotivoDeAnulacion,
-								ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, comentObserCoord, nameLegacyObservator,
-								vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador,
-								MotivoObservacion,
-								ComentarioObservacion,
-								MotivoNoAut,
-								ComentariosNoAut).then(() => {
-									this.logTramitationChange(sCurrentUserName).then(() => {
+							// MailHelper.sendEmail(oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion, MotivoDeAnulacion,
+							// 	ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, comentObserCoord, nameLegacyObservator,
+							// 	vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador,
+							// 	MotivoObservacion,
+							// 	ComentarioObservacion,
+							// 	MotivoNoAut,
+							// 	ComentariosNoAut).then(() => {
+							// 		this.logTramitationChange(sCurrentUserName).then(() => {
+							// 			BusyDialogHelper.close();
+							// 			var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
+							// 			var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
+							// 			MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
+							// 		}).catch((e) => {
+							// 			BusyDialogHelper.close();
+							// 			console.error(e);
+							// 			MessageBoxHelper.showAlert("Alerta", "Se ha guardado correctamente los cambios, pero ha habido un error en el logueo.",
+							// 				$.proxy(this.goToHome, this));
+							// 		});
+							// 	}).catch((e) => {
+							// 		BusyDialogHelper.close();
+							// 		console.error(e);
+							// 		MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al enviar mail para la coordinacion.", $.proxy(this.goToHome,
+							// 			this));
+							// 	});
+								try {
+										// --- Primer envío (normal) ---
+										MailHelper.sendEmail(
+											oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion,
+											MotivoDeAnulacion, ObservacionDeAnulacion, fechaAnulacion,
+											vieneDeTramitacion, vieneDeObservacion, false, // vieneDeCalendarioTramitacion = false
+											comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
+											nameLegacyCoordinator, nameLegacyTramitador,
+											MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut
+										);
+
+										// --- Segundo envío (desde calendario de tramitación) ---
+										MailHelper.sendEmail(
+											oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion,
+											MotivoDeAnulacion, ObservacionDeAnulacion, fechaAnulacion,
+											vieneDeTramitacion, vieneDeObservacion, true, // vieneDeCalendarioTramitacion = true
+											comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
+											nameLegacyCoordinator, nameLegacyTramitador,
+											MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut,
+											tramitaciones // 👈 parámetro adicional
+										);
+
+										// --- Log después de los dos envíos ---
+										this.logTramitationChange(sCurrentUserName);
+
 										BusyDialogHelper.close();
 										var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
 										var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
 										MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
-									}).catch((e) => {
+
+									} catch (e) {
 										BusyDialogHelper.close();
 										console.error(e);
-										MessageBoxHelper.showAlert("Alerta", "Se ha guardado correctamente los cambios, pero ha habido un error en el logueo.",
-											$.proxy(this.goToHome, this));
-									});
-								}).catch((e) => {
-									BusyDialogHelper.close();
-									console.error(e);
-									MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al enviar mail para la coordinacion.", $.proxy(this.goToHome,
-										this));
-								});
+										MessageBoxHelper.showAlert(
+											"Alerta",
+											"Se ha producido un error al enviar mail o en el logueo.",
+											$.proxy(this.goToHome, this)
+										);
+									}
 						}
 					}
 				}).catch((e) => {

@@ -46,7 +46,7 @@ sap.ui.define([
 			return sMails.toString();
 		},
 
-		sendEmail: function (...params) {
+		sendEmail: async function (...params) {
 			var that = this;
 			return new Promise((resolve, reject) => {
 				this.getToken().then((token) => {
@@ -121,7 +121,7 @@ sap.ui.define([
 				}
 
 				//context.Destinatario = destinatario;
-				context.Destinatario = "guillermo.quattrocchi@altromondo.com.ar";
+				context.Destinatario = "guillermo.quattrocchi@altromondo.com.ar,ivan.steciuk@altromondo.com.ar,mariano.vitelli@transener.com.ar";
 
 				// Si viene de anulacion
 				if (esAnulacion === true) {
@@ -141,7 +141,7 @@ sap.ui.define([
 					context.FechaAnulacion = '';
 				}
 
-				// Si viene de tramitacion
+
 				if (vieneDeTramitacion === true) {
 					if (licencia.Licstat === '07' || licencia.Licstat === '01' || licencia.Licstat === '23' || licencia.Licstat === '06') { //Si se esta tramitando por primera vez el estado llega como coordinada 07
 						var estadoSegunTramitaciones = AppManagementHelper.getModel("TramitacionStatusModel").getData().StatusText;
@@ -153,27 +153,26 @@ sap.ui.define([
 							licencia.Licstat = '23';
 						}
 					}
+
 				}
-				// Si viene de tramitacion
+
 				if (vieneDeCalendarioTramitacion === true) {
+					context.Trami = "S";
 
-
-					context.Trami = "S"
-
-					// === Catálogos ===
+					// Catálogos
 					const empresasCatalogo = AppManagementHelper.getModel("EmpresaTramitacionJsonModel")?.getData().Empresas || [];
 					const estadosCatalogo = AppManagementHelper.getModel("StatusTramitacion")?.getData().Estado || [];
 
-					const toArray = (data) => {
-						if (!data) return [];
-						if (Array.isArray(data)) return data;
-						if (Array.isArray(data.results)) return data.results;
-						return [];
-					};
+					const tramites = Array.isArray(tramitaciones) ? tramitaciones : [];
 
-					
+					// ⚠️ Si está vacío → corto acá
+					if (tramites.length === 0) {
+						context.empresas = [];
+						context.empresasTextoPlano = "No hay comentarios";
+						return;
+					}
 
-					// Diccionario de empresas (código → nombre)
+					// === funciones auxiliares
 					const nombreEmpresaPorCodigo = {};
 					empresasCatalogo.forEach(e => {
 						const codigo = String(e.Codigo || "").trim();
@@ -182,7 +181,6 @@ sap.ui.define([
 						}
 					});
 
-					// Diccionario de estados (código → descripción)
 					const nombreEstadoPorCodigo = {};
 					estadosCatalogo.forEach(e => {
 						const codigo = String(e.Valkey || e.Id || e.Estado || "").trim();
@@ -191,10 +189,7 @@ sap.ui.define([
 						}
 					});
 
-					// === Datos principales ===
-					const tramites = Array.isArray(tramitaciones) ? tramitaciones : [];
-
-					// Agrupar por empresa
+					// === agrupación por empresa
 					const agrupadosPorEmpresa = new Map();
 
 					tramites.forEach(tramite => {
@@ -217,7 +212,6 @@ sap.ui.define([
 						agrupadosPorEmpresa.set(codigoEmpresa, listaFechas);
 					});
 
-					// === Armar resultados ===
 					const resultadoEmpresas = [];
 					const saltoDeLinea = "\r\n";
 
@@ -225,10 +219,8 @@ sap.ui.define([
 						const nombreEmpresa = nombreEmpresaPorCodigo[codigoEmpresa] || `Empresa ${codigoEmpresa}`;
 						const encabezado = `${codigoEmpresa} - ${nombreEmpresa}`;
 
-						// El estado de tramitación lo tomo del primer item que tenga valor
 						const estadoTramitacion = fechas.find(f => f.EstadoTramitacion)?.EstadoTramitacion || "-";
 
-						// Quitar duplicados
 						const vistos = new Set();
 						const fechasUnicas = [];
 						fechas.forEach(f => {
@@ -239,14 +231,12 @@ sap.ui.define([
 							}
 						});
 
-						// Ordenar descendente por fecha
 						fechasUnicas.sort((a, b) => {
 							const [da, ma, aa] = a.Fecha.split("-").map(Number);
 							const [db, mb, ab] = b.Fecha.split("-").map(Number);
 							return new Date(ab, mb - 1, db) - new Date(aa, ma - 1, da);
 						});
 
-						// Texto plano con saltos de línea
 						const textoFechas = fechasUnicas
 							.map(f => `${f.Fecha} - ${f.EstadoDescripcion}: ${f.Observaciones}`)
 							.join(saltoDeLinea);
@@ -261,16 +251,17 @@ sap.ui.define([
 						});
 					}
 
-					// Guardar en contexto
 					context.empresas = resultadoEmpresas;
-					context.empresasTextoPlano = resultadoEmpresas
-						.map(e => `${e.Encabezado}${saltoDeLinea}Estado de tramitación: ${e.EstadoTramitacion}${saltoDeLinea}${e.TextoPlano}`)
-						.join(saltoDeLinea + saltoDeLinea);
-
-
-
-
+					context.empresasTextoPlano =
+						resultadoEmpresas.length === 0
+							? "No hay comentarios"
+							: resultadoEmpresas
+								.map(e =>
+									`${e.Encabezado}${saltoDeLinea}Estado de tramitación: ${e.EstadoTramitacion}${saltoDeLinea}${e.TextoPlano}`
+								)
+								.join(saltoDeLinea + saltoDeLinea);
 				}
+
 
 
 				if (vieneDeObservacion) {
