@@ -515,13 +515,6 @@ sap.ui.define([
 				oDisableControlsJsonModel.setProperty("/enabledForProgrammer", true);
 			}
 
-			// if (this.isProgrammerRol(oLicense.Licstat)) {
-			// 	oDisableControlsJsonModel.setProperty("/enabledForProgrammer", true);
-			// } else {
-			// 	oDisableControlsJsonModel.setProperty("/enabledForProgrammer", false);
-			// }
-
-
 			if (isLicense) {
 				localStorage.setItem("type", "Licencia");
 				AppManagementHelper.getAppRouter().navTo("Licencia", {

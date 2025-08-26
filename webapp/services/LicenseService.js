@@ -4052,25 +4052,32 @@ sap.ui.define([
 		},
 
 		getFullTramitacionesWithCalendarDates: function () {
-			var aTramitaciones = AppManagementHelper.getModel("TramitacionListJsonModel") ? AppManagementHelper.getModel(
-				"TramitacionListJsonModel").getData().Tramitaciones : [];
-			var aPromises = [];
+  const oListModel = AppManagementHelper.getModel("TramitacionListJsonModel");
+  const aTramitaciones = oListModel ? (oListModel.getData().Tramitaciones || []) : [];
+  if (!Array.isArray(aTramitaciones) || aTramitaciones.length === 0) return;
 
-			aTramitaciones.map((oTramitacion) => {
-				aPromises.push(this.getDatesFromTramitacion(oTramitacion));
-			});
+  // 1) Pedidos en paralelo
+  const aPromises = aTramitaciones.map((oTramitacion) => this.getDatesFromTramitacion(oTramitacion));
 
-			Promise.all(aPromises).then((aCalendarDates) => {
+  Promise.all(aPromises).then((aCalendarDates) => {
+    // 2) Construyo un nuevo array con CalendarDates ya asignado
+    const aWithCal = aTramitaciones.map((t, idx) => ({
+      ...t,
+      CalendarDates: aCalendarDates[idx]?.results || []
+    }));
 
-				aTramitaciones.map((Tramit, index) => {
-					aCalendarDates.map((oCalendarDates) => {
-						Tramit.CalendarDates = aCalendarDates[index].results;
-					});
-					AppManagementHelper.getModel("TramitacionListJsonModel").setProperty("/CalendarDates", Tramit.CalendarDates);
-				});
+    // 3) Actualizo el modelo "vivo" una sola vez
+    oListModel.setProperty("/Tramitaciones", aWithCal);
+    // (Si querías además tenerlo suelto en /CalendarDates del mismo modelo, podés quitar esta línea o ajustarla)
+    oListModel.setProperty("/CalendarDates", aWithCal.map(t => t.CalendarDates));
 
-			});
-		}
+    // 4) Creo el snapshot (copia profunda)
+    const oSnapshotModel = new sap.ui.model.json.JSONModel(JSON.parse(JSON.stringify(aWithCal)));
+    oSnapshotModel.setSizeLimit(100000); // por si tenés muchos items
+    AppManagementHelper.setModel(oSnapshotModel, "TramitacionListSnapshotModel");
+  });
+}
+
 
 	};
 });

@@ -121,7 +121,7 @@ sap.ui.define([
 				}
 
 				//context.Destinatario = destinatario;
-				context.Destinatario = "guillermo.quattrocchi@altromondo.com.ar,ivan.steciuk@altromondo.com.ar,mariano.vitelli@transener.com.ar";
+				context.Destinatario = "guillermo.quattrocchi@altromondo.com.ar";
 
 				// Si viene de anulacion
 				if (esAnulacion === true) {
@@ -140,6 +140,7 @@ sap.ui.define([
 					context.ObservacionDeAnulacion = '';
 					context.FechaAnulacion = '';
 				}
+
 
 
 				if (vieneDeTramitacion === true) {
@@ -234,7 +235,7 @@ sap.ui.define([
 						fechasUnicas.sort((a, b) => {
 							const [da, ma, aa] = a.Fecha.split("-").map(Number);
 							const [db, mb, ab] = b.Fecha.split("-").map(Number);
-							return new Date(ab, mb - 1, db) - new Date(aa, ma - 1, da);
+							return new Date(aa, ma - 1, da) - new Date(ab, mb - 1, db);
 						});
 
 						const textoFechas = fechasUnicas
