@@ -12,8 +12,9 @@ sap.ui.define([
 	"Transener/Operaciones/LicenciasTrabajo/services/LibroGuardiasService",
 	"Transener/Operaciones/LicenciasTrabajo/services/EtMailService",
 	"Transener/Operaciones/LicenciasTrabajo/utils/LegacyValidationHelper",
+	"sap/m/MessageBox"
 ], function (oDataService, MessageBoxHelper, FormatHelper, AppManagementHelper, BusyDialogHelper, BatchOperationsHelper, LicenceHelper,
-	FileDownloadHelper, MailHelper, FormatterHelper, LibroGuardiasService, EtMailService, LegacyValidationHelper) {
+	FileDownloadHelper, MailHelper, FormatterHelper, LibroGuardiasService, EtMailService, LegacyValidationHelper, MessageBox) {
 	"use strict";
 	return {
 		rolCoordinador: "Coordinador_Mantenimiento",
@@ -2067,32 +2068,59 @@ sap.ui.define([
 					var MotivoNoAut = "";
 					var ComentariosNoAut = "";
 
+					const aTramitacionOrig = AppManagementHelper.getModel("TramitacionListSnapshotModel").getData();
+
+
+					const result = this.getTramitacionDiff(aTramitacionOrig, tramitaciones);
+
+					if (result.changed) {
+						console.log("Hay cambios:", result.diffs);
+					} else {
+						console.log("No hubo cambios");
+					}
+
+
+
 
 					if (!bFinishTramitacion) {
-						MailHelper.sendEmail(oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion, MotivoDeAnulacion,
-							ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, vieneDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
-							vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador,
-							MotivoObservacion,
-							ComentarioObservacion,
-							MotivoNoAut,
-							ComentariosNoAut, tramitaciones).then(() => {
-								this.logTramitationChange(sCurrentUserName).then(() => {
-									BusyDialogHelper.close();
-									var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
-									var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
-									MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
+						if (result.changed) {
+							MailHelper.sendEmail(oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion, MotivoDeAnulacion,
+								ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, vieneDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
+								vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador,
+								MotivoObservacion,
+								ComentarioObservacion,
+								MotivoNoAut,
+								ComentariosNoAut, tramitaciones).then(() => {
+									this.logTramitationChange(sCurrentUserName).then(() => {
+										BusyDialogHelper.close();
+										var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
+										var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
+										MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
+									}).catch((e) => {
+										BusyDialogHelper.close();
+										console.error(e);
+										MessageBoxHelper.showAlert("Alerta", "Se ha guardado correctamente los cambios, pero ha habido un error en el logueo.",
+											$.proxy(this.goToHome, this));
+									});
 								}).catch((e) => {
 									BusyDialogHelper.close();
 									console.error(e);
-									MessageBoxHelper.showAlert("Alerta", "Se ha guardado correctamente los cambios, pero ha habido un error en el logueo.",
-										$.proxy(this.goToHome, this));
+									MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al enviar mail para la coordinacion.", $.proxy(this.goToHome,
+										this));
 								});
+						} else {
+							this.logTramitationChange(sCurrentUserName).then(() => {
+								BusyDialogHelper.close();
+								var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
+								var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
+								MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
 							}).catch((e) => {
 								BusyDialogHelper.close();
 								console.error(e);
-								MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al enviar mail para la coordinacion.", $.proxy(this.goToHome,
-									this));
+								MessageBoxHelper.showAlert("Alerta", "Se ha guardado correctamente los cambios, pero ha habido un error en el logueo.",
+									$.proxy(this.goToHome, this));
 							});
+						}
 
 					} else {
 						if (this.stateOfTramit === "23") {
@@ -2102,25 +2130,7 @@ sap.ui.define([
 								var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
 								var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
 								{
-									// MailHelper.sendEmail(oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion, MotivoDeAnulacion,
-									// 	ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, comentObserCoord, nameLegacyObservator,
-									// 	vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador,
-									// 	MotivoObservacion,
-									// 	ComentarioObservacion,
-									// 	MotivoNoAut,
-									// 	ComentariosNoAut).then(() => {
 
-									// 		BusyDialogHelper.close();
-									// 		var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
-									// 		var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
-									// 		MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
-
-									// 	}).catch((e) => {
-									// 		BusyDialogHelper.close();
-									// 		console.error(e);
-									// 		MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al enviar mail para la coordinacion.", $.proxy(this.goToHome,
-									// 			this));
-									// 	});
 									try {
 										// --- Primer envío (normal) ---
 										MailHelper.sendEmail(
@@ -2171,69 +2181,46 @@ sap.ui.define([
 									this.goToHome, this));
 							});
 						} else {
-							// MailHelper.sendEmail(oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion, MotivoDeAnulacion,
-							// 	ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, comentObserCoord, nameLegacyObservator,
-							// 	vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador,
-							// 	MotivoObservacion,
-							// 	ComentarioObservacion,
-							// 	MotivoNoAut,
-							// 	ComentariosNoAut).then(() => {
-							// 		this.logTramitationChange(sCurrentUserName).then(() => {
-							// 			BusyDialogHelper.close();
-							// 			var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
-							// 			var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
-							// 			MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
-							// 		}).catch((e) => {
-							// 			BusyDialogHelper.close();
-							// 			console.error(e);
-							// 			MessageBoxHelper.showAlert("Alerta", "Se ha guardado correctamente los cambios, pero ha habido un error en el logueo.",
-							// 				$.proxy(this.goToHome, this));
-							// 		});
-							// 	}).catch((e) => {
-							// 		BusyDialogHelper.close();
-							// 		console.error(e);
-							// 		MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al enviar mail para la coordinacion.", $.proxy(this.goToHome,
-							// 			this));
-							// 	});
-								try {
-										// --- Primer envío (normal) ---
-										MailHelper.sendEmail(
-											oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion,
-											MotivoDeAnulacion, ObservacionDeAnulacion, fechaAnulacion,
-											vieneDeTramitacion, vieneDeObservacion, false, // vieneDeCalendarioTramitacion = false
-											comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
-											nameLegacyCoordinator, nameLegacyTramitador,
-											MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut
-										);
 
-										// --- Segundo envío (desde calendario de tramitación) ---
-										MailHelper.sendEmail(
-											oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion,
-											MotivoDeAnulacion, ObservacionDeAnulacion, fechaAnulacion,
-											vieneDeTramitacion, vieneDeObservacion, true, // vieneDeCalendarioTramitacion = true
-											comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
-											nameLegacyCoordinator, nameLegacyTramitador,
-											MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut,
-											tramitaciones // 👈 parámetro adicional
-										);
+							try {
+								// --- Primer envío (normal) ---
+								MailHelper.sendEmail(
+									oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion,
+									MotivoDeAnulacion, ObservacionDeAnulacion, fechaAnulacion,
+									vieneDeTramitacion, vieneDeObservacion, false, // vieneDeCalendarioTramitacion = false
+									comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
+									nameLegacyCoordinator, nameLegacyTramitador,
+									MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut
+								);
 
-										// --- Log después de los dos envíos ---
-										this.logTramitationChange(sCurrentUserName);
+								// --- Segundo envío (desde calendario de tramitación) ---
+								MailHelper.sendEmail(
+									oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion,
+									MotivoDeAnulacion, ObservacionDeAnulacion, fechaAnulacion,
+									vieneDeTramitacion, vieneDeObservacion, true, // vieneDeCalendarioTramitacion = true
+									comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
+									nameLegacyCoordinator, nameLegacyTramitador,
+									MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut,
+									tramitaciones // 👈 parámetro adicional
+								);
 
-										BusyDialogHelper.close();
-										var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
-										var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
-										MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
+								// --- Log después de los dos envíos ---
+								this.logTramitationChange(sCurrentUserName);
 
-									} catch (e) {
-										BusyDialogHelper.close();
-										console.error(e);
-										MessageBoxHelper.showAlert(
-											"Alerta",
-											"Se ha producido un error al enviar mail o en el logueo.",
-											$.proxy(this.goToHome, this)
-										);
-									}
+								BusyDialogHelper.close();
+								var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
+								var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
+								MessageBoxHelper.showAlert("Alerta", sMessage, $.proxy(this.goToHome, this));
+
+							} catch (e) {
+								BusyDialogHelper.close();
+								console.error(e);
+								MessageBoxHelper.showAlert(
+									"Alerta",
+									"Se ha producido un error al enviar mail o en el logueo.",
+									$.proxy(this.goToHome, this)
+								);
+							}
 						}
 					}
 				}).catch((e) => {
@@ -2253,6 +2240,107 @@ sap.ui.define([
 			BusyDialogHelper.close();
 			MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al modificar esta licencia para la tramitacion");
 		},
+		getTramitacionDiff: function (aTramitacionOrig, aTramitacionesNow) {
+			// === Config ===
+			const KEY_FIELDS = ["Anio", "Id", "Traindex", "Empresa"];
+			const IGNORE_FIELDS = new Set([
+				"Enabled",
+				"__metadata",
+				"__deferred",
+				// "CalendarDates", // <- descomentá si NO querés comparar esta sección
+			]);
+
+			// === Helpers ===
+			const makeKey = (t) => KEY_FIELDS.map(k => String(t?.[k] ?? "")).join("|");
+
+			// Normaliza: Date -> ISO, String ISO -> ISO sin milisegundos; si no, devuelve tal cual
+			const normalizeIso = (v) => {
+				if (v instanceof Date) {
+					return isNaN(v) ? "" : v.toISOString().replace(/\.\d{3}Z$/, "Z");
+				}
+				if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}T/.test(v)) {
+					const d = new Date(v);
+					return isNaN(d) ? v : d.toISOString().replace(/\.\d{3}Z$/, "Z");
+				}
+				return v;
+			};
+
+			// Quita campos ignorados y normaliza valores (recursivo)
+			const prune = (obj) => {
+				if (Array.isArray(obj)) return obj.map(prune);
+				if (obj instanceof Date) return normalizeIso(obj);
+				if (obj && typeof obj === "object") {
+					const out = {};
+					Object.keys(obj).forEach(k => {
+						if (IGNORE_FIELDS.has(k)) return;
+						out[k] = prune(obj[k]);
+					});
+					return out;
+				}
+				return normalizeIso(obj);
+			};
+
+			// Stringify estable (ordena claves de objetos)
+			const stableStringify = (x) => {
+				const seen = new WeakSet();
+				const orderObj = (o) => {
+					if (!o || typeof o !== "object" || o instanceof Date) return o;
+					if (seen.has(o)) return o; // evitar ciclos
+					seen.add(o);
+					if (Array.isArray(o)) return o.map(orderObj);
+					const keys = Object.keys(o).sort();
+					const r = {};
+					for (const k of keys) r[k] = orderObj(o[k]);
+					return r;
+				};
+				return JSON.stringify(orderObj(x));
+			};
+
+			const deepEqual = (a, b) => stableStringify(prune(a)) === stableStringify(prune(b));
+
+			// === Función principal ===
+			if (!Array.isArray(aTramitacionOrig) || !Array.isArray(aTramitacionesNow)) {
+				return { changed: false, diffs: [] };
+			}
+
+			const mapOrig = new Map(aTramitacionOrig.map(t => [makeKey(t), t]));
+			const mapNow = new Map(aTramitacionesNow.map(t => [makeKey(t), t]));
+			const diffs = [];
+
+			// Nuevos / Modificados
+			for (const [key, nowItem] of mapNow.entries()) {
+				const origItem = mapOrig.get(key);
+				if (!origItem) {
+					diffs.push({ id: key, type: "new", after: nowItem });
+					continue;
+				}
+				if (!deepEqual(origItem, nowItem)) {
+					// Detalle de cambios (campo a campo, con normalización)
+					const Porig = prune(origItem);
+					const Pnow = prune(nowItem);
+					const fields = new Set([...Object.keys(Porig), ...Object.keys(Pnow)]);
+					const changes = {};
+					for (const f of fields) {
+						const so = stableStringify(Porig[f]);
+						const sn = stableStringify(Pnow[f]);
+						if (so !== sn) changes[f] = { old: Porig[f], new: Pnow[f] };
+					}
+					diffs.push({ id: key, type: "modified", before: origItem, after: nowItem, changes });
+				}
+			}
+
+			// Eliminados
+			for (const [key, origItem] of mapOrig.entries()) {
+				if (!mapNow.has(key)) {
+					diffs.push({ id: key, type: "deleted", before: origItem });
+				}
+			}
+
+			return { changed: diffs.length > 0, diffs };
+		}
+
+		,
+
 
 		suspendLicence: function (oSuspension) {
 			var oLicence = AppManagementHelper.getModel("LicenseJsonModel").getData();
@@ -4052,32 +4140,129 @@ sap.ui.define([
 		},
 
 		getFullTramitacionesWithCalendarDates: function () {
-  const oListModel = AppManagementHelper.getModel("TramitacionListJsonModel");
-  const aTramitaciones = oListModel ? (oListModel.getData().Tramitaciones || []) : [];
-  if (!Array.isArray(aTramitaciones) || aTramitaciones.length === 0) return;
+			const oListModel = AppManagementHelper.getModel("TramitacionListJsonModel");
+			const aTramitaciones = oListModel ? (oListModel.getData().Tramitaciones || []) : [];
+			if (!Array.isArray(aTramitaciones) || aTramitaciones.length === 0) return;
 
-  // 1) Pedidos en paralelo
-  const aPromises = aTramitaciones.map((oTramitacion) => this.getDatesFromTramitacion(oTramitacion));
+			// 1) Pedidos en paralelo
+			const aPromises = aTramitaciones.map((oTramitacion) => this.getDatesFromTramitacion(oTramitacion));
 
-  Promise.all(aPromises).then((aCalendarDates) => {
-    // 2) Construyo un nuevo array con CalendarDates ya asignado
-    const aWithCal = aTramitaciones.map((t, idx) => ({
-      ...t,
-      CalendarDates: aCalendarDates[idx]?.results || []
-    }));
+			Promise.all(aPromises).then((aCalendarDates) => {
+				// 2) Construyo un nuevo array con CalendarDates ya asignado
+				const aWithCal = aTramitaciones.map((t, idx) => ({
+					...t,
+					CalendarDates: aCalendarDates[idx]?.results || []
+				}));
 
-    // 3) Actualizo el modelo "vivo" una sola vez
-    oListModel.setProperty("/Tramitaciones", aWithCal);
-    // (Si querías además tenerlo suelto en /CalendarDates del mismo modelo, podés quitar esta línea o ajustarla)
-    oListModel.setProperty("/CalendarDates", aWithCal.map(t => t.CalendarDates));
+				// 3) Actualizo el modelo "vivo" una sola vez
+				oListModel.setProperty("/Tramitaciones", aWithCal);
+				oListModel.setProperty("/CalendarDates", aWithCal.map(t => t.CalendarDates));
 
-    // 4) Creo el snapshot (copia profunda)
-    const oSnapshotModel = new sap.ui.model.json.JSONModel(JSON.parse(JSON.stringify(aWithCal)));
-    oSnapshotModel.setSizeLimit(100000); // por si tenés muchos items
-    AppManagementHelper.setModel(oSnapshotModel, "TramitacionListSnapshotModel");
-  });
-}
+				// 4) Creo el snapshot (copia profunda)
+				const oSnapshotModel = new sap.ui.model.json.JSONModel(JSON.parse(JSON.stringify(aWithCal)));
+				oSnapshotModel.setSizeLimit(100000);
+				AppManagementHelper.setModel(oSnapshotModel, "TramitacionListSnapshotModel");
 
+				// 🔎 Consolear ambos
+				console.log("📌 Modelo vivo (TramitacionListJsonModel):", oListModel.getData());
+				console.log("📌 Modelo snapshot (TramitacionListSnapshotModel):", oSnapshotModel.getData());
+
+				this.showCalendarDatesMessages()
+			});
+		},
+		showCalendarDatesMessages: function () {
+			try {
+				// --- helpers ---
+				const toArray = (data) => {
+					if (!data) return [];
+					if (Array.isArray(data)) return data;
+					if (Array.isArray(data.results)) return data.results;
+					return [];
+				};
+
+				// Datos base
+				const aDatos = toArray(AppManagementHelper.getModel("TramitacionListSnapshotModel")?.getData());
+				if (!Array.isArray(aDatos) || aDatos.length === 0) {
+					// MessageBox.information("No hay datos disponibles.");
+					return;
+				}
+
+				// Catálogos
+				const empresasCatalogo = toArray(AppManagementHelper.getModel("EmpresaTramitacionJsonModel")?.getData()?.Empresas);
+				const estadosCatalogo = toArray(AppManagementHelper.getModel("StatusTramitacion")?.getData()?.Estado);
+
+				// Mapas de referencia
+				const nombreEmpresaPorCodigo = {};
+				empresasCatalogo.forEach(e => {
+					const codigo = String(e.Codigo || e.EmpTramita || e.Code || e.Id || "").trim();
+					if (!codigo) return;
+					const nombre = (e.Nombre || e.Descripcion || e.Name || "").trim();
+					nombreEmpresaPorCodigo[codigo] = nombre || `Empresa ${codigo}`;
+				});
+
+				const descEstadoPorCodigo = {};
+				estadosCatalogo.forEach(e => {
+					const codigo = String(e.Valkey || e.Id || e.Estado || e.Code || "").trim();
+					if (!codigo) return;
+					const desc = (e.Text || e.Texto || e.Descripcion || e.Name || e.Estado || e.Valor || codigo).trim();
+					descEstadoPorCodigo[codigo] = desc || codigo;
+				});
+
+				// Agrupar por empresa (EmpTramita)
+				const mEmpresas = {};
+				aDatos.forEach(item => {
+					const sEmpresa = String(item.EmpTramita || item.Empresa || "SIN_EMPRESA").trim();
+					if (!mEmpresas[sEmpresa]) mEmpresas[sEmpresa] = [];
+
+					const aCD = toArray(item.CalendarDates);
+					if (aCD.length > 0) {
+						aCD.forEach(cd => {
+							mEmpresas[sEmpresa].push({
+								Fecha: cd.Fecha,
+								Estado: cd.Estado,
+								Observaciones: cd.Observaciones
+							});
+						});
+					}
+					// Si no hay CalendarDates, dejamos el array vacío para mostrar el mensaje luego
+				});
+
+				// Construir mensaje
+				let sMensaje = "";
+				Object.keys(mEmpresas).sort().forEach(sEmpresa => {
+					const headerNombre = nombreEmpresaPorCodigo[sEmpresa]
+						? `${sEmpresa} - ${nombreEmpresaPorCodigo[sEmpresa]}`
+						: `Empresa ${sEmpresa}`;
+					sMensaje += `\n${headerNombre}\n`;
+
+					const arr = mEmpresas[sEmpresa];
+
+					// Si no hay fechas para esta empresa
+					if (!Array.isArray(arr) || arr.length === 0) {
+						sMensaje += `No hay fechas en calendario.\n`;
+						return;
+					}
+
+					// Ordenar por fecha ascendente
+					arr.sort((a, b) => new Date(a.Fecha) - new Date(b.Fecha));
+
+					arr.forEach(cd => {
+						const fecha = FormatHelper.formatDateLicenseWithoutUtc(cd.Fecha);
+						const estado = descEstadoPorCodigo[String(cd.Estado || "").trim()]
+							|| cd.Estado
+							|| "-";
+						const obs = (cd.Observaciones || "").trim() || "Sin observaciones";
+						sMensaje += `${fecha} - Comentario: ${obs} - Estado: ${estado}\n`;
+					});
+				});
+
+				MessageBox.alert(sMensaje.trim(), { title: "Estado Diario" });
+
+			} catch (error) {
+				console.error("Error al cargar observaciones:", error);
+				MessageBox.error("Ocurrió un error al obtener los datos.");
+			}
+		}
 
 	};
 });

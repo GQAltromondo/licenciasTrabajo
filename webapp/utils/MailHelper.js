@@ -121,7 +121,8 @@ sap.ui.define([
 				}
 
 				//context.Destinatario = destinatario;
-				context.Destinatario = "guillermo.quattrocchi@altromondo.com.ar";
+							context.Destinatario = "guillermo.quattrocchi@altromondo.com.ar,ivan.steciuk@altromondo.com.ar";
+
 
 				// Si viene de anulacion
 				if (esAnulacion === true) {
