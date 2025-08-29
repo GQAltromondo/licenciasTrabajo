@@ -114,17 +114,30 @@ sap.ui.define([
 			return dDate;
 		},
 
+		// formatDateLicenseWithoutUtc: function (dDate) {
+		// 	let d = dDate
+		// 	let month = '' + (d.getMonth() + 1);
+		// 	let day = '' + d.getDate();
+		// 	let year = d.getFullYear();
+
+		// 	if (month.length < 2) month = '0' + month;
+		// 	if (day.length < 2) day = '0' + day;
+
+		// 	return [day, month, year].join('-');
+		// },
 		formatDateLicenseWithoutUtc: function (dDate) {
-			let d = dDate
-			let month = '' + (d.getMonth() + 1);
-			let day = '' + d.getDate();
-			let year = d.getFullYear();
+    if (!dDate) return "";
 
-			if (month.length < 2) month = '0' + month;
-			if (day.length < 2) day = '0' + day;
+    let d = (dDate instanceof Date) ? dDate : new Date(dDate);
+    if (isNaN(d)) return "";
 
-			return [day, month, year].join('-');
-		},
+    let day = String(d.getUTCDate()).padStart(2, "0");
+    let month = String(d.getUTCMonth() + 1).padStart(2, "0");
+    let year = d.getUTCFullYear();
+
+    return `${day}-${month}-${year}`;
+},
+
 
 		getTimeFromHorariosInit: function (dDate, iInicio) {
 			var iDate = dDate.getTime();
