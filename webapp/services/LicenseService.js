@@ -1758,7 +1758,7 @@ sap.ui.define([
 		},
 
 		getTramitePromise: function (oTramite) {
-			
+
 			delete oTramite.CalendarDates;
 			if (oTramite.Traindex === "") {
 				return new Promise((resolve, reject) => {
@@ -1827,7 +1827,7 @@ sap.ui.define([
 		},
 
 		handleTramitePromises: function (aTramites) {
-			
+
 			var aPromises = [];
 			for (var oTramite of aTramites) {
 				aPromises.push(this.getTramitePromise(oTramite));
@@ -2099,7 +2099,15 @@ sap.ui.define([
 					var MotivoNoAut = "";
 					var ComentariosNoAut = "";
 
-					const aTramitacionOrig = AppManagementHelper.getModel("TramitacionListSnapshotModel").getData();
+					const aTramitacionOrig = (() => {
+						const d = AppManagementHelper.getModel("TramitacionListSnapshotModel")?.getData();
+						return !d ? [] :
+							Array.isArray(d) ? d :
+								Array.isArray(d.results) ? d.results :
+									Array.isArray(d.Tramitaciones) ? d.Tramitaciones :
+										(typeof d === "object" && Object.keys(d).length === 0) ? [] : [];
+					})();
+
 
 
 					const result = this.getTramitacionDiff(aTramitacionOrig, tramitaciones);
@@ -2284,14 +2292,19 @@ sap.ui.define([
 			// === Helpers ===
 			const makeKey = (t) => KEY_FIELDS.map(k => String(t?.[k] ?? "")).join("|");
 
-			// Normaliza: Date -> ISO, String ISO -> ISO sin milisegundos; si no, devuelve tal cual
-			const normalizeIso = (v) => {
-				if (v instanceof Date) {
-					return isNaN(v) ? "" : v.toISOString().replace(/\.\d{3}Z$/, "Z");
-				}
-				if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}T/.test(v)) {
-					const d = new Date(v);
-					return isNaN(d) ? v : d.toISOString().replace(/\.\d{3}Z$/, "Z");
+			// Detecta strings con fecha y normaliza a YYYY-MM-DD (UTC) para comparar sin hora
+			const normalizeDateOnly = (v) => {
+				const isoDT = /^\d{4}-\d{2}-\d{2}T/;          // 2025-08-29T03:00:00Z
+				const isoD = /^\d{4}-\d{2}-\d{2}$/;          // 2025-08-29
+				const odata = /^\/Date\((\d+)\)\/$/;          // /Date(1693276800000)/
+				const toYMD = (d) => isNaN(d) ? "" :
+					d.toISOString().slice(0, 10);               // YYYY-MM-DD (UTC)
+
+				if (v instanceof Date) return toYMD(v);
+				if (typeof v === "string") {
+					if (isoDT.test(v) || isoD.test(v)) return toYMD(new Date(v));
+					const m = v.match(odata);
+					if (m) return toYMD(new Date(Number(m[1])));
 				}
 				return v;
 			};
@@ -2299,7 +2312,7 @@ sap.ui.define([
 			// Quita campos ignorados y normaliza valores (recursivo)
 			const prune = (obj) => {
 				if (Array.isArray(obj)) return obj.map(prune);
-				if (obj instanceof Date) return normalizeIso(obj);
+				if (obj instanceof Date) return normalizeDateOnly(obj);
 				if (obj && typeof obj === "object") {
 					const out = {};
 					Object.keys(obj).forEach(k => {
@@ -2308,7 +2321,7 @@ sap.ui.define([
 					});
 					return out;
 				}
-				return normalizeIso(obj);
+				return normalizeDateOnly(obj); // <- aplica “solo fecha” también a strings tipo ISO/OData
 			};
 
 			// Stringify estable (ordena claves de objetos)
@@ -2316,7 +2329,7 @@ sap.ui.define([
 				const seen = new WeakSet();
 				const orderObj = (o) => {
 					if (!o || typeof o !== "object" || o instanceof Date) return o;
-					if (seen.has(o)) return o; // evitar ciclos
+					if (seen.has(o)) return o;
 					seen.add(o);
 					if (Array.isArray(o)) return o.map(orderObj);
 					const keys = Object.keys(o).sort();
@@ -2346,7 +2359,7 @@ sap.ui.define([
 					continue;
 				}
 				if (!deepEqual(origItem, nowItem)) {
-					// Detalle de cambios (campo a campo, con normalización)
+					// Detalle de cambios (campo a campo, con normalización a solo fecha)
 					const Porig = prune(origItem);
 					const Pnow = prune(nowItem);
 					const fields = new Set([...Object.keys(Porig), ...Object.keys(Pnow)]);
@@ -2368,9 +2381,8 @@ sap.ui.define([
 			}
 
 			return { changed: diffs.length > 0, diffs };
-		}
+		},
 
-		,
 
 
 		suspendLicence: function (oSuspension) {
@@ -4198,127 +4210,106 @@ sap.ui.define([
 			});
 		},
 		showCalendarDatesMessages: function () {
-  try {
-    // --- helpers ---
-    const toArray = (data) => {
-      if (!data) return [];
-      if (Array.isArray(data)) return data;
-      if (Array.isArray(data.results)) return data.results;
-      return [];
-    };
+			try {
+				const a = (data) => Array.isArray(data) ? data : (Array.isArray(data?.results) ? data.results : (data ? [data] : []));
+				const norm = (v) => String(v ?? "").trim().replace(/^0+/, "") || "0"; // <- quita ceros a la izquierda
 
-    // Datos base
-    const aDatos = toArray(AppManagementHelper.getModel("TramitacionListSnapshotModel")?.getData());
-    if (!Array.isArray(aDatos) || aDatos.length === 0) return;
+				const lista = a(AppManagementHelper.getModel("TramitacionListSnapshotModel")?.getData());
+				if (!Array.isArray(lista) || lista.length === 0) return;
 
-    // Catálogos
-    const empresasCatalogo = toArray(AppManagementHelper.getModel("EmpresaTramitacionJsonModel")?.getData()?.Empresas);
-    const estadosCatalogo  = toArray(AppManagementHelper.getModel("StatusTramitacion")?.getData()?.Estado);
+				const catEmpresas = a(AppManagementHelper.getModel("EmpresaTramitacionJsonModel")?.getData()?.Empresas);
+				const catEstados = a(AppManagementHelper.getModel("StatusTramitacion")?.getData()?.Estado);
 
-    // Mapas de referencia
-    const nombreEmpresaPorCodigo = {};
-    empresasCatalogo.forEach(e => {
-      const codigo = String(e.Codigo || e.EmpTramita || e.Code || e.Id || "").trim();
-      if (!codigo) return;
-      const nombre = (e.Nombre || e.Descripcion || e.Name || "").trim();
-      nombreEmpresaPorCodigo[codigo] = nombre || `Empresa ${codigo}`;
-    });
+				const nombrePorEmpresa = {};
+				const estadoEmpresaPorCodigo = {};
+				catEmpresas.forEach(e => {
+					const cod = String(e.Codigo || e.EmpTramita || e.Code || e.Id || "").trim();
+					if (!cod) return;
+					const nombre = (e.Nombre || e.Descripcion || e.Name || "").trim();
+					nombrePorEmpresa[cod] = nombre || `Empresa ${cod}`;
+					const estadoEmp = String(e.Estado || e.Status || e.EstadoTramitacion || "").trim();
+					if (estadoEmp) estadoEmpresaPorCodigo[cod] = estadoEmp;
+				});
 
-    const descEstadoPorCodigo = {};
-    estadosCatalogo.forEach(e => {
-      const codigo = String(e.Valkey || e.Id || e.Estado || e.Code || "").trim();
-      if (!codigo) return;
-      const desc = (e.Text || e.Texto || e.Descripcion || e.Name || e.Estado || e.Valor || codigo).trim();
-      descEstadoPorCodigo[codigo] = desc || codigo;
-    });
+				// Mapa de descripciones por estado, con clave normalizada
+				const descPorEstado = {};
+				catEstados.forEach(e => {
+					const cod = norm(e.Valkey || e.Id || e.Estado || e.Code || "");
+					if (!cod) return;
+					const txt = (e.Valtext || e.Texto || e.Descripcion || e.Name || e.Estado || e.Valor || cod).trim();
+					descPorEstado[cod] = txt || cod;
+				});
 
-    // Agrupar por empresa y guardar fechas + estado de tramitación
-    // estructura: { [empresa]: { fechas: [], estado: { code, desc, fechaRefISO } } }
-    const mEmpresas = {};
+				const porEmpresa = {};
+				lista.forEach(item => {
+					const codEmp = String(item.EmpTramita || item.Empresa || "SIN_EMPRESA").trim();
+					if (!porEmpresa[codEmp]) porEmpresa[codEmp] = { fechas: [], tram: null };
 
-    aDatos.forEach(item => {
-      const sEmpresa = String(item.EmpTramita || item.Empresa || "SIN_EMPRESA").trim();
-      if (!mEmpresas[sEmpresa]) mEmpresas[sEmpresa] = { fechas: [], estado: null };
+					// Estado de tramitación del trámite (normalizado)
+					const codTramRaw = String(item.Estado || "").trim();
+					const codTram = norm(codTramRaw);
+					const descTram = descPorEstado[codTram] || codTramRaw || "-";
+					const fechaRefISO = item.Fechatramitacion || item.Fechadiaria || new Date().toISOString();
 
-      // Estado a nivel empresa (tramite)
-      const estadoCodigo = String(item.Estado || "").trim();
-      const estadoDesc   = descEstadoPorCodigo[estadoCodigo] || estadoCodigo || "-";
+					if (!porEmpresa[codEmp].tram || new Date(fechaRefISO) > new Date(porEmpresa[codEmp].tram.fechaRefISO || 0)) {
+						porEmpresa[codEmp].tram = { code: codTram, desc: descTram, fechaRefISO };
+					}
 
-      // usamos Fechatramitacion como referencia temporal si existe (fallback a ahora)
-      const fechaRefISO = item.Fechatramitacion || item.Fechadiaria || new Date().toISOString();
+					// Fechas del calendario (también normalizamos el estado de cada fecha)
+					a(item.CalendarDates).forEach(cd => {
+						const codCd = norm(cd.Estado);
+						const estadoDesc = descPorEstado[codCd] || FormatHelper.getEstadoTramitacion(cd.Estado) || cd.Estado || "-";
+						porEmpresa[codEmp].fechas.push({
+							FechaISO: cd.Fecha,
+							Fecha: FormatHelper.formatDateLicenseWithoutUtc(cd.Fecha),
+							Estado: cd.Estado,
+							EstadoDesc: estadoDesc,
+							Observaciones: (cd.Observaciones || "").trim() || "Sin observaciones"
+						});
+					});
+				});
 
-      // setear si no hay o si es más reciente
-      if (
-        !mEmpresas[sEmpresa].estado ||
-        new Date(fechaRefISO) > new Date(mEmpresas[sEmpresa].estado.fechaRefISO || 0)
-      ) {
-        mEmpresas[sEmpresa].estado = { code: estadoCodigo, desc: estadoDesc, fechaRefISO };
-      }
+				const totalFechas = Object.values(porEmpresa).reduce((acc, e) => acc + e.fechas.length, 0);
+				if (totalFechas === 0) return;
 
-      // Fechas del calendario
-      const aCD = toArray(item.CalendarDates);
-      if (aCD.length > 0) {
-        aCD.forEach(cd => {
-          mEmpresas[sEmpresa].fechas.push({
-            FechaISO: cd.Fecha,
-            Fecha:    FormatHelper.formatDateLicenseWithoutUtc(cd.Fecha),
-            Estado:   cd.Estado,
-            EstadoDesc: FormatHelper.getEstadoTramitacion(cd.Estado),
-            Observaciones: (cd.Observaciones || "").trim() || "Sin observaciones"
-          });
-        });
-      }
-    });
+				let msg = "";
+				Object.keys(porEmpresa).sort().forEach(codEmp => {
+					const { fechas, tram } = porEmpresa[codEmp];
+					const header = nombrePorEmpresa[codEmp] ? `${codEmp} - ${nombrePorEmpresa[codEmp]}` : `Empresa ${codEmp}`;
+					msg += `\n${header}\n`;
 
-    // Verificar si hay al menos una fecha entre todas las empresas
-    const totalFechas = Object.values(mEmpresas).reduce((acc, e) => acc + e.fechas.length, 0);
-    if (totalFechas === 0) return; // no muestro popup si nadie tiene CalendarDates
+					const estadoEmpresa = estadoEmpresaPorCodigo[codEmp];
+					if (estadoEmpresa) msg += `Estado de la empresa: ${estadoEmpresa}\n`;
 
-    // Construir mensaje
-    let sMensaje = "";
-    Object.keys(mEmpresas).sort().forEach(sEmpresa => {
-      const entry = mEmpresas[sEmpresa];
-      const headerNombre = nombreEmpresaPorCodigo[sEmpresa]
-        ? `${sEmpresa} - ${nombreEmpresaPorCodigo[sEmpresa]}`
-        : `Empresa ${sEmpresa}`;
-      sMensaje += `\n${headerNombre}\n`;
+					msg += `Estado de tramitación: ${tram?.desc || "-"}\n`;
 
-      // Estado de tramitación (si lo hay)
-      const estadoTram = entry.estado?.desc || "-";
-      sMensaje += `Estado de tramitación: ${estadoTram}\n`;
+					if (!Array.isArray(fechas) || fechas.length === 0) {
+						msg += "No hay fechas en calendario.\n";
+						return;
+					}
 
-      const arr = entry.fechas;
+					// Dedupe y orden
+					const vistos = new Set();
+					const unicas = [];
+					fechas.forEach(f => {
+						const k = `${f.FechaISO}|${f.Estado}|${f.Observaciones}`;
+						if (!vistos.has(k)) { vistos.add(k); unicas.push(f); }
+					});
+					unicas.sort((a, b) => new Date(a.FechaISO) - new Date(b.FechaISO));
 
-      if (!Array.isArray(arr) || arr.length === 0) {
-        sMensaje += `No hay fechas en calendario.\n`;
-        return;
-      }
+					// Orden solicitado: Fecha – Estado – Comentario
+					unicas.forEach(cd => {
+						msg += `${cd.Fecha} - ${cd.EstadoDesc} - ${cd.Observaciones}\n`;
+					});
+				});
 
-      // Dedupe y orden
-      const vistos = new Set();
-      const fechasUnicas = [];
-      arr.forEach(f => {
-        const k = `${f.FechaISO}|${f.Estado}|${f.Observaciones}`;
-        if (!vistos.has(k)) {
-          vistos.add(k);
-          fechasUnicas.push(f);
-        }
-      });
+				MessageBox.alert(msg.trim(), { title: "Estado Diario" });
+			} catch (err) {
+				console.error("Error al cargar observaciones:", err);
+				MessageBox.error("Ocurrió un error al obtener los datos.");
+			}
+		}
 
-      fechasUnicas.sort((a, b) => new Date(a.FechaISO) - new Date(b.FechaISO));
-
-      fechasUnicas.forEach(cd => {
-        sMensaje += `${cd.Fecha} - Comentario: ${cd.Observaciones} - Estado: ${cd.EstadoDesc}\n`;
-      });
-    });
-
-    MessageBox.alert(sMensaje.trim(), { title: "Estado Diario" });
-
-  } catch (error) {
-    console.error("Error al cargar observaciones:", error);
-    MessageBox.error("Ocurrió un error al obtener los datos.");
-  }
-}
 
 	};
 });
