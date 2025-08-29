@@ -1698,23 +1698,52 @@ sap.ui.define([
 			});
 		},
 
+		// successPUTLicenceTramit: function (bFinishTramitacion, sMessage, aTramites, licenseClone) {
+
+		// 	var aTramitesCopy = structuredClone(aTramites);
+
+		// 	var aCalendarDates = aTramites.map(oTramite => oTramite.CalendarDates);
+
+		// 	var aTramitePromises = this.handleTramitePromises(aTramites);
+		// 	Promise.all(aTramitePromises).then((aResponses) => {
+		// 		var aPromisesCalendarPost = this.getCalendarDatesPromises(aResponses, aCalendarDates, aTramites);
+		// 		Promise.all(aPromisesCalendarPost).then(() => {
+		// 			this.successPOSTTramitacion(bFinishTramitacion, sMessage, licenseClone, aTramitesCopy);
+		// 		});
+		// 	}).catch((e) => {
+		// 		console.error(e);
+		// 		BusyDialogHelper.close();
+		// 		MessageBoxHelper.showAlert("Alerta", "Se ha producido un error tramitar", $.proxy(this.goToHome, this));
+		// 	});
+		// },
 		successPUTLicenceTramit: function (bFinishTramitacion, sMessage, aTramites, licenseClone) {
 
-			var aTramitesCopy = structuredClone(aTramites);
+			const aTramitesCopy = structuredClone(aTramites);
+			const aCalendarDates = aTramites.map(oTramite => oTramite.CalendarDates);
 
-			var aCalendarDates = aTramites.map(oTramite => oTramite.CalendarDates);
+			// Ejecutamos create/update en SERIE usando las MISMAS funciones
+			(async () => {
+				try {
+					const aResponses = [];
+					for (const oTramite of aTramites) {
+						// Reutiliza tu getTramitePromise; cada iteración espera a la anterior
+						const resp = await this.getTramitePromise(oTramite);
+						aResponses.push(resp);
+					}
 
-			var aTramitePromises = this.handleTramitePromises(aTramites);
-			Promise.all(aTramitePromises).then((aResponses) => {
-				var aPromisesCalendarPost = this.getCalendarDatesPromises(aResponses, aCalendarDates, aTramites);
-				Promise.all(aPromisesCalendarPost).then(() => {
+					// Luego de terminar TODOS los trámites, disparamos CalendarDates (en paralelo)
+					const aPromisesCalendarPost = this.getCalendarDatesPromises(aResponses, aCalendarDates, aTramites);
+					await Promise.all(aPromisesCalendarPost);
+
+					// Final
 					this.successPOSTTramitacion(bFinishTramitacion, sMessage, licenseClone, aTramitesCopy);
-				});
-			}).catch((e) => {
-				console.error(e);
-				BusyDialogHelper.close();
-				MessageBoxHelper.showAlert("Alerta", "Se ha producido un error tramitar", $.proxy(this.goToHome, this));
-			});
+
+				} catch (e) {
+					console.error(e);
+					BusyDialogHelper.close();
+					MessageBoxHelper.showAlert("Alerta", "Se ha producido un error tramitar", $.proxy(this.goToHome, this));
+				}
+			})();
 		},
 
 
@@ -1729,6 +1758,7 @@ sap.ui.define([
 		},
 
 		getTramitePromise: function (oTramite) {
+			
 			delete oTramite.CalendarDates;
 			if (oTramite.Traindex === "") {
 				return new Promise((resolve, reject) => {
@@ -1797,6 +1827,7 @@ sap.ui.define([
 		},
 
 		handleTramitePromises: function (aTramites) {
+			
 			var aPromises = [];
 			for (var oTramite of aTramites) {
 				aPromises.push(this.getTramitePromise(oTramite));
@@ -4163,106 +4194,131 @@ sap.ui.define([
 				oSnapshotModel.setSizeLimit(100000);
 				AppManagementHelper.setModel(oSnapshotModel, "TramitacionListSnapshotModel");
 
-				// 🔎 Consolear ambos
-				console.log("📌 Modelo vivo (TramitacionListJsonModel):", oListModel.getData());
-				console.log("📌 Modelo snapshot (TramitacionListSnapshotModel):", oSnapshotModel.getData());
-
 				this.showCalendarDatesMessages()
 			});
 		},
 		showCalendarDatesMessages: function () {
-			try {
-				// --- helpers ---
-				const toArray = (data) => {
-					if (!data) return [];
-					if (Array.isArray(data)) return data;
-					if (Array.isArray(data.results)) return data.results;
-					return [];
-				};
+  try {
+    // --- helpers ---
+    const toArray = (data) => {
+      if (!data) return [];
+      if (Array.isArray(data)) return data;
+      if (Array.isArray(data.results)) return data.results;
+      return [];
+    };
 
-				// Datos base
-				const aDatos = toArray(AppManagementHelper.getModel("TramitacionListSnapshotModel")?.getData());
-				if (!Array.isArray(aDatos) || aDatos.length === 0) {
-					// MessageBox.information("No hay datos disponibles.");
-					return;
-				}
+    // Datos base
+    const aDatos = toArray(AppManagementHelper.getModel("TramitacionListSnapshotModel")?.getData());
+    if (!Array.isArray(aDatos) || aDatos.length === 0) return;
 
-				// Catálogos
-				const empresasCatalogo = toArray(AppManagementHelper.getModel("EmpresaTramitacionJsonModel")?.getData()?.Empresas);
-				const estadosCatalogo = toArray(AppManagementHelper.getModel("StatusTramitacion")?.getData()?.Estado);
+    // Catálogos
+    const empresasCatalogo = toArray(AppManagementHelper.getModel("EmpresaTramitacionJsonModel")?.getData()?.Empresas);
+    const estadosCatalogo  = toArray(AppManagementHelper.getModel("StatusTramitacion")?.getData()?.Estado);
 
-				// Mapas de referencia
-				const nombreEmpresaPorCodigo = {};
-				empresasCatalogo.forEach(e => {
-					const codigo = String(e.Codigo || e.EmpTramita || e.Code || e.Id || "").trim();
-					if (!codigo) return;
-					const nombre = (e.Nombre || e.Descripcion || e.Name || "").trim();
-					nombreEmpresaPorCodigo[codigo] = nombre || `Empresa ${codigo}`;
-				});
+    // Mapas de referencia
+    const nombreEmpresaPorCodigo = {};
+    empresasCatalogo.forEach(e => {
+      const codigo = String(e.Codigo || e.EmpTramita || e.Code || e.Id || "").trim();
+      if (!codigo) return;
+      const nombre = (e.Nombre || e.Descripcion || e.Name || "").trim();
+      nombreEmpresaPorCodigo[codigo] = nombre || `Empresa ${codigo}`;
+    });
 
-				const descEstadoPorCodigo = {};
-				estadosCatalogo.forEach(e => {
-					const codigo = String(e.Valkey || e.Id || e.Estado || e.Code || "").trim();
-					if (!codigo) return;
-					const desc = (e.Text || e.Texto || e.Descripcion || e.Name || e.Estado || e.Valor || codigo).trim();
-					descEstadoPorCodigo[codigo] = desc || codigo;
-				});
+    const descEstadoPorCodigo = {};
+    estadosCatalogo.forEach(e => {
+      const codigo = String(e.Valkey || e.Id || e.Estado || e.Code || "").trim();
+      if (!codigo) return;
+      const desc = (e.Text || e.Texto || e.Descripcion || e.Name || e.Estado || e.Valor || codigo).trim();
+      descEstadoPorCodigo[codigo] = desc || codigo;
+    });
 
-				// Agrupar por empresa (EmpTramita)
-				const mEmpresas = {};
-				aDatos.forEach(item => {
-					const sEmpresa = String(item.EmpTramita || item.Empresa || "SIN_EMPRESA").trim();
-					if (!mEmpresas[sEmpresa]) mEmpresas[sEmpresa] = [];
+    // Agrupar por empresa y guardar fechas + estado de tramitación
+    // estructura: { [empresa]: { fechas: [], estado: { code, desc, fechaRefISO } } }
+    const mEmpresas = {};
 
-					const aCD = toArray(item.CalendarDates);
-					if (aCD.length > 0) {
-						aCD.forEach(cd => {
-							mEmpresas[sEmpresa].push({
-								Fecha: cd.Fecha,
-								Estado: cd.Estado,
-								Observaciones: cd.Observaciones
-							});
-						});
-					}
-					// Si no hay CalendarDates, dejamos el array vacío para mostrar el mensaje luego
-				});
+    aDatos.forEach(item => {
+      const sEmpresa = String(item.EmpTramita || item.Empresa || "SIN_EMPRESA").trim();
+      if (!mEmpresas[sEmpresa]) mEmpresas[sEmpresa] = { fechas: [], estado: null };
 
-				// Construir mensaje
-				let sMensaje = "";
-				Object.keys(mEmpresas).sort().forEach(sEmpresa => {
-					const headerNombre = nombreEmpresaPorCodigo[sEmpresa]
-						? `${sEmpresa} - ${nombreEmpresaPorCodigo[sEmpresa]}`
-						: `Empresa ${sEmpresa}`;
-					sMensaje += `\n${headerNombre}\n`;
+      // Estado a nivel empresa (tramite)
+      const estadoCodigo = String(item.Estado || "").trim();
+      const estadoDesc   = descEstadoPorCodigo[estadoCodigo] || estadoCodigo || "-";
 
-					const arr = mEmpresas[sEmpresa];
+      // usamos Fechatramitacion como referencia temporal si existe (fallback a ahora)
+      const fechaRefISO = item.Fechatramitacion || item.Fechadiaria || new Date().toISOString();
 
-					// Si no hay fechas para esta empresa
-					if (!Array.isArray(arr) || arr.length === 0) {
-						sMensaje += `No hay fechas en calendario.\n`;
-						return;
-					}
+      // setear si no hay o si es más reciente
+      if (
+        !mEmpresas[sEmpresa].estado ||
+        new Date(fechaRefISO) > new Date(mEmpresas[sEmpresa].estado.fechaRefISO || 0)
+      ) {
+        mEmpresas[sEmpresa].estado = { code: estadoCodigo, desc: estadoDesc, fechaRefISO };
+      }
 
-					// Ordenar por fecha ascendente
-					arr.sort((a, b) => new Date(a.Fecha) - new Date(b.Fecha));
+      // Fechas del calendario
+      const aCD = toArray(item.CalendarDates);
+      if (aCD.length > 0) {
+        aCD.forEach(cd => {
+          mEmpresas[sEmpresa].fechas.push({
+            FechaISO: cd.Fecha,
+            Fecha:    FormatHelper.formatDateLicenseWithoutUtc(cd.Fecha),
+            Estado:   cd.Estado,
+            EstadoDesc: FormatHelper.getEstadoTramitacion(cd.Estado),
+            Observaciones: (cd.Observaciones || "").trim() || "Sin observaciones"
+          });
+        });
+      }
+    });
 
-					arr.forEach(cd => {
-						const fecha = FormatHelper.formatDateLicenseWithoutUtc(cd.Fecha);
-						const estado = descEstadoPorCodigo[String(cd.Estado || "").trim()]
-							|| cd.Estado
-							|| "-";
-						const obs = (cd.Observaciones || "").trim() || "Sin observaciones";
-						sMensaje += `${fecha} - Comentario: ${obs} - Estado: ${estado}\n`;
-					});
-				});
+    // Verificar si hay al menos una fecha entre todas las empresas
+    const totalFechas = Object.values(mEmpresas).reduce((acc, e) => acc + e.fechas.length, 0);
+    if (totalFechas === 0) return; // no muestro popup si nadie tiene CalendarDates
 
-				MessageBox.alert(sMensaje.trim(), { title: "Estado Diario" });
+    // Construir mensaje
+    let sMensaje = "";
+    Object.keys(mEmpresas).sort().forEach(sEmpresa => {
+      const entry = mEmpresas[sEmpresa];
+      const headerNombre = nombreEmpresaPorCodigo[sEmpresa]
+        ? `${sEmpresa} - ${nombreEmpresaPorCodigo[sEmpresa]}`
+        : `Empresa ${sEmpresa}`;
+      sMensaje += `\n${headerNombre}\n`;
 
-			} catch (error) {
-				console.error("Error al cargar observaciones:", error);
-				MessageBox.error("Ocurrió un error al obtener los datos.");
-			}
-		}
+      // Estado de tramitación (si lo hay)
+      const estadoTram = entry.estado?.desc || "-";
+      sMensaje += `Estado de tramitación: ${estadoTram}\n`;
+
+      const arr = entry.fechas;
+
+      if (!Array.isArray(arr) || arr.length === 0) {
+        sMensaje += `No hay fechas en calendario.\n`;
+        return;
+      }
+
+      // Dedupe y orden
+      const vistos = new Set();
+      const fechasUnicas = [];
+      arr.forEach(f => {
+        const k = `${f.FechaISO}|${f.Estado}|${f.Observaciones}`;
+        if (!vistos.has(k)) {
+          vistos.add(k);
+          fechasUnicas.push(f);
+        }
+      });
+
+      fechasUnicas.sort((a, b) => new Date(a.FechaISO) - new Date(b.FechaISO));
+
+      fechasUnicas.forEach(cd => {
+        sMensaje += `${cd.Fecha} - Comentario: ${cd.Observaciones} - Estado: ${cd.EstadoDesc}\n`;
+      });
+    });
+
+    MessageBox.alert(sMensaje.trim(), { title: "Estado Diario" });
+
+  } catch (error) {
+    console.error("Error al cargar observaciones:", error);
+    MessageBox.error("Ocurrió un error al obtener los datos.");
+  }
+}
 
 	};
 });

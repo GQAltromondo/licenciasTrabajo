@@ -451,9 +451,6 @@ sap.ui.define([
 			var oItem = bManualPress ? oEvent : oEvent.getSource().getParent();
 			var oLicense = $.extend(true, {}, bManualPress ? oItem : oItem.getBindingContext("LicencesListJsonModel").getObject());
 
-			console.log(oLicense)
-
-
 			oFilterSelectionModel.setProperty("/textFlow", this.getLicenseButtonText(oLicense.Tipolicencia, oLicense.Licstat));
 			oFilterSelectionModel.setProperty("/annulateCreatedStatus", !!oLicense.Id);
 			var isLicense = oLicense.Tipo === "L";
