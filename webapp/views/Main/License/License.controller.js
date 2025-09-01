@@ -1628,6 +1628,10 @@ sap.ui.define([
 						bValid = false;
 						break;
 					}
+					if (oTramitacion.Estado === "") {
+							bValid = false;
+							break;
+						}
 				}
 				return bValid
 			}
