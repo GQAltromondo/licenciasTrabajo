@@ -477,7 +477,7 @@ sap.ui.define([
 
 						emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"],
 						hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]
-						].map(permiso => permiso && permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar");
+						].map(permiso => permiso && permiso.Mail);
 
 						let usuariosAsignados = {
 							Coordinador: currentUser.Legajo + ", " + currentName,
@@ -886,10 +886,9 @@ sap.ui.define([
 				if (Tipo === "L") {
 					aEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 						"Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]].map(permiso => permiso &&
-							permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar");
+							permiso.Mail );
 				} else {
-					aEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail ||
-						"guillermo.quattrocchi@altromondo.com.ar");
+					aEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail );
 				}
 
 				var sEmails = aEmails.join(",");
@@ -1289,13 +1288,12 @@ sap.ui.define([
 
 				var sEmailEt = "";
 				if (licencia.Tipo === "S") {
-					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail ||
-						"guillermo.quattrocchi@altromondo.com.ar");
+					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail );
 					sEmailEt = "";
 				} else {
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos["Jefe_Trabajo"],
 					hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]
-					].map(permiso => permiso && permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar");
+					].map(permiso => permiso && permiso.Mail );
 					sEmailEt = res[2].results && res[2].results !== 0 ? res[2].results.map(e => (e.Mail)).join(",") : "";
 				}
 
@@ -1432,8 +1430,7 @@ sap.ui.define([
 				let infAdicional = causaAnulado + "\n" + license.Obscausa;
 				let stringEmails = "";
 
-				stringEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail ||
-					"guillermo.quattrocchi@altromondo.com.ar").join(",");
+				stringEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail ).join(",");
 
 				var usuariosAsignados = {
 					Coordinador: hashPermisos["COORDINADOR"] ? hashPermisos["COORDINADOR"].Legajo + ", " + hashPermisos["COORDINADOR"].Nombre : "",
@@ -1584,7 +1581,7 @@ sap.ui.define([
 					"Solicitante_Suplente_Auxiliar"], hashPermisos[
 				"TRAMITADOR"],
 				hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["COORDINADOR"]
-				].map(permiso => permiso && permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar");
+				].map(permiso => permiso && permiso.Mail );
 
 				//emails = "hzea@inclusion.cloud"
 
@@ -1698,24 +1695,6 @@ sap.ui.define([
 			});
 		},
 
-		// successPUTLicenceTramit: function (bFinishTramitacion, sMessage, aTramites, licenseClone) {
-
-		// 	var aTramitesCopy = structuredClone(aTramites);
-
-		// 	var aCalendarDates = aTramites.map(oTramite => oTramite.CalendarDates);
-
-		// 	var aTramitePromises = this.handleTramitePromises(aTramites);
-		// 	Promise.all(aTramitePromises).then((aResponses) => {
-		// 		var aPromisesCalendarPost = this.getCalendarDatesPromises(aResponses, aCalendarDates, aTramites);
-		// 		Promise.all(aPromisesCalendarPost).then(() => {
-		// 			this.successPOSTTramitacion(bFinishTramitacion, sMessage, licenseClone, aTramitesCopy);
-		// 		});
-		// 	}).catch((e) => {
-		// 		console.error(e);
-		// 		BusyDialogHelper.close();
-		// 		MessageBoxHelper.showAlert("Alerta", "Se ha producido un error tramitar", $.proxy(this.goToHome, this));
-		// 	});
-		// },
 		successPUTLicenceTramit: function (bFinishTramitacion, sMessage, aTramites, licenseClone) {
 
 			const aTramitesCopy = structuredClone(aTramites);
@@ -1886,7 +1865,7 @@ sap.ui.define([
 					hashPermisos["COORDINADOR"] = hashPermisos["COORDINADOR"] || "";
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 						"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
-							permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar").join(",");
+							permiso.Mail).join(",");
 
 					var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 					var sCurrentUserMail = oUserJson.email;
@@ -1964,7 +1943,7 @@ sap.ui.define([
 					hashPermisos["COORDINADOR"] = hashPermisos["COORDINADOR"] || "";
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 						"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
-							permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar").join(",");
+							permiso.Mail).join(",");
 
 					var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 					var sCurrentUserMail = oUserJson.email;
@@ -2047,7 +2026,7 @@ sap.ui.define([
 				emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 					"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
 
-						permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar").join(",");
+						permiso.Mail ).join(",");
 				// permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar").join(",");
 				var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 				var sCurrentUserMail = oUserJson.email;
