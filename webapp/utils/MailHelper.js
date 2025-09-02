@@ -321,8 +321,6 @@ sap.ui.define([
 				context.Equipo = licencia.Equnr || "";
 				context.EqDescript = descEquipo;
 				context.InfAdicional = infAdicional || "";
-				context.Equinterv = licencia.Equiinterv;
-				context.Calendario = "Prueba de calendario"
 
 
 				// nuevos
