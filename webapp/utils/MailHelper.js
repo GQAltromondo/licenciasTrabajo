@@ -71,9 +71,9 @@ sap.ui.define([
 			});
 
 			function prepareContext(licencia, usuariosAsignados, destinatario, mailEt, infAdicional, esAnulacion, MotivoDeAnulacion,
-				ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, vieneDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
+				ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, comentObserCoord, nameLegacyObservator,
 				vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador, MotivoObservacion, ComentarioObservacion,
-				MotivoNoAut, ComentariosNoAut, tramitaciones) {
+				MotivoNoAut, ComentariosNoAut, tramitaciones,vieneDeCalendarioTramitacion) {
 
 				var those = that;
 				let workPlaces = AppManagementHelper.getModel("WorkPlacesJsonModel").getProperty("/WorkPlaces");
