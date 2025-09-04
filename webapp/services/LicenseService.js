@@ -477,7 +477,7 @@ sap.ui.define([
 
 						emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"],
 						hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]
-						].map(permiso => permiso && permiso.Mail);
+						].map(permiso => permiso && permiso.Mail );
 
 						let usuariosAsignados = {
 							Coordinador: currentUser.Legajo + ", " + currentName,
@@ -886,7 +886,7 @@ sap.ui.define([
 				if (Tipo === "L") {
 					aEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 						"Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]].map(permiso => permiso &&
-							permiso.Mail );
+							permiso.Mail);
 				} else {
 					aEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail );
 				}
@@ -1288,7 +1288,7 @@ sap.ui.define([
 
 				var sEmailEt = "";
 				if (licencia.Tipo === "S") {
-					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail );
+					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail);
 					sEmailEt = "";
 				} else {
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos["Jefe_Trabajo"],
@@ -1581,7 +1581,7 @@ sap.ui.define([
 					"Solicitante_Suplente_Auxiliar"], hashPermisos[
 				"TRAMITADOR"],
 				hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["COORDINADOR"]
-				].map(permiso => permiso && permiso.Mail );
+				].map(permiso => permiso && permiso.Mail);
 
 				//emails = "hzea@inclusion.cloud"
 
@@ -1865,7 +1865,7 @@ sap.ui.define([
 					hashPermisos["COORDINADOR"] = hashPermisos["COORDINADOR"] || "";
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 						"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
-							permiso.Mail).join(",");
+							permiso.Mail ).join(",");
 
 					var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 					var sCurrentUserMail = oUserJson.email;
@@ -1943,7 +1943,7 @@ sap.ui.define([
 					hashPermisos["COORDINADOR"] = hashPermisos["COORDINADOR"] || "";
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 						"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
-							permiso.Mail).join(",");
+							permiso.Mail ).join(",");
 
 					var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 					var sCurrentUserMail = oUserJson.email;
@@ -2027,7 +2027,7 @@ sap.ui.define([
 					"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
 
 						permiso.Mail ).join(",");
-				// permiso.Mail || "guillermo.quattrocchi@altromondo.com.ar").join(",");
+				
 				var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 				var sCurrentUserMail = oUserJson.email;
 				var sCurrentUserName = oUserJson.nombre + ", " + oUserJson.apellido;
@@ -2103,12 +2103,12 @@ sap.ui.define([
 					if (!bFinishTramitacion) {
 						if (result.changed) {
 							MailHelper.sendEmail(oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion, MotivoDeAnulacion,
-								ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, vieneDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
+								ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, comentObserCoord, nameLegacyObservator,
 								vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador,
 								MotivoObservacion,
 								ComentarioObservacion,
 								MotivoNoAut,
-								ComentariosNoAut, tramitaciones).then(() => {
+								ComentariosNoAut, tramitaciones, vieneDeCalendarioTramitacion).then(() => {
 									this.logTramitationChange(sCurrentUserName).then(() => {
 										BusyDialogHelper.close();
 										var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
@@ -2154,21 +2154,21 @@ sap.ui.define([
 										MailHelper.sendEmail(
 											oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion,
 											MotivoDeAnulacion, ObservacionDeAnulacion, fechaAnulacion,
-											vieneDeTramitacion, vieneDeObservacion, false, // vieneDeCalendarioTramitacion = false
+											vieneDeTramitacion, vieneDeObservacion, 
 											comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
 											nameLegacyCoordinator, nameLegacyTramitador,
-											MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut
+											MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut, tramitaciones, false
 										);
 
 										// --- Segundo envío (desde calendario de tramitación) ---
 										MailHelper.sendEmail(
 											oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion,
 											MotivoDeAnulacion, ObservacionDeAnulacion, fechaAnulacion,
-											vieneDeTramitacion, vieneDeObservacion, true, // vieneDeCalendarioTramitacion = true
+											vieneDeTramitacion, vieneDeObservacion,
 											comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
 											nameLegacyCoordinator, nameLegacyTramitador,
 											MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut,
-											tramitaciones // 👈 parámetro adicional
+											tramitaciones, true 
 										);
 
 										// --- Log después de los dos envíos ---
@@ -2205,21 +2205,21 @@ sap.ui.define([
 								MailHelper.sendEmail(
 									oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion,
 									MotivoDeAnulacion, ObservacionDeAnulacion, fechaAnulacion,
-									vieneDeTramitacion, vieneDeObservacion, false, // vieneDeCalendarioTramitacion = false
+									vieneDeTramitacion, vieneDeObservacion,
 									comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
 									nameLegacyCoordinator, nameLegacyTramitador,
-									MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut
+									MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut,tramitaciones,false
 								);
 
 								// --- Segundo envío (desde calendario de tramitación) ---
 								MailHelper.sendEmail(
 									oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion,
 									MotivoDeAnulacion, ObservacionDeAnulacion, fechaAnulacion,
-									vieneDeTramitacion, vieneDeObservacion, true, // vieneDeCalendarioTramitacion = true
+									vieneDeTramitacion, vieneDeObservacion, 
 									comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
 									nameLegacyCoordinator, nameLegacyTramitador,
 									MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut,
-									tramitaciones // 👈 parámetro adicional
+									tramitaciones ,true
 								);
 
 								// --- Log después de los dos envíos ---

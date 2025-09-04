@@ -1629,9 +1629,9 @@ sap.ui.define([
 						break;
 					}
 					if (oTramitacion.Estado === "") {
-							bValid = false;
-							break;
-						}
+						bValid = false;
+						break;
+					}
 				}
 				return bValid
 			}
@@ -4255,11 +4255,11 @@ sap.ui.define([
 			if (aFilteredLim && aFilteredLim.length > 0) {
 				aFilteredLim.forEach(function (limitacion) {
 					sMensaje += `- ${limitacion.Idlimitacion}\n`;
+
 				});
-			} else {
-				sMensaje += "No hay limitaciones técnicas activas.";
+				MessageBoxHelper.showMessage(sMensaje);
 			}
-			//	MessageBoxHelper.showMessage(sMensaje);
+
 
 			return obj;
 		},
@@ -4650,10 +4650,10 @@ sap.ui.define([
 		// Funcion callback llamada luego de cargar el modelo json que tendra los datos de la vista 
 		//En este caso lo utilizo para determinar dinamicamente el binding de algunos campos
 		findSuccess: async function (oLicence) {
-  this.bindJefes(oLicence);
-  
+			this.bindJefes(oLicence);
 
-			
+
+
 		},
 
 		//Issue 562 - Jefes de Trabajo habilitados para TcT
