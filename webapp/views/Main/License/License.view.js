@@ -2381,7 +2381,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								path: "PersonalHabilitadoModel>/Solicitante",
 								template: new sap.ui.core.Item({
 									key: "{PersonalHabilitadoModel>Legajo}",
-									text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre}"
+									text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre} - {PersonalHabilitadoModel>Descripcion}"
 								})
 							},
 							layoutData: new sap.ui.layout.GridData({
@@ -3242,7 +3242,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 										path: "PersonalHabilitadoModel>/Solicitante",
 										template: new sap.ui.core.Item({
 											key: "{PersonalHabilitadoModel>Legajo}",
-											text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre}"
+											text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre} - {PersonalHabilitadoModel>Descripcion}"
 										})
 									},
 								}),

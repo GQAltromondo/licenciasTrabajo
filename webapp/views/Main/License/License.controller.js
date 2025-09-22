@@ -4624,7 +4624,7 @@ sap.ui.define([
 				var sKey = oEvent.getParameter("selectedItem").getKey();
 				var oTemplate = new sap.ui.core.Item({
 					key: "{PersonalHabilitadoModel>Legajo}",
-					text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre}"
+					text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre} - {PersonalHabilitadoModel>Descripcion}"
 				});
 				if (sKey === "04" || sKey === "05") {
 					sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate);
@@ -4665,7 +4665,7 @@ sap.ui.define([
 				var sValue = oLicence.Jobcond;
 				var oTemplate = new sap.ui.core.Item({
 					key: "{PersonalHabilitadoModel>Legajo}",
-					text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre}"
+					text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre} - {PersonalHabilitadoModel>Descripcion}"
 				});
 				if (sValue === "04" || sValue === "05") {
 					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items",
