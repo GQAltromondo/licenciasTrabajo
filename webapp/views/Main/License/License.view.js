@@ -1377,7 +1377,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							},
 							dateValue: "{DeliveryTableJsonModel>Time}",
 							displayFormat: "HH:mm",
-							width:"100px"
+							width: "100px"
 						}),
 						new sap.m.Text({
 							text: "{DeliveryTableJsonModel>Cot}"
@@ -2748,6 +2748,8 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							}),
 						}).addStyleClass("LicenciaText"),
 						new sap.m.ComboBox({ //sap.m.isComboBox({
+						
+
 							layoutData: new sap.ui.layout.GridData({
 								span: "L2 M12 S12"
 							}),
@@ -3154,7 +3156,50 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									design: sap.m.LabelDesign.Bold,
 									text: "Jefe de trabajo"
 								}).addStyleClass("center LicenciaText"),
-								new sap.m.ComboBox({ 
+								// new sap.m.ComboBox({
+								// 	// change: function (oEvent) {
+								// 	// 	oController.updateJefeLabelText(oEvent)
+								// 	// 	$.proxy(oController.handleLegacyValidation, oController, "JefeTrabajoSuplente")(oEvent);
+								// 	// },
+								// 	items: {
+								// 		path: "HabPersonalModel>/items",
+								// 		templateShareable: false,
+								// 		template: new sap.ui.core.Item({
+								// 			key: "{HabPersonalModel>TipoHab}",
+								// 			text: "{= ${HabPersonalModel>TipoHab} + ' - ' + ${HabPersonalModel>Descripcion} }"
+								// 		})
+								// 	}
+									
+								// 	,
+								// 	enabled: {
+								// 		parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+								// 			"PermisosJsonModel>/UsuarioEncontrado", "DisableControlsJsonModel>/enabledForProgrammer"
+								// 		],
+								// 		formatter: oController.rolStatusEdition("general/")
+								// 	},
+								// 	width: "50%",
+
+								// 	id: "HabJefeTrabajoComb"
+								// }),
+								new sap.m.ComboBox({
+    items: {
+        path: "HabPersonalModel>/items",
+		        templateShareable: false,
+        template: new sap.ui.core.Item({
+            key: "{HabPersonalModel>TipoHab}",
+            text: "{= ${HabPersonalModel>TipoHab} + ' - ' + ${HabPersonalModel>Descripcion} }"
+        })
+    },
+     	enabled: {
+										parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+										"PermisosJsonModel>/UsuarioEncontrado", "DisableControlsJsonModel>/enabledForProgrammer"
+								 		],
+										formatter: oController.rolStatusEdition("general/")},
+    width: "50%",
+    id: "HabJefeTrabajoComb"
+}),
+
+								new sap.m.ComboBox({
 									change: function (oEvent) {
 										oController.updateJefeLabelText(oEvent);
 										$.proxy(oController.handleLegacyValidation, oController, "JefeTrabajo")(oEvent);
@@ -3187,7 +3232,30 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									design: sap.m.LabelDesign.Bold,
 									text: "Jefe de trabajo suplente",
 								}).addStyleClass("center LicenciaText"),
-								new sap.m.ComboBox({ 
+								new sap.m.ComboBox({
+									change: function (oEvent) {
+										oController.updateJefeSupLabelText(oEvent)
+										$.proxy(oController.handleLegacyValidation, oController, "JefeTrabajoSuplente")(oEvent);
+									},
+									valueState: "{LegacyValidationJsonModel>/JefeTrabajoSuplenteValueState}",
+									valueStateText: "{LegacyValidationJsonModel>/JefeTrabajoSuplenteValueStateText}",
+									enabled: {
+										parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+											"PermisosJsonModel>/UsuarioEncontrado", "DisableControlsJsonModel>/enabledForProgrammer"
+										],
+										formatter: oController.rolStatusEdition("general/")
+									},
+									width: "20%",
+									selectedKey: "{LicenseJsonModel>/JefeSuplente}",
+									id: "HabJefeTrabajoSupComb",
+									tooltip: {
+										parts: ["LicenseJsonModel>/JefeSuplente", "i18n>PersonalHabilitadoModel_JefeDeTrabajo", "i18n>Legajo",
+											"i18n>Nombre"
+										],
+										formatter: $.proxy(oController.formatComboTooltip, oController)
+									}
+								}),
+								new sap.m.ComboBox({
 									change: function (oEvent) {
 										oController.updateJefeSupLabelText(oEvent)
 										$.proxy(oController.handleLegacyValidation, oController, "JefeTrabajoSuplente")(oEvent);

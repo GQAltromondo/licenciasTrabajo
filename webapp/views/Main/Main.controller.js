@@ -98,6 +98,16 @@ sap.ui.define([
 			AppManagementHelper.getModel("EnabledFilterLicstat").setData({
 				enabled: true
 			});
+			AppManagementHelper.getModel("HabPersonalModel").setData([{
+				TipoHab: "M21",
+				Descripcion: "HAB m21"
+			},{
+				TipoHab: "M22",
+				Descripcion: "HAB m22"
+			}
+			]
+
+			);
 			AppManagementHelper.getModel("ColorModel").setProperty("/Color", "white");
 			AppManagementHelper.getModel("CheckAdvancedFiltersModel").setData({
 				Aro: false,
