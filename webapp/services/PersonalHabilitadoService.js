@@ -86,31 +86,97 @@ sap.ui.define([
 			})
 		},
 
-		getJefeTrabajoPromise: function (sSociedad) {
-			var that = this;
-			return new Promise(function (resolve, reject) {
-				oDataServices.getModel("TransenerOperaciones").read(that._entitySet, {
+	getJefeTrabajoPromise: function (sSociedad) {
+    var that = this;
+    var oModel = oDataServices.getModel("TransenerOperaciones");
 
-					filters: that.getFiltersPersonalHabilitado("JT", sSociedad, "H0001", ""),
-					success: resolve,
-					error: reject
-				})
-			})
-		},
+    // ===== helpers locales =====
+    const asArray = (data) => {
+        if (!data) return [];
+        if (Array.isArray(data)) return data;
+        if (data.results && Array.isArray(data.results)) return data.results;
+        return [data];
+    };
+    const safe = (v) => (v == null ? "" : String(v).trim());
 
-		getJefeTrabajoTctPromise: function (sSociedad) {
-			var that = this;
-			return new Promise(function (resolve, reject) {
-				oDataServices.getModel("TransenerOperaciones").read(that._entitySet, {
+    // Deduplica por TipoHab y arma { TipoHab, Descripcion }
+    const toUniqueHabList = (rows) => {
+        const map = new Map();
+        for (const r of rows) {
+            const tipo = safe(r.TipoHab);
+            if (!tipo) continue;
+            if (!map.has(tipo)) {
+                // Fallbacks por si la descripción viene con otro nombre
+                const desc =
+                    safe(r.Descripcion) ||
+                    safe(r.Desc_TipoHab) ||
+                    safe(r.DescripcionTipoHab) ||
+                    "";
+                map.set(tipo, { TipoHab: tipo, Descripcion: desc });
+            }
+        }
+        return Array.from(map.values());
+    };
 
-					filters: that.getFiltersPersonalHabilitado("", sSociedad, "H0002", "J", "JN"),
+    return new Promise(function (resolve, reject) {
+        oModel.read(that._entitySet, {
+            filters: that.getFiltersPersonalHabilitado("JT", sSociedad, "H0001", ""),
+            success: function (oData) {
+                const rows = asArray(oData);
+                const list = toUniqueHabList(rows);
+                AppManagementHelper.getModel("HabPersonalModel").setData(list);
+                resolve(oData);
+            },
+            error: reject
+        });
+    });
+},
 
-					//filters: that.getFiltersPersonalHabilitado("JT", sSociedad, "H0002",""),
-					success: resolve,
-					error: reject
-				})
-			})
-		},
+getJefeTrabajoTctPromise: function (sSociedad) {
+    var that = this;
+    var oModel = oDataServices.getModel("TransenerOperaciones");
+
+    // ===== helpers locales (idénticos a los de arriba) =====
+    const asArray = (data) => {
+        if (!data) return [];
+        if (Array.isArray(data)) return data;
+        if (data.results && Array.isArray(data.results)) return data.results;
+        return [data];
+    };
+    const safe = (v) => (v == null ? "" : String(v).trim());
+    const toUniqueHabList = (rows) => {
+        const map = new Map();
+        for (const r of rows) {
+            const tipo = safe(r.Lote);
+            if (!tipo) continue;
+            if (!map.has(tipo)) {
+                const desc =
+                    safe(r.Descripcion) ||
+                    safe(r.Desc_TipoHab) ||
+                    safe(r.DescripcionTipoHab) ||
+                    "";
+                map.set(tipo, { TipoHab: tipo, Descripcion: desc });
+            }
+        }
+        return Array.from(map.values());
+    };
+
+    return new Promise(function (resolve, reject) {
+        oModel.read(that._entitySet, {
+            // según tu comentario: H0002 y roles J / JN
+            // filters: that.getFiltersPersonalHabilitado("", sSociedad, "H0002", "J", "JN"),
+			  filters: that.getFiltersPersonalHabilitado("", sSociedad, "H0002"),
+            success: function (oData) {
+                const rows = asArray(oData);
+                const list = toUniqueHabList(rows);
+                AppManagementHelper.getModel("HabPersonalTCTModel").setData(list);
+                resolve(oData);
+            },
+            error: reject
+        });
+    });
+},
+
 
 		getSolicitantePromise: function (sSociedad) {
 			var that = this;

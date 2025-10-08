@@ -2748,7 +2748,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							}),
 						}).addStyleClass("LicenciaText"),
 						new sap.m.ComboBox({ //sap.m.isComboBox({
-						
+
 
 							layoutData: new sap.ui.layout.GridData({
 								span: "L2 M12 S12"
@@ -3119,32 +3119,6 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							})
 						}).addStyleClass("licenseInputBorder"),
 
-						// new sap.m.Label({
-						// 	design: sap.m.LabelDesign.Bold,
-						// 	text: "OT",
-						// 	layoutData: new sap.ui.layout.GridData({
-						// 		span: "L2 M12 S12"
-						// 	})
-						// }).addStyleClass("LicenciaText"),
-						// new sap.m.ComboBox({
-						// 	busy: "{OrdenesJsonModel>/Busy}",
-						// 	enabled: {
-						// 		parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-						// 			"PermisosJsonModel>/UsuarioEncontrado", "LicenseJsonModel>/Werks"
-						// 		],
-						// 		formatter: oController.rolStatusEdition("general/")
-						// 	},
-						// 	selectionChange: [oController.OTSelected, oController],
-						// 	selectedKey: "{LicenseJsonModel>/Aufnr}",
-						// 	width: "100%",
-						// 	items: {
-						// 		path: "OrdenesJsonModel>/Ordenes",
-						// 		template: new sap.ui.core.Item({
-						// 			key: "{OrdenesJsonModel>Orden}",
-						// 			text: "{OrdenesJsonModel>Orden} - {OrdenesJsonModel>Descripcion}"
-						// 		})
-						// 	}
-						// }).addStyleClass("licenseInputBorder"),
 						new sap.m.VBox({
 							layoutData: new sap.ui.layout.GridData({
 								span: "L4 M12 S12",
@@ -3152,53 +3126,27 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							}),
 							items: [
 								new sap.m.Label({
+									id: "TipoHabLabel",
+									design: sap.m.LabelDesign.Bold,
+									text: "Tipo de habilitacion"
+								}).addStyleClass("center LicenciaText"),
+
+								new sap.m.ComboBox({
+									selectionChange: $.proxy(oController.onSelectionChangeHab, oController),
+									enabled: {
+										parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+											"PermisosJsonModel>/UsuarioEncontrado", "DisableControlsJsonModel>/enabledForProgrammer"
+										],
+										formatter: oController.rolStatusEdition("general/")
+									},
+									width: "50%",
+									id: "HabJefeTrabajoComb"
+								}).addStyleClass("sapUiTinyMarginBottom"),
+								new sap.m.Label({
 									id: "jefeLabel",
 									design: sap.m.LabelDesign.Bold,
-									text: "Jefe de trabajo"
+									text: "Jefe de Trabajo"
 								}).addStyleClass("center LicenciaText"),
-								// new sap.m.ComboBox({
-								// 	// change: function (oEvent) {
-								// 	// 	oController.updateJefeLabelText(oEvent)
-								// 	// 	$.proxy(oController.handleLegacyValidation, oController, "JefeTrabajoSuplente")(oEvent);
-								// 	// },
-								// 	items: {
-								// 		path: "HabPersonalModel>/items",
-								// 		templateShareable: false,
-								// 		template: new sap.ui.core.Item({
-								// 			key: "{HabPersonalModel>TipoHab}",
-								// 			text: "{= ${HabPersonalModel>TipoHab} + ' - ' + ${HabPersonalModel>Descripcion} }"
-								// 		})
-								// 	}
-									
-								// 	,
-								// 	enabled: {
-								// 		parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-								// 			"PermisosJsonModel>/UsuarioEncontrado", "DisableControlsJsonModel>/enabledForProgrammer"
-								// 		],
-								// 		formatter: oController.rolStatusEdition("general/")
-								// 	},
-								// 	width: "50%",
-
-								// 	id: "HabJefeTrabajoComb"
-								// }),
-								new sap.m.ComboBox({
-    items: {
-        path: "HabPersonalModel>/items",
-		        templateShareable: false,
-        template: new sap.ui.core.Item({
-            key: "{HabPersonalModel>TipoHab}",
-            text: "{= ${HabPersonalModel>TipoHab} + ' - ' + ${HabPersonalModel>Descripcion} }"
-        })
-    },
-     	enabled: {
-										parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-										"PermisosJsonModel>/UsuarioEncontrado", "DisableControlsJsonModel>/enabledForProgrammer"
-								 		],
-										formatter: oController.rolStatusEdition("general/")},
-    width: "50%",
-    id: "HabJefeTrabajoComb"
-}),
-
 								new sap.m.ComboBox({
 									change: function (oEvent) {
 										oController.updateJefeLabelText(oEvent);
@@ -3230,7 +3178,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								new sap.m.Label({
 									id: "jefeSupLabel",
 									design: sap.m.LabelDesign.Bold,
-									text: "Jefe de trabajo suplente",
+									text: "Tipo de habilitacion trabajo suplente",
 								}).addStyleClass("center LicenciaText"),
 								new sap.m.ComboBox({
 									change: function (oEvent) {
@@ -3254,7 +3202,12 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 										],
 										formatter: $.proxy(oController.formatComboTooltip, oController)
 									}
-								}),
+								}).addStyleClass("sapUiTinyMarginBottom"),
+								new sap.m.Label({
+									id: "jefeLabelSuplente",
+									design: sap.m.LabelDesign.Bold,
+									text: "Jefe de Trabajo Suplente"
+								}).addStyleClass("center LicenciaText"),
 								new sap.m.ComboBox({
 									change: function (oEvent) {
 										oController.updateJefeSupLabelText(oEvent)

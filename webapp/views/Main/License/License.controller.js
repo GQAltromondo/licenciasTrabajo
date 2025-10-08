@@ -4609,44 +4609,124 @@ sap.ui.define([
 			}
 
 		},
-		//Issue 562 - Jefes de Trabajo habilitados para TcT
-		//Se borro el binding de la vista para los campos Jefe de trabajo y Jefe de trabajo Suplente  ya que se determina dinamicamente al valor del combo Condiciones de trabajo
+
 		onSelectionChangeCond: function (oEvent) {
+			sap.ui.getCore().byId("HabJefeTrabajoComb").setSelectedKey("")
 
-			sap.ui.getCore().byId("JefeTrabajoCombo").setSelectedKey("")
-			sap.ui.getCore().byId("JefeTrabajoSupComb").setSelectedKey("")
 
-			sap.ui.getCore().byId("jefeLabel").setText("Jefe de trabajo");
-			sap.ui.getCore().byId("jefeSupLabel").setText("Jefe de trabajo suplente");
-
-			jefeSupLabel
 			if (oEvent.getParameter("selectedItem")) {
 				var sKey = oEvent.getParameter("selectedItem").getKey();
-				var oTemplate = new sap.ui.core.Item({
-					key: "{PersonalHabilitadoModel>Legajo}",
-					text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre} - {PersonalHabilitadoModel>Descripcion}"
+
+				var oTemplateHab = new sap.ui.core.Item({
+					key: "{HabPersonalModel>TipoHab}",
+					text: "{HabPersonalModel>TipoHab} -{HabPersonalModel>Descripcion}"
+				});
+				var oTemplateHabTCT = new sap.ui.core.Item({
+					key: "{HabPersonalTCTModel>TipoHab}",
+					text: "{HabPersonalTCTModel>TipoHab} -{HabPersonalTCTModel>Descripcion}"
 				});
 				if (sKey === "04" || sKey === "05") {
-					sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate);
-					sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate);
-					sap.ui.getCore().byId("jefeTrabTrComb").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate);
 
+					sap.ui.getCore().byId("HabJefeTrabajoComb").bindAggregation("items", "HabPersonalTCTModel>/", oTemplateHabTCT);
 
 				} else if (sKey) {
-					sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate);
-					sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate);
-					sap.ui.getCore().byId("jefeTrabTrComb").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate);
 
+					sap.ui.getCore().byId("HabJefeTrabajoComb").bindAggregation("items", "HabPersonalModel>/", oTemplateHab);
 
 				}
 			} else {
-				sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items");
-				sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items");
-				sap.ui.getCore().byId("jefeTrabTrComb").unbindAggregation("items");
 
+				sap.ui.getCore().byId("HabJefeTrabajoComb").unbindAggregation("items");
 			}
 
 		},
+		onSelectionChangeHab: function (oEvent) {
+			const view = this.getView();
+			const get = (id) => this.byId(id) || sap.ui.getCore().byId(id);
+
+			// Limpieza de selección
+			["JefeTrabajoCombo", "JefeTrabajoSupComb", "jefeTrabTrComb"].forEach(id => {
+				const c = get(id);
+				if (c) { c.setSelectedKey(""); c.unbindAggregation("items"); }
+			});
+
+			const oSelItem = oEvent.getParameter("selectedItem");
+			if (!oSelItem) return;
+
+			// Rama TCT según LicenseJsonModel>/Jobcond (04/05)
+			const lic = view.getModel("LicenseJsonModel");
+			const jobcond = String((lic && lic.getProperty("/Jobcond")) || "").padStart(2, "0");
+			const isTct = jobcond === "04" || jobcond === "05";
+
+			// Tomar datos del ítem elegido (proba ambos modelos por si el combo está bindeado a uno u otro)
+			const ctxTct = oSelItem.getBindingContext("HabPersonalTCTModel");
+			const ctxHab = oSelItem.getBindingContext("HabPersonalModel");
+			const sel = (ctxTct && ctxTct.getObject()) || (ctxHab && ctxHab.getObject()) || {};
+
+			// Fuente: arrays del PersonalHabilitadoModel
+			const phModel = view.getModel("PersonalHabilitadoModel") || AppManagementHelper.getModel("PersonalHabilitadoModel");
+			const basePath = isTct ? "/JefeDeTrabajoTct" : "/JefeDeTrabajo";
+			const base = (phModel && phModel.getProperty(basePath)) || [];
+
+			// Helpers
+			const dedupeBy = (arr, keyFn) => {
+				const m = new Map();
+				for (const it of arr) {
+					const k = keyFn(it);
+					if (k != null && !m.has(k)) m.set(k, it);
+				}
+				return Array.from(m.values());
+			};
+
+			// Armar lista manual (sin usar filtros de binding)
+			const matchFn = (row) => {
+				if (isTct) {
+					if (sel.TipoHab) return String(row.Lote || "") === String(sel.TipoHab);
+					return true;
+				} else {
+					if (sel.TipoHab) return String(row.TipoHab || "") === String(sel.TipoHab);
+					return true;
+				}
+			};
+
+			const projected = dedupeBy(base.filter(matchFn), it => it.Legajo)
+				.map(it => ({
+					Key: it.Legajo,
+					Display: [it.Legajo, it.Nombre, "-", it.Descripcion].filter(Boolean).join(" "),
+					// campos útiles para depurar/mostrar:
+					Legajo: it.Legajo,
+					Nombre: it.Nombre,
+					Descripcion: it.Descripcion,
+					TipoHab: it.TipoHab,
+					Lote: it.Lote
+				}));
+
+				// Publico la lista en un modelo temporal y bindeo los combos
+			const JSONModel = sap.ui.model.json.JSONModel;
+			const previewModel = view.getModel("JefesPreviewModel") || new JSONModel([]);
+			previewModel.setData(projected);
+			view.setModel(previewModel, "JefesPreviewModel");
+
+			const tpl = new sap.ui.core.Item({
+				key: "{JefesPreviewModel>Key}",
+				text: "{JefesPreviewModel>Display}"
+			});
+
+			const bind = (id) => {
+				const c = get(id);
+				if (!c) return;
+				c.bindAggregation("items", {
+					path: "JefesPreviewModel>/",
+					template: tpl,
+					templateShareable: false
+				});
+			};
+
+			["JefeTrabajoCombo", "JefeTrabajoSupComb", "jefeTrabTrComb"].forEach(bind);
+		}
+
+		,
+
 		// Funcion callback llamada luego de cargar el modelo json que tendra los datos de la vista 
 		//En este caso lo utilizo para determinar dinamicamente el binding de algunos campos
 		findSuccess: async function (oLicence) {

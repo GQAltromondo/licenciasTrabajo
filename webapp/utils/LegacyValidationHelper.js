@@ -363,22 +363,58 @@ sap.ui.define([
 			}
 		},
 
-		getSelectedVigenciaValue: function (oEvent) {
-			if (oEvent.dateAdded) {
-				return oEvent.date
-			} else {
-				var oBinding = oEvent.getSource().getSelectedItem();
-				return oBinding ? oBinding.getBindingContext("PersonalHabilitadoModel").getObject().Vigencia : null
+		// Helper reutilizable
+		_getSelectedPropertyFromAnyModel: function (oEvent, prop, modelsOrder) {
+			// Caso especial: evento "sintético" con valores directos
+			if (oEvent && oEvent.dateAdded) {
+				if (prop === "Vigencia") return oEvent.date ?? null;
+				if (prop === "Estado") return oEvent.estado ?? null;
 			}
+
+			// Obtener el ítem seleccionado robustamente (selectionChange / change / MultiComboBox)
+			const src = oEvent && oEvent.getSource ? oEvent.getSource() : null;
+			const item = (oEvent && oEvent.getParameter && (
+				oEvent.getParameter("selectedItem") ||  // ComboBox/Select
+				oEvent.getParameter("changedItem")      // MultiComboBox
+			)) || (src && src.getSelectedItem && src.getSelectedItem()) || null;
+
+			if (!item) return null;
+
+			// Orden de búsqueda de modelos (puede extenderse)
+			const names = (modelsOrder && modelsOrder.length ? modelsOrder : [
+				"JefesPreviewModel",
+				"PersonalHabilitadoModel",
+				"HabPersonalModel",
+				"HabPersonalTCTModel",
+				undefined // modelo por defecto de la vista
+			]);
+
+			// Intentar leer la propiedad desde el primer contexto que la tenga
+			for (const name of names) {
+				const ctx = item.getBindingContext(name);
+				if (!ctx) continue;
+
+				// 1) vía getProperty (más eficiente)
+				const val = ctx.getProperty(prop);
+				if (val !== undefined) return val;
+
+				// 2) vía getObject (por si el path no apunta directo a la propiedad)
+				const obj = ctx.getObject && ctx.getObject();
+				if (obj && Object.prototype.hasOwnProperty.call(obj, prop)) {
+					return obj[prop];
+				}
+			}
+
+			return null;
+		},
+
+		// API pública unificada
+		getSelectedVigenciaValue: function (oEvent) {
+			return this._getSelectedPropertyFromAnyModel(oEvent, "Vigencia");
 		},
 
 		getSelectedStateValue: function (oEvent) {
-			if (oEvent.dateAdded) {
-				return oEvent.estado
-			} else {
-				var oBinding = oEvent.getSource().getSelectedItem();
-				return oBinding ? oBinding.getBindingContext("PersonalHabilitadoModel").getObject().Estado : null
-			}
+			return this._getSelectedPropertyFromAnyModel(oEvent, "Estado");
 		},
 
 		handleLegacyValidation: function (sType, oEvent) {
