@@ -3176,7 +3176,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							}),
 							items: [
 								new sap.m.Label({
-									id: "jefeSupLabel",
+									id: "TipoHabSuplente",
 									design: sap.m.LabelDesign.Bold,
 									text: "Tipo de habilitacion trabajo suplente",
 								}).addStyleClass("center LicenciaText"),
