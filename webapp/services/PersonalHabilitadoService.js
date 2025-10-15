@@ -86,96 +86,106 @@ sap.ui.define([
 			})
 		},
 
-	getJefeTrabajoPromise: function (sSociedad) {
-    var that = this;
-    var oModel = oDataServices.getModel("TransenerOperaciones");
+		getJefeTrabajoPromise: function (sSociedad) {
+			var that = this;
+			var oModel = oDataServices.getModel("TransenerOperaciones");
 
-    // ===== helpers locales =====
-    const asArray = (data) => {
-        if (!data) return [];
-        if (Array.isArray(data)) return data;
-        if (data.results && Array.isArray(data.results)) return data.results;
-        return [data];
-    };
-    const safe = (v) => (v == null ? "" : String(v).trim());
+			// ===== helpers locales =====
+			const asArray = (data) => {
+				if (!data) return [];
+				if (Array.isArray(data)) return data;
+				if (data.results && Array.isArray(data.results)) return data.results;
+				return [data];
+			};
+			const safe = (v) => (v == null ? "" : String(v).trim());
 
-    // Deduplica por TipoHab y arma { TipoHab, Descripcion }
-    const toUniqueHabList = (rows) => {
-        const map = new Map();
-        for (const r of rows) {
-            const tipo = safe(r.TipoHab);
-            if (!tipo) continue;
-            if (!map.has(tipo)) {
-                // Fallbacks por si la descripción viene con otro nombre
-                const desc =
-                    safe(r.Descripcion) ||
-                    safe(r.Desc_TipoHab) ||
-                    safe(r.DescripcionTipoHab) ||
-                    "";
-                map.set(tipo, { TipoHab: tipo, Descripcion: desc });
-            }
-        }
-        return Array.from(map.values());
-    };
+			// Deduplica por TipoHab y arma { TipoHab, Descripcion }
+			const toUniqueHabList = (rows) => {
+				const map = new Map();
+				for (const r of rows) {
+					const tipo = safe(r.TipoHab);
+					if (!tipo) continue;
+					if (!map.has(tipo)) {
+						// Fallbacks por si la descripción viene con otro nombre
+						const desc =
+							safe(r.Descripcion) ||
+							safe(r.Desc_TipoHab) ||
+							safe(r.DescripcionTipoHab) ||
+							"";
+						map.set(tipo, { TipoHab: tipo, Descripcion: desc });
+					}
+				}
+				return Array.from(map.values());
+			};
 
-    return new Promise(function (resolve, reject) {
-        oModel.read(that._entitySet, {
-            filters: that.getFiltersPersonalHabilitado("JT", sSociedad, "H0001", ""),
-            success: function (oData) {
-                const rows = asArray(oData);
-                const list = toUniqueHabList(rows);
-                AppManagementHelper.getModel("HabPersonalModel").setData(list);
-                resolve(oData);
-            },
-            error: reject
-        });
-    });
-},
+			return new Promise(function (resolve, reject) {
+				oModel.read(that._entitySet, {
+					filters: that.getFiltersPersonalHabilitado("JT", sSociedad, "H0001", ""),
+					success: function (oData) {
+						const rows = asArray(oData);
+						const list = toUniqueHabList(rows);
+						AppManagementHelper.getModel("HabPersonalModel").setData(list);
+						resolve(oData);
+					},
+					error: reject
+				});
+			});
+		},
 
-getJefeTrabajoTctPromise: function (sSociedad) {
-    var that = this;
-    var oModel = oDataServices.getModel("TransenerOperaciones");
+		getJefeTrabajoTctPromise: function (sSociedad) {
+			var that = this;
+			var oModel = oDataServices.getModel("TransenerOperaciones");
 
-    // ===== helpers locales (idénticos a los de arriba) =====
-    const asArray = (data) => {
-        if (!data) return [];
-        if (Array.isArray(data)) return data;
-        if (data.results && Array.isArray(data.results)) return data.results;
-        return [data];
-    };
-    const safe = (v) => (v == null ? "" : String(v).trim());
-    const toUniqueHabList = (rows) => {
-        const map = new Map();
-        for (const r of rows) {
-            const tipo = safe(r.Lote);
-            if (!tipo) continue;
-            if (!map.has(tipo)) {
-                const desc =
-                    safe(r.Descripcion) ||
-                    safe(r.Desc_TipoHab) ||
-                    safe(r.DescripcionTipoHab) ||
-                    "";
-                map.set(tipo, { TipoHab: tipo, Descripcion: desc });
-            }
-        }
-        return Array.from(map.values());
-    };
+			// ===== helpers locales (idénticos a los de arriba) =====
+			const asArray = (data) => {
+				if (!data) return [];
+				if (Array.isArray(data)) return data;
+				if (data.results && Array.isArray(data.results)) return data.results;
+				return [data];
+			};
+			const safe = (v) => (v == null ? "" : String(v).trim());
+			const toUniqueHabList = (rows) => {
+				const map = new Map();
+				for (const r of rows) {
+					const tipo = safe(r.Lote);
+					if (!tipo) continue;
+					if (!map.has(tipo)) {
+						const desc =
+							safe(r.Descripcion) ||
+							safe(r.Desc_TipoHab) ||
+							safe(r.DescripcionTipoHab) ||
+							"";
+						map.set(tipo, { TipoHab: tipo, Descripcion: desc });
+					}
+				}
+				return Array.from(map.values());
+			};
 
-    return new Promise(function (resolve, reject) {
-        oModel.read(that._entitySet, {
-            // según tu comentario: H0002 y roles J / JN
-            // filters: that.getFiltersPersonalHabilitado("", sSociedad, "H0002", "J", "JN"),
-			  filters: that.getFiltersPersonalHabilitado("", sSociedad, "H0002"),
-            success: function (oData) {
-                const rows = asArray(oData);
-                const list = toUniqueHabList(rows);
-                AppManagementHelper.getModel("HabPersonalTCTModel").setData(list);
-                resolve(oData);
-            },
-            error: reject
-        });
-    });
-},
+			return new Promise(function (resolve, reject) {
+				oModel.read(that._entitySet, {
+					// según tu comentario: H0002 y roles J / JN
+					filters: that.getFiltersPersonalHabilitado("", sSociedad, "H0002", "J", "JN"),
+					//  filters: that.getFiltersPersonalHabilitado("", sSociedad, "H0002"),
+					success: function (oData) {
+						const rows = asArray(oData);
+						// const list = toUniqueHabList(rows);
+						const list = [
+							{ TipoHab: "A", Descripcion: "A" },
+							{ TipoHab: "HC", Descripcion: "HC" },
+							{ TipoHab: "J", Descripcion: "J" },
+							{ TipoHab: "JN", Descripcion: "JN" },
+							{ TipoHab: "O", Descripcion: "O" },
+							{ TipoHab: "ON", Descripcion: "ON" },
+							{ TipoHab: "TJ", Descripcion: "TJ" },
+							{ TipoHab: "TEO", Descripcion: "TEO" }
+						]
+						AppManagementHelper.getModel("HabPersonalTCTModel").setData(list);
+						resolve(oData);
+					},
+					error: reject
+				});
+			});
+		},
 
 
 		getSolicitantePromise: function (sSociedad) {

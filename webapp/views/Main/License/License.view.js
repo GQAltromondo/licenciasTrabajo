@@ -3139,6 +3139,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 										],
 										formatter: oController.rolStatusEdition("general/")
 									},
+									selectedKey: "{LicenseJsonModel>/TipoHabJefe}",
 									width: "50%",
 									id: "HabJefeTrabajoComb"
 								}).addStyleClass("sapUiTinyMarginBottom"),
@@ -3181,27 +3182,17 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									text: "Tipo de habilitacion trabajo suplente",
 								}).addStyleClass("center LicenciaText"),
 								new sap.m.ComboBox({
-									change: function (oEvent) {
-										oController.updateJefeSupLabelText(oEvent)
-										$.proxy(oController.handleLegacyValidation, oController, "JefeTrabajoSuplente")(oEvent);
-									},
-									valueState: "{LegacyValidationJsonModel>/JefeTrabajoSuplenteValueState}",
-									valueStateText: "{LegacyValidationJsonModel>/JefeTrabajoSuplenteValueStateText}",
+									id: "HabJefeTrabajoSupComb",
+									selectionChange: $.proxy(oController.onSelectionChangeHabSup, oController),
 									enabled: {
 										parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
 											"PermisosJsonModel>/UsuarioEncontrado", "DisableControlsJsonModel>/enabledForProgrammer"
 										],
 										formatter: oController.rolStatusEdition("general/")
 									},
-									width: "20%",
-									selectedKey: "{LicenseJsonModel>/JefeSuplente}",
-									id: "HabJefeTrabajoSupComb",
-									tooltip: {
-										parts: ["LicenseJsonModel>/JefeSuplente", "i18n>PersonalHabilitadoModel_JefeDeTrabajo", "i18n>Legajo",
-											"i18n>Nombre"
-										],
-										formatter: $.proxy(oController.formatComboTooltip, oController)
-									}
+									selectedKey: "{LicenseJsonModel>/TipoHabJefeSup}",
+									formatter: oController.rolStatusEdition("general/"),
+									width: "50%",
 								}).addStyleClass("sapUiTinyMarginBottom"),
 								new sap.m.Label({
 									id: "jefeLabelSuplente",
@@ -3237,6 +3228,8 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							layoutData: new sap.ui.layout.GridData({
 								span: "L4 M12 S12"
 							}),
+							height:"110px",
+						justifyContent: sap.m.FlexJustifyContent.End,
 							items: [
 								new sap.m.Label({
 									design: sap.m.LabelDesign.Bold,
