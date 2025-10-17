@@ -367,7 +367,7 @@ sap.ui.define([
 		_getSelectedPropertyFromAnyModel: function (oEvent, prop, modelsOrder) {
 			// Caso especial: evento "sintético" con valores directos
 			if (oEvent && oEvent.dateAdded) {
-				if (prop === "Vigencia") return oEvent.date ?? null;
+				if (prop === "Vigencia") return oEvent.Vigencia ?? null;
 				if (prop === "Estado") return oEvent.estado ?? null;
 			}
 
@@ -383,6 +383,7 @@ sap.ui.define([
 			// Orden de búsqueda de modelos (puede extenderse)
 			const names = (modelsOrder && modelsOrder.length ? modelsOrder : [
 				"JefesPreviewModel",
+				"JefesSupPreviewModel",
 				"PersonalHabilitadoModel",
 				"HabPersonalModel",
 				"HabPersonalTCTModel",

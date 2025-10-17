@@ -1243,9 +1243,11 @@ sap.ui.define([
 			} else {
 				// Issue 582 - si se trata de una copia y el usuario es solicitante transener de debe asignar siempre el tipo "Programada"
 				this.changeLicenTypeCopyTBA();
+				var oLicence = AppManagementHelper.getModel("LicenseJsonModel").getData()
 				// Issue 565 - Al copiar una licencia se debe inicializar el binding de los jefes
-				this.bindJefes(AppManagementHelper.getModel("LicenseJsonModel").getData());
-				this.validarHabilit(AppManagementHelper.getModel("LicenseJsonModel").getData(), AppManagementHelper.getModel(
+				this.bindJefes(oLicence);
+				this.bindTipoHab(oLicence)
+				this.validarHabilit(oLicence, AppManagementHelper.getModel(
 					"PersonalHabilitadoModel").getData().Todos);
 				this.getView().byId("InputTimbeg").setValue("");
 				this.getView().byId("InputTimend").setValue("");
@@ -4697,7 +4699,9 @@ sap.ui.define([
 					Nombre: it.Nombre,
 					Descripcion: it.Descripcion,
 					TipoHab: it.TipoHab,
-					Lote: it.Lote
+					Lote: it.Lote,
+					Vigencia: it.Vigencia,
+					Estado: it.Estado
 				}));
 
 			// Publico la lista en un modelo temporal y bindeo los combos
@@ -4781,7 +4785,9 @@ sap.ui.define([
 					Nombre: it.Nombre,
 					Descripcion: it.Descripcion,
 					TipoHab: it.TipoHab,
-					Lote: it.Lote
+					Lote: it.Lote,
+					Vigencia: it.Vigencia,
+					Estado: it.Estado
 				}));
 
 			// Publico la lista en un modelo temporal y bindeo los combos
@@ -4814,11 +4820,38 @@ sap.ui.define([
 		//En este caso lo utilizo para determinar dinamicamente el binding de algunos campos
 		findSuccess: async function (oLicence) {
 			this.bindJefes(oLicence);
+			this.bindTipoHab(oLicence);
 
 
 
 		},
+		bindTipoHab(oLicence) {
+			if (oLicence) {
 
+				var sValue = oLicence.Jobcond;
+				var oTemplateHab = new sap.ui.core.Item({
+					key: "{HabPersonalModel>TipoHab}",
+					text: "{HabPersonalModel>Descripcion}"
+				});
+				var oTemplateHabTCT = new sap.ui.core.Item({
+					key: "{HabPersonalTCTModel>TipoHab}",
+					text: "{HabPersonalTCTModel>TipoHab} -{HabPersonalTCTModel>Descripcion}"
+				});
+				if (sValue === "04" || sValue === "05") {
+
+					sap.ui.getCore().byId("HabJefeTrabajoComb").bindAggregation("items", "HabPersonalTCTModel>/", oTemplateHabTCT);
+					sap.ui.getCore().byId("HabJefeTrabajoSupComb").bindAggregation("items", "HabPersonalTCTModel>/", oTemplateHabTCT);
+				} else if (sValue) {
+
+					sap.ui.getCore().byId("HabJefeTrabajoComb").bindAggregation("items", "HabPersonalModel>/", oTemplateHab);
+					sap.ui.getCore().byId("HabJefeTrabajoSupComb").bindAggregation("items", "HabPersonalModel>/", oTemplateHab);
+				}
+			} else {
+				sap.ui.getCore().byId("HabJefeTrabajoSupComb").unbindAggregation("items");
+				sap.ui.getCore().byId("HabJefeTrabajoComb").unbindAggregation("items");
+			}
+
+		},
 		//Issue 562 - Jefes de Trabajo habilitados para TcT
 		//Se borro el binding de la vista para los campos Jefe de trabajo y Jefe de trabajo Suplente  ya que se determina dinamicamente al valor del combo Condiciones de trabajo
 
@@ -4913,8 +4946,8 @@ sap.ui.define([
 		updateJefeLabelText: function (oEvent) {
 			const oComboBox = oEvent.getSource();
 			const sSelectedKey = oComboBox.getSelectedKey();
-			const oModel = this.getView().getModel("PersonalHabilitadoModel");
-			const aItems = oModel.getProperty("/JefeDeTrabajo");
+			const oModel = this.getView().getModel("JefesPreviewModel");
+			const aItems = oModel.getProperty("/");
 
 			const oJefe = aItems.find(item => item.Legajo === sSelectedKey);
 			const sTipoHab = oJefe?.TipoHab;
@@ -4937,8 +4970,8 @@ sap.ui.define([
 		updateJefeSupLabelText: function (oEvent) {
 			const oComboBox = oEvent.getSource();
 			const sSelectedKey = oComboBox.getSelectedKey();
-			const oModel = this.getView().getModel("PersonalHabilitadoModel");
-			const aItems = oModel.getProperty("/JefeDeTrabajo");
+			const oModel = this.getView().getModel("JefesSupPreviewModel");
+			const aItems = oModel.getProperty("/");
 
 			const oJefe = aItems.find(item => item.Legajo === sSelectedKey);
 			const sTipoHab = oJefe?.TipoHab;
