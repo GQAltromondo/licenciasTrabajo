@@ -2908,7 +2908,7 @@ sap.ui.define([
 			oDataService.getModel("TransenerOperaciones").read(entity, {
 				filters: aFilters,
 				urlParameters: oParameter ? oParameter : {
-					"$select": "Nombre,Idunifilar,NumVersion,Region,TipoUnifilar,Et,Empresa,Anio,Region,IntAbLe,SecAbBt,SecPatCr,PatAdic,Numerolicencia,RealIdUnifilar"
+					"$select": "Nombre,Idunifilar,NumVersion,Region,TipoUnifilar,Et,Empresa,Anio,Region,IntAbLe,SecAbBt,SecPatCr,PatAdic,Numerolicencia"
 				},
 				success: fnCallback,
 				error: fnError
