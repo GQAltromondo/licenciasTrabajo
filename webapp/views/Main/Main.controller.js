@@ -767,7 +767,7 @@ sap.ui.define([
 								}, () => {
 									MessageBoxHelper.showAlert("Alerta", "Error al obtener unifilares")
 								}, {
-									"$select": "Nombre,Idunifilar,NumVersion,Region,TipoUnifilar,Et,Empresa,Anio,Region,IntAbLe,SecAbBt,SecPatCr,PatAdic,Numerolicencia,Mapa,Doctype,Imagenunifilar"
+									"$select": "Nombre,Idunifilar,NumVersion,Region,TipoUnifilar,Et,Empresa,Anio,Region,IntAbLe,SecAbBt,SecPatCr,PatAdic,Numerolicencia,Mapa,Doctype,Imagenunifilar,RealIdUnifilar"
 								})
 							} else {
 								BusyDialogHelper.close();
@@ -919,6 +919,8 @@ sap.ui.define([
 					oUnifilarFromOldLicense.Et && e.TipoUnifilar === oUnifilarFromOldLicense.TipoUnifilar)
 				if (oUnifilarNewVersion) {
 					if (oUnifilarFromOldLicense.NumVersion !== oUnifilarNewVersion.NumVersion) {
+						//GQ PROBLEMA CON DUPLICAR UNIFILARES 22/10
+						oUnifilarFromOldLicense.RealIdUnifilar = oUnifilarNewVersion.IdUnifilar
 						aUnifilaresToCreate.push({
 							data: oUnifilarFromOldLicense,
 							create: false
