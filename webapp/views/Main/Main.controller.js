@@ -678,7 +678,7 @@ sap.ui.define([
 					"Barrafstx", "Bloqueo", "Werks", "SolSuplente", "Jefe", "JefeSuplente", "Tipinterv", "Perestac",
 					"Descripcion", "Solictext", "Aro", "Sindivi", "Senalninguna", "Precaucionesok", "Senalestados",
 					"Senalalarmas", "Senalmedicion", "Senalafect", "Fstensionret", "Intnooperar", "Precauciones", "Rdisparo", "Equiinterv",
-					"Aufnr", "Bloqueorecierretxt", "Tipolicencia", "Estacional", "Capex", "SolSuplenteAux","TipoHabJefe","TipoHabJefeSup"
+					"Aufnr", "Bloqueorecierretxt", "Tipolicencia", "Estacional", "Capex", "SolSuplenteAux","TipoHabJefe","TipoHabJefeSup","IdHabJefe","IdHabJefeSup"
 				];
 				propertiesToCopy.forEach(prop => {
 					copy[prop] = oldLicense[prop];

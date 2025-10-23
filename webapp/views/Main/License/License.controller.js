@@ -4701,7 +4701,8 @@ sap.ui.define([
 					TipoHab: it.TipoHab,
 					Lote: it.Lote,
 					Vigencia: it.Vigencia,
-					Estado: it.Estado
+					Estado: it.Estado,
+					IdHabilitacion:it.IdHabilitacion
 				}));
 
 			// Publico la lista en un modelo temporal y bindeo los combos
@@ -4787,7 +4788,8 @@ sap.ui.define([
 					TipoHab: it.TipoHab,
 					Lote: it.Lote,
 					Vigencia: it.Vigencia,
-					Estado: it.Estado
+					Estado: it.Estado,
+					IdHabilitacion:it.IdHabilitacion
 				}));
 
 			// Publico la lista en un modelo temporal y bindeo los combos

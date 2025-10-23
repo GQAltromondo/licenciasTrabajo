@@ -369,6 +369,7 @@ sap.ui.define([
 			if (oEvent && oEvent.dateAdded) {
 				if (prop === "Vigencia") return oEvent.Vigencia ?? null;
 				if (prop === "Estado") return oEvent.estado ?? null;
+				if (prop === "IdHabilitacion") return oEvent.IdHabilitacion ?? null ;
 			}
 
 			// Obtener el ítem seleccionado robustamente (selectionChange / change / MultiComboBox)
@@ -418,12 +419,16 @@ sap.ui.define([
 			return this._getSelectedPropertyFromAnyModel(oEvent, "Estado");
 		},
 
+		getSelectedIdHabilitacion: function (oEvent) {
+			return this._getSelectedPropertyFromAnyModel(oEvent, "IdHabilitacion");
+		},
+
 		handleLegacyValidation: function (sType, oEvent) {
-			var oModelLegacyValidation = AppManagementHelper.getModel("LegacyValidationJsonModel");
+			const oLicense = AppManagementHelper.getModel("LicenseJsonModel")
 			var dateVigencia = this.getSelectedVigenciaValue(oEvent)
 			var state = this.getSelectedStateValue(oEvent)
-			var sTextSuccess = "";
-			var sTextWarning = "El legajo seleccionado no se encuentra dentro del rango de la fecha inicio y fin de la licencia";
+			var IdHabilitacion = this.getSelectedIdHabilitacion(oEvent)
+
 			if (dateVigencia) {
 				//validacion de fechas, si está mal warning con mensaje de FECHAS
 				var oDateBetweenRange = this.dateBetweenRange(null, dateVigencia);
@@ -437,110 +442,97 @@ sap.ui.define([
 								this.setWarningState("/SolicitanteValueState", "/SolicitanteValueStateText", "")
 						}
 						if (sType === "JefeTrabajo") {
-							if (oDateBetweenRange.message === "")
-								this.setSuccessState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", oDateBetweenRange.message)
-							else
-								this.setWarningState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", "")
+							if (oDateBetweenRange.message === ""){
+								oLicense.setProperty("/IdHabJefe", IdHabilitacion)
+							this.setSuccessState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", oDateBetweenRange.message)
+							}else{
+							this.setWarningState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", "")
+							oLicense.setProperty("/IdHabJefe", "")}
+					}
+					if (sType === "JefeTrabajoSuplente") {
+						if (oDateBetweenRange.message === ""){
+							oLicense.setProperty("/IdHabJefeSup", IdHabilitacion)
+							this.setSuccessState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", oDateBetweenRange.message)
+						}else{
+							this.setWarningState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", "")
+							oLicense.setProperty("/IdHabJefeSup", "")
 						}
-						if (sType === "JefeTrabajoSuplente") {
-							if (oDateBetweenRange.message === "")
-								this.setSuccessState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", oDateBetweenRange.message)
-							else
-								this.setWarningState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", "")
-						}
-						if (sType === "SolicitanteSuplente") {
-							if (oDateBetweenRange.message === "")
-								this.setSuccessState("/SolicitanteSuplenteValueState", "/SolicitanteSuplenteValueStateText", oDateBetweenRange.message)
-							else
-								this.setWarningState("/SolicitanteSuplenteValueState", "/SolicitanteSuplenteValueStateText", "")
-						}
-						if (sType === "SolicitanteSuplenteAuxiliar") {
-							if (oDateBetweenRange.message === "")
-								this.setSuccessState("/SolicitanteSuplenteAuxValueState", "/SolicitanteSuplenteAuxValueStateText", oDateBetweenRange.message)
-							else
-								this.setWarningState("/SolicitanteSuplenteAuxValueState", "/SolicitanteSuplenteAuxValueStateText", "")
-						}
-						if (sType === "TejtCD") {
-							if (oDateBetweenRange.message === "")
-								this.setSuccessState("/TejtCancelacionDefValueState", "/TejtCancelacionDefValueStateText", oDateBetweenRange.message)
-							else
-								this.setWarningState("/TejtCancelacionDefValueState", "/TejtCancelacionDefValueStateText", "")
-						}
-					} else {
-						var sWarningText = "El legajo tiene sus habilitaciones SUSPENDIDAS o DESHABILITADAS";
-						if (sType === "Solicitante") {
-							this.setErrorState("/SolicitanteValueState", "/SolicitanteValueStateText", sWarningText)
-						}
-						if (sType === "JefeTrabajo") {
-							this.setErrorState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", sWarningText)
-						}
-						if (sType === "JefeTrabajoSuplente") {
-							this.setErrorState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", sWarningText)
-						}
-						if (sType === "SolicitanteSuplente") {
-							this.setErrorState("/SolicitanteSuplenteValueState", "/SolicitanteSuplenteValueStateText", sWarningText)
-						}
-						if (sType === "SolicitanteSuplenteAuxiliar") {
-							this.setErrorState("/SolicitanteSuplenteAuxValueState", "/SolicitanteSuplenteAuxValueState", sWarningText)
-						}
-						if (sType === "TejtCD") {
-							this.setErrorState("/TejtCancelacionDefValueState", "/TejtCancelacionDefValueStateText", sWarningText)
-						}
+					}
+					if (sType === "SolicitanteSuplente") {
+						if (oDateBetweenRange.message === "")
+							this.setSuccessState("/SolicitanteSuplenteValueState", "/SolicitanteSuplenteValueStateText", oDateBetweenRange.message)
+						else
+							this.setWarningState("/SolicitanteSuplenteValueState", "/SolicitanteSuplenteValueStateText", "")
+					}
+					if (sType === "SolicitanteSuplenteAuxiliar") {
+						if (oDateBetweenRange.message === "")
+							this.setSuccessState("/SolicitanteSuplenteAuxValueState", "/SolicitanteSuplenteAuxValueStateText", oDateBetweenRange.message)
+						else
+							this.setWarningState("/SolicitanteSuplenteAuxValueState", "/SolicitanteSuplenteAuxValueStateText", "")
+					}
+					if (sType === "TejtCD") {
+						if (oDateBetweenRange.message === "")
+							this.setSuccessState("/TejtCancelacionDefValueState", "/TejtCancelacionDefValueStateText", oDateBetweenRange.message)
+						else
+							this.setWarningState("/TejtCancelacionDefValueState", "/TejtCancelacionDefValueStateText", "")
 					}
 				} else {
-					if (this.validState(state)) {
-						if (sType === "Solicitante") {
-							this.setWarningState("/SolicitanteValueState", "/SolicitanteValueStateText", "")
-						}
-						if (sType === "JefeTrabajo") {
-							this.setWarningState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", "")
-						}
-						if (sType === "JefeTrabajoSuplente") {
-							this.setWarningState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", "")
-						}
-						if (sType === "SolicitanteSuplente") {
-							this.setWarningState("/SolicitanteSuplenteValueState", "/SolicitanteSuplenteValueStateText", "")
-						}
-						if (sType === "SolicitanteSuplenteAuxiliar") {
-							this.setWarningState("/SolicitanteSuplenteAuxValueState", "/SolicitanteSuplenteValueStateText", "")
-						}
-						if (sType === "TejtCD") {
-							this.setWarningState("/TejtCancelacionDefValueState", "/TejtCancelacionDefValueStateText", "")
-						}
-					} else {
-						var sWarningText = "El legajo tiene sus habilitaciones SUSPENDIDAS o DESHABILITADAS";
-						if (sType === "Solicitante") {
-							this.setErrorState("/SolicitanteValueState", "/SolicitanteValueStateText", sWarningText)
-						}
-						if (sType === "JefeTrabajo") {
-							this.setErrorState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", sWarningText)
-						}
-						if (sType === "JefeTrabajoSuplente") {
-							this.setErrorState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", sWarningText)
-						}
-						if (sType === "SolicitanteSuplente") {
-							this.setErrorState("/SolicitanteSuplenteValueState", "/SolicitanteSuplenteValueStateText", sWarningText)
-						}
-						if (sType === "SolicitanteSuplenteAuxiliar") {
-							this.setErrorState("/SolicitanteSuplenteAuxValueState", "/SolicitanteSuplenteAuxValueState", sWarningText)
-						}
-						if (sType === "TejtCD") {
-							this.setErrorState("/TejtCancelacionDefValueState", "/TejtCancelacionDefValueStateText", sWarningText)
-						}
-
-					}
-				}
-			} else {
-				if (!this.validState(state)) {
 					var sWarningText = "El legajo tiene sus habilitaciones SUSPENDIDAS o DESHABILITADAS";
 					if (sType === "Solicitante") {
 						this.setErrorState("/SolicitanteValueState", "/SolicitanteValueStateText", sWarningText)
 					}
 					if (sType === "JefeTrabajo") {
 						this.setErrorState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", sWarningText)
+						oLicense.setProperty("/IdHabJefeSup", "")
 					}
 					if (sType === "JefeTrabajoSuplente") {
 						this.setErrorState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", sWarningText)
+						oLicense.setProperty("/IdHabJefeSup", "")
+					}
+					if (sType === "SolicitanteSuplente") {
+						this.setErrorState("/SolicitanteSuplenteValueState", "/SolicitanteSuplenteValueStateText", sWarningText)
+					}
+					if (sType === "SolicitanteSuplenteAuxiliar") {
+						this.setErrorState("/SolicitanteSuplenteAuxValueState", "/SolicitanteSuplenteAuxValueState", sWarningText)
+					}
+					if (sType === "TejtCD") {
+						this.setErrorState("/TejtCancelacionDefValueState", "/TejtCancelacionDefValueStateText", sWarningText)
+					}
+				}
+			} else {
+				if (this.validState(state)) {
+					if (sType === "Solicitante") {
+						this.setWarningState("/SolicitanteValueState", "/SolicitanteValueStateText", "")
+					}
+					if (sType === "JefeTrabajo") {
+						this.setWarningState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", "")
+						oLicense.setProperty("/IdHabJefeSup", "")
+					}
+					if (sType === "JefeTrabajoSuplente") {
+						this.setWarningState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", "")
+						oLicense.setProperty("/IdHabJefeSup", "")
+					}
+					if (sType === "SolicitanteSuplente") {
+						this.setWarningState("/SolicitanteSuplenteValueState", "/SolicitanteSuplenteValueStateText", "")
+					}
+					if (sType === "SolicitanteSuplenteAuxiliar") {
+						this.setWarningState("/SolicitanteSuplenteAuxValueState", "/SolicitanteSuplenteValueStateText", "")
+					}
+					if (sType === "TejtCD") {
+						this.setWarningState("/TejtCancelacionDefValueState", "/TejtCancelacionDefValueStateText", "")
+					}
+				} else {
+					var sWarningText = "El legajo tiene sus habilitaciones SUSPENDIDAS o DESHABILITADAS";
+					if (sType === "Solicitante") {
+						this.setErrorState("/SolicitanteValueState", "/SolicitanteValueStateText", sWarningText)
+					}
+					if (sType === "JefeTrabajo") {
+						this.setErrorState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", sWarningText)
+						oLicense.setProperty("/IdHabJefeSup", "")
+					}
+					if (sType === "JefeTrabajoSuplente") {
+						this.setErrorState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", sWarningText)
+						oLicense.setProperty("/IdHabJefeSup", "")
 					}
 					if (sType === "SolicitanteSuplente") {
 						this.setErrorState("/SolicitanteSuplenteValueState", "/SolicitanteSuplenteValueStateText", sWarningText)
@@ -553,6 +545,32 @@ sap.ui.define([
 					}
 
 				}
+			}
+		} else {
+			if(!this.validState(state)) {
+	var sWarningText = "El legajo tiene sus habilitaciones SUSPENDIDAS o DESHABILITADAS";
+	if (sType === "Solicitante") {
+		this.setErrorState("/SolicitanteValueState", "/SolicitanteValueStateText", sWarningText)
+	}
+	if (sType === "JefeTrabajo") {
+		this.setErrorState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", sWarningText)
+		oLicense.setProperty("/IdHabJefeSup", "")
+	}
+	if (sType === "JefeTrabajoSuplente") {
+		this.setErrorState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", sWarningText)
+		oLicense.setProperty("/IdHabJefeSup", "")
+	}
+	if (sType === "SolicitanteSuplente") {
+		this.setErrorState("/SolicitanteSuplenteValueState", "/SolicitanteSuplenteValueStateText", sWarningText)
+	}
+	if (sType === "SolicitanteSuplenteAuxiliar") {
+		this.setErrorState("/SolicitanteSuplenteAuxValueState", "/SolicitanteSuplenteAuxValueState", sWarningText)
+	}
+	if (sType === "TejtCD") {
+		this.setErrorState("/TejtCancelacionDefValueState", "/TejtCancelacionDefValueStateText", sWarningText)
+	}
+
+}
 			}
 		}
 
