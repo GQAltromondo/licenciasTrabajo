@@ -86,6 +86,7 @@ sap.ui.define([
 			var sTipo = oEvent.getSource().getParent().getBindingContext("UnifilarListModel").getObject().TipoUnifilar;
 			var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			var sIndex = oEvent.getSource().getParent().getBindingContext("UnifilarListModel").getObject().Idunifilar;
+			var sRealIdUnifilar = oEvent.getSource().getParent().getBindingContext("UnifilarListModel").getObject().RealIdUnifilar || 0
 
 			// Fix issue #498 ID de solicitud y unifilres.
 			var oLicencia = AppManagementHelper.getModel("LicenseJsonModel").getData();
@@ -103,7 +104,7 @@ sap.ui.define([
 			// window.open(sHost, "_blank");
 
 			//	location.hash = `GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`
-			var Hash = `#GestionUnifilaresV1-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`;
+			var Hash = `#GestionUnifilaresV1-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&RealIdUnifilar=${sRealIdUnifilar}&Mode=E`;
 
 			const currentHash = Hash;
 
