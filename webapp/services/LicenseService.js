@@ -3294,7 +3294,8 @@ sap.ui.define([
 				TeinformoValueState: "Success",
 				TeinformoValueStateText: "",
 				JefetraValueState: "Success",
-				JefetraValueStateText: ""
+				JefetraValueStateText: "",
+				IdJefeTrj:""
 			});
 			aTransfers.forEach((e) => {
 				e.enabledCombo = e.Trjindex === undefined || e.Trjindex === "";

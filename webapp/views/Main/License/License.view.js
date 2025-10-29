@@ -60,6 +60,33 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 					editable: true,
 					content: [
 						new sap.m.Label({
+							id: "TipoHabJefeTransf",
+							design: sap.m.LabelDesign.Bold,
+							text: "Tipo de habilitacion",
+						}).addStyleClass("center LicenciaText"),
+						new sap.m.ComboBox({
+							
+							id: "TransfHabJefeTrabajoComb",
+							selectionChange: $.proxy(oController.onSelectionChangeHabTransf, oController),
+							enabled: {
+								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"TransferListJsonModel>enabledCombo"
+								],
+								formatter: oController.rolStatusEdition("transferencia/")
+							},
+							items: {
+								path: "HabListModel>/",
+								templateShareable: false,
+								template: new sap.ui.core.Item({
+									key: "{HabListModel>TipoHab}",
+									text: "{HabListModel>TipoHab} - {HabListModel>Descripcion}"
+								})
+							}
+							, selectedKey: "{TransferListJsonModel>TipoJefeTrj}",
+							formatter: oController.rolStatusEdition("transferencia/"),
+							width: "20%",
+						}).addStyleClass("sapUiTinyMarginBottom"),
+						new sap.m.Label({
 							text: "Nuevo JT",
 							layoutData: new sap.ui.layout.GridData({
 								span: "L2 M12 S12"
@@ -72,7 +99,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							}),
 
 							valueState: "{TransferListJsonModel>JefetraValueState}",
-							id: "jefeTrabTrComb",
+							id: "JefeTrabTrComb",
 							valueStateText: "{TransferListJsonModel>JefetraValueStateText}",
 							change: [oController.handleLegacyValidationTransfers, oController],
 							enabled: {
@@ -82,13 +109,13 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								formatter: oController.rolStatusEdition("transferencia/")
 							},
 							items: {
-								path: "PersonalHabilitadoModel>/JefeDeTrabajo",
+								path: "JefesListModel>/",
 								templateShareable: false,
 								template: new sap.ui.core.Item({
-									key: "{PersonalHabilitadoModel>Legajo}",
-									text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre}"
+									key: "{JefesListModel>Legajo}",
+									text: "{JefesListModel>Legajo} {JefesListModel>Nombre} - {JefesListModel>Descripcion}"
 								})
-							},
+							}
 						}),
 						new sap.m.Label({
 							text: "Fecha y hora",
@@ -192,48 +219,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							}
 						}),
 
-						/*new sap.m.ComboBox({
-							enabled: {
-								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks"],
-								formatter: oController.rolStatusEdition("transferencia/")
-							},
-							selectedKey: "{TransferListJsonModel>Autcot}",
-							layoutData: new sap.ui.layout.GridData({
-								span: "L1 M12 S12"
-							}),
-							items: [
-								new sap.ui.core.Item({
-									text: {
-										path: "DeliveryTableJsonModel>Cot",
-										formatter: $.proxy(oController.handleUserName, oController)
-									},
-									key: {
-										path: "DeliveryTableJsonModel>Cot",
-										formatter: $.proxy(oController.handleUserName, oController)
-									}
-								})
-							]
-						}),*/
-						/*new sap.m.ComboBox({
-							enabled: {
-								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks"],
-								formatter: oController.rolStatusEdition("transferencia/")
-							},
-							selectedKey: "{TransferListJsonModel>Autcot}",
-							layoutData: new sap.ui.layout.GridData({
-								span: "L1 M12 S12"
-							}),
-							items: [
-								new sap.ui.core.Item({
-									text: "SI",
-									key: "X"
-								}),
-								new sap.ui.core.Item({
-									text: "NO",
-									key: "Y"
-								})
-							]
-						}),*/
+
 
 						new sap.m.Button({
 							enabled: {
@@ -3139,6 +3125,14 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 										],
 										formatter: oController.rolStatusEdition("general/")
 									},
+									items: {
+										path: "HabListModel>/",
+										templateShareable: false,
+										template: new sap.ui.core.Item({
+											key: "{HabListModel>TipoHab}",
+											text: "{HabListModel>TipoHab} - {HabListModel>Descripcion}"
+										})
+									},
 									selectedKey: "{LicenseJsonModel>/TipoHabJefe}",
 									width: "50%",
 									id: "HabJefeTrabajoComb"
@@ -3167,7 +3161,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									tooltip: {
 										parts: ["LicenseJsonModel>/Jefe", "i18n>PersonalHabilitadoModel_JefeDeTrabajo", "i18n>Legajo", "i18n>Nombre"],
 										formatter: $.proxy(oController.formatComboTooltip, oController)
-									},
+									}
 								})
 							]
 						}).addStyleClass("sapUiTinyMarginBottom"),
@@ -3189,6 +3183,14 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 											"PermisosJsonModel>/UsuarioEncontrado", "DisableControlsJsonModel>/enabledForProgrammer"
 										],
 										formatter: oController.rolStatusEdition("general/")
+									},
+									items: {
+										path: "HabListModel>/",
+										templateShareable: false,
+										template: new sap.ui.core.Item({
+											key: "{HabListModel>TipoHab}",
+											text: "{HabListModel>TipoHab} - {HabListModel>Descripcion}"
+										})
 									},
 									selectedKey: "{LicenseJsonModel>/TipoHabJefeSup}",
 									formatter: oController.rolStatusEdition("general/"),
@@ -3221,6 +3223,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 										],
 										formatter: $.proxy(oController.formatComboTooltip, oController)
 									}
+
 								})
 							]
 						}),
@@ -3228,8 +3231,8 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							layoutData: new sap.ui.layout.GridData({
 								span: "L4 M12 S12"
 							}),
-							height:"110px",
-						justifyContent: sap.m.FlexJustifyContent.End,
+							height: "110px",
+							justifyContent: sap.m.FlexJustifyContent.End,
 							items: [
 								new sap.m.Label({
 									design: sap.m.LabelDesign.Bold,
