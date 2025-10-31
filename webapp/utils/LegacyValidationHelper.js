@@ -59,30 +59,55 @@ sap.ui.define([
 			}
 		},
 
+		// dateBetweenRange: function (oLicense, dateToCheck) {
+		// 	var dateToCheckUTC = FormatHelper.formatDatesGMT(dateToCheck);
+		// 	var oLicenseData = AppManagementHelper.getModel("LicenseJsonModel").getData();
+		// 	var sSolbeg = oLicense ? oLicense.Solbeg : oLicenseData.Solbeg;
+		// 	var sSolend = oLicense ? oLicense.Solend : oLicenseData.Solend;
+		// 	if (sSolbeg && sSolend && dateToCheckUTC) {
+		// 		if (dateToCheckUTC.getTime() > sSolend.getTime()) {
+		// 			return {
+		// 				valid: true,
+		// 				message: ""
+		// 			}
+		// 		} else {
+		// 			return {
+		// 				valid: dateToCheckUTC.getTime() <= sSolend.getTime() && dateToCheckUTC.getTime() >= sSolbeg.getTime(),
+		// 				message: ""
+		// 			}
+		// 		}
+		// 	} else {
+		// 		return {
+		// 			valid: true,
+		// 			message: ""
+		// 		};
+		// 	}
+		// },
 		dateBetweenRange: function (oLicense, dateToCheck) {
-			var dateToCheckUTC = FormatHelper.formatDatesGMT(dateToCheck);
-			var oLicenseData = AppManagementHelper.getModel("LicenseJsonModel").getData();
-			var sSolbeg = oLicense ? oLicense.Solbeg : oLicenseData.Solbeg;
-			var sSolend = oLicense ? oLicense.Solend : oLicenseData.Solend;
-			if (sSolbeg && sSolend && dateToCheckUTC) {
-				if (dateToCheckUTC.getTime() > sSolend.getTime()) {
-					return {
-						valid: true,
-						message: ""
-					}
-				} else {
-					return {
-						valid: dateToCheckUTC.getTime() <= sSolend.getTime() && dateToCheckUTC.getTime() >= sSolbeg.getTime(),
-						message: ""
-					}
-				}
-			} else {
-				return {
-					valid: true,
-					message: ""
-				};
-			}
-		},
+    const dateToCheckUTC = FormatHelper.formatDatesGMT(dateToCheck);
+    if (!dateToCheckUTC) {
+        return { valid: false, message: "" };
+    }
+
+    const oLicenseData = AppManagementHelper.getModel("LicenseJsonModel").getData();
+    const sSolend = oLicense?.Solend || oLicenseData.Solend;
+
+    if (!sSolend) {
+        return { valid: false, message: "" };
+    }
+
+    const endDate = new Date(sSolend);
+
+    const isAfterEnd = dateToCheckUTC.getTime() > endDate.getTime();
+
+    return {
+        valid: isAfterEnd,
+        message: isAfterEnd
+            ? ""
+            : `La fecha  no es posterior al fin de la licencia .`
+    };
+},
+
 
 		createLegacyComboStateModel: function () {
 			var oModel = AppManagementHelper.getModel("LegacyValidationJsonModel");
