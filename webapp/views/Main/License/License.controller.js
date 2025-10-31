@@ -3847,20 +3847,56 @@ sap.ui.define([
 
 		},
 
+		// handleLegacyValidationTransfers: function (oEvent) {
+		// 	var oModel = AppManagementHelper.getModel("TransferListJsonModel");
+		// 	var sPath = oEvent.getSource().getBindingContext("TransferListJsonModel").getPath();
+		// 	var oData = oEvent.getSource().getBindingContext("TransferListJsonModel").getObject();
+		// 	var sLegacy = oData.Jefetra;
+		// 	LegacyValidationHelper.handleLegacyValidationForDDSR(sLegacy, sPath, oModel, "/JefetraValueState", "/JefetraValueStateText",
+		// 		oEvent
+		// 			.getSource().mBindingInfos.items.path, true);
+		// 	if (oEvent.getSource) {
+		// 		if (oEvent.getSource().getValueState() === "Error") {
+		// 			oEvent.getSource().setSelectedKey("");
+		// 		}
+		// 	}
+		// },
 		handleLegacyValidationTransfers: function (oEvent) {
-			var oModel = AppManagementHelper.getModel("TransferListJsonModel");
-			var sPath = oEvent.getSource().getBindingContext("TransferListJsonModel").getPath();
-			var oData = oEvent.getSource().getBindingContext("TransferListJsonModel").getObject();
-			var sLegacy = oData.Jefetra;
-			LegacyValidationHelper.handleLegacyValidationForDDSR(sLegacy, sPath, oModel, "/JefetraValueState", "/JefetraValueStateText",
-				oEvent
-					.getSource().mBindingInfos.items.path, true);
-			if (oEvent.getSource) {
-				if (oEvent.getSource().getValueState() === "Error") {
-					oEvent.getSource().setSelectedKey("");
-				}
-			}
-		},
+    var oCombo = oEvent.getSource();
+    var oModel = AppManagementHelper.getModel("TransferListJsonModel");
+    var sPath = oCombo.getBindingContext("TransferListJsonModel").getPath();
+    var oData = oCombo.getBindingContext("TransferListJsonModel").getObject();
+    var sLegacy = oData.Jefetra;
+
+    // 🔹 Obtener el item seleccionado
+    var oSelectedItem = oCombo.getSelectedItem();
+    var idHabilitacion = null;
+
+    if (oSelectedItem) {
+        var oCtx = oSelectedItem.getBindingContext("JefesListModel");
+        if (oCtx) {
+            var oObj = oCtx.getObject();
+            idHabilitacion = oObj?.IdHabilitacion || null;
+
+        }
+    }
+
+    // 🔹 Lógica de validación legacy existente
+    LegacyValidationHelper.handleLegacyValidationForDDSR(
+        sLegacy,
+        sPath,
+        oModel,
+        "/JefetraValueState",
+        "/JefetraValueStateText",
+        oCombo.mBindingInfos.items.path,
+        true
+    );
+
+    if (oCombo.getValueState() === "Error") {
+        oCombo.setSelectedKey("");
+    }
+},
+
 
 		handleLegacyValidationReanudation: function (oEvent) {
 			var oModel = AppManagementHelper.getModel("ReanudationTableJsonModel");
@@ -4628,7 +4664,7 @@ sap.ui.define([
 				});
 				var oTemplateHabTCT = new sap.ui.core.Item({
 					key: "{HabPersonalTCTModel>TipoHab}",
-					text: "{HabPersonalTCTModel>TipoHab} -{HabPersonalTCTModel>Descripcion}"
+					text: "{HabPersonalTCTModel>TipoHab} - {HabPersonalTCTModel>Descripcion}"
 				});
 				if (sKey === "04" || sKey === "05") {
 

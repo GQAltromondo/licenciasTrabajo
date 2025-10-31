@@ -170,14 +170,12 @@ sap.ui.define([
 						const rows = asArray(oData);
 						// const list = toUniqueHabList(rows);
 						const list = [
-							{ TipoHab: "A", Descripcion: "A" },
-							{ TipoHab: "HC", Descripcion: "HC" },
-							{ TipoHab: "J", Descripcion: "J" },
-							{ TipoHab: "JN", Descripcion: "JN" },
-							{ TipoHab: "O", Descripcion: "O" },
-							{ TipoHab: "ON", Descripcion: "ON" },
-							{ TipoHab: "TJ", Descripcion: "TJ" },
-							{ TipoHab: "TEO", Descripcion: "TEO" }
+							// { TipoHab: "A", Descripcion: "Auxiliar TcT" },
+							// { TipoHab: "HC", Descripcion: "Habilitación en Capacitación" },
+							{ TipoHab: "J", Descripcion: "Jefe de Trabajo TcT" },
+							{ TipoHab: "JN", Descripcion: "Jefe de Trabajo TcT para retiro de Nidos" },
+							// { TipoHab: "O", Descripcion: "Operario TcT" },
+							// { TipoHab: "ON", Descripcion: "Operario TcT para retiro de Nidos" }
 						]
 						AppManagementHelper.getModel("HabPersonalTCTModel").setData(list);
 						resolve(oData);
