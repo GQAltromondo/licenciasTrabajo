@@ -4650,41 +4650,149 @@ sap.ui.define([
 
 		},
 
-		onSelectionChangeCond: function (oEvent) {
-			sap.ui.getCore().byId("HabJefeTrabajoComb").setSelectedKey("")
-			sap.ui.getCore().byId("HabJefeTrabajoSupComb").setSelectedKey("")
-			sap.ui.getCore().byId("TransfHabJefeTrabajoComb").setSelectedKey("")
+		// onSelectionChangeCond: function (oEvent) {
+		// 	sap.ui.getCore().byId("HabJefeTrabajoComb").setSelectedKey("")
+		// 	sap.ui.getCore().byId("HabJefeTrabajoSupComb").setSelectedKey("")
+		// 	sap.ui.getCore().byId("TransfHabJefeTrabajoComb").setSelectedKey("")
 
 
-			if (oEvent.getParameter("selectedItem")) {
-				var sKey = oEvent.getParameter("selectedItem").getKey();
+		// 	if (oEvent.getParameter("selectedItem")) {
+		// 		var sKey = oEvent.getParameter("selectedItem").getKey();
 
-				var oTemplateHab = new sap.ui.core.Item({
-					key: "{HabPersonalModel>TipoHab}",
-					text: "{HabPersonalModel>Descripcion}"
-				});
-				var oTemplateHabTCT = new sap.ui.core.Item({
-					key: "{HabPersonalTCTModel>TipoHab}",
-					text: "{HabPersonalTCTModel>TipoHab} - {HabPersonalTCTModel>Descripcion}"
-				});
-				if (sKey === "04" || sKey === "05") {
+		// 		var oTemplateHab = new sap.ui.core.Item({
+		// 			key: "{HabPersonalModel>TipoHab}",
+		// 			text: "{HabPersonalModel>Descripcion}"
+		// 		});
+		// 		var oTemplateHabTCT = new sap.ui.core.Item({
+		// 			key: "{HabPersonalTCTModel>TipoHab}",
+		// 			text: "{HabPersonalTCTModel>TipoHab} - {HabPersonalTCTModel>Descripcion}"
+		// 		});
+		// 		if (sKey === "04" || sKey === "05") {
 
-					sap.ui.getCore().byId("HabJefeTrabajoComb").bindAggregation("items", "HabPersonalTCTModel>/", oTemplateHabTCT);
-					sap.ui.getCore().byId("HabJefeTrabajoSupComb").bindAggregation("items", "HabPersonalTCTModel>/", oTemplateHabTCT);
-					sap.ui.getCore().byId("TransfHabJefeTrabajoComb").bindAggregation("items", "HabPersonalTCTModel>/", oTemplateHabTCT);
-				} else if (sKey) {
+		// 			sap.ui.getCore().byId("HabJefeTrabajoComb").bindAggregation("items", "HabPersonalTCTModel>/", oTemplateHabTCT);
+		// 			sap.ui.getCore().byId("HabJefeTrabajoSupComb").bindAggregation("items", "HabPersonalTCTModel>/", oTemplateHabTCT);
+		// 			sap.ui.getCore().byId("TransfHabJefeTrabajoComb").bindAggregation("items", "HabPersonalTCTModel>/", oTemplateHabTCT);
+		// 		} else if (sKey) {
 
-					sap.ui.getCore().byId("HabJefeTrabajoComb").bindAggregation("items", "HabPersonalModel>/", oTemplateHab);
-					sap.ui.getCore().byId("HabJefeTrabajoSupComb").bindAggregation("items", "HabPersonalModel>/", oTemplateHab);
-					sap.ui.getCore().byId("TransfHabJefeTrabajoComb").bindAggregation("items", "HabPersonalModel>/", oTemplateHab);
-				}
-			} else {
-				sap.ui.getCore().byId("HabJefeTrabajoSupComb").unbindAggregation("items");
-				sap.ui.getCore().byId("HabJefeTrabajoComb").unbindAggregation("items");
-				sap.ui.getCore().byId("TransfHabJefeTrabajoComb").unbindAggregation("items");
-			}
+		// 			sap.ui.getCore().byId("HabJefeTrabajoComb").bindAggregation("items", "HabPersonalModel>/", oTemplateHab);
+		// 			sap.ui.getCore().byId("HabJefeTrabajoSupComb").bindAggregation("items", "HabPersonalModel>/", oTemplateHab);
+		// 			sap.ui.getCore().byId("TransfHabJefeTrabajoComb").bindAggregation("items", "HabPersonalModel>/", oTemplateHab);
+		// 		}
+		// 	} else {
+		// 		sap.ui.getCore().byId("HabJefeTrabajoSupComb").unbindAggregation("items");
+		// 		sap.ui.getCore().byId("HabJefeTrabajoComb").unbindAggregation("items");
+		// 		sap.ui.getCore().byId("TransfHabJefeTrabajoComb").unbindAggregation("items");
+		// 	}
 
-		},
+		// },
+onSelectionChangeCond: function (oEvent) {
+
+	sap.ui.getCore().byId("HabJefeTrabajoComb").setSelectedKey("")
+	sap.ui.getCore().byId("HabJefeTrabajoSupComb").setSelectedKey("")
+	sap.ui.getCore().byId("TransfHabJefeTrabajoComb").setSelectedKey("")
+	sap.ui.getCore().byId("JefeTrabajoSupComb").setSelectedKey("")
+	sap.ui.getCore().byId("JefeTrabajoCombo").setSelectedKey("")
+
+
+    const get = (id) => sap.ui.getCore().byId(id);
+    const view = this.getView();
+
+    // 1) Limpiar selección
+    ["HabJefeTrabajoComb", "HabJefeTrabajoSupComb", "TransfHabJefeTrabajoComb"].forEach(id => {
+        const c = get(id);
+        if (c) c.setSelectedKey("");
+    });
+
+    const selItem = oEvent.getParameter("selectedItem");
+    if (!selItem) {
+        // Sin selección -> desbindear y vaciar HabListModel
+        let habList = view.getModel("HabListModel");
+        if (!habList) {
+            habList = new sap.ui.model.json.JSONModel([]);
+            view.setModel(habList, "HabListModel");
+        }
+        habList.setData([]);
+        ["HabJefeTrabajoComb", "HabJefeTrabajoSupComb", "TransfHabJefeTrabajoComb"].forEach(id => {
+            const c = get(id);
+            if (c) c.unbindAggregation("items");
+        });
+        return;
+    }
+
+    // 2) Determinar si es TCT
+    const sKey = selItem.getKey(); // Jobcond
+    const isTct = (sKey === "04" || sKey === "05");
+
+    // 3) Elegir modelo fuente y traer datos
+    const srcModelName = isTct ? "HabPersonalTCTModel" : "HabPersonalModel";
+    const srcModel = view.getModel(srcModelName) || sap.ui.getCore().getModel(srcModelName);
+
+    // Crear/obtener HabListModel (proxy unificado)
+    let habList = view.getModel("HabListModel");
+    if (!habList) {
+        habList = new sap.ui.model.json.JSONModel([]);
+        view.setModel(habList, "HabListModel");
+    }
+
+    // ====== FILTRO que vos podés ajustar a tu necesidad ======
+    // Ejemplos para sumar si querés:
+    //  - descartar sin TipoHab: row => row && row.TipoHab
+    //  - estado 'S': row => row.Estado === 'S'
+    const filterFn = (row) => !!row; // <- hoy: solo descarta nulos/undefined
+    // ==========================================================
+
+    const copyFilteredToHabList = () => {
+        const data = (srcModel && srcModel.getProperty("/")) || [];
+        const arr = Array.isArray(data) ? data : [];
+        // Aplica filtro + (opcional) proyección si necesitás
+        const filtered = arr.filter(filterFn);
+        habList.setData(filtered);
+        // Si querés asegurar re-render: habList.updateBindings(true);
+    };
+
+    // Si el modelo fuente tiene carga async, esperar el evento;
+    // igual hacemos una copia inmediata para cubrir el caso ya cargado
+    if (srcModel && typeof srcModel.attachRequestCompleted === "function") {
+        let once = false;
+        srcModel.attachRequestCompleted(() => {
+            if (once) return;
+            once = true;
+            copyFilteredToHabList();
+        });
+    }
+    copyFilteredToHabList();
+
+    // 4) Plantilla de items (muestra distinto si es TCT)
+    const template = new sap.ui.core.Item({
+        key: "{HabListModel>TipoHab}",
+        text: {
+            parts: ["HabListModel>TipoHab", "HabListModel>Descripcion"],
+            formatter: function (tipo, desc) {
+                return isTct
+                    ? [tipo, desc].filter(Boolean).join(" - ")
+                    : (desc || tipo || "");
+            }
+        }
+    });
+
+    // 5) Bindeo único a HabListModel para los 3 combos
+    ["HabJefeTrabajoComb", "HabJefeTrabajoSupComb", "TransfHabJefeTrabajoComb"].forEach(id => {
+        const c = get(id);
+        if (!c) return;
+
+        const b = c.getBinding("items");
+        if (!b) {
+            c.bindAggregation("items", {
+                path: "HabListModel>/",
+                templateShareable: false,
+                template
+            });
+        } else {
+            b.refresh(true);
+        }
+    });
+},
+
 		onSelectionChangeHab: function (oEvent) {
 			const view = this.getView();
 			const get = (id) => this.byId(id) || sap.ui.getCore().byId(id);
@@ -4704,8 +4812,8 @@ sap.ui.define([
 			const isTct = jobcond === "04" || jobcond === "05";
 
 			// Tomar datos del ítem elegido (proba ambos modelos por si el combo está bindeado a uno u otro)
-			const ctxTct = oSelItem.getBindingContext("HabPersonalTCTModel");
-			const ctxHab = oSelItem.getBindingContext("HabPersonalModel");
+			const ctxTct = oSelItem.getBindingContext("HabListModel");
+			const ctxHab = oSelItem.getBindingContext("HabListModel");
 			const sel = (ctxTct && ctxTct.getObject()) || (ctxHab && ctxHab.getObject()) || {};
 
 			// Fuente: arrays del PersonalHabilitadoModel
@@ -4772,9 +4880,7 @@ sap.ui.define([
 
 			["JefeTrabajoCombo"].forEach(bind);
 		},
-
-
-		onSelectionChangeHabSup: function (oEvent) {
+onSelectionChangeHabSup: function (oEvent) {
 			const view = this.getView();
 			const get = (id) => this.byId(id) || sap.ui.getCore().byId(id);
 
@@ -4793,8 +4899,8 @@ sap.ui.define([
 			const isTct = jobcond === "04" || jobcond === "05";
 
 			// Tomar datos del ítem elegido (proba ambos modelos por si el combo está bindeado a uno u otro)
-			const ctxTct = oSelItem.getBindingContext("HabPersonalTCTModel");
-			const ctxHab = oSelItem.getBindingContext("HabPersonalModel");
+			const ctxTct = oSelItem.getBindingContext("HabListModel");
+			const ctxHab = oSelItem.getBindingContext("HabListModel");
 			const sel = (ctxTct && ctxTct.getObject()) || (ctxHab && ctxHab.getObject()) || {};
 
 			// Fuente: arrays del PersonalHabilitadoModel
@@ -4861,6 +4967,94 @@ sap.ui.define([
 
 			["JefeTrabajoSupComb"].forEach(bind);
 		},
+
+		// onSelectionChangeHabSup: function (oEvent) {
+		// 	const view = this.getView();
+		// 	const get = (id) => this.byId(id) || sap.ui.getCore().byId(id);
+
+		// 	// Limpieza de selección
+		// 	["JefeTrabajoSupComb"].forEach(id => {
+		// 		const c = get(id);
+		// 		if (c) { c.setSelectedKey(""); c.unbindAggregation("items"); }
+		// 	});
+
+		// 	const oSelItem = oEvent.getParameter("selectedItem");
+		// 	if (!oSelItem) return;
+
+		// 	// Rama TCT según LicenseJsonModel>/Jobcond (04/05)
+		// 	const lic = view.getModel("LicenseJsonModel");
+		// 	const jobcond = String((lic && lic.getProperty("/Jobcond")) || "").padStart(2, "0");
+		// 	const isTct = jobcond === "04" || jobcond === "05";
+
+		// 	// Tomar datos del ítem elegido (proba ambos modelos por si el combo está bindeado a uno u otro)
+		// 	const ctxTct = oSelItem.getBindingContext("HabPersonalTCTModel");
+		// 	const ctxHab = oSelItem.getBindingContext("HabPersonalModel");
+		// 	const sel = (ctxTct && ctxTct.getObject()) || (ctxHab && ctxHab.getObject()) || {};
+
+		// 	// Fuente: arrays del PersonalHabilitadoModel
+		// 	const phModel = view.getModel("PersonalHabilitadoModel") || AppManagementHelper.getModel("PersonalHabilitadoModel");
+		// 	const basePath = isTct ? "/JefeDeTrabajoTct" : "/JefeDeTrabajo";
+		// 	const base = (phModel && phModel.getProperty(basePath)) || [];
+
+		// 	// Helpers
+		// 	const dedupeBy = (arr, keyFn) => {
+		// 		const m = new Map();
+		// 		for (const it of arr) {
+		// 			const k = keyFn(it);
+		// 			if (k != null && !m.has(k)) m.set(k, it);
+		// 		}
+		// 		return Array.from(m.values());
+		// 	};
+
+		// 	// Armar lista manual (sin usar filtros de binding)
+		// 	const matchFn = (row) => {
+		// 		if (isTct) {
+		// 			if (sel.TipoHab) return String(row.Lote || "") === String(sel.TipoHab);
+		// 			return true;
+		// 		} else {
+		// 			if (sel.TipoHab) return String(row.TipoHab || "") === String(sel.TipoHab);
+		// 			return true;
+		// 		}
+		// 	};
+
+		// 	const projected = dedupeBy(base.filter(matchFn), it => it.Legajo)
+		// 		.map(it => ({
+		// 			Key: it.Legajo,
+		// 			Display: [it.Legajo, it.Nombre, "-", it.Descripcion].filter(Boolean).join(" "),
+		// 			// campos útiles para depurar/mostrar:
+		// 			Legajo: it.Legajo,
+		// 			Nombre: it.Nombre,
+		// 			Descripcion: it.Descripcion,
+		// 			TipoHab: it.TipoHab,
+		// 			Lote: it.Lote,
+		// 			Vigencia: it.Vigencia,
+		// 			Estado: it.Estado,
+		// 			IdHabilitacion: it.IdHabilitacion
+		// 		}));
+
+		// 	// Publico la lista en un modelo temporal y bindeo los combos
+		// 	const JSONModel = sap.ui.model.json.JSONModel;
+		// 	const previewModel = view.getModel("JefesSupPreviewModel") || new JSONModel([]);
+		// 	previewModel.setData(projected);
+		// 	view.setModel(previewModel, "JefesSupPreviewModel");
+
+		// 	const tpl = new sap.ui.core.Item({
+		// 		key: "{JefesSupPreviewModel>Key}",
+		// 		text: "{JefesSupPreviewModel>Display}"
+		// 	});
+
+		// 	const bind = (id) => {
+		// 		const c = get(id);
+		// 		if (!c) return;
+		// 		c.bindAggregation("items", {
+		// 			path: "JefesSupPreviewModel>/",
+		// 			template: tpl,
+		// 			templateShareable: false
+		// 		});
+		// 	};
+
+		// 	["JefeTrabajoSupComb"].forEach(bind);
+		// },
 		onSelectionChangeHabTransf: function (oEvent) {
 			const view = this.getView();
 			const by = (id) => this.byId(id) || sap.ui.getCore().byId(id);
