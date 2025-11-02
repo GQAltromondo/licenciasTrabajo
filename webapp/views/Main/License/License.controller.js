@@ -1246,8 +1246,9 @@ sap.ui.define([
 				this.changeLicenTypeCopyTBA();
 				var oLicence = AppManagementHelper.getModel("LicenseJsonModel").getData()
 				// Issue 565 - Al copiar una licencia se debe inicializar el binding de los jefes
-				this.bindJefes(oLicence);
+				this.refreshJefesFromLicense(oLicence);
 				this.bindTipoHab(oLicence)
+			
 				this.validarHabilit(oLicence, AppManagementHelper.getModel(
 					"PersonalHabilitadoModel").getData().Todos);
 				this.getView().byId("InputTimbeg").setValue("");
@@ -4936,9 +4937,86 @@ sap.ui.define([
 		},
 		findSuccess: async function (oLicence) {
 			this.bindTipoHab(oLicence);
-			this.bindJefes(oLicence);
+			this.refreshJefesFromLicense(oLicence);
 			this.bindJefesTransf(oLicence);
+	
 		},
+refreshJefesFromLicense: function () {
+    const view = this.getView();
+
+    // === 0) Map: combo -> {prop en licencia, nombre del modelo destino} ===
+    const comboMap = {
+        "JefeTrabajoCombo":   { licProp: "TipoHabJefe",    modelName: "JefesPreviewModel" },
+        "JefeTrabajoSupComb": { licProp: "TipoHabJefeSup", modelName: "JefesSupPreviewModel" }
+    };
+
+    // === 1) Licencia y flag TCT ===
+    const licData = (view.getModel("LicenseJsonModel")?.getData?.()) || {};
+    const jobcond = String(licData.Jobcond || "").padStart(2, "0");
+    const isTct   = (jobcond === "04" || jobcond === "05");
+
+    // === 2) Fuente común ===
+    const phModel = view.getModel("PersonalHabilitadoModel") || sap.ui.getCore().getModel("PersonalHabilitadoModel");
+    const srcPath = isTct ? "/JefeDeTrabajoTct" : "/JefeDeTrabajo";
+    const source  = (phModel && phModel.getProperty(srcPath)) || [];
+
+    // Helpers
+    const dedupeBy = (arr, keyFn) => {
+        const m = new Map();
+        arr.forEach(it => {
+            const k = keyFn(it);
+            if (k != null && !m.has(k)) m.set(k, it);
+        });
+        return Array.from(m.values());
+    };
+
+    const projectRow = (it) => ({
+        Key: it.Legajo,
+        Display: [it.Legajo, it.Nombre, "-", it.Descripcion].filter(Boolean).join(" "),
+        Legajo: it.Legajo,
+        Nombre: it.Nombre,
+        Descripcion: it.Descripcion,
+        TipoHab: it.TipoHab,
+        Lote: it.Lote,
+        Vigencia: it.Vigencia,
+        Estado: it.Estado,
+        IdHabilitacion: it.IdHabilitacion
+    });
+
+    // === 3) Para cada combo: filtrar y setear SOLO el modelo destino ===
+    Object.values(comboMap).forEach(({ licProp, modelName }) => {
+        const tipoHabKey = String(licData?.[licProp] || "").trim();
+
+        // Crear/obtener el modelo destino
+        let model = view.getModel(modelName);
+        if (!model) {
+            model = new sap.ui.model.json.JSONModel([]);
+            view.setModel(model, modelName);
+        }
+
+        if (!tipoHabKey) {
+            // No hay clave -> vaciar
+            model.setData([]);
+            return;
+        }
+
+        // Filtrado por TipoHab (y Lote si TCT)
+        const matches = (row) => {
+            if (isTct) {
+                return String(row.TipoHab || "") === tipoHabKey || String(row.Lote || "") === tipoHabKey;
+            }
+            return String(row.TipoHab || "") === tipoHabKey;
+        };
+
+        const projected = dedupeBy(source.filter(matches), it => it.Legajo).map(projectRow);
+
+        // ✅ Setear datos nuevos (sin tocar bindings/agregations)
+        model.setData(projected);
+        // Si querés forzar re-render: model.updateBindings(true);
+    });
+},
+
+
 		bindTipoHab: function (oLicence) {
 			const oView = this.getView();
 

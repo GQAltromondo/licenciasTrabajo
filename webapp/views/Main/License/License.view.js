@@ -3161,7 +3161,15 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									tooltip: {
 										parts: ["LicenseJsonModel>/Jefe", "i18n>PersonalHabilitadoModel_JefeDeTrabajo", "i18n>Legajo", "i18n>Nombre"],
 										formatter: $.proxy(oController.formatComboTooltip, oController)
-									}
+									},
+									items: {
+										path: "JefesPreviewModel>/",
+										templateShareable: false,
+										template: new sap.ui.core.Item({
+											key: "{JefesPreviewModel>Key}",
+											text: "{JefesPreviewModel>Key} - {JefesPreviewModel>Display}"
+										})
+									},
 								})
 							]
 						}).addStyleClass("sapUiTinyMarginBottom"),
@@ -3222,7 +3230,15 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 											"i18n>Nombre"
 										],
 										formatter: $.proxy(oController.formatComboTooltip, oController)
-									}
+									},
+										items: {
+										path: "JefesSupPreviewModel>/",
+										templateShareable: false,
+										template: new sap.ui.core.Item({
+											key: "{JefesSupPreviewModel>Key}",
+											text: "{JefesSupPreviewModel>Key} - {JefesSupPreviewModel>Display}"
+										})
+									},
 
 								})
 							]
