@@ -65,7 +65,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							text: "Tipo de habilitacion",
 						}).addStyleClass("center LicenciaText"),
 						new sap.m.ComboBox({
-							
+
 							id: "TransfHabJefeTrabajoComb",
 							selectionChange: $.proxy(oController.onSelectionChangeHabTransf, oController),
 							enabled: {
@@ -3140,7 +3140,14 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								new sap.m.Label({
 									id: "jefeLabel",
 									design: sap.m.LabelDesign.Bold,
-									text: "Jefe de Trabajo"
+									text: {
+										parts: [
+											{ path: "LicenseJsonModel>/IdHabJefe" }
+										],
+										formatter: function (idHab) {
+											return `Jefe de Trabajo ${idHab ? "(" + idHab + ")" : ""}`;
+										}
+									}
 								}).addStyleClass("center LicenciaText"),
 								new sap.m.ComboBox({
 									change: function (oEvent) {
@@ -3207,7 +3214,14 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								new sap.m.Label({
 									id: "jefeLabelSuplente",
 									design: sap.m.LabelDesign.Bold,
-									text: "Jefe de Trabajo Suplente"
+									text: {
+										parts: [
+											{ path: "LicenseJsonModel>/IdHabJefeSup" }
+										],
+										formatter: function (idHab) {
+											return `Jefe de Trabajo Suplente ${idHab ? "(" + idHab + ")" : ""}`;
+										}
+									}
 								}).addStyleClass("center LicenciaText"),
 								new sap.m.ComboBox({
 									change: function (oEvent) {
@@ -3231,7 +3245,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 										],
 										formatter: $.proxy(oController.formatComboTooltip, oController)
 									},
-										items: {
+									items: {
 										path: "JefesSupPreviewModel>/",
 										templateShareable: false,
 										template: new sap.ui.core.Item({
@@ -3275,7 +3289,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 										path: "PersonalHabilitadoModel>/Solicitante",
 										template: new sap.ui.core.Item({
 											key: "{PersonalHabilitadoModel>Legajo}",
-											text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre} - {PersonalHabilitadoModel>Descripcion}"
+											text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre}"
 										})
 									},
 								}),

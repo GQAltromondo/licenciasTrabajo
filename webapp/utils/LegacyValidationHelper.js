@@ -343,6 +343,13 @@ sap.ui.define([
 
 		handleLegacyValidationForDDSR: function (sLegacy, sPath, oModel, ValueStateProp, ValueStateTextProp, sHabProperty,isTransfer) {
 			
+			if(sHabProperty === "/"){
+				  const jobcond = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Jobcond")
+				  const isTct = jobcond === "04" || jobcond === "05";
+				  sHabProperty = isTct ? "/JefeDeTrabajoTct" : "/JefeDeTrabajo";
+			}
+
+
 			var aPersonalTodo = AppManagementHelper.getModel("PersonalHabilitadoModel").getProperty(sHabProperty);
 			var oPersonal = aPersonalTodo.find(e => e.Legajo === sLegacy)
 			var sTextWarning = "El legajo seleccionado no se encuentra dentro del rango de la fecha inicio y fin de la licencia";
@@ -514,7 +521,7 @@ sap.ui.define([
 						}
 						if (sType === "JefeTrabajo") {
 							this.setErrorState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", sWarningText)
-							oLicense.setProperty("/IdHabJefeSup", "")
+							oLicense.setProperty("/IdHabJefe", "")
 						}
 						if (sType === "JefeTrabajoSuplente") {
 							this.setErrorState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", sWarningText)
@@ -537,11 +544,11 @@ sap.ui.define([
 						}
 						if (sType === "JefeTrabajo") {
 							this.setWarningState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", "")
-							oLicense.setProperty("/IdHabJefeSup", "")
+							oLicense.setProperty("/IdHabJefe", IdHabilitacion)
 						}
 						if (sType === "JefeTrabajoSuplente") {
 							this.setWarningState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", "")
-							oLicense.setProperty("/IdHabJefeSup", "")
+							oLicense.setProperty("/IdHabJefeSup", IdHabilitacion)
 						}
 						if (sType === "SolicitanteSuplente") {
 							this.setWarningState("/SolicitanteSuplenteValueState", "/SolicitanteSuplenteValueStateText", "")
@@ -559,7 +566,7 @@ sap.ui.define([
 						}
 						if (sType === "JefeTrabajo") {
 							this.setErrorState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", sWarningText)
-							oLicense.setProperty("/IdHabJefeSup", "")
+							oLicense.setProperty("/IdHabJefe", "")
 						}
 						if (sType === "JefeTrabajoSuplente") {
 							this.setErrorState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", sWarningText)
@@ -585,7 +592,7 @@ sap.ui.define([
 					}
 					if (sType === "JefeTrabajo") {
 						this.setErrorState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", sWarningText)
-						oLicense.setProperty("/IdHabJefeSup", "")
+						oLicense.setProperty("/IdHabJefe", "")
 					}
 					if (sType === "JefeTrabajoSuplente") {
 						this.setErrorState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", sWarningText)

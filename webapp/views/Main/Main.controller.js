@@ -98,7 +98,7 @@ sap.ui.define([
 			AppManagementHelper.getModel("EnabledFilterLicstat").setData({
 				enabled: true
 			});
-		
+
 			AppManagementHelper.getModel("ColorModel").setProperty("/Color", "white");
 			AppManagementHelper.getModel("CheckAdvancedFiltersModel").setData({
 				Aro: false,
@@ -487,10 +487,7 @@ sap.ui.define([
 			}
 
 			AppManagementHelper.setNavigationProperties(oLicense);
-			LicenceHelper.generateDeliveryDevolution(oLicense);
-			LicenceHelper.generatePlacementRemoval(oLicense);
-			LicenceHelper.generateTurno(oLicense);
-			LicenceHelper.generateInhibicionHabilitacion(oLicense);
+
 
 			this.findEstacionCode(oLicense.Tplnr);
 			this.loadCatalogData(oLicense.Werks).then((oCatalogData) => {
@@ -506,7 +503,10 @@ sap.ui.define([
 			this.findOrden(oLicense.Empresa, oLicense.Werks);
 
 			var sLicenseUrl = FormatterHelper.getLicenseUrl(oLicense);
-
+			LicenceHelper.generateDeliveryDevolution(oLicense);
+			LicenceHelper.generatePlacementRemoval(oLicense);
+			LicenceHelper.generateTurno(oLicense);
+			LicenceHelper.generateInhibicionHabilitacion(oLicense);
 			if (this.isProgrammerRol(oLicense.Licstat)) {
 				oDisableControlsJsonModel.setProperty("/enabledForProgrammer", false);
 			} else {
@@ -524,6 +524,7 @@ sap.ui.define([
 					id: sLicenseUrl
 				});
 			}
+
 		},
 
 		isProgrammerRol: function (sLicstat) {
@@ -678,7 +679,7 @@ sap.ui.define([
 					"Barrafstx", "Bloqueo", "Werks", "SolSuplente", "Jefe", "JefeSuplente", "Tipinterv", "Perestac",
 					"Descripcion", "Solictext", "Aro", "Sindivi", "Senalninguna", "Precaucionesok", "Senalestados",
 					"Senalalarmas", "Senalmedicion", "Senalafect", "Fstensionret", "Intnooperar", "Precauciones", "Rdisparo", "Equiinterv",
-					"Aufnr", "Bloqueorecierretxt", "Tipolicencia", "Estacional", "Capex", "SolSuplenteAux","TipoHabJefe","TipoHabJefeSup","IdHabJefe","IdHabJefeSup"
+					"Aufnr", "Bloqueorecierretxt", "Tipolicencia", "Estacional", "Capex", "SolSuplenteAux", "TipoHabJefe", "TipoHabJefeSup", "IdHabJefe", "IdHabJefeSup"
 				];
 				propertiesToCopy.forEach(prop => {
 					copy[prop] = oldLicense[prop];
@@ -1463,7 +1464,7 @@ sap.ui.define([
 			}
 		},
 
-		afterEmpresa: function () {
+		afterEmpresa: async function () {
 
 			//var model = new sap.ui.model.json.JSONModel(this.society);
 
@@ -1534,7 +1535,7 @@ sap.ui.define([
 			EstadoTramitacionService.loadStatus()
 			MotivoNoAutorizacionService.loadMotivos()
 			EmpresaTramitacionService.loadTramitacion(this.society);
-			PersonalHabilitadoService.getPersonalPromise(this.society);
+			await PersonalHabilitadoService.getPersonalPromise(this.society);
 			this.loadPuestosTrabajo(this.society).then((aPuestosTrabajo) => {
 				AppManagementHelper.getModel("PuestosTrabajoJsonModel");
 				AppManagementHelper.getModel("PuestosTrabajoJsonModel").setData({
