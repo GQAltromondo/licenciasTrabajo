@@ -1960,6 +1960,11 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 					new sap.m.Button({
 						icon: "sap-icon://pdf-attachment",
 						text: "Exportar Licencia",
+						visible: {
+							parts: ["LicenseJsonModel>/Licstat"],
+							formatter: oController.validateEditStatus
+						},
+
 						press: [oController.exportLicense, oController],
 					}).addStyleClass("buttonInverted"),
 				],
@@ -1970,7 +1975,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								"PermisosJsonModel>/UsuarioEncontrado", "LicenseJsonModel>/Substatus", "LicenseJsonModel>/Licstat"
 							],
 							//	formatter: oController.rolStatusEdition("botones/botonCancelacionDefinitiva", oController.validateSubstatus)
-							formatter: oController.rolStatusEdition("botones/botonCancelacionDefinitiva", oController.validateSubstatus.bind())
+							formatter: oController.rolStatusEdition("botones/botonCancelacionDefinitiva", oController.validateEditStatus.bind())
 						},
 						text: "Cancelación Definitiva",
 						tooltip: "Cancelación Definitiva",

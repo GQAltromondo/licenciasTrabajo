@@ -685,6 +685,14 @@ sap.ui.define([
 					copy[prop] = oldLicense[prop];
 				});
 				// Time
+
+				copy.TipoHabJefe = ""
+				copy.TipoHabJefeSup = ""
+				copy.Jefe = ""
+				copy.JefeSuplente = ""
+				copy.IdHabJefe = ""
+				copy.IdHabJefeSup = ""
+
 				copy.Timbeg = new Date(copy.Timbeg);
 				copy.Timbeg = new Date(copy.Timbeg.getTime() + copy.Timbeg.getTimezoneOffset() * 60 * 1000);
 				copy.Timend = new Date(copy.Timend);

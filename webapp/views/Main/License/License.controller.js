@@ -1034,6 +1034,21 @@ sap.ui.define([
 		rolStatusEdition2: function (controlPath, callback) {
 			return RolAuthorizationHelper.rolStatusEdition2(controlPath, callback);
 		},
+validateEditStatus: function (status) {
+    // Si no hay status, no mostramos nada
+    if (!status) return false;
+
+    // Convertimos a número por seguridad
+    const iStatus = Number(status);
+
+    // Si es 30 o 2 → devolver false (no visible)
+    if (iStatus === 30 || iStatus === 2) {
+        return false;
+    }
+
+    // En cualquier otro caso → visible
+    return true;
+},
 
 
 		validateSubstatus: function (...extra) {
@@ -1246,11 +1261,11 @@ sap.ui.define([
 				this.changeLicenTypeCopyTBA();
 				var oLicence = AppManagementHelper.getModel("LicenseJsonModel").getData()
 				// Issue 565 - Al copiar una licencia se debe inicializar el binding de los jefes
-				this.refreshJefesFromLicense(oLicence);
+				//this.refreshJefesFromLicense(oLicence);
 				this.bindTipoHab(oLicence)
 
-				this.validarHabilit(oLicence, AppManagementHelper.getModel(
-					"PersonalHabilitadoModel").getData().Todos);
+				//this.validarHabilit(oLicence, AppManagementHelper.getModel(
+				//	"PersonalHabilitadoModel").getData().Todos);
 				this.getView().byId("InputTimbeg").setValue("");
 				this.getView().byId("InputTimend").setValue("");
 			}
