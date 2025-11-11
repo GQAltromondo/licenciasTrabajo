@@ -874,7 +874,9 @@ sap.ui.define([
 					fechahorageneracion: "Fecha y hora de generacion",
 					solicitante: "Solicitante",
 					solicitantesup: "Solicitante suplente",
+					tipohabJefe: "Tipo Hab. Jefe",
 					jefedetrabajo: "Jefe de trabajo",
+					tipohabJefeSup: "Tipo Hab. Jefe Sup",
 					jefedetrabajosup: "Jefe de trabajo suplente",
 					tipointerv: "Tipo de intervencion",
 					periodoestacional: "Periodo del Estacional / Estacional Pendiente",
@@ -966,7 +968,9 @@ sap.ui.define([
 					ot: license.Aufnr,
 					fechahorageneracion: that.getFechaHora(license.Gdate),
 					solicitantesup: license.SolSuplente + ' ' + FormatterHelper.getSolicitanteName(license.SolSuplente),
+					tipohabJefe:license.TipoHabJefe + ' ' + FormatterHelper.getTipoHabName(license.TipoHabJefe),
 					jefedetrabajo: license.Jefe + ' ' + FormatterHelper.getPersonalHabilitadoName(license.Jefe), //Ticket 571 punto 5, usamos la property Todos para recuperar el jefe en vez de JefeDeTrabajo
+					tipohabJefeSup :license.TipoHabJefeSup + ' ' + FormatterHelper.getTipoHabName(license.TipoHabJefeSup),
 					jefedetrabajosup: license.JefeSuplente + ' ' + FormatterHelper.getPersonalHabilitadoName(license.JefeSuplente), //Ticket 571 punto 5, usamos la property Todos para recuperar el jefe suplente en vez de Solicitante
 					tipointerv: FormatterHelper.getTipoIntervencion(license.Tipinterv),
 					periodoestacional: FormatterHelper.getPerestac(license.Estacional),

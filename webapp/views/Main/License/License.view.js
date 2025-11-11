@@ -65,15 +65,8 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							text: "Tipo de habilitacion",
 						}).addStyleClass("center LicenciaText"),
 						new sap.m.ComboBox({
-
 							id: "TransfHabJefeTrabajoComb",
-							selectionChange: $.proxy(oController.onSelectionChangeHabTransf, oController),
-							enabled: {
-								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-									"TransferListJsonModel>enabledCombo"
-								],
-								formatter: oController.rolStatusEdition("transferencia/")
-							},
+							enabled: false,
 							items: {
 								path: "HabListModel>/",
 								templateShareable: false,
@@ -81,10 +74,9 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									key: "{HabListModel>TipoHab}",
 									text: "{HabListModel>TipoHab} - {HabListModel>Descripcion}"
 								})
-							}
-							, selectedKey: "{TransferListJsonModel>TipoJefeTrj}",
-							formatter: oController.rolStatusEdition("transferencia/"),
-							width: "20%",
+							},
+							selectedKey: "{LicenseJsonModel>/TipoHabJefe}",
+							width: "20%"
 						}).addStyleClass("sapUiTinyMarginBottom"),
 						new sap.m.Label({
 							text: "Nuevo JT",
@@ -109,13 +101,21 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								formatter: oController.rolStatusEdition("transferencia/")
 							},
 							items: {
-								path: "JefesListModel>/",
-								templateShareable: false,
-								template: new sap.ui.core.Item({
-									key: "{JefesListModel>Legajo}",
-									text: "{JefesListModel>Legajo} {JefesListModel>Nombre} - {JefesListModel>Descripcion}"
-								})
-							}
+										path: "JefesPreviewModel>/",
+										templateShareable: false,
+										template: new sap.ui.core.Item({
+											key: "{JefesPreviewModel>Key}",
+											text: "{JefesPreviewModel>Key} - {JefesPreviewModel>Display}"
+										})
+									}
+							// items: {
+							// 	path: "JefesListModel>/",
+							// 	templateShareable: false,
+							// 	template: new sap.ui.core.Item({
+							// 		key: "{JefesListModel>Legajo}",
+							// 		text: "{JefesListModel>Legajo} {JefesListModel>Nombre} - {JefesListModel>Descripcion}"
+							// 	})
+							// }
 						}),
 						new sap.m.Label({
 							text: "Fecha y hora",
@@ -3197,13 +3197,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								}).addStyleClass("center LicenciaText"),
 								new sap.m.ComboBox({
 									id: "HabJefeTrabajoSupComb",
-									selectionChange: $.proxy(oController.onSelectionChangeHabSup, oController),
-									enabled: {
-										parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-											"PermisosJsonModel>/UsuarioEncontrado", "DisableControlsJsonModel>/enabledForProgrammer"
-										],
-										formatter: oController.rolStatusEdition("general/")
-									},
+									enabled: false,
 									items: {
 										path: "HabListModel>/",
 										templateShareable: false,

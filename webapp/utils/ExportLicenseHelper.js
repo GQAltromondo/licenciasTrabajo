@@ -844,7 +844,21 @@ sap.ui.define([
 					fontSize: 9,
 					text: licencia.SolSuplente + ' ' + FormatterHelper.getSolicitanteName(licencia.SolSuplente)
 				}]
-			}, {
+			}, 
+			{
+				margin: [0, 0, 0, 10],
+				columns: [{
+					width: '*',
+					fontSize: 9,
+					margin: [0, 0, 5, 0],
+					bold: true,
+					text: 'Tipo Hab jefe de trabajo :'
+				}, {
+					width: '*',
+					fontSize: 9,
+					text: licencia.TipoHabJefe + ' ' + FormatterHelper.getTipoHabName(licencia.TipoHabJefe)
+				}]
+			},{
 				margin: [0, 0, 0, 10],
 				columns: [{
 					width: '*',
@@ -857,7 +871,21 @@ sap.ui.define([
 					fontSize: 9,
 					text: licencia.Jefe + ' ' + FormatterHelper.getJefeName(licencia.Jefe)
 				}]
-			}, {
+			}, 
+				{
+				margin: [0, 0, 0, 10],
+				columns: [{
+					width: '*',
+					fontSize: 9,
+					margin: [0, 0, 5, 0],
+					bold: true,
+					text: 'Tipo Hab jefe de trabajo Sup :'
+				}, {
+					width: '*',
+					fontSize: 9,
+					text: licencia.TipoHabJefeSup + ' ' + FormatterHelper.getTipoHabName(licencia.TipoHabJefeSup)
+				}]
+			},{
 				margin: [0, 0, 0, 10],
 				columns: [{
 					width: '*',

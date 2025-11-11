@@ -14,20 +14,20 @@ sap.ui.define([
 
 		getNovedadType: function (sProccess) {
 			switch (sProccess) {
-			case "E":
-				return "ENTR";
-			case "D":
-				return "DEVU";
-			case "R":
-				return "REAN";
-			case "S":
-				return "SUSP";
-			case "CC":
-				return "CANC";
+				case "E":
+					return "ENTR";
+				case "D":
+					return "DEVU";
+				case "R":
+					return "REAN";
+				case "S":
+					return "SUSP";
+				case "CC":
+					return "CANC";
 				// Issue 542 - Registrar automáticamente en el Libro de Guardia la Novedad "NO Entrega de LT
 				// Se agrega novedad "No Entrega"
-			case "NE":
-				return "NENT";
+				case "NE":
+					return "NENT";
 			}
 		},
 
@@ -182,6 +182,23 @@ sap.ui.define([
 			}
 			return "";
 		},
+		getTipoHabName: function (tipoHab) {
+			const get = AppManagementHelper.getModel.bind(AppManagementHelper);
+
+
+			let habilitaciones = get("HabPersonalModel")?.getData() || [];
+			let found = habilitaciones.find(h => h.TipoHab === tipoHab);
+			if (found) return found.Descripcion;
+
+
+			let habilitacionesTCT = get("HabPersonalTCTModel")?.getData() || [];
+			found = habilitacionesTCT.find(h => h.TipoHab === tipoHab);
+			if (found) return found.Descripcion;
+
+
+			return "";
+		},
+
 
 		getJefeName: function (legajo) {
 			let jefes = AppManagementHelper.getModel("PersonalHabilitadoModel").getProperty("/JefeDeTrabajo");
@@ -252,14 +269,14 @@ sap.ui.define([
 
 		getDescripcionEstadoDiario: function (key) {
 			switch (key) {
-			case "NA":
-				return "No Autorizada";
-			case "CC":
-				return "Condicionada";
-			case "AS":
-				return "Anulada por el solicitante";
-			default:
-				return key;
+				case "NA":
+					return "No Autorizada";
+				case "CC":
+					return "Condicionada";
+				case "AS":
+					return "Anulada por el solicitante";
+				default:
+					return key;
 			}
 		},
 
