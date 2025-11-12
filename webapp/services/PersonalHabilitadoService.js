@@ -174,6 +174,7 @@ sap.ui.define([
 							// { TipoHab: "HC", Descripcion: "Habilitación en Capacitación" },
 							{ TipoHab: "J", Descripcion: "Jefe de Trabajo TcT" },
 							{ TipoHab: "JN", Descripcion: "Jefe de Trabajo TcT para retiro de Nidos" },
+							{ TipoHab: "JTE", Descripcion: "Tct Terceros" },
 							// { TipoHab: "O", Descripcion: "Operario TcT" },
 							// { TipoHab: "ON", Descripcion: "Operario TcT para retiro de Nidos" }
 						]

@@ -4661,7 +4661,8 @@ sap.ui.define([
 			sap.ui.getCore().byId("TransfHabJefeTrabajoComb").setSelectedKey("")
 			sap.ui.getCore().byId("JefeTrabajoSupComb").setSelectedKey("")
 			sap.ui.getCore().byId("JefeTrabajoCombo").setSelectedKey("")
-
+sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items")
+sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 			const lic = oView.getModel("LicenseJsonModel");
 			lic.setProperty("/IdHabJefeSup", "")
 			lic.setProperty("/IdHabJefe", "")
