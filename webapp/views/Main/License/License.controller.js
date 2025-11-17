@@ -4890,13 +4890,13 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 		refreshJefesFromLicense: function () {
 			const view = this.getView();
 
-			// === 0) Map: combo -> {prop en licencia, nombre del modelo destino} ===
+		
 			const comboMap = {
 				"JefeTrabajoCombo": { licProp: "TipoHabJefe", modelName: "JefesPreviewModel" },
 				"JefeTrabajoSupComb": { licProp: "TipoHabJefeSup", modelName: "JefesSupPreviewModel" }
 			};
 
-			// === 1) Licencia y flag TCT ===
+			
 			const licData = (view.getModel("LicenseJsonModel")?.getData?.()) || {};
 			var sIdHabJefe = (licData.IdHabJefe || "").trim();
 			var sIdHabJefeSup = (licData.IdHabJefeSup || "").trim();
@@ -4905,12 +4905,12 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 			const jobcond = String(licData.Jobcond || "").padStart(2, "0");
 			const isTct = (jobcond === "04" || jobcond === "05");
 
-			// === 2) Fuente común ===
+			
 			const phModel = view.getModel("PersonalHabilitadoModel") || sap.ui.getCore().getModel("PersonalHabilitadoModel");
 			const srcPath = isTct ? "/JefeDeTrabajoTct" : "/JefeDeTrabajo";
 			const source = (phModel && phModel.getProperty(srcPath)) || [];
 
-			// Helpers
+		
 			const dedupeBy = (arr, keyFn) => {
 				const m = new Map();
 				arr.forEach(it => {
@@ -4933,25 +4933,25 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 				IdHabilitacion: it.IdHabilitacion
 			});
 
-			// === 3) Para cada combo: filtrar y setear SOLO el modelo destino ===
+			
 			Object.values(comboMap).forEach(({ licProp, modelName }) => {
 				const tipoHabKey = String(licData?.[licProp] || "").trim();
 
-				// Crear/obtener el modelo destino
+				
 				let model = view.getModel(modelName);
 				if (!model) {
 					model = new sap.ui.model.json.JSONModel([]);
 					view.setModel(model, modelName);
 				}
 
-				// Si NO hay TipoHab -> enviar TODO sin filtrar (dedupe + project)
+				
 				if (!tipoHabKey) {
 					const allProjected = dedupeBy(source, it => it.Legajo).map(projectRow);
 					model.setData(allProjected);
 					return;
 				}
 
-				// Filtrado por TipoHab (y Lote si TCT)
+				
 				const matches = (row) => {
 					if (isTct) {
 						return String(row.TipoHab || "") === tipoHabKey || String(row.Lote || "") === tipoHabKey;
@@ -4961,9 +4961,9 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 
 				const projected = dedupeBy(source.filter(matches), it => it.Legajo).map(projectRow);
 
-				// ✅ Setear datos nuevos (sin tocar bindings/agregations)
+				
 				model.setData(projected);
-				// model.updateBindings(true); // opcional si querés forzar re-render
+				
 			});
 		},
 

@@ -692,6 +692,7 @@ sap.ui.define([
 				copy.JefeSuplente = ""
 				copy.IdHabJefe = ""
 				copy.IdHabJefeSup = ""
+				copy.Aufnr =""
 
 				copy.Timbeg = new Date(copy.Timbeg);
 				copy.Timbeg = new Date(copy.Timbeg.getTime() + copy.Timbeg.getTimezoneOffset() * 60 * 1000);
