@@ -103,19 +103,13 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							items: {
 										path: "JefesPreviewModel>/",
 										templateShareable: false,
+										length:2000,
 										template: new sap.ui.core.Item({
 											key: "{JefesPreviewModel>Key}",
 											text: "{JefesPreviewModel>Key} - {JefesPreviewModel>Display}"
 										})
 									}
-							// items: {
-							// 	path: "JefesListModel>/",
-							// 	templateShareable: false,
-							// 	template: new sap.ui.core.Item({
-							// 		key: "{JefesListModel>Legajo}",
-							// 		text: "{JefesListModel>Legajo} {JefesListModel>Nombre} - {JefesListModel>Descripcion}"
-							// 	})
-							// }
+					
 						}),
 						new sap.m.Label({
 							text: "Fecha y hora",

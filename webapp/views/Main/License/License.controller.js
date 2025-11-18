@@ -4682,6 +4682,7 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 				let habList = view.getModel("HabListModel");
 				if (!habList) {
 					habList = new sap.ui.model.json.JSONModel([]);
+					habList.setSizeLimit(9999)
 					view.setModel(habList, "HabListModel");
 				}
 				habList.setData([]);
@@ -4704,6 +4705,7 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 			let habList = view.getModel("HabListModel");
 			if (!habList) {
 				habList = new sap.ui.model.json.JSONModel([]);
+				habList.setSizeLimit(9999)
 				view.setModel(habList, "HabListModel");
 			}
 
@@ -4853,6 +4855,7 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 				let m = view.getModel(name);
 				if (!m) {
 					m = new JSONModel([]);
+					m.setSizeLimit(9999)
 					view.setModel(m, name);
 				}
 				return m;
@@ -4941,6 +4944,7 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 				let model = view.getModel(modelName);
 				if (!model) {
 					model = new sap.ui.model.json.JSONModel([]);
+					model.setSizeLimit(9999)
 					view.setModel(model, modelName);
 				}
 
@@ -4974,6 +4978,7 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 			let oProxyModel = oView.getModel("HabListModel");
 			if (!oProxyModel) {
 				oProxyModel = new sap.ui.model.json.JSONModel([]);
+				oProxyModel.setSizeLimit(9999)
 				oView.setModel(oProxyModel, "HabListModel");
 			}
 
@@ -5046,6 +5051,7 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 			let oProxy = oView.getModel("JefesListModel");
 			if (!oProxy) {
 				oProxy = new sap.ui.model.json.JSONModel([]);
+				oProxy.setSizeLimit(9999)
 				oView.setModel(oProxy, "JefesListModel");
 			}
 
