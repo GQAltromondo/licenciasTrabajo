@@ -14,6 +14,7 @@ sap.ui.define([
 	"Transener/Operaciones/LicenciasTrabajo/utils/AppManagementHelper",
 	"Transener/Operaciones/LicenciasTrabajo/utils/DateHelper",
 	"Transener/Operaciones/LicenciasTrabajo/utils/ExportLicenseHelper",
+	"Transener/Operaciones/LicenciasTrabajo/utils/ModelHelper",
 	//model
 	"Transener/Operaciones/LicenciasTrabajo/model/HardCodeModel",
 	"Transener/Operaciones/LicenciasTrabajo/model/models",
@@ -53,7 +54,7 @@ sap.ui.define([
 	"Transener/Operaciones/LicenciasTrabajo/services/UserService"
 
 ], function (Controller, NavigationHelper, FormatHelper, FioriComponentHelper, MailHelper, ValidateHelper,
-	MessageBoxHelper, i18nTranslationHelper, AppManagementHelper, DateHelper, ExportLicenseHelper, HardCodeModel, models, LicenseService,
+	MessageBoxHelper, i18nTranslationHelper, AppManagementHelper, DateHelper, ExportLicenseHelper, ModelHelper, HardCodeModel, models, LicenseService,
 	RegionesService,
 	PersonalHabilitadoService, WorkPlaceService,
 	oDataService, EmpresaTramitacionService, TipoEquipoService, EquiposService, OrdenesService, EstacionesService, JobCondService, EstadoTramitacionService, MotivoNoAutorizacionService,
@@ -74,7 +75,10 @@ sap.ui.define([
 			var oTableBindingItems = this.byId("auditTable").getBinding("items");
 			oTableBindingItems.filter(LicenceHelper.getFastSearchFilters(sValue, this));
 		},
-		//mergea esto develop
+		getVersion: function () {
+			const sVersion = this.getOwnerComponent().getManifestEntry("/sap.app/applicationVersion/version");
+			ModelHelper.getModel(this.getView(), "version").setData({ version: sVersion });
+		},
 		onInit: function () {
 
 			var oRouter = AppManagementHelper.getAppRouter();
@@ -94,6 +98,7 @@ sap.ui.define([
 			AppManagementHelper.getModel("EnabledFilterLicstat").setData({
 				enabled: true
 			});
+
 			AppManagementHelper.getModel("ColorModel").setProperty("/Color", "white");
 			AppManagementHelper.getModel("CheckAdvancedFiltersModel").setData({
 				Aro: false,
@@ -104,7 +109,7 @@ sap.ui.define([
 			});
 
 			oDataService.getModel("SelectModel")
-
+			this.getVersion()
 		},
 		loadPuestosTrabajo: async function (empresa) {
 			let aPuestosTrabajo = await LicenseService.getPuestosTrabajo(empresa)
@@ -225,7 +230,7 @@ sap.ui.define([
 			var oArgs = oEvent?.getParameter("arguments") || {};
 			var sKey = oArgs.url || ""; // Si no hay URL, asignamos una cadena vacía
 
-
+			var aRoles = AppManagementHelper.getModel("UserJsonModel").getData().roles;
 
 			if (aRoles.includes("ope_visualizador")) {
 				this._handleValidUser(sKey);
@@ -447,9 +452,6 @@ sap.ui.define([
 			var oItem = bManualPress ? oEvent : oEvent.getSource().getParent();
 			var oLicense = $.extend(true, {}, bManualPress ? oItem : oItem.getBindingContext("LicencesListJsonModel").getObject());
 
-			console.log(oLicense)
-
-
 			oFilterSelectionModel.setProperty("/textFlow", this.getLicenseButtonText(oLicense.Tipolicencia, oLicense.Licstat));
 			oFilterSelectionModel.setProperty("/annulateCreatedStatus", !!oLicense.Id);
 			var isLicense = oLicense.Tipo === "L";
@@ -485,10 +487,7 @@ sap.ui.define([
 			}
 
 			AppManagementHelper.setNavigationProperties(oLicense);
-			LicenceHelper.generateDeliveryDevolution(oLicense);
-			LicenceHelper.generatePlacementRemoval(oLicense);
-			LicenceHelper.generateTurno(oLicense);
-			LicenceHelper.generateInhibicionHabilitacion(oLicense);
+
 
 			this.findEstacionCode(oLicense.Tplnr);
 			this.loadCatalogData(oLicense.Werks).then((oCatalogData) => {
@@ -504,19 +503,15 @@ sap.ui.define([
 			this.findOrden(oLicense.Empresa, oLicense.Werks);
 
 			var sLicenseUrl = FormatterHelper.getLicenseUrl(oLicense);
-
+			LicenceHelper.generateDeliveryDevolution(oLicense);
+			LicenceHelper.generatePlacementRemoval(oLicense);
+			LicenceHelper.generateTurno(oLicense);
+			LicenceHelper.generateInhibicionHabilitacion(oLicense);
 			if (this.isProgrammerRol(oLicense.Licstat)) {
 				oDisableControlsJsonModel.setProperty("/enabledForProgrammer", false);
 			} else {
 				oDisableControlsJsonModel.setProperty("/enabledForProgrammer", true);
 			}
-
-			// if (this.isProgrammerRol(oLicense.Licstat)) {
-			// 	oDisableControlsJsonModel.setProperty("/enabledForProgrammer", true);
-			// } else {
-			// 	oDisableControlsJsonModel.setProperty("/enabledForProgrammer", false);
-			// }
-
 
 			if (isLicense) {
 				localStorage.setItem("type", "Licencia");
@@ -529,6 +524,7 @@ sap.ui.define([
 					id: sLicenseUrl
 				});
 			}
+
 		},
 
 		isProgrammerRol: function (sLicstat) {
@@ -636,35 +632,27 @@ sap.ui.define([
 			AppManagementHelper.getModel("FilterSelectionJsonModel").setProperty("/enabledEspecifyBarra", false);
 			AppManagementHelper.getModel("FilterSelectionJsonModel").setProperty("/annulateCreatedStatus", !!oLicense.Id);
 
-			// // Issue #518 -> Set Tipo de Licencia por defecto según rol.
-			// var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "ope_jefe_cot" || sRol === "ope_jefe_cotdt");
-			// var bOperador = aUserRoles.find(sRol => sRol === "ope_oper-turno_cot" || sRol === "ope_oper-turno_cotdt");
-			// if (bJefeTurnoCOT || bOperador) {
-			// 	AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "EM");
-			// }
 
-			// var bProgramacion = aUserRoles.find(sRol => sRol === "ope_programacion_cot" || sRol === "ope_programacion_cotdt");
-			// if (bProgramacion) {
-			// 	AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "TE");
-			// }
-
-			// var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "ope_solic-lic_transba");
-			// if (bSolicitanteLicTBA) {
-			// 	AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "N");
-			// }
 			// Issue #518 -> Set Tipo de Licencia por defecto según rol.
-			var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "Jefe_Turno_COT" || sRol === "Jefe_Turno_COTDT");
-			var bOperador = aUserRoles.find(sRol => sRol === "Operador_COT" || sRol === "Operador_COTDT");
+			//var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "Jefe_Turno_COT" || sRol === "Jefe_Turno_COTDT");
+			var bJefeTurnoCOT = aUserRoles.find(sRol => sRol === "ope_jefe_turno_cot" || sRol === "ope_jefe_turno_cotdt");
+
+			//var bOperador = aUserRoles.find(sRol => sRol === "Operador_COT" || sRol === "Operador_COTDT");
+			var bOperador = aUserRoles.find(sRol => sRol === "ope_oper-turno_cot" || sRol === "ope_oper-turno_cotdt");
 			if (bJefeTurnoCOT || bOperador) {
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "EM");
 			}
 
-			var bProgramacion = aUserRoles.find(sRol => sRol === "Programacion_COT" || sRol === "Programacion_COTDT");
+			//var bProgramacion = aUserRoles.find(sRol => sRol === "Programacion_COT" || sRol === "Programacion_COTDT");
+			var bProgramacion = aUserRoles.find(sRol => sRol === "ope_programacion_cot" || sRol === "ope_programacion_cotdt");
+
 			if (bProgramacion) {
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "TE");
 			}
 
-			var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "Solicitante_Lic_TBA");
+			//var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "Solicitante_Lic_TBA");
+			var bSolicitanteLicTBA = aUserRoles.find(sRol => sRol === "ope_solic-lic_transba");
+
 			if (bSolicitanteLicTBA) {
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "N");
 			}
@@ -691,12 +679,21 @@ sap.ui.define([
 					"Barrafstx", "Bloqueo", "Werks", "SolSuplente", "Jefe", "JefeSuplente", "Tipinterv", "Perestac",
 					"Descripcion", "Solictext", "Aro", "Sindivi", "Senalninguna", "Precaucionesok", "Senalestados",
 					"Senalalarmas", "Senalmedicion", "Senalafect", "Fstensionret", "Intnooperar", "Precauciones", "Rdisparo", "Equiinterv",
-					"Aufnr", "Bloqueorecierretxt", "Tipolicencia", "Estacional", "Capex", "SolSuplenteAux"
+					"Aufnr", "Bloqueorecierretxt", "Tipolicencia", "Estacional", "Capex", "SolSuplenteAux", "TipoHabJefe", "TipoHabJefeSup", "IdHabJefe", "IdHabJefeSup"
 				];
 				propertiesToCopy.forEach(prop => {
 					copy[prop] = oldLicense[prop];
 				});
 				// Time
+
+				copy.TipoHabJefe = ""
+				copy.TipoHabJefeSup = ""
+				copy.Jefe = ""
+				copy.JefeSuplente = ""
+				copy.IdHabJefe = ""
+				copy.IdHabJefeSup = ""
+				copy.Aufnr =""
+
 				copy.Timbeg = new Date(copy.Timbeg);
 				copy.Timbeg = new Date(copy.Timbeg.getTime() + copy.Timbeg.getTimezoneOffset() * 60 * 1000);
 				copy.Timend = new Date(copy.Timend);
@@ -781,7 +778,7 @@ sap.ui.define([
 								}, () => {
 									MessageBoxHelper.showAlert("Alerta", "Error al obtener unifilares")
 								}, {
-									"$select": "Nombre,Idunifilar,NumVersion,Region,TipoUnifilar,Et,Empresa,Anio,Region,IntAbLe,SecAbBt,SecPatCr,PatAdic,Numerolicencia,Mapa,Doctype,Imagenunifilar"
+									"$select": "Nombre,Idunifilar,NumVersion,Region,TipoUnifilar,Et,Empresa,Anio,Region,IntAbLe,SecAbBt,SecPatCr,PatAdic,Numerolicencia,Mapa,Doctype,Imagenunifilar,RealIdUnifilar"
 								})
 							} else {
 								BusyDialogHelper.close();
@@ -933,6 +930,8 @@ sap.ui.define([
 					oUnifilarFromOldLicense.Et && e.TipoUnifilar === oUnifilarFromOldLicense.TipoUnifilar)
 				if (oUnifilarNewVersion) {
 					if (oUnifilarFromOldLicense.NumVersion !== oUnifilarNewVersion.NumVersion) {
+						//GQ PROBLEMA CON DUPLICAR UNIFILARES 22/10
+						oUnifilarFromOldLicense.RealIdUnifilar = oUnifilarNewVersion.IdUnifilar
 						aUnifilaresToCreate.push({
 							data: oUnifilarFromOldLicense,
 							create: false
@@ -1474,7 +1473,7 @@ sap.ui.define([
 			}
 		},
 
-		afterEmpresa: function () {
+		afterEmpresa: async function () {
 
 			//var model = new sap.ui.model.json.JSONModel(this.society);
 
@@ -1545,7 +1544,7 @@ sap.ui.define([
 			EstadoTramitacionService.loadStatus()
 			MotivoNoAutorizacionService.loadMotivos()
 			EmpresaTramitacionService.loadTramitacion(this.society);
-			PersonalHabilitadoService.getPersonalPromise(this.society);
+			await PersonalHabilitadoService.getPersonalPromise(this.society);
 			this.loadPuestosTrabajo(this.society).then((aPuestosTrabajo) => {
 				AppManagementHelper.getModel("PuestosTrabajoJsonModel");
 				AppManagementHelper.getModel("PuestosTrabajoJsonModel").setData({
@@ -1583,8 +1582,8 @@ sap.ui.define([
 			centroToRegion.loadData(sPath + "/conf/centroToRegion.json", "", false);
 
 			//	AppManagementHelper.getModel("FiltersJsonModel").setProperty("/Werks/value", werks);
-			// var empresa = this.society === "100" ? "TRANSENER" : "TRANSBA";
-			var empresa = this.society
+			var empresa = this.society === "100" ? "TRANSENER" : "TRANSBA";
+
 			LimitacionesTecnicas.loadLimitacionesTecnicas(empresa);
 
 		},
@@ -4349,7 +4348,7 @@ sap.ui.define([
 						}, (e) => {
 							console.log(e);
 						}, {
-							"$select": "Nombre,Idunifilar,NumVersion,Region,TipoUnifilar,Et,Empresa,Anio,Region,IntAbLe,SecAbBt,SecPatCr,PatAdic,Numerolicencia,Imagenunifilar,Doctype"
+							"$select": "Nombre,Idunifilar,NumVersion,Region,TipoUnifilar,Et,Empresa,Anio,Region,IntAbLe,SecAbBt,SecPatCr,PatAdic,Numerolicencia,Imagenunifilar,Doctype,RealIdUnifilar"
 						});
 
 

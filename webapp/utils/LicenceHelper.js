@@ -28,7 +28,7 @@ sap.ui.define([
 			var obj = items[0].getBindingContext("EstacionesJsonModel").getObject();
 			var sKey = obj.Estacion;
 			var sEmpresa = "100";
-			EquiposService.loadEquipos(sKey, sEmpresa);
+			EquiposService.loadEquipos(sKey,  sEmpresa);
 			AppManagementHelper.getModel("FilterSelectionJsonModel").setProperty("/enabledComboEQUIPO", true);
 			//TODO uncomment if decide to select region based on ET
 
@@ -921,7 +921,6 @@ sap.ui.define([
 			var oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
 			var aDataTODOS = oModel.getProperty("/Todos");
 
-			console.log("DATA", aDataTODOS)
 			var aOptions = [];
 
 			if (oLicense.EntregasLicencia_nav.length > 0) {
@@ -935,8 +934,6 @@ sap.ui.define([
 				var oLastJefeTransferido = aDataTODOS.find(oItem => oItem.Legajo === oLastTranfer.Jefetra);
 				aOptions.push(oLastJefeTransferido);
 			}
-
-			console.log("Options", aOptions)
 
 			oModel.setProperty("/CboJefeCancelacion", aOptions);
 		},
@@ -1663,12 +1660,30 @@ sap.ui.define([
 						})
 						break;
 					}
+				case "TipoHabJefe":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Tipo Hab Jefe de Trabajo"
+						})
+						break;
+					}
 				case "Jefe":
 					if (value !== "") {
 						break;
 					} else {
 						aRequiredFields.push({
 							value: "- Jefe de trabajo"
+						})
+						break;
+					}
+				case "TipoHabJefeSup":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Tipo Hab Jefe de Trabajo Suplente"
 						})
 						break;
 					}

@@ -133,7 +133,7 @@
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
-				"ope_solic-lic_transba",
+			
 				"preguntar lucas",
 				"Tramitador",
 				"ope_visualizador"
@@ -230,7 +230,6 @@
 				"Tramitador",
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			]
 		}
@@ -253,7 +252,7 @@
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
-				"ope_solic-lic_transba",
+			
 				"preguntar lucas",
 				"Tramitador",
 				"ope_visualizador"
@@ -277,7 +276,7 @@
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
-				"ope_solic-lic_transba",
+			
 				"preguntar lucas",
 				"Tramitador",
 				"ope_visualizador"
@@ -298,7 +297,7 @@
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
-				"ope_solic-lic_transba",
+				
 				"preguntar lucas",
 				"Tramitador",
 				"ope_visualizador"
@@ -339,7 +338,6 @@
 				"Tramitador",
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			]
 		}
@@ -350,7 +348,7 @@
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
-				"ope_solic-lic_transba",
+		
 				"ope_programacion_cot",
 				"ope_programacion_cotdt",
 				"ope_jefe_turno_cot",
@@ -361,7 +359,6 @@
 			"!Werks": [
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			]
 		},
@@ -372,7 +369,7 @@
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
-				"ope_solic-lic_transba",
+			
 				"Tramitador",
 				"ope_coord-mant"
 							]
@@ -384,7 +381,7 @@
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
-				"ope_solic-lic_transba",
+			
 				"ope_coord-mant"
 			]
 		},
@@ -392,19 +389,16 @@
 			"!ET": [
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			],
 			"!Equnr": [
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			],
 			"all": [
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba",
 				"ope_programacion_cot",
 				"ope_programacion_cotdt",
@@ -424,7 +418,6 @@
 				"Tramitador",
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			],
 			"ButtonEditLicense": [
@@ -438,7 +431,6 @@
 			"ButtonEditLicenseSolicitante": [
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			],
 			"ButtonEditLicenseRequest": [
@@ -457,7 +449,6 @@
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
-				"ope_solic-lic_transba",
 				"ope_coord-mant"
 			],
 			"ButtonEditSol": [
@@ -469,7 +460,6 @@
 				"Tramitador",
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			],
 			"!ButtonEditSol": [
@@ -483,7 +473,6 @@
 			"AnnulateButton": [
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			]
 		}
@@ -508,7 +497,6 @@
 				"Tramitador",
 				"ope_visualizador",
 				"ope_solic-lic_transener",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			]
 		},
@@ -519,7 +507,7 @@
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
-				"ope_solic-lic_transba",
+				
 				"Tramitador",
 				"ope_coord-mant"
 			]
@@ -541,7 +529,6 @@
 				"Tramitador",
 				"ope_visualizador",
 				"ope_solic-lic_transener",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			]
 		},
@@ -552,7 +539,7 @@
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
-				"ope_solic-lic_transba",
+				
 				"Tramitador",
 				"ope_coord-mant"
 			]
@@ -573,13 +560,11 @@
 				"Tramitador",
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			],
 			"ButtonEditLicenseSolicitante": [
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			],
 			"ButtonEditLicense": [
@@ -597,7 +582,6 @@
 				"Tramitador",
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			],
 			"ButtonEditLicenseRequest": [
@@ -616,7 +600,7 @@
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
-				"ope_solic-lic_transba",
+				
 				"ope_coord-mant"
 			],
 			"ButtonEditSol": [
@@ -629,7 +613,7 @@
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
-				"ope_solic-lic_transba",
+			
 				"ope_coord-mant"
 			],
 			"ButtonCreateLicenceFromRequest": [
@@ -641,7 +625,6 @@
 				"Tramitador",
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			],
 			"ButtonAddReportSemanalCammesa": [
@@ -688,7 +671,7 @@
 				"ope_visualizador",
 				"ope_solic-lic_transener",
 				"ope_solic-lic_transba",
-				"ope_solic-lic_transba",
+			
 				"ope_coord-mant"
 			]
 		},
@@ -710,7 +693,7 @@
 				"ope_visualizador",
 				"ope_solic-lic_transener",
 				"ope_solic-lic_transba",
-				"ope_solic-lic_transba",
+			
 				"ope_coord-mant"
 			]
 		},
@@ -730,7 +713,6 @@
 				"Tramitador",
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			],
 			"ButtonEditLicense": [
@@ -748,7 +730,6 @@
 				"Tramitador",
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			],
 			"ButtonEditLicenseRequest": [
@@ -767,7 +748,7 @@
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
-				"ope_solic-lic_transba",
+				
 				"ope_coord-mant"
 			],
 			"ButtonEditSol": [
@@ -780,7 +761,7 @@
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
-				"ope_solic-lic_transba",
+			
 				"ope_coord-mant"
 			],
 			"ButtonCreateLicenceFromRequest": [
@@ -792,7 +773,6 @@
 				"Tramitador",
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			],
 			"ButtonAddReportSemanalCammesa": [
@@ -834,7 +814,6 @@
 			"Tramitador",
 			"ope_visualizador",
 			"ope_solic-lic_transener",
-			"ope_solic-lic_transba",
 			"ope_solic-lic_transba"
 		],
 		"comentario": "Solicitud que todavia no es licencia",
@@ -848,7 +827,6 @@
 				"Tramitador",
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			],
 			"ButtonEditLicense": [
@@ -866,7 +844,6 @@
 				"Tramitador",
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			],
 			"!ButtonEditSol": [
@@ -890,7 +867,6 @@
 				"Tramitador",
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			],
 			"CancelarTramitacionButon": [
@@ -926,7 +902,7 @@
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
 				"ope_solic-lic_transba",
-				"ope_solic-lic_transba",
+			
 				"preguntar lucas",
 				"Tramitador",
 				"ope_visualizador"
@@ -950,7 +926,6 @@
 			"!ButtonAddCoordination": [
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			]
 		},
@@ -961,7 +936,6 @@
 			"!ButtonAddObservation": [
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			]
 		},
@@ -978,7 +952,6 @@
 				"Tramitador",
 				"ope_solic-lic_transener",
 				"Solicitante_Lic_S",
-				"ope_solic-lic_transba",
 				"ope_solic-lic_transba"
 			]
 		}
@@ -1000,7 +973,7 @@
 			"ope_solic-lic_transener",
 			"Solicitante_Lic_S",
 			"ope_solic-lic_transba",
-			"ope_solic-lic_transba",
+			
 			"preguntar lucas",
 			"Tramitador",
 			"ope_visualizador"

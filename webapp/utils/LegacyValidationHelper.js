@@ -59,30 +59,55 @@ sap.ui.define([
 			}
 		},
 
+		// dateBetweenRange: function (oLicense, dateToCheck) {
+		// 	var dateToCheckUTC = FormatHelper.formatDatesGMT(dateToCheck);
+		// 	var oLicenseData = AppManagementHelper.getModel("LicenseJsonModel").getData();
+		// 	var sSolbeg = oLicense ? oLicense.Solbeg : oLicenseData.Solbeg;
+		// 	var sSolend = oLicense ? oLicense.Solend : oLicenseData.Solend;
+		// 	if (sSolbeg && sSolend && dateToCheckUTC) {
+		// 		if (dateToCheckUTC.getTime() > sSolend.getTime()) {
+		// 			return {
+		// 				valid: true,
+		// 				message: ""
+		// 			}
+		// 		} else {
+		// 			return {
+		// 				valid: dateToCheckUTC.getTime() <= sSolend.getTime() && dateToCheckUTC.getTime() >= sSolbeg.getTime(),
+		// 				message: ""
+		// 			}
+		// 		}
+		// 	} else {
+		// 		return {
+		// 			valid: true,
+		// 			message: ""
+		// 		};
+		// 	}
+		// },
 		dateBetweenRange: function (oLicense, dateToCheck) {
-			var dateToCheckUTC = FormatHelper.formatDatesGMT(dateToCheck);
-			var oLicenseData = AppManagementHelper.getModel("LicenseJsonModel").getData();
-			var sSolbeg = oLicense ? oLicense.Solbeg : oLicenseData.Solbeg;
-			var sSolend = oLicense ? oLicense.Solend : oLicenseData.Solend;
-			if (sSolbeg && sSolend && dateToCheckUTC) {
-				if (dateToCheckUTC.getTime() > sSolend.getTime()) {
-					return {
-						valid: true,
-						message: ""
-					}
-				} else {
-					return {
-						valid: dateToCheckUTC.getTime() <= sSolend.getTime() && dateToCheckUTC.getTime() >= sSolbeg.getTime(),
-						message: ""
-					}
-				}
-			} else {
-				return {
-					valid: true,
-					message: ""
-				};
-			}
-		},
+    const dateToCheckUTC = FormatHelper.formatDatesGMT(dateToCheck);
+    if (!dateToCheckUTC) {
+        return { valid: false, message: "" };
+    }
+
+    const oLicenseData = AppManagementHelper.getModel("LicenseJsonModel").getData();
+    const sSolend = oLicense?.Solend || oLicenseData.Solend;
+
+    if (!sSolend) {
+        return { valid: false, message: "" };
+    }
+
+    const endDate = new Date(sSolend);
+
+    const isAfterEnd = dateToCheckUTC.getTime() > endDate.getTime();
+
+    return {
+        valid: isAfterEnd,
+        message: isAfterEnd
+            ? ""
+            : `La fecha  no es posterior al fin de la licencia .`
+    };
+},
+
 
 		createLegacyComboStateModel: function () {
 			var oModel = AppManagementHelper.getModel("LegacyValidationJsonModel");
@@ -316,7 +341,14 @@ sap.ui.define([
 			}
 		},
 
-		handleLegacyValidationForDDSR: function (sLegacy, sPath, oModel, ValueStateProp, ValueStateTextProp, sHabProperty) {
+		handleLegacyValidationForDDSR: function (sLegacy, sPath, oModel, ValueStateProp, ValueStateTextProp, sHabProperty,isTransfer) {
+			
+			if(sHabProperty === "/"){
+				  const jobcond = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Jobcond")
+				  const isTct = jobcond === "04" || jobcond === "05";
+				  sHabProperty = isTct ? "/JefeDeTrabajoTct" : "/JefeDeTrabajo";
+			}
+
 
 			var aPersonalTodo = AppManagementHelper.getModel("PersonalHabilitadoModel").getProperty(sHabProperty);
 			var oPersonal = aPersonalTodo.find(e => e.Legajo === sLegacy)
@@ -325,6 +357,7 @@ sap.ui.define([
 			if (oPersonal) {
 				var dateVigencia = oPersonal.Vigencia;
 				var state = oPersonal.Estado;
+				var idHab = oPersonal.IdHabilitacion;
 				if (dateVigencia) {
 					var oDateBetweenRange = this.dateBetweenRange(null, dateVigencia);
 					if (oDateBetweenRange.valid) {
@@ -332,6 +365,9 @@ sap.ui.define([
 							if (oDateBetweenRange.message === "") {
 								oModel.setProperty(sPath + ValueStateProp, "Success")
 								oModel.setProperty(sPath + ValueStateTextProp, "")
+								if(isTransfer){
+								oModel.setProperty(sPath + "/IdJefeTrj" ,idHab)
+								}
 							} else {
 								oModel.setProperty(sPath + ValueStateProp, "Warning")
 								oModel.setProperty(sPath + ValueStateTextProp, "")
@@ -363,30 +399,73 @@ sap.ui.define([
 			}
 		},
 
-		getSelectedVigenciaValue: function (oEvent) {
-			if (oEvent.dateAdded) {
-				return oEvent.date
-			} else {
-				var oBinding = oEvent.getSource().getSelectedItem();
-				return oBinding ? oBinding.getBindingContext("PersonalHabilitadoModel").getObject().Vigencia : null
+		// Helper reutilizable
+		_getSelectedPropertyFromAnyModel: function (oEvent, prop, modelsOrder) {
+			// Caso especial: evento "sintético" con valores directos
+			if (oEvent && oEvent.dateAdded) {
+				if (prop === "Vigencia") return oEvent.Vigencia ?? null;
+				if (prop === "Estado") return oEvent.estado ?? null;
+				if (prop === "IdHabilitacion") return oEvent.IdHabilitacion ?? null;
 			}
+
+			// Obtener el ítem seleccionado robustamente (selectionChange / change / MultiComboBox)
+			const src = oEvent && oEvent.getSource ? oEvent.getSource() : null;
+			const item = (oEvent && oEvent.getParameter && (
+				oEvent.getParameter("selectedItem") ||  // ComboBox/Select
+				oEvent.getParameter("changedItem")      // MultiComboBox
+			)) || (src && src.getSelectedItem && src.getSelectedItem()) || null;
+
+			if (!item) return null;
+
+			// Orden de búsqueda de modelos (puede extenderse)
+			const names = (modelsOrder && modelsOrder.length ? modelsOrder : [
+				"JefesPreviewModel",
+				"JefesSupPreviewModel",
+				"JefesListModel",
+				"PersonalHabilitadoModel",
+				"HabPersonalModel",
+				"HabPersonalTCTModel",
+				undefined // modelo por defecto de la vista
+			]);
+
+			// Intentar leer la propiedad desde el primer contexto que la tenga
+			for (const name of names) {
+				const ctx = item.getBindingContext(name);
+				if (!ctx) continue;
+
+				// 1) vía getProperty (más eficiente)
+				const val = ctx.getProperty(prop);
+				if (val !== undefined) return val;
+
+				// 2) vía getObject (por si el path no apunta directo a la propiedad)
+				const obj = ctx.getObject && ctx.getObject();
+				if (obj && Object.prototype.hasOwnProperty.call(obj, prop)) {
+					return obj[prop];
+				}
+			}
+
+			return null;
+		},
+
+		// API pública unificada
+		getSelectedVigenciaValue: function (oEvent) {
+			return this._getSelectedPropertyFromAnyModel(oEvent, "Vigencia");
 		},
 
 		getSelectedStateValue: function (oEvent) {
-			if (oEvent.dateAdded) {
-				return oEvent.estado
-			} else {
-				var oBinding = oEvent.getSource().getSelectedItem();
-				return oBinding ? oBinding.getBindingContext("PersonalHabilitadoModel").getObject().Estado : null
-			}
+			return this._getSelectedPropertyFromAnyModel(oEvent, "Estado");
+		},
+
+		getSelectedIdHabilitacion: function (oEvent) {
+			return this._getSelectedPropertyFromAnyModel(oEvent, "IdHabilitacion");
 		},
 
 		handleLegacyValidation: function (sType, oEvent) {
-			var oModelLegacyValidation = AppManagementHelper.getModel("LegacyValidationJsonModel");
+			const oLicense = AppManagementHelper.getModel("LicenseJsonModel")
 			var dateVigencia = this.getSelectedVigenciaValue(oEvent)
 			var state = this.getSelectedStateValue(oEvent)
-			var sTextSuccess = "";
-			var sTextWarning = "El legajo seleccionado no se encuentra dentro del rango de la fecha inicio y fin de la licencia";
+			var IdHabilitacion = this.getSelectedIdHabilitacion(oEvent)
+
 			if (dateVigencia) {
 				//validacion de fechas, si está mal warning con mensaje de FECHAS
 				var oDateBetweenRange = this.dateBetweenRange(null, dateVigencia);
@@ -400,16 +479,22 @@ sap.ui.define([
 								this.setWarningState("/SolicitanteValueState", "/SolicitanteValueStateText", "")
 						}
 						if (sType === "JefeTrabajo") {
-							if (oDateBetweenRange.message === "")
+							if (oDateBetweenRange.message === "") {
+								oLicense.setProperty("/IdHabJefe", IdHabilitacion)
 								this.setSuccessState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", oDateBetweenRange.message)
-							else
+							} else {
 								this.setWarningState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", "")
+								oLicense.setProperty("/IdHabJefe", "")
+							}
 						}
 						if (sType === "JefeTrabajoSuplente") {
-							if (oDateBetweenRange.message === "")
+							if (oDateBetweenRange.message === "") {
+								oLicense.setProperty("/IdHabJefeSup", IdHabilitacion)
 								this.setSuccessState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", oDateBetweenRange.message)
-							else
+							} else {
 								this.setWarningState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", "")
+								oLicense.setProperty("/IdHabJefeSup", "")
+							}
 						}
 						if (sType === "SolicitanteSuplente") {
 							if (oDateBetweenRange.message === "")
@@ -436,9 +521,11 @@ sap.ui.define([
 						}
 						if (sType === "JefeTrabajo") {
 							this.setErrorState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", sWarningText)
+							oLicense.setProperty("/IdHabJefe", "")
 						}
 						if (sType === "JefeTrabajoSuplente") {
 							this.setErrorState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", sWarningText)
+							oLicense.setProperty("/IdHabJefeSup", "")
 						}
 						if (sType === "SolicitanteSuplente") {
 							this.setErrorState("/SolicitanteSuplenteValueState", "/SolicitanteSuplenteValueStateText", sWarningText)
@@ -457,9 +544,11 @@ sap.ui.define([
 						}
 						if (sType === "JefeTrabajo") {
 							this.setWarningState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", "")
+							oLicense.setProperty("/IdHabJefe", IdHabilitacion)
 						}
 						if (sType === "JefeTrabajoSuplente") {
 							this.setWarningState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", "")
+							oLicense.setProperty("/IdHabJefeSup", IdHabilitacion)
 						}
 						if (sType === "SolicitanteSuplente") {
 							this.setWarningState("/SolicitanteSuplenteValueState", "/SolicitanteSuplenteValueStateText", "")
@@ -477,9 +566,11 @@ sap.ui.define([
 						}
 						if (sType === "JefeTrabajo") {
 							this.setErrorState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", sWarningText)
+							oLicense.setProperty("/IdHabJefe", "")
 						}
 						if (sType === "JefeTrabajoSuplente") {
 							this.setErrorState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", sWarningText)
+							oLicense.setProperty("/IdHabJefeSup", "")
 						}
 						if (sType === "SolicitanteSuplente") {
 							this.setErrorState("/SolicitanteSuplenteValueState", "/SolicitanteSuplenteValueStateText", sWarningText)
@@ -501,9 +592,11 @@ sap.ui.define([
 					}
 					if (sType === "JefeTrabajo") {
 						this.setErrorState("/JefeTrabajoValueState", "/JefeTrabajoValueStateText", sWarningText)
+						oLicense.setProperty("/IdHabJefe", "")
 					}
 					if (sType === "JefeTrabajoSuplente") {
 						this.setErrorState("/JefeTrabajoSuplenteValueState", "/JefeTrabajoSuplenteValueStateText", sWarningText)
+						oLicense.setProperty("/IdHabJefeSup", "")
 					}
 					if (sType === "SolicitanteSuplente") {
 						this.setErrorState("/SolicitanteSuplenteValueState", "/SolicitanteSuplenteValueStateText", sWarningText)
