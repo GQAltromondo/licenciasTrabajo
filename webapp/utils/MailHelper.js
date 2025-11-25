@@ -71,9 +71,9 @@ sap.ui.define([
 			});
 
 			function prepareContext(licencia, usuariosAsignados, destinatario, mailEt, infAdicional, esAnulacion, MotivoDeAnulacion,
-				ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, vieneDeCalendarioTramitacion, comentObserCoord, nameLegacyObservator,
+				ObservacionDeAnulacion, fechaAnulacion, vieneDeTramitacion, vieneDeObservacion, comentObserCoord, nameLegacyObservator,
 				vieneDeCoordinacion, vieneDeCancelacion, nameLegacyCoordinator, nameLegacyTramitador, MotivoObservacion, ComentarioObservacion,
-				MotivoNoAut, ComentariosNoAut, tramitaciones) {
+				MotivoNoAut, ComentariosNoAut, tramitaciones,vieneDeCalendarioTramitacion) {
 
 				var those = that;
 				let workPlaces = AppManagementHelper.getModel("WorkPlacesJsonModel").getProperty("/WorkPlaces");
@@ -121,7 +121,7 @@ sap.ui.define([
 				}
 
 				context.Destinatario = destinatario;
-				//context.Destinatario = "guillermo.quattrocchi@altromondo.com.ar,ivan.steciuk@altromondo.com.ar";
+				//context.Destinatario = "guillermo.quattrocchi@altromondo.com.ar";
 
 
 				// Si viene de anulacion
@@ -160,7 +160,16 @@ sap.ui.define([
 
 				if (vieneDeCalendarioTramitacion === true) {
 					context.Trami = "S";
-
+					if (licencia.Licstat === '07' || licencia.Licstat === '01' || licencia.Licstat === '23' || licencia.Licstat === '06') { //Si se esta tramitando por primera vez el estado llega como coordinada 07
+						var estadoSegunTramitaciones = AppManagementHelper.getModel("TramitacionStatusModel").getData().StatusText;
+						if (estadoSegunTramitaciones === 'Trámite Autorizado') {
+							licencia.Licstat = '01';
+						} else if (estadoSegunTramitaciones === 'Trámite No Autorizado') {
+							licencia.Licstat = '06';
+						} else if (estadoSegunTramitaciones === 'En Trámite') {
+							licencia.Licstat = '23';
+						}
+					}
 					// Catálogos
 					const empresasCatalogo = AppManagementHelper.getModel("EmpresaTramitacionJsonModel")?.getData().Empresas || [];
 					const estadosCatalogo = AppManagementHelper.getModel("StatusTramitacion")?.getData().Estado || [];
@@ -322,7 +331,6 @@ sap.ui.define([
 				context.EqDescript = descEquipo;
 				context.InfAdicional = infAdicional || "";
 				context.Equinterv = licencia.Equiinterv;
-				context.Calendario = "Prueba de calendario"
 
 
 				// nuevos
