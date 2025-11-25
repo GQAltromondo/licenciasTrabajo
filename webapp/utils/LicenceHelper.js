@@ -1641,12 +1641,30 @@ sap.ui.define([
 						})
 						break;
 					}
+				case "TipoHabJefe":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Tipo Hab Jefe de Trabajo"
+						})
+						break;
+					}
 				case "Jefe":
 					if (value !== "") {
 						break;
 					} else {
 						aRequiredFields.push({
 							value: "- Jefe de trabajo"
+						})
+						break;
+					}
+				case "TipoHabJefeSup":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Tipo Hab Jefe de Trabajo Suplente"
 						})
 						break;
 					}

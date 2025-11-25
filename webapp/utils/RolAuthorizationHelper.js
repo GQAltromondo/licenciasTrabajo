@@ -117,7 +117,6 @@ sap.ui.define([
 			}
 
 			return function (status, roles, statuses, region, ...extra) {
-		
 				if (!statuses) return false;
 
 				let sRegionFormat = FormatterHelper.centroToRegion(region);

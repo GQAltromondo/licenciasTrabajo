@@ -32,14 +32,15 @@ sap.ui.define([
 	"Transener/Operaciones/LicenciasTrabajo/services/MailAROService",
 	"Transener/Operaciones/LicenciasTrabajo/utils/LegacyValidationHelper",
 	"Transener/Operaciones/LicenciasTrabajo/utils/TramitacionCalendarHelper",
-	"sap/ui/core/Fragment"
+	"sap/ui/core/Fragment",
+	"sap/m/MessageBox"
 ], function (Controller, Models, NavigationHelper, FormatHelper, FormatterHelper, AppManagementHelper, RolAuthorizationHelper,
 	oDataService, History,
 	MessageBoxHelper,
 	FioriComponentHelper, LicenseService, FioriHelper, MailHelper, BusyDialogHelper, ValidateHelper, LicenceHelper, ExportLicenseHelper,
 	UnifilarHelper,
 	EquiposService, OrdenesService, TipoEquipoService, PersonalHabilitadoService, EmpresaTramitacionService,
-	EstacionesService, WorkPlaceService, OrdenesDialogHelper, MailAROService, LegacyValidationHelper, TramitacionCalendarHelper, Fragment) {
+	EstacionesService, WorkPlaceService, OrdenesDialogHelper, MailAROService, LegacyValidationHelper, TramitacionCalendarHelper, Fragment, MessageBox) {
 	"use strict";
 
 	return Controller.extend("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License", {
@@ -85,6 +86,7 @@ sap.ui.define([
 			var sTipo = oEvent.getSource().getParent().getBindingContext("UnifilarListModel").getObject().TipoUnifilar;
 			var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			var sIndex = oEvent.getSource().getParent().getBindingContext("UnifilarListModel").getObject().Idunifilar;
+			var sRealIdUnifilar = oEvent.getSource().getParent().getBindingContext("UnifilarListModel").getObject().RealIdUnifilar || 0
 
 			// Fix issue #498 ID de solicitud y unifilres.
 			var oLicencia = AppManagementHelper.getModel("LicenseJsonModel").getData();
@@ -102,7 +104,7 @@ sap.ui.define([
 			// window.open(sHost, "_blank");
 
 			//	location.hash = `GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`
-			var Hash = `#GestionUnifilaresV1-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&Mode=E`;
+			var Hash = `#GestionUnifilaresV1-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${sEmpresa}&Anio=${sAnio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&Centro=${sCentro}&ET=${sET}&RealIdUnifilar=${sRealIdUnifilar}&Mode=E`;
 
 			const currentHash = Hash;
 
@@ -1032,6 +1034,21 @@ sap.ui.define([
 		rolStatusEdition2: function (controlPath, callback) {
 			return RolAuthorizationHelper.rolStatusEdition2(controlPath, callback);
 		},
+		validateEditStatus: function (status) {
+			// Si no hay status, no mostramos nada
+			if (!status) return false;
+
+			// Convertimos a número por seguridad
+			const iStatus = Number(status);
+
+			// Si es 30 o 2 → devolver false (no visible)
+			if (iStatus === 30 || iStatus === 2) {
+				return false;
+			}
+
+			// En cualquier otro caso → visible
+			return true;
+		},
 
 
 		validateSubstatus: function (...extra) {
@@ -1242,10 +1259,13 @@ sap.ui.define([
 			} else {
 				// Issue 582 - si se trata de una copia y el usuario es solicitante transener de debe asignar siempre el tipo "Programada"
 				this.changeLicenTypeCopyTBA();
+				var oLicence = AppManagementHelper.getModel("LicenseJsonModel").getData()
 				// Issue 565 - Al copiar una licencia se debe inicializar el binding de los jefes
-				this.bindJefes(AppManagementHelper.getModel("LicenseJsonModel").getData());
-				this.validarHabilit(AppManagementHelper.getModel("LicenseJsonModel").getData(), AppManagementHelper.getModel(
-					"PersonalHabilitadoModel").getData().Todos);
+				//this.refreshJefesFromLicense(oLicence);
+				this.bindTipoHab(oLicence)
+
+				//this.validarHabilit(oLicence, AppManagementHelper.getModel(
+				//	"PersonalHabilitadoModel").getData().Todos);
 				this.getView().byId("InputTimbeg").setValue("");
 				this.getView().byId("InputTimend").setValue("");
 			}
@@ -1624,6 +1644,10 @@ sap.ui.define([
 			} else {
 				for (var oTramitacion of aTramitaciones) {
 					if (oTramitacion.EmpTramita === "") {
+						bValid = false;
+						break;
+					}
+					if (oTramitacion.Estado === "") {
 						bValid = false;
 						break;
 					}
@@ -2489,6 +2513,7 @@ sap.ui.define([
 
 		onSendTransfer: function (oEvent) {
 			BusyDialogHelper.open();
+			var TipoHab = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/TipoHabJefe")
 			var oTransfer = oEvent.getSource().getParent().getParent().getBindingContext("TransferListJsonModel").getObject();
 			if (oTransfer.Jefetra == "") {
 				MessageBoxHelper.showAlert("Alerta", "Debe seleccionar un Jefe de Trabajo para realizar la transferencia");
@@ -2496,6 +2521,7 @@ sap.ui.define([
 				return
 			}
 			oTransfer.Autcot = AppManagementHelper.getUser();
+			oTransfer.TipoJefeTrj = TipoHab;
 			delete oTransfer.JefetraValueState;
 			delete oTransfer.JefetraValueStateText;
 			delete oTransfer.TeinformoValueState;
@@ -2884,7 +2910,8 @@ sap.ui.define([
 					oDatosAnteriores.Intercerr !== oDatosARefrescar.Intercerr || oDatosAnteriores.Equimov !== oDatosARefrescar.Equimov ||
 					oDatosAnteriores.Patadic !== oDatosARefrescar.Patadic) {
 					//vuelvo al estado anterior
-					AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Licstat", this._estadoPrevio);
+					//GQ FIX 25/02	
+					//AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Licstat", this._estadoPrevio);
 					BusyDialogHelper.close();
 					return MessageBoxHelper.showAlert("Alerta",
 						"Algunos datos de los unifilares no están actualizados con los ultimos cambios realizados. Se refrescará la información actual. Revise si es correcta e intente guardar nuevamente."
@@ -3440,12 +3467,12 @@ sap.ui.define([
 		openFileList: function () {
 			var userInfo = AppManagementHelper.getModel("UserJsonModel");
 			var permisosEliminarDocumento = userInfo.oData.roles[0];
-			/*var EnablePermiso = undefined;
+			var EnablePermiso = undefined;
 			if (permisosEliminarDocumento === 'ope_jefe_cot' || 'ope_oper-turno_cot' || 'ope_programacion_cotdt') {
 				EnablePermiso = false;
 			} else {
 				EnablePermiso = true;
-			}*/
+			}
 
 			this.handleRefreshUploadedFilesList();
 
@@ -3854,20 +3881,43 @@ sap.ui.define([
 
 		},
 
+
 		handleLegacyValidationTransfers: function (oEvent) {
+			var oCombo = oEvent.getSource();
 			var oModel = AppManagementHelper.getModel("TransferListJsonModel");
-			var sPath = oEvent.getSource().getBindingContext("TransferListJsonModel").getPath();
-			var oData = oEvent.getSource().getBindingContext("TransferListJsonModel").getObject();
+			var sPath = oCombo.getBindingContext("TransferListJsonModel").getPath();
+			var oData = oCombo.getBindingContext("TransferListJsonModel").getObject();
 			var sLegacy = oData.Jefetra;
-			LegacyValidationHelper.handleLegacyValidationForDDSR(sLegacy, sPath, oModel, "/JefetraValueState", "/JefetraValueStateText",
-				oEvent
-					.getSource().mBindingInfos.items.path);
-			if (oEvent.getSource) {
-				if (oEvent.getSource().getValueState() === "Error") {
-					oEvent.getSource().setSelectedKey("");
+
+			// 🔹 Obtener el item seleccionado
+			var oSelectedItem = oCombo.getSelectedItem();
+			var idHabilitacion = null;
+
+			if (oSelectedItem) {
+				var oCtx = oSelectedItem.getBindingContext("JefesListModel");
+				if (oCtx) {
+					var oObj = oCtx.getObject();
+					idHabilitacion = oObj?.IdHabilitacion || null;
+
 				}
 			}
+
+			// 🔹 Lógica de validación legacy existente
+			LegacyValidationHelper.handleLegacyValidationForDDSR(
+				sLegacy,
+				sPath,
+				oModel,
+				"/JefetraValueState",
+				"/JefetraValueStateText",
+				oCombo.mBindingInfos.items.path,
+				true
+			);
+
+			if (oCombo.getValueState() === "Error") {
+				oCombo.setSelectedKey("");
+			}
 		},
+
 
 		handleLegacyValidationReanudation: function (oEvent) {
 			var oModel = AppManagementHelper.getModel("ReanudationTableJsonModel");
@@ -4206,7 +4256,7 @@ sap.ui.define([
 				operator: sap.ui.model.FilterOperator.EQ,
 				value1: tipo
 			}));
-			return personalHabilitadoService.getPersonalPromise(filters);
+			return PersonalHabilitadoService.getPersonalPromise(filters);
 		},
 
 		searchOrden: function (evt) {
@@ -4265,11 +4315,11 @@ sap.ui.define([
 			if (aFilteredLim && aFilteredLim.length > 0) {
 				aFilteredLim.forEach(function (limitacion) {
 					sMensaje += `- ${limitacion.Idlimitacion}\n`;
+
 				});
-			} else {
-				sMensaje += "No hay limitaciones técnicas activas.";
+				MessageBoxHelper.showMessage(sMensaje);
 			}
-			//	MessageBoxHelper.showMessage(sMensaje);
+
 
 			return obj;
 		},
@@ -4619,73 +4669,436 @@ sap.ui.define([
 			}
 
 		},
-		//Issue 562 - Jefes de Trabajo habilitados para TcT
-		//Se borro el binding de la vista para los campos Jefe de trabajo y Jefe de trabajo Suplente  ya que se determina dinamicamente al valor del combo Condiciones de trabajo
+
 		onSelectionChangeCond: function (oEvent) {
-			if (oEvent.getParameter("selectedItem")) {
-				var sKey = oEvent.getParameter("selectedItem").getKey();
-				var oTemplate = new sap.ui.core.Item({
-					key: "{PersonalHabilitadoModel>Legajo}",
-					text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre}"
-				});
-				if (sKey === "04" || sKey === "05") {
-					sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate);
-					sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate);
-					sap.ui.getCore().byId("jefeTrabTrComb").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate);
-				} else if (sKey) {
-					sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate);
-					sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate);
-					sap.ui.getCore().byId("jefeTrabTrComb").bindAggregation("items", "PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate);
+			const oView = this.getView();
+			sap.ui.getCore().byId("HabJefeTrabajoComb").setSelectedKey("")
+			sap.ui.getCore().byId("HabJefeTrabajoSupComb").setSelectedKey("")
+			sap.ui.getCore().byId("TransfHabJefeTrabajoComb").setSelectedKey("")
+			sap.ui.getCore().byId("JefeTrabajoSupComb").setSelectedKey("")
+			sap.ui.getCore().byId("JefeTrabajoCombo").setSelectedKey("")
+sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items")
+sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
+			const lic = oView.getModel("LicenseJsonModel");
+			lic.setProperty("/IdHabJefeSup", "")
+			lic.setProperty("/IdHabJefe", "")
 
+			const get = (id) => sap.ui.getCore().byId(id);
+			const view = this.getView();
+
+			// 1) Limpiar selección
+			["HabJefeTrabajoComb", "HabJefeTrabajoSupComb", "TransfHabJefeTrabajoComb"].forEach(id => {
+				const c = get(id);
+				if (c) c.setSelectedKey("");
+			});
+
+			const selItem = oEvent.getParameter("selectedItem");
+			if (!selItem) {
+				// Sin selección -> desbindear y vaciar HabListModel
+				let habList = view.getModel("HabListModel");
+				if (!habList) {
+					habList = new sap.ui.model.json.JSONModel([]);
+					habList.setSizeLimit(9999)
+					view.setModel(habList, "HabListModel");
 				}
-			} else {
-				sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items");
-				sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items");
-				sap.ui.getCore().byId("jefeTrabTrComb").unbindAggregation("items");
+				habList.setData([]);
+				["HabJefeTrabajoComb", "HabJefeTrabajoSupComb", "TransfHabJefeTrabajoComb"].forEach(id => {
+					const c = get(id);
+					if (c) c.unbindAggregation("items");
+				});
+				return;
 			}
 
-		},
-		// Funcion callback llamada luego de cargar el modelo json que tendra los datos de la vista 
-		//En este caso lo utilizo para determinar dinamicamente el binding de algunos campos
-		findSuccess: function (oLicence) {
-			this.bindJefes(oLicence);
+			// 2) Determinar si es TCT
+			const sKey = selItem.getKey(); // Jobcond
+			const isTct = (sKey === "04" || sKey === "05");
 
-		},
-		//Issue 562 - Jefes de Trabajo habilitados para TcT
-		//Se borro el binding de la vista para los campos Jefe de trabajo y Jefe de trabajo Suplente  ya que se determina dinamicamente al valor del combo Condiciones de trabajo
-		bindJefes(oLicence) {
-			if (oLicence) {
+			// 3) Elegir modelo fuente y traer datos
+			const srcModelName = isTct ? "HabPersonalTCTModel" : "HabPersonalModel";
+			const srcModel = view.getModel(srcModelName) || sap.ui.getCore().getModel(srcModelName);
 
-				var sValue = oLicence.Jobcond;
-				var oTemplate = new sap.ui.core.Item({
-					key: "{PersonalHabilitadoModel>Legajo}",
-					text: "{PersonalHabilitadoModel>Legajo} {PersonalHabilitadoModel>Nombre}"
+			// Crear/obtener HabListModel (proxy unificado)
+			let habList = view.getModel("HabListModel");
+			if (!habList) {
+				habList = new sap.ui.model.json.JSONModel([]);
+				habList.setSizeLimit(9999)
+				view.setModel(habList, "HabListModel");
+			}
+
+			// ====== FILTRO que vos podés ajustar a tu necesidad ======
+			// Ejemplos para sumar si querés:
+			//  - descartar sin TipoHab: row => row && row.TipoHab
+			//  - estado 'S': row => row.Estado === 'S'
+			const filterFn = (row) => !!row; // <- hoy: solo descarta nulos/undefined
+			// ==========================================================
+
+			const copyFilteredToHabList = () => {
+				const data = (srcModel && srcModel.getProperty("/")) || [];
+				const arr = Array.isArray(data) ? data : [];
+
+				const normalizeTipoHab = (s) => {
+					const m = String(s || "").match(/^([A-Za-z]?)(\d+)$/);
+					if (!m) return s;
+					return m[1] + m[2].padStart(3, "0");
+				};
+
+				const filtered = arr
+					.filter(filterFn)
+					.sort((a, b) => normalizeTipoHab(a.TipoHab).localeCompare(normalizeTipoHab(b.TipoHab)));
+
+				habList.setData(filtered);
+				// habList.updateBindings(true);
+			};
+
+
+			// Si el modelo fuente tiene carga async, esperar el evento;
+			// igual hacemos una copia inmediata para cubrir el caso ya cargado
+			if (srcModel && typeof srcModel.attachRequestCompleted === "function") {
+				let once = false;
+				srcModel.attachRequestCompleted(() => {
+					if (once) return;
+					once = true;
+					copyFilteredToHabList();
 				});
-				if (sValue === "04" || sValue === "05") {
-					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items",
-						"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate) : "";
-					(sap.ui.getCore().byId("JefeTrabajoSupComb")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items",
-						"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate) : "";
-					(sap.ui.getCore().byId("jefeTrabTrComb")) ? sap.ui.getCore().byId("jefeTrabTrComb").bindAggregation("items",
-						"PersonalHabilitadoModel>/JefeDeTrabajoTct", oTemplate) : "";
-				} else if (sValue) {
-					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").bindAggregation("items",
-						"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate) : "";
-					(sap.ui.getCore().byId("JefeTrabajoSupComb")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").bindAggregation("items",
-						"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate) : "";
-					(sap.ui.getCore().byId("jefeTrabTrComb")) ? sap.ui.getCore().byId("jefeTrabTrComb").bindAggregation("items",
-						"PersonalHabilitadoModel>/JefeDeTrabajo", oTemplate) : "";
+			}
+			copyFilteredToHabList();
+
+			// 4) Plantilla de items (muestra distinto si es TCT)
+			const template = new sap.ui.core.Item({
+				key: "{HabListModel>TipoHab}",
+				text: {
+					parts: ["HabListModel>TipoHab", "HabListModel>Descripcion"],
+					formatter: function (tipo, desc) {
+						return isTct
+							? [tipo, desc].filter(Boolean).join(" - ")
+							: (desc || tipo || "");
+					}
+				}
+			});
+
+			// 5) Bindeo único a HabListModel para los 3 combos
+			["HabJefeTrabajoComb", "HabJefeTrabajoSupComb", "TransfHabJefeTrabajoComb"].forEach(id => {
+				const c = get(id);
+				if (!c) return;
+
+				const b = c.getBinding("items");
+				if (!b) {
+					c.bindAggregation("items", {
+						path: "HabListModel>/",
+						templateShareable: false,
+						sorter: new sap.ui.model.Sorter("TipoHab", false),
+						template
+					});
 				} else {
-					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items") : "";
-					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items") : "";
-					(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("jefeTrabTrComb").unbindAggregation("items") : "";
+					b.refresh(true);
 				}
-			} else {
-				(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items") : "";
-				(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items") : "";
-				(sap.ui.getCore().byId("JefeTrabajoCombo")) ? sap.ui.getCore().byId("jefeTrabTrComb").unbindAggregation("items") : "";
+			});
+		},
+		onSelectionChangeHab: function (oEvent) {
+			const view = this.getView();
+			const get = (id) => this.byId(id) || sap.ui.getCore().byId(id);
+
+			// Limpieza de selección en ambos combos
+			["JefeTrabajoCombo", "JefeTrabajoSupComb"].forEach(id => {
+				const c = get(id);
+				if (c) { c.setSelectedKey(""); c.unbindAggregation("items"); }
+			});
+
+			const oSelItem = oEvent.getParameter("selectedItem");
+			if (!oSelItem) return;
+
+			// Rama TCT según LicenseJsonModel>/Jobcond (04/05)
+			const lic = view.getModel("LicenseJsonModel");
+			// Vacío ambos ids, así no queda selección huérfana
+			if (lic) {
+				lic.setProperty("/IdHabJefe", "");
+				lic.setProperty("/IdHabJefeSup", "");
+				lic.setProperty("/TipoHabJefeSup", lic.getProperty("/TipoHabJefe"))
+			}
+			const jobcond = String((lic && lic.getProperty("/Jobcond")) || "").padStart(2, "0");
+			const isTct = jobcond === "04" || jobcond === "05";
+
+			// Tomar datos del ítem elegido
+			const ctxTct = oSelItem.getBindingContext("HabListModel");
+			const ctxHab = oSelItem.getBindingContext("HabListModel");
+			const sel = (ctxTct && ctxTct.getObject()) || (ctxHab && ctxHab.getObject()) || {};
+
+			// Fuente: arrays del PersonalHabilitadoModel
+			const phModel = view.getModel("PersonalHabilitadoModel") || AppManagementHelper.getModel("PersonalHabilitadoModel");
+			const basePath = isTct ? "/JefeDeTrabajoTct" : "/JefeDeTrabajo";
+			const base = (phModel && phModel.getProperty(basePath)) || [];
+
+			// Helpers
+			const dedupeBy = (arr, keyFn) => {
+				const m = new Map();
+				for (const it of arr) {
+					const k = keyFn(it);
+					if (k != null && !m.has(k)) m.set(k, it);
+				}
+				return Array.from(m.values());
+			};
+
+			// Armar lista manual (sin usar filtros de binding)
+			const matchFn = (row) => {
+				if (isTct) {
+					if (sel.TipoHab) return String(row.Lote || "") === String(sel.TipoHab);
+					return true;
+				} else {
+					if (sel.TipoHab) return String(row.TipoHab || "") === String(sel.TipoHab);
+					return true;
+				}
+			};
+
+			const projected = dedupeBy(base.filter(matchFn), it => it.Legajo)
+				.map(it => ({
+					Key: it.Legajo,
+					Display: [it.Legajo, it.Nombre, "-", it.Descripcion].filter(Boolean).join(" "),
+					// campos útiles para depurar/mostrar:
+					Legajo: it.Legajo,
+					Nombre: it.Nombre,
+					Descripcion: it.Descripcion,
+					TipoHab: it.TipoHab,
+					Lote: it.Lote,
+					Vigencia: it.Vigencia,
+					Estado: it.Estado,
+					IdHabilitacion: it.IdHabilitacion
+				}));
+
+			// --- Publico la MISMA lista en ambos modelos ---
+			const JSONModel = sap.ui.model.json.JSONModel;
+
+			const ensureModel = (name) => {
+				let m = view.getModel(name);
+				if (!m) {
+					m = new JSONModel([]);
+					m.setSizeLimit(9999)
+					view.setModel(m, name);
+				}
+				return m;
+			};
+
+			ensureModel("JefesPreviewModel").setData(projected);
+			ensureModel("JefesSupPreviewModel").setData(projected);
+
+			// --- Bindeo ambos combos ---
+			const bindFor = (id, modelName) => {
+				const c = get(id);
+				if (!c) return;
+				const tpl = new sap.ui.core.Item({
+					key: `{${modelName}>Key}`,
+					text: `{${modelName}>Display}`
+				});
+				c.bindAggregation("items", {
+					path: `${modelName}>/`,
+					template: tpl,
+					templateShareable: false
+				});
+			};
+
+			bindFor("JefeTrabajoCombo", "JefesPreviewModel");
+			bindFor("JefeTrabajoSupComb", "JefesSupPreviewModel");
+
+
+		},
+		findSuccess: async function (oLicence) {
+			this.bindTipoHab(oLicence);
+			this.refreshJefesFromLicense(oLicence);
+			this.bindJefesTransf(oLicence);
+
+		},
+		refreshJefesFromLicense: function () {
+			const view = this.getView();
+
+		
+			const comboMap = {
+				"JefeTrabajoCombo": { licProp: "TipoHabJefe", modelName: "JefesPreviewModel" },
+				"JefeTrabajoSupComb": { licProp: "TipoHabJefeSup", modelName: "JefesSupPreviewModel" }
+			};
+
+			
+			const licData = (view.getModel("LicenseJsonModel")?.getData?.()) || {};
+			var sIdHabJefe = (licData.IdHabJefe || "").trim();
+			var sIdHabJefeSup = (licData.IdHabJefeSup || "").trim();
+
+			var tieneAmbos = sIdHabJefe !== "" && sIdHabJefeSup !== "";
+			const jobcond = String(licData.Jobcond || "").padStart(2, "0");
+			const isTct = (jobcond === "04" || jobcond === "05");
+
+			
+			const phModel = view.getModel("PersonalHabilitadoModel") || sap.ui.getCore().getModel("PersonalHabilitadoModel");
+			const srcPath = isTct ? "/JefeDeTrabajoTct" : "/JefeDeTrabajo";
+			const source = (phModel && phModel.getProperty(srcPath)) || [];
+
+		
+			const dedupeBy = (arr, keyFn) => {
+				const m = new Map();
+				arr.forEach(it => {
+					const k = keyFn(it);
+					if (k != null && !m.has(k)) m.set(k, it);
+				});
+				return Array.from(m.values());
+			};
+
+			const projectRow = (it) => ({
+				Key: it.Legajo,
+				Display: tieneAmbos ? [it.Legajo, it.Nombre, "-", it.Descripcion].filter(Boolean).join(" ") : [it.Legajo, it.Nombre].filter(Boolean).join(" "),
+				Legajo: it.Legajo,
+				Nombre: it.Nombre,
+				Descripcion: it.Descripcion,
+				TipoHab: it.TipoHab,
+				Lote: it.Lote,
+				Vigencia: it.Vigencia,
+				Estado: it.Estado,
+				IdHabilitacion: it.IdHabilitacion
+			});
+
+			
+			Object.values(comboMap).forEach(({ licProp, modelName }) => {
+				const tipoHabKey = String(licData?.[licProp] || "").trim();
+
+				
+				let model = view.getModel(modelName);
+				if (!model) {
+					model = new sap.ui.model.json.JSONModel([]);
+					model.setSizeLimit(9999)
+					view.setModel(model, modelName);
+				}
+
+				
+				if (!tipoHabKey) {
+					const allProjected = dedupeBy(source, it => it.Legajo).map(projectRow);
+					model.setData(allProjected);
+					return;
+				}
+
+				
+				const matches = (row) => {
+					if (isTct) {
+						return String(row.TipoHab || "") === tipoHabKey || String(row.Lote || "") === tipoHabKey;
+					}
+					return String(row.TipoHab || "") === tipoHabKey;
+				};
+
+				const projected = dedupeBy(source.filter(matches), it => it.Legajo).map(projectRow);
+
+				
+				model.setData(projected);
+				
+			});
+		},
+
+
+		bindTipoHab: function (oLicence) {
+			const oView = this.getView();
+
+			let oProxyModel = oView.getModel("HabListModel");
+			if (!oProxyModel) {
+				oProxyModel = new sap.ui.model.json.JSONModel([]);
+				oProxyModel.setSizeLimit(9999)
+				oView.setModel(oProxyModel, "HabListModel");
 			}
 
+
+			if (!oLicence || !oLicence.Jobcond) {
+				oProxyModel.setData([]);
+				return;
+			}
+
+
+			const bUsaTCT = (oLicence.Jobcond === "04" || oLicence.Jobcond === "05");
+			const sModeloFuente = bUsaTCT ? "HabPersonalTCTModel" : "HabPersonalModel";
+
+
+			const oModeloFuente = oView.getModel(sModeloFuente) || sap.ui.getCore().getModel(sModeloFuente);
+
+			const copiarDatos = function () {
+				const aDatos = (oModeloFuente && oModeloFuente.getProperty("/")) || [];
+
+				if (Array.isArray(aDatos)) {
+
+					// Normalizador para ordenar correctamente (M1 → M001, etc.)
+					const normalizeTipoHab = function (s) {
+						const m = String(s || "").match(/^([A-Za-z]?)(\d+)$/);
+						if (!m) return s;
+						return m[1] + m[2].padStart(3, "0");
+					};
+
+					// Copiamos + ordenamos
+					const aOrdenados = aDatos.slice().sort(function (a, b) {
+						return normalizeTipoHab(a.TipoHab).localeCompare(normalizeTipoHab(b.TipoHab));
+					});
+
+					oProxyModel.setData(aOrdenados);
+
+				} else {
+					oProxyModel.setData([]);
+				}
+			};
+
+
+
+			if (oModeloFuente) {
+
+
+				if (typeof oModeloFuente.attachRequestCompleted === "function") {
+					let bYaEjecutado = false;
+					oModeloFuente.attachRequestCompleted(function () {
+						if (!bYaEjecutado) {
+							bYaEjecutado = true;
+							copiarDatos();
+						}
+					});
+				}
+
+
+				copiarDatos();
+
+			} else {
+
+				oProxyModel.setData([]);
+			}
+
+
+		},
+		bindJefesTransf: function (oLicence) {
+			const oView = this.getView();
+
+			// 1) Crear/obtener el modelo proxy donde mirarán SIEMPRE los ComboBox
+			let oProxy = oView.getModel("JefesListModel");
+			if (!oProxy) {
+				oProxy = new sap.ui.model.json.JSONModel([]);
+				oProxy.setSizeLimit(9999)
+				oView.setModel(oProxy, "JefesListModel");
+			}
+
+			// 2) Si no hay licencia o no tiene Jobcond => vaciar y salir
+			if (!oLicence || !oLicence.Jobcond) {
+				oProxy.setData([]);
+				return;
+			}
+
+			// 3) Decidir de dónde copiar según Jobcond
+			const esTCT = (oLicence.Jobcond === "04" || oLicence.Jobcond === "05");
+			const oSrc = oView.getModel("PersonalHabilitadoModel") || sap.ui.getCore().getModel("PersonalHabilitadoModel");
+			const sPath = esTCT ? "/JefeDeTrabajoTct" : "/JefeDeTrabajo";
+
+			// 4) Copiar datos desde el modelo fuente al proxy
+			const copiar = () => {
+				const a = (oSrc && oSrc.getProperty(sPath)) || [];
+				oProxy.setData(Array.isArray(a) ? a : []);
+			};
+
+			if (oSrc) {
+				// si es async, rellenar cuando termine (una sola vez)
+				if (typeof oSrc.attachRequestCompleted === "function") {
+					let once = false;
+					oSrc.attachRequestCompleted(() => { if (!once) { once = true; copiar(); } });
+				}
+				// intento inmediato por si ya hay data
+				copiar();
+			} else {
+				oProxy.setData([]);
+			}
 		},
 		validarHabilit: function (oLicence, aHabilitaciones) {
 			if (oLicence) {
@@ -4740,6 +5153,55 @@ sap.ui.define([
 			return true;
 
 		},
+		updateJefeLabelText: function (oEvent) {
+			const oComboBox = oEvent.getSource();
+			const sSelectedKey = oComboBox.getSelectedKey();
+			const oModel = this.getView().getModel("JefesPreviewModel");
+			const aItems = oModel.getProperty("/");
+
+			const oJefe = aItems.find(item => item.Legajo === sSelectedKey);
+			const sTipoHab = oJefe?.TipoHab;
+			const aGuiados = ["M03", "M07", "M11", "M15", "M19", "M23", "M27"];
+
+
+			const oLicenseModel = this.getView().getModel("LicenseJsonModel");
+			const sJobCond = oLicenseModel?.getProperty("/Jobcond");
+
+			const oLabel = sap.ui.getCore().byId("jefeLabel");
+			if (oLabel) {
+				if (sJobCond === "06" && aGuiados.includes(sTipoHab)) {
+					oLabel.setText("Jefe de trabajo guiado");
+				} else {
+					oLabel.setText("Jefe de trabajo");
+				}
+			}
+		},
+
+		updateJefeSupLabelText: function (oEvent) {
+			const oComboBox = oEvent.getSource();
+			const sSelectedKey = oComboBox.getSelectedKey();
+			const oModel = this.getView().getModel("JefesSupPreviewModel");
+			const aItems = oModel.getProperty("/");
+
+			const oJefe = aItems.find(item => item.Legajo === sSelectedKey);
+			const sTipoHab = oJefe?.TipoHab;
+			const aGuiados = ["M03", "M07", "M11", "M15", "M19", "M23", "M27"];
+
+			const oLicenseModel = this.getView().getModel("LicenseJsonModel");
+			const sJobCond = oLicenseModel?.getProperty("/Jobcond");
+
+
+			const oLabel = sap.ui.getCore().byId("jefeSupLabel");
+			if (oLabel) {
+				if (sJobCond === "06" && aGuiados.includes(sTipoHab)) {
+					oLabel.setText("Jefe de trabajo suplente guiado");
+				} else {
+					oLabel.setText("Jefe de trabajo suplente");
+				}
+			}
+		},
+
+
 		setErrorState: function (sValueStateProperty, sValueStateTextProperty, sTextForValueState) {
 			var oModelLegacyValidation = AppManagementHelper.getModel("LegacyValidationJsonModel");
 			oModelLegacyValidation.setProperty(sValueStateProperty, "Error");

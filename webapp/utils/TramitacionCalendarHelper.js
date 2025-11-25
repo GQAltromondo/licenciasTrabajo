@@ -267,6 +267,7 @@ sap.ui.define([
 			if (this.payloadValid(oDatePayload)) {
 				if (!this.dateHasBeenAdded(oDatePayload.Fecha)) {
 					this.saveDate(oDatePayload);
+				
 					this.cleanFormModel();
 				} else {
 					//mostrar confirm.
@@ -315,6 +316,7 @@ sap.ui.define([
 			} else {
 				var aDates = oModelTramitacion.getProperty(this._oModelPath + "/CalendarDates");
 				aDates.push(oDatePayload);
+				LicenseService.sendLicenciaEmail(AppManagementHelper.getModel("LicenseJsonModel").getData())
 				oModelTramitacion.refresh(true);
 			}
 

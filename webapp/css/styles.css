@@ -170,7 +170,7 @@
 }
 
 .customTable.sapMListBGTranslucent tr.sapMLIB.sapMLIB-CTX:nth-child(odd) {
-    background-color: #ffffff !important;
+    background-color: #ffffff
 }
 
 .customTable.sapMListBGTranslucent tr.sapMLIB.sapMLIB-CTX.sapMLIBActive:nth-child(odd) {
@@ -1057,3 +1057,15 @@ html.sap-desktop .sapContrast.sapMIBar.sapMFooter-CTX {
 }
 
 
+/* style.css */
+.rowHighlightWarning {
+    background-color: #fff3cd !important; /* light yellow */
+  }
+  
+  .rowHighlightError {
+    background-color: #f8d7da !important; /* light red */
+  }
+  
+  .rowHighlightSuccess {
+    background-color: #d4edda !important; /* light green */
+  }
