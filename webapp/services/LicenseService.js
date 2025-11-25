@@ -3423,13 +3423,16 @@ sap.ui.define([
 				oLicense.PeriodoText = this.getPeriodoText(oLicense.Period);
 				oLicense.StatusText = this.getStatusText(oLicense.Licstat, oLicense.Substatus);
 				oLicense.ValidForDuplicate = this.rolesForDuplication(oLicense.Tipo, oLicense.Werks);
+			});
 
-				let aLicensesOrdered 
-				if (bDontSort !== true) {
-					aLicensesOrdered = _.orderBy(aLicenses, ['Anio', 'Id'], ['desc', 'desc']);
-				} else {
-					aLicensesOrdered = aLicenses;
-				}
+			//	var aLicensesWithCheck = this.validateChecks(aLicensesOrdered);
+			// Issue 548 - Para las vistas  LTs de equipos y Salidas y Lineas la info viene ya ordenada de back end y no se debe reordenar
+			// para estas llamadas el parametro dontSort vendra en true
+			if (bDontSort !== true) {
+				var aLicensesOrdered = _.orderBy(aLicenses, ['Anio', "Id"], ["desc", "desc"])
+			} else {
+				aLicensesOrdered = aLicenses;
+			}
 
 			AppManagementHelper.getModel("LicencesListJsonModel").setData({
 				Licenses: aLicensesOrdered
