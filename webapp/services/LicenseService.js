@@ -3295,7 +3295,8 @@ sap.ui.define([
 				TeinformoValueState: "Success",
 				TeinformoValueStateText: "",
 				JefetraValueState: "Success",
-				JefetraValueStateText: ""
+				JefetraValueStateText: "",
+				IdJefeTrj:""
 			});
 			aTransfers.forEach((e) => {
 				e.enabledCombo = e.Trjindex === undefined || e.Trjindex === "";
@@ -3409,12 +3410,12 @@ sap.ui.define([
 				aFilters.push(new sap.ui.model.Filter("Tipo", sap.ui.model.FilterOperator.EQ, "S"));
 			}
 		},
+
 		successGET: function (bDontSort, data) {
 			var aLicenses = FormatHelper.removeResults(data);
 			FormatHelper.formatTimesFromGetLicenses(aLicenses);
 
-			
-
+		
 			aLicenses.forEach((oLicense) => {
 				oLicense.ArbplDesc = this.getArbplDesc(oLicense.Arbpl);
 				oLicense.EqustatText = this.getEqustatText(oLicense.Equstat);
@@ -3430,14 +3431,11 @@ sap.ui.define([
 					aLicensesOrdered = aLicenses;
 				}
 
-				AppManagementHelper.getModel("LicencesListJsonModel").setData({
-					Licenses: aLicensesOrdered
-				});
-
-				BusyDialogHelper.close();
+			AppManagementHelper.getModel("LicencesListJsonModel").setData({
+				Licenses: aLicensesOrdered
 			});
+			BusyDialogHelper.close();
 		},
-
 
 		errorGET: function (error) {
 			var sError = FormatHelper.parseJsonError(error);

@@ -98,6 +98,7 @@ sap.ui.define([
 			AppManagementHelper.getModel("EnabledFilterLicstat").setData({
 				enabled: true
 			});
+
 			AppManagementHelper.getModel("ColorModel").setProperty("/Color", "white");
 			AppManagementHelper.getModel("CheckAdvancedFiltersModel").setData({
 				Aro: false,
@@ -486,10 +487,7 @@ sap.ui.define([
 			}
 
 			AppManagementHelper.setNavigationProperties(oLicense);
-			LicenceHelper.generateDeliveryDevolution(oLicense);
-			LicenceHelper.generatePlacementRemoval(oLicense);
-			LicenceHelper.generateTurno(oLicense);
-			LicenceHelper.generateInhibicionHabilitacion(oLicense);
+
 
 			this.findEstacionCode(oLicense.Tplnr);
 			this.loadCatalogData(oLicense.Werks).then((oCatalogData) => {
@@ -505,7 +503,10 @@ sap.ui.define([
 			this.findOrden(oLicense.Empresa, oLicense.Werks);
 
 			var sLicenseUrl = FormatterHelper.getLicenseUrl(oLicense);
-
+			LicenceHelper.generateDeliveryDevolution(oLicense);
+			LicenceHelper.generatePlacementRemoval(oLicense);
+			LicenceHelper.generateTurno(oLicense);
+			LicenceHelper.generateInhibicionHabilitacion(oLicense);
 			if (this.isProgrammerRol(oLicense.Licstat)) {
 				oDisableControlsJsonModel.setProperty("/enabledForProgrammer", false);
 			} else {
@@ -523,6 +524,7 @@ sap.ui.define([
 					id: sLicenseUrl
 				});
 			}
+
 		},
 
 		isProgrammerRol: function (sLicstat) {
@@ -677,12 +679,21 @@ sap.ui.define([
 					"Barrafstx", "Bloqueo", "Werks", "SolSuplente", "Jefe", "JefeSuplente", "Tipinterv", "Perestac",
 					"Descripcion", "Solictext", "Aro", "Sindivi", "Senalninguna", "Precaucionesok", "Senalestados",
 					"Senalalarmas", "Senalmedicion", "Senalafect", "Fstensionret", "Intnooperar", "Precauciones", "Rdisparo", "Equiinterv",
-					"Aufnr", "Bloqueorecierretxt", "Tipolicencia", "Estacional", "Capex", "SolSuplenteAux"
+					"Aufnr", "Bloqueorecierretxt", "Tipolicencia", "Estacional", "Capex", "SolSuplenteAux", "TipoHabJefe", "TipoHabJefeSup", "IdHabJefe", "IdHabJefeSup"
 				];
 				propertiesToCopy.forEach(prop => {
 					copy[prop] = oldLicense[prop];
 				});
 				// Time
+
+				copy.TipoHabJefe = ""
+				copy.TipoHabJefeSup = ""
+				copy.Jefe = ""
+				copy.JefeSuplente = ""
+				copy.IdHabJefe = ""
+				copy.IdHabJefeSup = ""
+				copy.Aufnr =""
+
 				copy.Timbeg = new Date(copy.Timbeg);
 				copy.Timbeg = new Date(copy.Timbeg.getTime() + copy.Timbeg.getTimezoneOffset() * 60 * 1000);
 				copy.Timend = new Date(copy.Timend);
@@ -767,7 +778,7 @@ sap.ui.define([
 								}, () => {
 									MessageBoxHelper.showAlert("Alerta", "Error al obtener unifilares")
 								}, {
-									"$select": "Nombre,Idunifilar,NumVersion,Region,TipoUnifilar,Et,Empresa,Anio,Region,IntAbLe,SecAbBt,SecPatCr,PatAdic,Numerolicencia,Mapa,Doctype,Imagenunifilar"
+									"$select": "Nombre,Idunifilar,NumVersion,Region,TipoUnifilar,Et,Empresa,Anio,Region,IntAbLe,SecAbBt,SecPatCr,PatAdic,Numerolicencia,Mapa,Doctype,Imagenunifilar,RealIdUnifilar"
 								})
 							} else {
 								BusyDialogHelper.close();
@@ -919,6 +930,8 @@ sap.ui.define([
 					oUnifilarFromOldLicense.Et && e.TipoUnifilar === oUnifilarFromOldLicense.TipoUnifilar)
 				if (oUnifilarNewVersion) {
 					if (oUnifilarFromOldLicense.NumVersion !== oUnifilarNewVersion.NumVersion) {
+						//GQ PROBLEMA CON DUPLICAR UNIFILARES 22/10
+						oUnifilarFromOldLicense.RealIdUnifilar = oUnifilarNewVersion.IdUnifilar
 						aUnifilaresToCreate.push({
 							data: oUnifilarFromOldLicense,
 							create: false
@@ -2023,7 +2036,7 @@ _refreshAndDetectStateChanges: function () {
 			}
 		},
 
-		afterEmpresa: function () {
+		afterEmpresa: async function () {
 
 			//var model = new sap.ui.model.json.JSONModel(this.society);
 
@@ -2094,7 +2107,7 @@ _refreshAndDetectStateChanges: function () {
 			EstadoTramitacionService.loadStatus()
 			MotivoNoAutorizacionService.loadMotivos()
 			EmpresaTramitacionService.loadTramitacion(this.society);
-			PersonalHabilitadoService.getPersonalPromise(this.society);
+			await PersonalHabilitadoService.getPersonalPromise(this.society);
 			this.loadPuestosTrabajo(this.society).then((aPuestosTrabajo) => {
 				AppManagementHelper.getModel("PuestosTrabajoJsonModel");
 				AppManagementHelper.getModel("PuestosTrabajoJsonModel").setData({

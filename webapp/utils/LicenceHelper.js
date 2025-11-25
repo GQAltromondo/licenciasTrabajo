@@ -28,7 +28,7 @@ sap.ui.define([
 			var obj = items[0].getBindingContext("EstacionesJsonModel").getObject();
 			var sKey = obj.Estacion;
 			var sEmpresa = "100";
-			EquiposService.loadEquipos(sKey,sEmpresa);
+			EquiposService.loadEquipos(sKey, sEmpresa);
 			AppManagementHelper.getModel("FilterSelectionJsonModel").setProperty("/enabledComboEQUIPO", true);
 			//TODO uncomment if decide to select region based on ET
 
@@ -691,7 +691,7 @@ sap.ui.define([
 
 		// 	this.generateTable();
 		// },
-			generateTurno: function (oLicense) {
+		generateTurno: function (oLicense) {
 			var oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
 			var aDataTODOS = oModel.getProperty("/Todos");
 
@@ -699,14 +699,14 @@ sap.ui.define([
 
 			if (oLicense.TurnosLicencias_nav.length > 0) {
 				let aCloneTurnos = jQuery.extend(true, [], oLicense.TurnosLicencias_nav);
-				
-				aCloneTurnos.forEach(oTurno=>{
-					oTurno.Dateturno = FormatHelper.formatDateWithoutGMT(oTurno.Dateturno)   
+
+				aCloneTurnos.forEach(oTurno => {
+					oTurno.Dateturno = FormatHelper.formatDateWithoutGMT(oTurno.Dateturno)
 					oTurno.Turno = FormatHelper.formatTimeString(oTurno.Turno)
 				})
-				
+
 				aTurnos = aTurnos.concat(aCloneTurnos);
-			} 
+			}
 			//	this.formatUTCDates(aColocaciones);
 			AppManagementHelper.getModel("TurnosTableJsonModel").setData({
 				Turno: aTurnos
@@ -1044,22 +1044,23 @@ sap.ui.define([
 			//TODO AGREGAR TMB AQUI LO DE LA TRAMITACION EN UN FUTURO CALENDARIO
 
 			switch (sType) {
-			case "E":
-				return sPeriod === "C" ? sSubstatus === "" : sSubstatus === "" || sSubstatus === "D";
-			case "D":
-				return sSubstatus === "E" || sSubstatus === "R";
-			case "R":
-				return sSubstatus === "S";
-			case "S":
-				return sSubstatus === "R" || sSubstatus === "E";
-			case "F":
-				return false;
+				case "E":
+					return sPeriod === "C" ? sSubstatus === "" : sSubstatus === "" || sSubstatus === "D";
+				case "D":
+					return sSubstatus === "E" || sSubstatus === "R";
+				case "R":
+					return sSubstatus === "S";
+				case "S":
+					return sSubstatus === "R" || sSubstatus === "E";
+				case "F":
+					return false;
 			}
 
 		},
 
 		cloneLicense: function (license) {
-			let clone = {...license
+			let clone = {
+				...license
 			};
 			clone.Gdate = new Date(license.Gdate);
 			clone.Solbeg = new Date(license.Solbeg);
@@ -1070,7 +1071,8 @@ sap.ui.define([
 			if (license.HorariosPorLicencia_nav && license.HorariosPorLicencia_nav.length) {
 				clone.HorariosPorLicencia_nav = [];
 				license.HorariosPorLicencia_nav.forEach((horario) => {
-					let horarioClone = {...horario
+					let horarioClone = {
+						...horario
 					};
 					horarioClone.Fecha = new Date(horario.Fecha);
 					horarioClone.Horainicio = new Date(horario.Horainicio);
@@ -1083,7 +1085,8 @@ sap.ui.define([
 			if (license.ObservacionesLicencia_nav && license.ObservacionesLicencia_nav.length) {
 				clone.ObservacionesLicencia_nav = [];
 				license.ObservacionesLicencia_nav.forEach((observacion) => {
-					let observacionClone = {...observacion
+					let observacionClone = {
+						...observacion
 					};
 					observacionClone.CreationDate = new Date(observacion.CreationDate);
 					observacionClone.CreationTime = {
@@ -1097,7 +1100,8 @@ sap.ui.define([
 			if (license.CoordinacionesLicencia_nav && license.CoordinacionesLicencia_nav.length) {
 				clone.CoordinacionesLicencia_nav = [];
 				license.CoordinacionesLicencia_nav.forEach((coordinacion) => {
-					let coordinacionClone = {...coordinacion
+					let coordinacionClone = {
+						...coordinacion
 					};
 					coordinacionClone.CreationDate = new Date(coordinacion.CreationDate);
 					coordinacionClone.CreationTime = {
@@ -1129,13 +1133,16 @@ sap.ui.define([
 			if (license.TramitacionesLicencia_nav && license.TramitacionesLicencia_nav.length) {
 				clone.TramitacionesLicencia_nav = [];
 				license.TramitacionesLicencia_nav.forEach((tramitacion) => {
-					let tramitacionClone = {...tramitacion
+					let tramitacionClone = {
+						...tramitacion
 					};
-					tramitacionClone.CalendarDates = {...tramitacion.CalendarDates
+					tramitacionClone.CalendarDates = {
+						...tramitacion.CalendarDates
 					};
 					tramitacionClone.CalendarDates = [];
 					tramitacion.CalendarDates.forEach(fechaSeleccionada => {
-						let fechaClone = {...fechaSeleccionada
+						let fechaClone = {
+							...fechaSeleccionada
 						};
 						fechaClone.Fecha = new Date(fechaSeleccionada.Fecha);
 						tramitacionClone.CalendarDates.push()
@@ -1147,7 +1154,8 @@ sap.ui.define([
 			if (license.EntregasLicencia_nav && license.EntregasLicencia_nav.length) {
 				clone.EntregasLicencia_nav = [];
 				license.EntregasLicencia_nav.forEach((entrega) => {
-					let entregaClone = {...entrega
+					let entregaClone = {
+						...entrega
 					};
 					entregaClone.Datelicencia = new Date(entrega.Datelicencia);
 					entregaClone.Delivereddate = new Date(entrega.Delivereddate);
@@ -1160,7 +1168,8 @@ sap.ui.define([
 			if (license.DevolucionLicencia_nav && license.DevolucionLicencia_nav.length) {
 				clone.DevolucionLicencia_nav = [];
 				license.DevolucionLicencia_nav.forEach((devolucion) => {
-					let devolucionClone = {...devolucion
+					let devolucionClone = {
+						...devolucion
 					};
 					devolucionClone.Datelicencia = new Date(devolucion.Datelicencia);
 					devolucionClone.Delivereddate = new Date(devolucion.Delivereddate);
@@ -1173,7 +1182,8 @@ sap.ui.define([
 			if (license.SuspensionLicencia_nav && license.SuspensionLicencia_nav.length) {
 				clone.SuspensionLicencia_nav = [];
 				license.SuspensionLicencia_nav.forEach((suspension) => {
-					let suspensionClone = {...suspension
+					let suspensionClone = {
+						...suspension
 					};
 					suspensionClone.Datelicencia = new Date(suspension.Datelicencia);
 					suspensionClone.Time = new Date(suspension.Time);
@@ -1184,7 +1194,8 @@ sap.ui.define([
 			if (license.ReanudacionLicencia_nav && license.ReanudacionLicencia_nav.length) {
 				clone.ReanudacionLicencia_nav = [];
 				license.ReanudacionLicencia_nav.forEach((reanudacion) => {
-					let reanudacionClone = {...reanudacion
+					let reanudacionClone = {
+						...reanudacion
 					};
 					reanudacionClone.Datelicencia = new Date(reanudacion.Datelicencia);
 					reanudacionClone.Time = new Date(reanudacion.Time);
@@ -1195,7 +1206,8 @@ sap.ui.define([
 			if (license.TransferenciaJefeTrabajo_nav && license.TransferenciaJefeTrabajo_nav.length) {
 				clone.TransferenciaJefeTrabajo_nav = [];
 				license.TransferenciaJefeTrabajo_nav.forEach((transferencia) => {
-					let transferenciaClone = {...transferencia
+					let transferenciaClone = {
+						...transferencia
 					};
 					transferenciaClone.Time = new Date(transferencia.Time);
 					clone.TransferenciaJefeTrabajo_nav.push(transferenciaClone)
@@ -1210,18 +1222,18 @@ sap.ui.define([
 		getIsFinish: function (sStatus) {
 			let bFinish;
 			switch (sStatus) {
-			case "01":
-				bFinish = true;
-				break;
-			case "06":
-				bFinish = true;
-				break;
-			case "23":
-				bFinish = true;
-				break;
-			default:
-				bFinish = false;
-				break;
+				case "01":
+					bFinish = true;
+					break;
+				case "06":
+					bFinish = true;
+					break;
+				case "23":
+					bFinish = true;
+					break;
+				default:
+					bFinish = false;
+					break;
 			}
 
 			return bFinish;
@@ -1287,302 +1299,302 @@ sap.ui.define([
 		attributeIsValidForRequest: function (attribute, value, aRequiredFields) {
 			var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			switch (attribute) {
-			case "Solbeg":
-				if (value !== null) {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Fecha de inicio"
-					})
-					break;
-				}
-			case "Solend":
-				if (value !== null) {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Fecha de fin"
-					})
-					break;
-				}
-			case "Timbeg":
-				if (value !== null) {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Hora de inicio"
-					})
-					break;
-				}
-			case "Timend":
-				if (value !== null) {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Hora de fin"
-					})
-					break;
-				}
-			case "Descripcion":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Descripción del trabajo a realizar"
-					})
-					break;
-				}
-			case "Equnr":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Equipo Solicitado Cammesa"
-					})
-					break;
-				}
-			case "Estacional":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Estacional"
-					})
-					break;
-				}
-			case "Capex":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- CAPEX"
-					})
-					break;
-				}
-			case "Tplnr":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- E.T"
-					})
-					break;
-				}
-			case "Werks":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Región"
-					})
-					break;
-				}
-			case "Tiemporep":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Tiempo de reposición"
-					})
-					break;
-				}
-			case "Equstat":
-				if (value !== "N") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Estado Equipo CAMMESA"
-					})
-					break;
-				}
-			default:
-				return true
+				case "Solbeg":
+					if (value !== null) {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Fecha de inicio"
+						})
+						break;
+					}
+				case "Solend":
+					if (value !== null) {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Fecha de fin"
+						})
+						break;
+					}
+				case "Timbeg":
+					if (value !== null) {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Hora de inicio"
+						})
+						break;
+					}
+				case "Timend":
+					if (value !== null) {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Hora de fin"
+						})
+						break;
+					}
+				case "Descripcion":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Descripción del trabajo a realizar"
+						})
+						break;
+					}
+				case "Equnr":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Equipo Solicitado Cammesa"
+						})
+						break;
+					}
+				case "Estacional":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Estacional"
+						})
+						break;
+					}
+				case "Capex":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- CAPEX"
+						})
+						break;
+					}
+				case "Tplnr":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- E.T"
+						})
+						break;
+					}
+				case "Werks":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Región"
+						})
+						break;
+					}
+				case "Tiemporep":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Tiempo de reposición"
+						})
+						break;
+					}
+				case "Equstat":
+					if (value !== "N") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Estado Equipo CAMMESA"
+						})
+						break;
+					}
+				default:
+					return true
 			}
 		},
 
 		attributeIsValidForLicense: function (attribute, value, aRequiredFields) {
 			var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			switch (attribute) {
-			case "Solbeg":
-				if (value !== null) {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Fecha de inicio"
-					})
-					break;
-				}
-			case "Solend":
-				if (value !== null) {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Fecha de fin"
-					})
-					break;
-				}
-			case "Timbeg":
-				if (value !== null) {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Hora de inicio"
-					})
-					break;
-				}
-			case "Timend":
-				if (value !== null) {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Hora de fin"
-					})
-					break;
-				}
-			case "Descripcion":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Descripción del trabajo a realizar"
-					})
-					break;
-				}
-			case "Equnr":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Equipo Solicitado Cammesa"
-					})
-					break;
-				}
-			case "Estacional":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Estacional"
-					})
-					break;
-				}
-			case "Capex":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- CAPEX"
-					})
-					break;
-				}
-			case "Tplnr":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- E.T"
-					})
-					break;
-				}
-			case "Werks":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Región"
-					})
-					break;
-				}
-			case "Equstat":
-				if (value !== "N") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Estado Equipo CAMMESA"
-					})
-					break;
-				}
-			case "Tipinterv":
-				if (value === "") {
-					aRequiredFields.push({
-						value: "- Tipo de intervención"
-					})
-				}
-				if (value === "ESTACIONAL") {
-					if (oLicense.Perestac !== "") {
+				case "Solbeg":
+					if (value !== null) {
 						break;
 					} else {
 						aRequiredFields.push({
-							value: "- Periodo del Estacional / Estacional Pendiente"
+							value: "- Fecha de inicio"
 						})
 						break;
 					}
-					break;
-				} else {
-					break;
-				}
-			case "Arbpl":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Puesto de trabajo"
-					})
-					break;
-				}
-			case "Solicitante":
-				if (value !== "" && value !== "00000000") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Solicitante"
-					})
-					break;
-				}
-			case "Equstatnocam":
-				if (value !== "N") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Estado Equipo/s a intervenir"
-					})
-					break;
-				}
-			case "Jobcond":
-				if (value === "" || value === "00") {
-					aRequiredFields.push({
-						value: "- Condiciones de trabajo"
-					})
-				}
-				// if (value === "06")
-				// 	aRequiredFields.push({
-				// 		value: "- Descripcion de las Condiciones Especiales"
-				// 	})
-				if (value === '04' || value === '05') {
-					if (oLicense.Bloqueorecierretxt === '') {
+				case "Solend":
+					if (value !== null) {
+						break;
+					} else {
 						aRequiredFields.push({
-							value: "- Bloqueo de recierres (Sólo para TCT)"
+							value: "- Fecha de fin"
+						})
+						break;
+					}
+				case "Timbeg":
+					if (value !== null) {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Hora de inicio"
+						})
+						break;
+					}
+				case "Timend":
+					if (value !== null) {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Hora de fin"
+						})
+						break;
+					}
+				case "Descripcion":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Descripción del trabajo a realizar"
+						})
+						break;
+					}
+				case "Equnr":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Equipo Solicitado Cammesa"
+						})
+						break;
+					}
+				case "Estacional":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Estacional"
+						})
+						break;
+					}
+				case "Capex":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- CAPEX"
+						})
+						break;
+					}
+				case "Tplnr":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- E.T"
+						})
+						break;
+					}
+				case "Werks":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Región"
+						})
+						break;
+					}
+				case "Equstat":
+					if (value !== "N") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Estado Equipo CAMMESA"
+						})
+						break;
+					}
+				case "Tipinterv":
+					if (value === "") {
+						aRequiredFields.push({
+							value: "- Tipo de intervención"
 						})
 					}
-					if (oLicense.Intnooperar === '') {
+					if (value === "ESTACIONAL") {
+						if (oLicense.Perestac !== "") {
+							break;
+						} else {
+							aRequiredFields.push({
+								value: "- Periodo del Estacional / Estacional Pendiente"
+							})
+							break;
+						}
+						break;
+					} else {
+						break;
+					}
+				case "Arbpl":
+					if (value !== "") {
+						break;
+					} else {
 						aRequiredFields.push({
-							value: "- Interruptores que no deben Operarse (sólo para TcT)"
+							value: "- Puesto de trabajo"
+						})
+						break;
+					}
+				case "Solicitante":
+					if (value !== "" && value !== "00000000") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Solicitante"
+						})
+						break;
+					}
+				case "Equstatnocam":
+					if (value !== "N") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Estado Equipo/s a intervenir"
+						})
+						break;
+					}
+				case "Jobcond":
+					if (value === "" || value === "00") {
+						aRequiredFields.push({
+							value: "- Condiciones de trabajo"
 						})
 					}
-					break;
-				}
+					// if (value === "06")
+					// 	aRequiredFields.push({
+					// 		value: "- Descripcion de las Condiciones Especiales"
+					// 	})
+					if (value === '04' || value === '05') {
+						if (oLicense.Bloqueorecierretxt === '') {
+							aRequiredFields.push({
+								value: "- Bloqueo de recierres (Sólo para TCT)"
+							})
+						}
+						if (oLicense.Intnooperar === '') {
+							aRequiredFields.push({
+								value: "- Interruptores que no deben Operarse (sólo para TcT)"
+							})
+						}
+						break;
+					}
 				// else {
 				// 	break;
 				// }
-			case "Equiinterv":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Equipo/s a Intervenir"
-					})
-					break;
-				}
+				case "Equiinterv":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Equipo/s a Intervenir"
+						})
+						break;
+					}
 				/*case "Barrafs":
 					if (value !== "") {
 						break;
@@ -1593,51 +1605,69 @@ sap.ui.define([
 						break;
 					}
 				*/
-			case "Bloqueo":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Bloqueo de recierres"
-					})
-					break;
-				}
-			case "Rdisparo":
-				if (value !== "" && value !== "N") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Riesgo de disparo"
-					})
-					break;
-				}
-			case "SolSuplente":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Solicitante suplente"
-					})
-					break;
-				}
-			case "Jefe":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Jefe de trabajo"
-					})
-					break;
-				}
-			case "JefeSuplente":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Jefe de trabajo suplente"
-					})
-					break;
-				}
+				case "Bloqueo":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Bloqueo de recierres"
+						})
+						break;
+					}
+				case "Rdisparo":
+					if (value !== "" && value !== "N") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Riesgo de disparo"
+						})
+						break;
+					}
+				case "SolSuplente":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Solicitante suplente"
+						})
+						break;
+					}
+				case "TipoHabJefe":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Tipo Hab Jefe de Trabajo"
+						})
+						break;
+					}
+				case "Jefe":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Jefe de trabajo"
+						})
+						break;
+					}
+				case "TipoHabJefeSup":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Tipo Hab Jefe de Trabajo Suplente"
+						})
+						break;
+					}
+				case "JefeSuplente":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Jefe de trabajo suplente"
+						})
+						break;
+					}
 				case "Solictext":
 					if (value !== "") {
 						break;
@@ -1647,51 +1677,51 @@ sap.ui.define([
 						})
 						break;
 					}
-			case "Aro":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Coordinado con ARO"
-					})
-					break;
-				}
-			case "Senalafect":
-				if (value === "" && oLicense.Senalninguna === "") {
-					aRequiredFields.push({
-						value: "- Especificar Señales Afectadas"
-					})
-					break;
-				} else {
-					break;
-				}
-			case "Precauciones":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Otras precauciones de seguridad"
-					})
-					break;
-				}
-			case "Tiemporep":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- Tiempo de reposición"
-					})
-					break;
-				}
-			case "Fstensionret":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- LAT F/S con Tensión de Retorno"
-					})
-					break;
-				}
+				case "Aro":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Coordinado con ARO"
+						})
+						break;
+					}
+				case "Senalafect":
+					if (value === "" && oLicense.Senalninguna === "") {
+						aRequiredFields.push({
+							value: "- Especificar Señales Afectadas"
+						})
+						break;
+					} else {
+						break;
+					}
+				case "Precauciones":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Otras precauciones de seguridad"
+						})
+						break;
+					}
+				case "Tiemporep":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- Tiempo de reposición"
+						})
+						break;
+					}
+				case "Fstensionret":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- LAT F/S con Tensión de Retorno"
+						})
+						break;
+					}
 				/*case "R500kv":
 					if (value !== "") {
 						break;
@@ -1702,26 +1732,26 @@ sap.ui.define([
 						break;
 					}
 				*/
-			case "Fstensionret":
-				if (value !== "") {
-					break;
-				} else {
-					aRequiredFields.push({
-						value: "- LAT F/S con Tensión de Retorno"
-					})
-					break;
-				}
-			case "Barrafstx":
-				if (oLicense.Barrafs === "X" && value === "") {
-					aRequiredFields.push({
-						value: "- Especificar Barra"
-					})
-					break;
-				} else {
-					break;
-				}
-			default:
-				return true
+				case "Fstensionret":
+					if (value !== "") {
+						break;
+					} else {
+						aRequiredFields.push({
+							value: "- LAT F/S con Tensión de Retorno"
+						})
+						break;
+					}
+				case "Barrafstx":
+					if (oLicense.Barrafs === "X" && value === "") {
+						aRequiredFields.push({
+							value: "- Especificar Barra"
+						})
+						break;
+					} else {
+						break;
+					}
+				default:
+					return true
 			}
 		},
 

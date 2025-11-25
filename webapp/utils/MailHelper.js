@@ -207,11 +207,11 @@ sap.ui.define([
 						const estadoCodigo = String(tramite.Estado || "").trim();
 						const estadoDescripcion = nombreEstadoPorCodigo[estadoCodigo] || estadoCodigo || "-";
 
-						
-						
-							entry.estadoTramitacion = estadoDescripcion;
-						
-						
+
+
+						entry.estadoTramitacion = estadoDescripcion;
+
+
 
 						// Cargar fechas (si existen)
 						(tramite.CalendarDates || []).forEach(cd => {
