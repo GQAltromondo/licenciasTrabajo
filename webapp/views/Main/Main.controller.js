@@ -441,6 +441,7 @@ sap.ui.define([
 		},
 
 		goToEdit: function (oEvent, bManualPress) {
+			LegacyValidationHelper.createLegacyComboStateModel();
 			BusyDialogHelper.open();
 			var oFilterSelectionModel = AppManagementHelper.getModel("FilterSelectionJsonModel");
 			var oDeliveryModel = AppManagementHelper.getModel("DeliveryTableJsonModel");
@@ -692,7 +693,7 @@ sap.ui.define([
 				copy.JefeSuplente = ""
 				copy.IdHabJefe = ""
 				copy.IdHabJefeSup = ""
-				copy.Aufnr =""
+				copy.Aufnr = ""
 
 				copy.Timbeg = new Date(copy.Timbeg);
 				copy.Timbeg = new Date(copy.Timbeg.getTime() + copy.Timbeg.getTimezoneOffset() * 60 * 1000);
@@ -1572,7 +1573,7 @@ sap.ui.define([
 					});*/
 					LicenseService.FIND(oDataUrl, (license) => {
 						this.getView().setBusy(false);
-						this.goToEdit(license, true);
+						this.c(license, true);
 					})
 				}, 5000)
 			}
