@@ -218,6 +218,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Main", {
 				contentLeft: [
 					new sap.m.Button({
 						text: "Reportes",
+						menuPosition: sap.ui.core.Popup.Dock.BeginTop,
 						press: [oController.openReportesSheet, oController]
 					}).addStyleClass("buttonInverted"),
 
