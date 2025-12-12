@@ -488,7 +488,7 @@ sap.ui.define([
 			}
 
 			AppManagementHelper.setNavigationProperties(oLicense);
-		
+
 			LicenceHelper.generatePlacementRemoval(oLicense);
 			LicenceHelper.generateTurno(oLicense);
 			LicenceHelper.generateInhibicionHabilitacion(oLicense);
@@ -4454,8 +4454,64 @@ sap.ui.define([
 		},
 
 		goToGantt: function () {
-			this.getOwnerComponent().getRouter().navTo("Gantt", {empresa: this.society });
+			this.getOwnerComponent().getRouter().navTo("Gantt", { empresa: this.society });
+		}, openReportesSheet: function (oEvent) {
+			if (!this._oReportesSheet) {
+				this._oReportesSheet = new sap.m.ActionSheet({
+					placement: sap.m.PlacementType.Top, // abre hacia arriba desde el footer
+					buttons: [
+						new sap.m.Button({
+							icon: "sap-icon://doc-attachment",
+							text: "Solicitud de acuerdo",
+							press: [this.solicitudAcuerdoExport, this]
+						}),
+						new sap.m.Button({
+							icon: "sap-icon://excel-attachment",
+							text: "Programación semanal (reunion CAMMESA)",
+							press: [this.handleSemanalCammesa, this]
+						}),
+						new sap.m.Button({
+							icon: "sap-icon://excel-attachment",
+							text: "Comparación de licencias.",
+							press: [this.reportLicenseComparison, this]
+						}),
+						new sap.m.Button({
+							icon: "sap-icon://pdf-attachment",
+							text: "Parte Diario de LT autorizadas.",
+							press: [this.handleDiaryPartLT, this]
+						}),
+						new sap.m.Button({
+							icon: "sap-icon://excel-attachment",
+							text: "Parte de Trabajos Diario y Semanal.",
+							press: [this.handleWorkReportCammesa, this]
+						}),
+						new sap.m.Button({
+							icon: "sap-icon://pdf-attachment",
+							text: "Reporte de Licencias.",
+							press: [this.downloadLicenses, this]
+						}),
+						new sap.m.Button({
+							icon: "sap-icon://pdf-attachment",
+							text: "Exportar Solicitudes y Licencias",
+							press: [this.exportMultipleLics, this]
+						})
+					]
+				});
+
+				// importante para que se destruya con la vista
+				this.getView().addDependent(this._oReportesSheet);
+			}
+
+			this._oReportesSheet.openBy(oEvent.getSource());
 		},
+
+		onExit: function () {
+			if (this._oReportesSheet) {
+				this._oReportesSheet.destroy();
+				this._oReportesSheet = null;
+			}
+		}
+
 
 	});
 });

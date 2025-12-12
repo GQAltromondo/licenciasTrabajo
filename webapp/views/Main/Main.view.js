@@ -212,52 +212,15 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Main", {
 		var mainPage = new sap.m.Page({
 			title: "{i18n>title}",
 			floatingFooter: false,
-			enableScrolling: false,
+			enableScrolling: true,
 			showHeader: false,
 			footer: new sap.m.Bar({
 				contentLeft: [
-					new sap.m.MenuButton({
+					new sap.m.Button({
 						text: "Reportes",
-						menu: new sap.m.Menu({
-							items: [
-								new sap.m.MenuItem({
-									icon: "sap-icon://doc-attachment",
-									text: "Solicitud de acuerdo",
-									press: [oController.solicitudAcuerdoExport, oController]
-								}),
-								new sap.m.MenuItem({
-									icon: "sap-icon://excel-attachment",
-									text: "Programación semanal (reunion CAMMESA)",
-									press: [oController.handleSemanalCammesa, oController]
-								}),
-								new sap.m.MenuItem({
-									icon: "sap-icon://excel-attachment",
-									text: "Comparación de licencias.",
-									press: [oController.reportLicenseComparison, oController]
-								}),
-								new sap.m.MenuItem({
-									icon: "sap-icon://pdf-attachment",
-									text: "Parte Diario de LT autorizadas.",
-									press: [oController.handleDiaryPartLT, oController]
-								}),
-								new sap.m.MenuItem({
-									icon: "sap-icon://excel-attachment",
-									text: "Parte de Trabajos Diario y Semanal.",
-									press: [oController.handleWorkReportCammesa, oController]
-								}),
-								new sap.m.MenuItem({
-									icon: "sap-icon://pdf-attachment",
-									text: "Reporte de Licencias.",
-									press: [oController.downloadLicenses, oController]
-								}),
-								new sap.m.MenuItem({
-									icon: "sap-icon://pdf-attachment",
-									text: "Exportar Solicitudes y Licencias",
-									press: [oController.exportMultipleLics, oController]
-								})
-							]
-						})
+						press: [oController.openReportesSheet, oController]
 					}).addStyleClass("buttonInverted"),
+
 					new sap.m.Button({
 						iconFirst: true,
 						text: "{i18n>goToGantt}",
@@ -334,7 +297,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Main", {
 						press: [oController.openMassiveTramitationAddCompanyDialog, oController]
 					}).addStyleClass("buttonInverted"),
 					new sap.m.Text({
-						text:"{version>/version}"
+						text: "{version>/version}"
 					})
 				]
 			}),
