@@ -1907,6 +1907,7 @@ sap.ui.define([
 						var vieneDeCancelacion = false;
 						var vieneDeCalendarioTramitacion = false;
 						var nameLegacyCoordinator = this.getLastCoordinator();
+						var vieneDeCalendarioTramitacion = false;
 						var nameLegacyTramitador = oLicence.Tramitador;
 						var MotivoObservacion = "";
 						var ComentarioObservacion = "";
@@ -3409,6 +3410,8 @@ sap.ui.define([
 		successGET: function (bDontSort, data) {
 			var aLicenses = FormatHelper.removeResults(data);
 			FormatHelper.formatTimesFromGetLicenses(aLicenses);
+
+		
 			aLicenses.forEach((oLicense) => {
 				oLicense.ArbplDesc = this.getArbplDesc(oLicense.Arbpl);
 				oLicense.EqustatText = this.getEqustatText(oLicense.Equstat);

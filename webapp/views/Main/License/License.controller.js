@@ -264,6 +264,8 @@ sap.ui.define([
 			this.oDialogTable.close();
 			this.oDialogTable.destroy(true);
 		},
+		
+		
 
 		onChangeSelectionRegion: function (evt) {
 			//return; //TODO remove this this is to go back to ordenes input
@@ -375,7 +377,8 @@ sap.ui.define([
 							template: new sap.m.StandardListItem({
 								type: sap.m.ListType.Navigation,
 								press: [this.openUnifilarURL, this],
-								title: "{UnifilaresFileListModel>IdUnifilar} --- {UnifilaresFileListModel>Descripcion}",
+								// title: "{UnifilaresFileListModel>IdUnifilar} --- {UnifilaresFileListModel>Descripcion}",
+								title: "{UnifilaresFileListModel>Descripcion}",
 								description: {
 									path: "UnifilaresFileListModel>TipoUnifilar",
 									formatter: (tipo) => {
@@ -416,90 +419,191 @@ sap.ui.define([
 			})
 		},
 
+		// unifilarValid: function (oUnifilar) {
+		// 	var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
+		// 	this.oDialogSelection.setBusy(true);
+		// 	LicenseService.getUnifilares(oLicense, (data) => {
+		// 		this.oDialogSelection.setBusy(false);
+		// 		var oModel = AppManagementHelper.getModel("UnifilarListModel");
+		// 		oModel.setData({
+		// 			Unifilares: data.results,
+		// 			index: data.results.length + 1
+		// 		});
+		// 		let aUnifilares = AppManagementHelper.getModel("UnifilarListModel").getData().Unifilares;
+		// 		let oUnifilarFound = aUnifilares.find(e => e.Et === oUnifilar.Et && e.TipoUnifilar === oUnifilar.TipoUnifilar);
+		// 		if (oUnifilarFound) {
+		// 			MessageBoxHelper.showAlert("Alerta", "Ya se ha agregado un unifilar del mismo tipo para esta E.T");
+		// 		} else {
+		// 			var sRealIdUnifilar = oUnifilar.IdUnifilar.toString();
+		// 			var sTipo = oUnifilar.TipoUnifilar;
+		// 			var oModelSelectionData = AppManagementHelper.getModel("SelectionUnifilarModel").getData();
+		// 			var sVersion = "";
+		// 			var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
+		// 			var sIndex = new Date().valueOf().toString(36) + Math.random().toString(36).substr(2);
+		// 			var sIndexFormatted = sIndex.substr(1, 18);
+		// 			var sIndex = sIndexFormatted;
+
+		// 			// Fix issue #498 ID de solicitud y unifilres.
+		// 			var oLicencia = AppManagementHelper.getModel("LicenseJsonModel").getData();
+		// 			var sLicenciaCreada = (oLicencia.Id && oLicencia.Tipo === "L") ? oLicencia.Id : "";
+
+
+		// 			// Obtén los parámetros de la URL
+		// 			var searchParams = new URLSearchParams(window.location.search);
+
+		// 			// Obtén el valor de 'siteId'
+		// 			var siteId = searchParams.get("siteId");
+
+		// 			console.log("siteId:", siteId);
+
+		// 			// RL 10/12
+
+		// 			var navigationService = sap.ushell.Container.getService('CrossApplicationNavigation');
+		// 			var hash = navigationService.hrefForExternal({
+		// 				target: { semanticObject: 'GestionUnifilaresV1', action: 'Display' },
+		// 				params: {
+		// 					LicenciaCreada: sLicenciaCreada,
+		// 					Tipo: sTipo,
+		// 					Version: sVersion,
+		// 					Empresa: oLicense.Empresa,
+		// 					Anio: oLicense.Anio,
+		// 					Id: oLicense.Idunifilar,
+		// 					IdUnifilar: sIndex,
+		// 					RealIdUnifilar: sRealIdUnifilar,
+		// 					Centro: oModelSelectionData.Region,
+		// 					ET: oModelSelectionData.ET,
+		// 					Mode: "C"
+		// 				}
+		// 			});
+		// 			var url = window.location.href.split('#')[0] + hash;
+		// 			sap.m.URLHelper.redirect(url, true);
+		// 			// Fin RL 10/12
+
+		// 			// console.log("URL", window.location.hostname + "/site?siteId=" + siteId)
+		// 			// RL 10/12 var Hash = `#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${oLicense.Empresa}&Anio=${oLicense.Anio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&RealIdUnifilar=${sRealIdUnifilar}&Centro=${oModelSelectionData.Region}&ET=${oModelSelectionData.ET}&Mode=C`;
+		// 			// const sHost = (window.location.hostname + "/site?siteId=" + siteId + Hash)
+		// 			// window.location.href = (sHost, "_blank")
+
+
+		// 			// //window.open(sHost, "_blank");
+		// 			// // var sHost =
+		// 			// // 	`https://${window.location.host}/sites/fiorilaunchpad#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${oLicense.Empresa}&Anio=${oLicense.Anio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&RealIdUnifilar=${sRealIdUnifilar}&Centro=${oModelSelectionData.Region}&ET=${oModelSelectionData.ET}&Mode=C`;
+		// 			// // window.open(sHost, "_blank");
+		// 			// RL 10/12 location.hash = "GestionUnifilares-Display?Empresa=" + `LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${oLicense.Empresa}&Anio=${oLicense.Anio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&RealIdUnifilar=${sRealIdUnifilar}&Centro=${oModelSelectionData.Region}&ET=${oModelSelectionData.ET}&Mode=C`;
+		// 			//location.hash = Hash
+
+		// 			// const currentHash = Hash;
+
+		// 			// // Crear la URL para la nueva pestaña
+		// 			// const newUrl = `${location.origin}/site?siteId=${siteId}${currentHash}`;
+
+		// 			//}
+		// 		}
+		// 	}, $.proxy(this.onErrorGetUnifilares, this));
+		// },
+
 		unifilarValid: function (oUnifilar) {
-			var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
-			this.oDialogSelection.setBusy(true);
-			LicenseService.getUnifilares(oLicense, (data) => {
-				this.oDialogSelection.setBusy(false);
-				var oModel = AppManagementHelper.getModel("UnifilarListModel");
-				oModel.setData({
-					Unifilares: data.results,
-					index: data.results.length + 1
-				});
-				let aUnifilares = AppManagementHelper.getModel("UnifilarListModel").getData().Unifilares;
-				let oUnifilarFound = aUnifilares.find(e => e.Et === oUnifilar.Et && e.TipoUnifilar === oUnifilar.TipoUnifilar);
-				if (oUnifilarFound) {
-					MessageBoxHelper.showAlert("Alerta", "Ya se ha agregado un unifilar del mismo tipo para esta E.T");
-				} else {
-					var sRealIdUnifilar = oUnifilar.IdUnifilar.toString();
-					var sTipo = oUnifilar.TipoUnifilar;
-					var oModelSelectionData = AppManagementHelper.getModel("SelectionUnifilarModel").getData();
-					var sVersion = "";
-					var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
-					var sIndex = new Date().valueOf().toString(36) + Math.random().toString(36).substr(2);
-					var sIndexFormatted = sIndex.substr(1, 18);
-					var sIndex = sIndexFormatted;
+  var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
+  this.oDialogSelection.setBusy(true);
 
-					// Fix issue #498 ID de solicitud y unifilres.
-					var oLicencia = AppManagementHelper.getModel("LicenseJsonModel").getData();
-					var sLicenciaCreada = (oLicencia.Id && oLicencia.Tipo === "L") ? oLicencia.Id : "";
+  // helper local para resolver versión desde distintas fuentes
+  function resolveVersion(fromItem, fromResults) {
+    // a) campos típicos
+    let v = fromItem.NumVersion ?? fromItem.Version ?? fromItem.Numversion ?? fromItem.NroVersion;
 
+    // b) si no vino, intento en el resultado del backend por Idunifilar
+    if (!v && fromResults && fromResults.length) {
+      const id = String(fromItem.IdUnifilar ?? fromItem.Idunifilar ?? fromItem.Id ?? "");
+      let found = null;
+      if (id) found = fromResults.find(r => String(r.Idunifilar ?? r.Id) === id);
+      if (!found) {
+        // último intento: por Tipo + (si existe) ET
+        const tipo = String(fromItem.TipoUnifilar ?? fromItem.Tipo ?? "");
+        const et   = String(fromItem.Et ?? fromItem.ET ?? "");
+        found = fromResults.find(r => String(r.TipoUnifilar) === tipo && (!et || String(r.Et) === et));
+      }
+      if (found) v = found.NumVersion ?? found.Version;
+    }
 
-					// Obtén los parámetros de la URL
-					var searchParams = new URLSearchParams(window.location.search);
+    // c) último recurso: parsear de textos (p.ej. "2 v — E.T. ABSTO")
+    if (!v) {
+      const texts = [
+        String(fromItem.IdUnifilar ?? ""),
+        String(fromItem.Descripcion ?? fromItem.Nombre ?? fromItem.Title ?? "")
+      ];
+      for (const s of texts) {
+        // “2 v …” o “… v 2”
+        let m = s.match(/^\s*(\d+)\s*v\b/i) || s.match(/\bv\s*(\d+)\b/i);
+        if (m && m[1]) { v = m[1]; break; }
+      }
+    }
 
-					// Obtén el valor de 'siteId'
-					var siteId = searchParams.get("siteId");
+    // d) devuelvo string (o vacío si no hubo suerte)
+    return v != null ? String(v) : "";
+  }
 
-					console.log("siteId:", siteId);
+  LicenseService.getUnifilares(oLicense, (data) => {
+    this.oDialogSelection.setBusy(false);
 
-					// RL 10/12
+    // log de respaldo
+    console.log("[unifilarValid] item recibido:", oUnifilar);
+    console.log("[unifilarValid] results del backend:", data && data.results);
 
-					var navigationService = sap.ushell.Container.getService('CrossApplicationNavigation');
-					var hash = navigationService.hrefForExternal({
-						target: { semanticObject: 'GestionUnifilaresV1', action: 'Display' },
-						params: {
-							LicenciaCreada: sLicenciaCreada,
-							Tipo: sTipo,
-							Version: sVersion,
-							Empresa: oLicense.Empresa,
-							Anio: oLicense.Anio,
-							Id: oLicense.Idunifilar,
-							IdUnifilar: sIndex,
-							RealIdUnifilar: sRealIdUnifilar,
-							Centro: oModelSelectionData.Region,
-							ET: oModelSelectionData.ET,
-							Mode: "C"
-						}
-					});
-					var url = window.location.href.split('#')[0] + hash;
-					sap.m.URLHelper.redirect(url, true);
-					// Fin RL 10/12
+    // (si usás el modelo local)
+    var oModel = AppManagementHelper.getModel("UnifilarListModel");
+    oModel.setData({ Unifilares: data.results, index: (data.results || []).length + 1 });
 
-					// console.log("URL", window.location.hostname + "/site?siteId=" + siteId)
-					// RL 10/12 var Hash = `#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${oLicense.Empresa}&Anio=${oLicense.Anio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&RealIdUnifilar=${sRealIdUnifilar}&Centro=${oModelSelectionData.Region}&ET=${oModelSelectionData.ET}&Mode=C`;
-					// const sHost = (window.location.hostname + "/site?siteId=" + siteId + Hash)
-					// window.location.href = (sHost, "_blank")
+	// En tu payload, IdUnifilar es el número de versión
+	var sVersion        = String(oUnifilar.IdUnifilar);
+	var sRealIdUnifilar = String(oUnifilar.IdUnifilar); // si más adelante te llega un ID real distinto, lo cambiamos
+	var sTipo           = String(oUnifilar.TipoUnifilar || "");
 
 
-					// //window.open(sHost, "_blank");
-					// // var sHost =
-					// // 	`https://${window.location.host}/sites/fiorilaunchpad#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${oLicense.Empresa}&Anio=${oLicense.Anio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&RealIdUnifilar=${sRealIdUnifilar}&Centro=${oModelSelectionData.Region}&ET=${oModelSelectionData.ET}&Mode=C`;
-					// // window.open(sHost, "_blank");
-					// RL 10/12 location.hash = "GestionUnifilares-Display?Empresa=" + `LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${oLicense.Empresa}&Anio=${oLicense.Anio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&RealIdUnifilar=${sRealIdUnifilar}&Centro=${oModelSelectionData.Region}&ET=${oModelSelectionData.ET}&Mode=C`;
-					//location.hash = Hash
+    // Si aún así no se pudo, NO bloqueo: uso fallback "1" y dejo log.
+    if (!sVersion) {
+      console.warn("[unifilarValid] No se pudo resolver la versión; uso fallback '1'. Item:", oUnifilar);
+      sVersion = "1";
+    }
 
-					// const currentHash = Hash;
+    // índice temporal
+    var sIndex = (new Date().valueOf().toString(36) + Math.random().toString(36).slice(2)).slice(1, 19);
 
-					// // Crear la URL para la nueva pestaña
-					// const newUrl = `${location.origin}/site?siteId=${siteId}${currentHash}`;
+    // Issue #498
+    var oLicencia = AppManagementHelper.getModel("LicenseJsonModel").getData();
+    var sLicenciaCreada = (oLicencia.Id && oLicencia.Tipo === "L") ? oLicencia.Id : "";
 
-					//}
-				}
-			}, $.proxy(this.onErrorGetUnifilares, this));
-		},
+    var oModelSelectionData = AppManagementHelper.getModel("SelectionUnifilarModel").getData();
+
+    // CrossApp nav (ojo con 'Id': acá es la licencia)
+    var navigationService = sap.ushell.Container.getService('CrossApplicationNavigation');
+    var hash = navigationService.hrefForExternal({
+      target: { semanticObject: 'GestionUnifilaresV1', action: 'Display' },
+      params: {
+        LicenciaCreada : sLicenciaCreada,
+        Tipo           : String(oUnifilar.TipoUnifilar || ""),
+        Version        : String(oUnifilar.IdUnifilar),          // ✅ ahora viaja
+        Empresa        : oLicense.Empresa,
+        Anio           : oLicense.Anio,
+        Id             : oLicense.Idunifilar,    // ✅ más consistente que Idunifilar
+        IdUnifilar     : sIndex,              // temporal
+        RealIdUnifilar : String(oUnifilar.IdUnifilar),     // lo que venga del item (texto o id)
+        Centro         : oModelSelectionData.Region,
+        ET             : oModelSelectionData.ET,
+        Mode           : "C"
+      }
+    });
+
+    var url = window.location.href.split('#')[0] + hash;
+    sap.m.URLHelper.redirect(url, true);
+
+  }, $.proxy(this.onErrorGetUnifilares, this));
+},
+
+
 		openUnifilarURL: function (oEvent) {
 			var oUnifilar = oEvent.getSource().getBindingContext("UnifilaresFileListModel").getObject()
+			console.log("[openUnifilarURL] item clickeado:", oUnifilar);
+
 			this.unifilarValid(oUnifilar)
 		},
 

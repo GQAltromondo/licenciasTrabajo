@@ -285,6 +285,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Main", {
 						iconFirst: true,
 						text: "Tramitacion Masiva",
 						tooltip: "Tramitacion Masiva",
+						
 						enabled: {
 							parts: ["UserJsonModel>/roles", "permisosModel>/"],
 							//uso el mismo que el boton del listado principal
@@ -295,7 +296,9 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Main", {
 							//uso el mismo que el boton del listado principal
 							formatter: oController.rolVisualization("listado/tramitacionMasiva")
 						},
-						press: [oController.openMassiveTramitationAddCompanyDialog, oController]
+						press: [oController.onMassivePress, oController]
+
+
 					}).addStyleClass("buttonInverted"),
 					new sap.m.Text({
 						text: "{version>/version}"
