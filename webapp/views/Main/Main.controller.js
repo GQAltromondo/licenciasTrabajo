@@ -990,52 +990,52 @@ sap.ui.define([
 				Days: aItemDays
 			});*/
 		},
-// Identificador estable de una licencia en la tabla
-// Identificador estable
-_keyFor: function (lic) {
-  return [lic.Empresa, lic.Anio, lic.Id].join("|");
-},
+		// Identificador estable de una licencia en la tabla
+		// Identificador estable
+		_keyFor: function (lic) {
+			return [lic.Empresa, lic.Anio, lic.Id].join("|");
+		},
 
-_getSelectedKeys: function () {
-  return this.getLicenseTable()
-    .getSelectedContexts()
-    .map(c => this._keyFor(c.getObject()));
-},
+		_getSelectedKeys: function () {
+			return this.getLicenseTable()
+				.getSelectedContexts()
+				.map(c => this._keyFor(c.getObject()));
+		},
 
-_findLicenseInModelByKey: function (key) {
-  const [Empresa, Anio, Id] = key.split("|");
-  const a = AppManagementHelper.getModel("LicencesListJsonModel").getData().Licenses || [];
-  return a.find(l => l.Empresa === Empresa && l.Anio === Anio && l.Id === Id);
-},
+		_findLicenseInModelByKey: function (key) {
+			const [Empresa, Anio, Id] = key.split("|");
+			const a = AppManagementHelper.getModel("LicencesListJsonModel").getData().Licenses || [];
+			return a.find(l => l.Empresa === Empresa && l.Anio === Anio && l.Id === Id);
+		},
 
-_restoreSelectionFromKeys: function (keys) {
-  const set = new Set(keys);
-  const table = this.getLicenseTable();
-  table.removeSelections(true);
-  table.getItems().forEach(item => {
-    const o = item.getBindingContext("LicencesListJsonModel")?.getObject();
-    if (o && set.has(this._keyFor(o))) {
-      table.setSelectedItem(item, true);
-    }
-  });
-},
+		_restoreSelectionFromKeys: function (keys) {
+			const set = new Set(keys);
+			const table = this.getLicenseTable();
+			table.removeSelections(true);
+			table.getItems().forEach(item => {
+				const o = item.getBindingContext("LicencesListJsonModel")?.getObject();
+				if (o && set.has(this._keyFor(o))) {
+					table.setSelectedItem(item, true);
+				}
+			});
+		},
 
-// >>> NUEVO: sleep fijo de 5s (o ms parametrizable)
-_sleep: function (ms) {
-  return new Promise(res => setTimeout(res, ms));
-},
+		// >>> NUEVO: sleep fijo de 5s (o ms parametrizable)
+		_sleep: function (ms) {
+			return new Promise(res => setTimeout(res, ms));
+		},
 
 
-// Espera a que termine el refresh (datos + render) antes de continuar
-_waitListRendered: function () {
-  const table = this.getLicenseTable();
-  return new Promise(resolve => {
-    const binding = table.getBinding("items");
-    binding.attachEventOnce("dataReceived", () => {
-      table.attachEventOnce("updateFinished", () => resolve());
-    });
-  });
-},
+		// Espera a que termine el refresh (datos + render) antes de continuar
+		_waitListRendered: function () {
+			const table = this.getLicenseTable();
+			return new Promise(resolve => {
+				const binding = table.getBinding("items");
+				binding.attachEventOnce("dataReceived", () => {
+					table.attachEventOnce("updateFinished", () => resolve());
+				});
+			});
+		},
 
 
 
@@ -1051,196 +1051,94 @@ _waitListRendered: function () {
 				return true;
 			}
 		},
-		
+
 
 		clearTramitMassiveModal: function () {
 			AppManagementHelper.getModel("TramitacionMasivaListJsonModel").getData().Tramitaciones = [];
 		},
 		// === helpers de clave/estado/selección ===
-_getLicenseKey: function (oLic) {
-  // usa la misma combinación que ya usás en tu app
-  return [oLic.Empresa, oLic.Anio, oLic.Id, oLic.Tipo].join("|");
-},
-_getStatusTuple: function (oLic) {
-  return { Licstat: oLic.Licstat || "", Substatus: oLic.Substatus || "" };
-},
-_reselectByKeys: function (aKeys) {
-  var oTable = this.byId("auditTable");
-  var aItems = oTable.getItems();
-  oTable.removeSelections(true);
-  aItems.forEach(function (it) {
-    var oCtx = it.getBindingContext("LicencesListJsonModel");
-    if (!oCtx) return;
-    var oLic = oCtx.getObject();
-    var key = this._getLicenseKey(oLic);
-    if (aKeys.indexOf(key) > -1) {
-      it.setSelected(true);
-    }
-  }.bind(this));
-},
+		_getLicenseKey: function (oLic) {
+			// usa la misma combinación que ya usás en tu app
+			return [oLic.Empresa, oLic.Anio, oLic.Id, oLic.Tipo].join("|");
+		},
+		_getStatusTuple: function (oLic) {
+			return { Licstat: oLic.Licstat || "", Substatus: oLic.Substatus || "" };
+		},
+		_reselectByKeys: function (aKeys) {
+			var oTable = this.byId("auditTable");
+			var aItems = oTable.getItems();
+			oTable.removeSelections(true);
+			aItems.forEach(function (it) {
+				var oCtx = it.getBindingContext("LicencesListJsonModel");
+				if (!oCtx) return;
+				var oLic = oCtx.getObject();
+				var key = this._getLicenseKey(oLic);
+				if (aKeys.indexOf(key) > -1) {
+					it.setSelected(true);
+				}
+			}.bind(this));
+		},
 
-// Espera hasta que el binding "se estabilice" (longitud no cambia durante 2 ticks seguidos)
-_waitTableStable: function (oBinding, fnDone, iTimeoutMs) {
-  var t0 = Date.now(), lastLen = -1, stable = 0, timeout = iTimeoutMs || 6000;
-  var tick = function () {
-    var b = this.byId("auditTable").getBinding("items");
-    oBinding = b || oBinding;
-    if (!oBinding) return setTimeout(tick, 80);
-    var len = oBinding.getLength();
-    if (len === lastLen && len >= 0) stable++; else { stable = 0; lastLen = len; }
-    if (stable >= 2) return fnDone();
-    if (Date.now() - t0 > timeout) return fnDone();
-    setTimeout(tick, 80);
-  }.bind(this);
-  tick();
-},
-
-// === handler principal ===
-// onMassivePress: function () {
-//   var oTable = this.byId("auditTable");
-//   var aCtx = oTable.getSelectedContexts();
-//   if (!aCtx || !aCtx.length) {
-//     sap.m.MessageToast.show("Seleccioná al menos una licencia.");
-//     return;
-//   }
-
-//   // 1) snapshot de selección y estado
-//   var aSnapshot = aCtx.map(function (c) {
-//     var oLic = c.getObject();
-//     return {
-//       key: this._getLicenseKey(oLic),
-//       st: this._getStatusTuple(oLic)
-//     };
-//   }.bind(this));
-//   var aKeys = aSnapshot.map(function (x) { return x.key; });
-
-//   // 2) pedir refresh SIN limpiar selección
-//   this._skipCleanSelectionsOnce = true;
-//   BusyDialogHelper.open();
-
-//   // 3) esperar a que la tabla “se estabilice”
-//   var oBinding = oTable.getBinding("items");
-//   this.makeFilters(0);
-
-//   this._waitTableStable(oBinding, function () {
-//     // 4) re-seleccionar por clave
-//     this._reselectByKeys(aKeys);
-
-//     // 5) comparar estados post-refresh
-//     var mapNow = {};
-//     this.byId("auditTable").getItems().forEach(function (it) {
-//       var bc = it.getBindingContext("LicencesListJsonModel");
-//       if (!bc) return;
-//       var oLic = bc.getObject();
-//       mapNow[this._getLicenseKey(oLic)] = this._getStatusTuple(oLic);
-//     }.bind(this));
-
-//     var aChanged = [];
-//     aSnapshot.forEach(function (row) {
-//       var now = mapNow[row.key];
-//       if (now && (now.Licstat !== row.st.Licstat || now.Substatus !== row.st.Substatus)) {
-//         aChanged.push(row.key);
-//       }
-//     });
-
-//     BusyDialogHelper.close();
-
-//     if (aChanged.length) {
-//       // algo cambió: bloquear y avisar
-//       this.byId("auditTable").removeSelections(true);
-//       sap.m.MessageBox.information(
-//         "Alguna de las licencias seleccionadas cambió de estado tras el refresco.\n" +
-//         "Revisá el listado y volvé a presionar Tramitación Masiva."
-//       );
-//       return;
-//     }
-
-//     // 6) nada cambió → abrir el pop-up (manteniendo la selección)
-//     setTimeout(function () {
-//       this.openMassiveTramitationAddCompanyDialog();
-//     }.bind(this), 0);
-//   }.bind(this), 7000); // timeout opcional si querés
-// },
-// onMassivePress: function () {
-//   var oTable = this.byId("auditTable");
-//   var aCtx = oTable.getSelectedContexts();
-//   if (!aCtx || !aCtx.length) return sap.m.MessageToast.show("Seleccioná al menos una licencia.");
-
-//   // snapshot selección + estado
-//   var aSnapshot = aCtx.map(function (c) {
-//     var o = c.getObject();
-//     return { key: this._getLicenseKey(o), st: this._getStatusTuple(o) };
-//   }.bind(this));
-//   this._massiveSnapshot = aSnapshot; // <-- lo guardamos para re-verificar al confirmar
-//   var aKeys = aSnapshot.map(x => x.key);
-
-//   // refresh listado
-//   this._skipCleanSelectionsOnce = true;
-//   BusyDialogHelper.open();
-//   var oBinding = oTable.getBinding("items");
-//   this.makeFilters(0);
-
-//   this._waitTableStable(oBinding, function () {
-//     this._reselectByKeys(aKeys);
-//     // comparamos ahora
-//     var changed = this._hasAnyStateChangedSince(aSnapshot);
-//     BusyDialogHelper.close();
-
-//     if (changed) {
-//       this.byId("auditTable").removeSelections(true);
-//       return sap.m.MessageBox.information(
-//         "Alguna licencia cambió de estado tras el refresco.\n" +
-//         "Revisá el listado y volvé a presionar Tramitación Masiva."
-//       );
-//     }
-//     // sin cambios → abrir pop-up
-//     this.openMassiveTramitationAddCompanyDialog();
-//   }.bind(this));
-// },
-
-onMassivePress: function () {
-  var oTable = this.byId("auditTable");
-  var aCtx = oTable.getSelectedContexts();
-  if (!aCtx || !aCtx.length) return sap.m.MessageToast.show("Seleccioná al menos una licencia.");
-
-  // podés dejar este snapshot si te sirve para re-seleccionar
-  var aSnapshot = aCtx.map(function (c) {
-    var o = c.getObject();
-    return { key: this._getLicenseKey(o), st: this._getStatusTuple(o) };
-  }.bind(this));
-  this._massiveSnapshot = aSnapshot; // opcional
-  var aKeys = aSnapshot.map(x => x.key);
-
-  // refresh + re-selección
-  this._skipCleanSelectionsOnce = true;
-  BusyDialogHelper.open();
-  var oBinding = oTable.getBinding("items");
-  this.makeFilters(0);
-
-  this._waitTableStable(oBinding, function () {
-    this._reselectByKeys(aKeys);
-    BusyDialogHelper.close();
-
-    // 🚫 Sin chequeo ni popup intermedio
-    // ✅ Dejá que valide y muestre el popup bueno dentro de openMassiveTramitationAddCompanyDialog
-    this.openMassiveTramitationAddCompanyDialog();
-  }.bind(this));
-},
+		// Espera hasta que el binding "se estabilice" (longitud no cambia durante 2 ticks seguidos)
+		_waitTableStable: function (oBinding, fnDone, iTimeoutMs) {
+			var t0 = Date.now(), lastLen = -1, stable = 0, timeout = iTimeoutMs || 6000;
+			var tick = function () {
+				var b = this.byId("auditTable").getBinding("items");
+				oBinding = b || oBinding;
+				if (!oBinding) return setTimeout(tick, 80);
+				var len = oBinding.getLength();
+				if (len === lastLen && len >= 0) stable++; else { stable = 0; lastLen = len; }
+				if (stable >= 2) return fnDone();
+				if (Date.now() - t0 > timeout) return fnDone();
+				setTimeout(tick, 80);
+			}.bind(this);
+			tick();
+		},
 
 
-_hasAnyStateChangedSince: function (aSnapshot) {
-  var mapNow = {};
-  this.byId("auditTable").getItems().forEach(function (it) {
-    var bc = it.getBindingContext("LicencesListJsonModel");
-    if (!bc) return;
-    var o = bc.getObject();
-    mapNow[this._getLicenseKey(o)] = this._getStatusTuple(o);
-  }.bind(this));
-  return aSnapshot.some(function (row) {
-    var now = mapNow[row.key];
-    return !now || now.Licstat !== row.st.Licstat || now.Substatus !== row.st.Substatus;
-  });
-},
+		onMassivePress: function () {
+			var oTable = this.byId("auditTable");
+			var aCtx = oTable.getSelectedContexts();
+			if (!aCtx || !aCtx.length) return sap.m.MessageToast.show("Seleccioná al menos una licencia.");
+
+			// podés dejar este snapshot si te sirve para re-seleccionar
+			var aSnapshot = aCtx.map(function (c) {
+				var o = c.getObject();
+				return { key: this._getLicenseKey(o), st: this._getStatusTuple(o) };
+			}.bind(this));
+			this._massiveSnapshot = aSnapshot; // opcional
+			var aKeys = aSnapshot.map(x => x.key);
+
+			// refresh + re-selección
+			this._skipCleanSelectionsOnce = true;
+			BusyDialogHelper.open();
+			var oBinding = oTable.getBinding("items");
+			this.makeFilters(0);
+
+			this._waitTableStable(oBinding, function () {
+				this._reselectByKeys(aKeys);
+				BusyDialogHelper.close();
+
+				// 🚫 Sin chequeo ni popup intermedio
+				// ✅ Dejá que valide y muestre el popup bueno dentro de openMassiveTramitationAddCompanyDialog
+				this.openMassiveTramitationAddCompanyDialog();
+			}.bind(this));
+		},
+
+
+		_hasAnyStateChangedSince: function (aSnapshot) {
+			var mapNow = {};
+			this.byId("auditTable").getItems().forEach(function (it) {
+				var bc = it.getBindingContext("LicencesListJsonModel");
+				if (!bc) return;
+				var o = bc.getObject();
+				mapNow[this._getLicenseKey(o)] = this._getStatusTuple(o);
+			}.bind(this));
+			return aSnapshot.some(function (row) {
+				var now = mapNow[row.key];
+				return !now || now.Licstat !== row.st.Licstat || now.Substatus !== row.st.Substatus;
+			});
+		},
 
 
 
@@ -1273,12 +1171,12 @@ _hasAnyStateChangedSince: function (aSnapshot) {
 		// 						text: "Cancelar",
 		// 							press: [oController.closeMassiveTramitationDialog, oController]
 		// 						}).addStyleClass("buttonInverted floatLeft"),
-			
+
 		// 						new sap.m.Button({
 		// 							text: "Aceptar",
 		// 							press: [oController.tramitMassiveLicenses, oController]
 		// 							}).addStyleClass("buttonInverted floatRight")
-			
+
 		// 					],
 		// 					customData: [
 		// 						new sap.ui.core.CustomData({
@@ -1305,90 +1203,90 @@ _hasAnyStateChangedSince: function (aSnapshot) {
 		// 	}
 		// },
 		openMassiveTramitationAddCompanyDialog: async function () {
-  const selectedKeys = this._getSelectedKeys();
-  if (!selectedKeys.length) {
-    sap.m.MessageToast.show("Seleccioná al menos una licencia.");
-    return;
-  }
+			const selectedKeys = this._getSelectedKeys();
+			if (!selectedKeys.length) {
+				sap.m.MessageToast.show("Seleccioná al menos una licencia.");
+				return;
+			}
 
-  // Snapshot de estados antes de refrescar
-  const snapshot = this.getLicenseTable().getSelectedContexts().map(c => {
-    const l = c.getObject();
-    return {
-      key: this._keyFor(l),
-      Licstat: l.Licstat || "",
-      Substatus: l.Substatus || ""
-    };
-  });
+			// Snapshot de estados antes de refrescar
+			const snapshot = this.getLicenseTable().getSelectedContexts().map(c => {
+				const l = c.getObject();
+				return {
+					key: this._keyFor(l),
+					Licstat: l.Licstat || "",
+					Substatus: l.Substatus || ""
+				};
+			});
 
-  // Refresco + espera fija de 5s
-  BusyDialogHelper.open("", "Actualizando listado...");
-  this.makeFilters(0);                 // tu refresh actual
-  await this._sleep(5000);             // <<< esperamos 5 segundos
-  BusyDialogHelper.close();
+			// Refresco + espera fija de 5s
+			BusyDialogHelper.open("", "Actualizando listado...");
+			this.makeFilters(0);                 // tu refresh actual
+			await this._sleep(5000);             // <<< esperamos 5 segundos
+			BusyDialogHelper.close();
 
-  // Restaura selección y valida que sigan estando
-  this._restoreSelectionFromKeys(selectedKeys);
+			// Restaura selección y valida que sigan estando
+			this._restoreSelectionFromKeys(selectedKeys);
 
-  const stillSelected = this.getLicenseTable().getSelectedContexts();
-  if (!stillSelected.length) {
-    sap.m.MessageBox.warning("No hay licencias seleccionadas después de actualizar. Seleccionalas nuevamente.");
-    return;
-  }
+			const stillSelected = this.getLicenseTable().getSelectedContexts();
+			if (!stillSelected.length) {
+				sap.m.MessageBox.warning("No hay licencias seleccionadas después de actualizar. Seleccionalas nuevamente.");
+				return;
+			}
 
-  // Comparar estados post-refresh
-  const cambiadas = [];
-  snapshot.forEach(s => {
-    const act = this._findLicenseInModelByKey(s.key);
-    if (!act) return; // puede haber salido por filtros
-    if (act.Licstat !== s.Licstat || act.Substatus !== s.Substatus) {
-      const id = s.key.split("|")[2];
-      const antes = s.Licstat + (s.Substatus ? "/" + s.Substatus : "");
-      const ahora = act.Licstat + (act.Substatus ? "/" + act.Substatus : "");
-      cambiadas.push(`• ${id} (antes: ${antes} | ahora: ${ahora})`);
-    }
-  });
+			// Comparar estados post-refresh
+			const cambiadas = [];
+			snapshot.forEach(s => {
+				const act = this._findLicenseInModelByKey(s.key);
+				if (!act) return; // puede haber salido por filtros
+				if (act.Licstat !== s.Licstat || act.Substatus !== s.Substatus) {
+					const id = s.key.split("|")[2];
+					const antes = s.Licstat + (s.Substatus ? "/" + s.Substatus : "");
+					const ahora = act.Licstat + (act.Substatus ? "/" + act.Substatus : "");
+					cambiadas.push(`• ${id} (antes: ${antes} | ahora: ${ahora})`);
+				}
+			});
 
-  if (cambiadas.length) {
-    sap.m.MessageBox.warning(
-      "Alguna de las licencias seleccionadas cambió de estado durante la actualización.\n" +
-      "Revisá la selección y volvé a presionar Tramitación Masiva.\n\n" +
-      cambiadas.join("\n")
-    );
-    return;
-  }
+			if (cambiadas.length) {
+				sap.m.MessageBox.warning(
+					"Alguna de las licencias seleccionadas cambió de estado durante la actualización.\n" +
+					"Revisá la selección y volvé a presionar Tramitación Masiva.\n\n" +
+					cambiadas.join("\n")
+				);
+				return;
+			}
 
-  // Abrir el popup (tu código actual)
-  this.clearTramitMassiveModal();
-  const selectedItems = this.getLicenseTable().getSelectedContexts().map(c => c.getObject());
-  AppManagementHelper.getModel("TramitacionesCatalogoJsonModel").setProperty("/Tramitaciones", selectedItems);
+			// Abrir el popup (tu código actual)
+			this.clearTramitMassiveModal();
+			const selectedItems = this.getLicenseTable().getSelectedContexts().map(c => c.getObject());
+			AppManagementHelper.getModel("TramitacionesCatalogoJsonModel").setProperty("/Tramitaciones", selectedItems);
 
-  var pageName = "Transener.Operaciones.LicenciasTrabajo.views.Main.Dialogs.MassiveTramitation";
-  var component = FioriComponentHelper.getComponent();
-  var view = component.byId(pageName);
-  if (!view) {
-    var viewId = component.byId(pageName);
-    view = sap.ui.jsview(viewId, pageName);
-    var oDialog = new sap.m.Dialog({
-      title: "Tramitacion Masiva",
-      contentWidth: "60%",
-      modal: true,
-      content: view,
-      busy: "{TramitacionMasivaListJsonModel>/Busy}",
-      buttons: [
-        new sap.m.Button({ text: "Cancelar", press: [this.closeMassiveTramitationDialog, this] })
-          .addStyleClass("buttonInverted floatLeft"),
-        new sap.m.Button({ text: "Aceptar", press: [this.tramitMassiveLicenses, this] })
-          .addStyleClass("buttonInverted floatRight")
-      ]
-    }).addStyleClass("customDialog");
-    this.massiveTramitationDialog = oDialog;
-    this.getView().addDependent(oDialog);
-    oDialog.open();
-  } else {
-    this.massiveTramitationDialog.open();
-  }
-},
+			var pageName = "Transener.Operaciones.LicenciasTrabajo.views.Main.Dialogs.MassiveTramitation";
+			var component = FioriComponentHelper.getComponent();
+			var view = component.byId(pageName);
+			if (!view) {
+				var viewId = component.byId(pageName);
+				view = sap.ui.jsview(viewId, pageName);
+				var oDialog = new sap.m.Dialog({
+					title: "Tramitacion Masiva",
+					contentWidth: "60%",
+					modal: true,
+					content: view,
+					busy: "{TramitacionMasivaListJsonModel>/Busy}",
+					buttons: [
+						new sap.m.Button({ text: "Cancelar", press: [this.closeMassiveTramitationDialog, this] })
+							.addStyleClass("buttonInverted floatLeft"),
+						new sap.m.Button({ text: "Aceptar", press: [this.tramitMassiveLicenses, this] })
+							.addStyleClass("buttonInverted floatRight")
+					]
+				}).addStyleClass("customDialog");
+				this.massiveTramitationDialog = oDialog;
+				this.getView().addDependent(oDialog);
+				oDialog.open();
+			} else {
+				this.massiveTramitationDialog.open();
+			}
+		},
 
 
 
@@ -1558,200 +1456,152 @@ _hasAnyStateChangedSince: function (aSnapshot) {
 		setModalTramitacionesMasivasBusyState: function (state) {
 			this.getView().getModel("TramitacionMasivaListJsonModel").setProperty("/Busy", state);
 		},
-// 		_precheckSelectionState: function () {
-//   return new Promise(function (resolve) {
-//     var snap = this._massiveSnapshot || [];
-//     if (!snap.length) return resolve(false);
 
-//     // refresco rápido
-//     this._skipCleanSelectionsOnce = true;
-//     BusyDialogHelper.open();
-//     var oTable = this.byId("auditTable");
-//     var oBinding = oTable.getBinding("items");
-//     this.makeFilters(0);
+		_precheckSelectionState: function () {
+			return Promise.resolve(true); // sin popups, siempre continúa
+		},
+		_waitForTableUpdate: function (timeoutMs = 2000) {
+			return new Promise((resolve) => {
+				const oTable = this.getLicenseTable();
+				if (!oTable) return resolve();
 
-//     this._waitTableStable(oBinding, function () {
-//       // re-selecciono para no perder la selección visible
-//       this._reselectByKeys(snap.map(s => s.key));
-//       var changed = this._hasAnyStateChangedSince(snap);
-//       BusyDialogHelper.close();
+				const oBinding = oTable.getBinding("items");
+				if (!oBinding) return resolve();
 
-//      if (changed) {
-//         // cierro el pop-up si está abierto
-//    if (this.massiveTramitationDialog && this.massiveTramitationDialog.isOpen()) {
-//           this.massiveTramitationDialog.close();
-//         }
-//         sap.m.MessageBox.information(
-//       "Alguna de las licencias seleccionadas cambió de estado.\n" +
-//            "Volvé a seleccionar y presioná Tramitación Masiva nuevamente."
-//        );
-// 	   resolve(false);
-//        } else {
-//          resolve(true);
-//        }
-//     }.bind(this));
-//   }.bind(this));
-// },
-_precheckSelectionState: function () {
-  return Promise.resolve(true); // sin popups, siempre continúa
-},
-_waitForTableUpdate: function (timeoutMs = 2000) {
-  return new Promise((resolve) => {
-    const oTable = this.getLicenseTable();
-    if (!oTable) return resolve();
+				// Si no hay petición nueva, resolvemos en el próximo ciclo
+				let resolved = false;
+				const done = () => { if (!resolved) { resolved = true; resolve(); } };
 
-    const oBinding = oTable.getBinding("items");
-    if (!oBinding) return resolve();
+				// 1) dataReceived: típico en OData v2
+				oBinding.attachEventOnce("dataReceived", done);
 
-    // Si no hay petición nueva, resolvemos en el próximo ciclo
-    let resolved = false;
-    const done = () => { if (!resolved) { resolved = true; resolve(); } };
+				// 2) change/refresh: a veces GETWithFilters setea el mismo dataset y dispara change
+				oBinding.attachEventOnce("change", done);
+				oBinding.attachEventOnce("refresh", done);
 
-    // 1) dataReceived: típico en OData v2
-    oBinding.attachEventOnce("dataReceived", done);
-
-    // 2) change/refresh: a veces GETWithFilters setea el mismo dataset y dispara change
-    oBinding.attachEventOnce("change", done);
-    oBinding.attachEventOnce("refresh", done);
-
-    // 3) Fallback por si nada de lo anterior dispara
-    setTimeout(done, timeoutMs);
-  });
+				// 3) Fallback por si nada de lo anterior dispara
+				setTimeout(done, timeoutMs);
+			});
 
 
-},
-// Guarda snapshot (clave + estado) de la selección actual
-// _snapshotSelectionAndStates: function () {
-//   var oTable = this.byId("auditTable");
-//   var aCtx = oTable.getSelectedContexts() || [];
-//   this._massiveSnapshot = aCtx.map(function (c) {
-//     var o = c.getObject();
-//     return {
-//       key: [o.Empresa, o.Anio, o.Id, o.Tipo].join("|"),
-//       id: o.Id, // para mostrar en alerta
-//       Licstat: o.Licstat || "",
-//       Substatus: o.Substatus || ""
-//     };
-//   });
-// },
-// Guarda selección + estados (antes de refrescar)
-// Guarda selección y estados
-_snapshotSelectionAndStates: function () {
-  const ctxs = this.getLicenseTable().getSelectedContexts() || [];
-  const sel = ctxs.map(c => c.getObject());
-  this._selectionSnapshot = sel.map(o => ({
-    key: `${o.Empresa}-${o.Anio}-${o.Id}`, // ajustá si tu clave es otra
-    Licstat: o.Licstat
-  }));
-},
+		},
+	
+		_snapshotSelectionAndStates: function () {
+			const ctxs = this.getLicenseTable().getSelectedContexts() || [];
+			const sel = ctxs.map(c => c.getObject());
+			this._selectionSnapshot = sel.map(o => ({
+				key: `${o.Empresa}-${o.Anio}-${o.Id}`, // ajustá si tu clave es otra
+				Licstat: o.Licstat
+			}));
+		},
 
-// Re-selecciona luego del refresh
-_reselectFromSnapshot: function () {
-  if (!this._selectionSnapshot || !this._selectionSnapshot.length) return;
-  const table = this.getLicenseTable();
-  const items = table.getItems();
-  table.removeSelections(true);
-  items.forEach(it => {
-    const o = it.getBindingContext("LicencesListJsonModel")?.getObject();
-    if (!o) return;
-    const key = `${o.Empresa}-${o.Anio}-${o.Id}`;
-    if (this._selectionSnapshot.find(s => s.key === key)) {
-      table.setSelectedItem(it, true);
-    }
-  });
-},
+		// Re-selecciona luego del refresh
+		_reselectFromSnapshot: function () {
+			if (!this._selectionSnapshot || !this._selectionSnapshot.length) return;
+			const table = this.getLicenseTable();
+			const items = table.getItems();
+			table.removeSelections(true);
+			items.forEach(it => {
+				const o = it.getBindingContext("LicencesListJsonModel")?.getObject();
+				if (!o) return;
+				const key = `${o.Empresa}-${o.Anio}-${o.Id}`;
+				if (this._selectionSnapshot.find(s => s.key === key)) {
+					table.setSelectedItem(it, true);
+				}
+			});
+		},
 
-// Devuelve array de cambios detectados
-_detectStateChanges: function () {
-  if (!this._selectionSnapshot) return [];
-  const table = this.getLicenseTable();
-  const changes = [];
-  table.getItems().forEach(it => {
-    const o = it.getBindingContext("LicencesListJsonModel")?.getObject();
-    if (!o) return;
-    const key = `${o.Empresa}-${o.Anio}-${o.Id}`;
-    const snap = this._selectionSnapshot.find(s => s.key === key);
-    if (snap && snap.Licstat !== o.Licstat) {
-      changes.push({ id: o.Id, from: snap.Licstat, to: o.Licstat });
-    }
-  });
-  return changes;
-},
+		// Devuelve array de cambios detectados
+		_detectStateChanges: function () {
+			if (!this._selectionSnapshot) return [];
+			const table = this.getLicenseTable();
+			const changes = [];
+			table.getItems().forEach(it => {
+				const o = it.getBindingContext("LicencesListJsonModel")?.getObject();
+				if (!o) return;
+				const key = `${o.Empresa}-${o.Anio}-${o.Id}`;
+				const snap = this._selectionSnapshot.find(s => s.key === key);
+				if (snap && snap.Licstat !== o.Licstat) {
+					changes.push({ id: o.Id, from: snap.Licstat, to: o.Licstat });
+				}
+			});
+			return changes;
+		},
 
-_refreshListAndWait: async function () {
-  // Dispara tu refresh (makeFilters o lo que uses)
-  this.makeFilters(0);
-  try {
-    await this._waitForTableUpdate(2500); // subí un poco el timeout
-  } finally {
-    // nada
-  }
-  this._reselectFromSnapshot();
-},
+		_refreshListAndWait: async function () {
+			// Dispara tu refresh (makeFilters o lo que uses)
+			this.makeFilters(0);
+			try {
+				await this._waitForTableUpdate(2500); // subí un poco el timeout
+			} finally {
+				// nada
+			}
+			this._reselectFromSnapshot();
+		},
 
-// Refresca el listado, re-selecciona y devuelve array de claves que cambiaron estado
-_refreshAndDetectStateChanges: function () {
-  return new Promise(function (resolve) {
-    var oTable = this.byId("auditTable");
-    var aKeys = (this._massiveSnapshot || []).map(s => s.key);
+		// Refresca el listado, re-selecciona y devuelve array de claves que cambiaron estado
+		_refreshAndDetectStateChanges: function () {
+			return new Promise(function (resolve) {
+				var oTable = this.byId("auditTable");
+				var aKeys = (this._massiveSnapshot || []).map(s => s.key);
 
-    // no limpies la selección en este refresh
-    this._skipCleanSelectionsOnce = true;
-    BusyDialogHelper.open();
-    this.makeFilters(0);
+				// no limpies la selección en este refresh
+				this._skipCleanSelectionsOnce = true;
+				BusyDialogHelper.open();
+				this.makeFilters(0);
 
-    // esperar a que estabilice el binding
-    var waitStable = (cb => {
-      var lastLen = -1, stable = 0, t0 = Date.now();
-      (function tick() {
-        var b = oTable.getBinding("items");
-        var len = b ? b.getLength() : -1;
-        if (len === lastLen && len >= 0) stable++; else { stable = 0; lastLen = len; }
-        if (stable >= 2 || Date.now() - t0 > 6000) return cb();
-        setTimeout(tick, 80);
-      })();
-    });
+				// esperar a que estabilice el binding
+				var waitStable = (cb => {
+					var lastLen = -1, stable = 0, t0 = Date.now();
+					(function tick() {
+						var b = oTable.getBinding("items");
+						var len = b ? b.getLength() : -1;
+						if (len === lastLen && len >= 0) stable++; else { stable = 0; lastLen = len; }
+						if (stable >= 2 || Date.now() - t0 > 6000) return cb();
+						setTimeout(tick, 80);
+					})();
+				});
 
-    waitStable(function () {
-      // re-selecciono visualmente
-      oTable.removeSelections(true);
-      oTable.getItems().forEach(function (it) {
-        var bc = it.getBindingContext("LicencesListJsonModel");
-        if (!bc) return;
-        var o = bc.getObject();
-        var key = [o.Empresa, o.Anio, o.Id, o.Tipo].join("|");
-        if (aKeys.indexOf(key) > -1) it.setSelected(true);
-      });
+				waitStable(function () {
+					// re-selecciono visualmente
+					oTable.removeSelections(true);
+					oTable.getItems().forEach(function (it) {
+						var bc = it.getBindingContext("LicencesListJsonModel");
+						if (!bc) return;
+						var o = bc.getObject();
+						var key = [o.Empresa, o.Anio, o.Id, o.Tipo].join("|");
+						if (aKeys.indexOf(key) > -1) it.setSelected(true);
+					});
 
-      // mapa de estados actuales
-      var now = {};
-      oTable.getItems().forEach(function (it) {
-        var bc = it.getBindingContext("LicencesListJsonModel");
-        if (!bc) return;
-        var o = bc.getObject();
-        now[[o.Empresa,o.Anio,o.Id,o.Tipo].join("|")] = {
-          Licstat: o.Licstat || "",
-          Substatus: o.Substatus || ""
-        };
-      });
+					// mapa de estados actuales
+					var now = {};
+					oTable.getItems().forEach(function (it) {
+						var bc = it.getBindingContext("LicencesListJsonModel");
+						if (!bc) return;
+						var o = bc.getObject();
+						now[[o.Empresa, o.Anio, o.Id, o.Tipo].join("|")] = {
+							Licstat: o.Licstat || "",
+							Substatus: o.Substatus || ""
+						};
+					});
 
-      BusyDialogHelper.close();
+					BusyDialogHelper.close();
 
-      // detectar cambios y armar lista para alerta
-      var changed = [];
-      (this._massiveSnapshot || []).forEach(function (row) {
-        var cur = now[row.key];
-        if (!cur) {
-          changed.push({ id: row.id, from: row.Licstat+"/"+row.Substatus, to: "—" });
-        } else if (cur.Licstat !== row.Licstat || cur.Substatus !== row.Substatus) {
-          changed.push({ id: row.id, from: row.Licstat+"/"+row.Substatus, to: cur.Licstat+"/"+cur.Substatus });
-        }
-      });
+					// detectar cambios y armar lista para alerta
+					var changed = [];
+					(this._massiveSnapshot || []).forEach(function (row) {
+						var cur = now[row.key];
+						if (!cur) {
+							changed.push({ id: row.id, from: row.Licstat + "/" + row.Substatus, to: "—" });
+						} else if (cur.Licstat !== row.Licstat || cur.Substatus !== row.Substatus) {
+							changed.push({ id: row.id, from: row.Licstat + "/" + row.Substatus, to: cur.Licstat + "/" + cur.Substatus });
+						}
+					});
 
-      resolve(changed); // array vacío => no hubo cambios
-    }.bind(this));
-  }.bind(this));
-},
+					resolve(changed); // array vacío => no hubo cambios
+				}.bind(this));
+			}.bind(this));
+		},
 
 
 		// tramitMassiveLicenses: function () {
@@ -1759,7 +1609,7 @@ _refreshAndDetectStateChanges: function () {
 		// 	var aTramitaciones = AppManagementHelper.getModel("TramitacionMasivaListJsonModel").getData().Tramitaciones;
 		// 	var bShowConfirm = false;
 		// 	var that = this;
-			
+
 
 		// 	// Valido si todos los campos necesarios estan completos.
 		// 	if (this.validTramitaciones(aTramitaciones)) {
@@ -1794,42 +1644,42 @@ _refreshAndDetectStateChanges: function () {
 		// 	}
 		// },
 		tramitMassiveLicenses: async function () {
-  // 0) pre-chequeo final: refresca, re-selecciona y verifica cambios de estado
-//   const ok = await this._precheckSelectionState();
-//   if (!ok) return; // abortar si hubo cambios
+			// 0) pre-chequeo final: refresca, re-selecciona y verifica cambios de estado
+			//   const ok = await this._precheckSelectionState();
+			//   if (!ok) return; // abortar si hubo cambios
 
-  var aLicenciasSelected = AppManagementHelper.getModel("TramitacionesCatalogoJsonModel").getData().Tramitaciones;
-  var aTramitaciones    = AppManagementHelper.getModel("TramitacionMasivaListJsonModel").getData().Tramitaciones;
-  var that = this;
+			var aLicenciasSelected = AppManagementHelper.getModel("TramitacionesCatalogoJsonModel").getData().Tramitaciones;
+			var aTramitaciones = AppManagementHelper.getModel("TramitacionMasivaListJsonModel").getData().Tramitaciones;
+			var that = this;
 
-  // 1) validación de campos (igual que antes)
-  if (this.validTramitaciones(aTramitaciones)) {
-    this.setModalTramitacionesMasivasBusyState(true);
-    ReportesService.getLicenciasFullData(aLicenciasSelected).then((aLicenciaFull) => {
-      var aLicenciasSelectedFull = aLicenciaFull;
-      this.checkSiLicenciasTienenTramitaciones(aLicenciasSelectedFull, aTramitaciones).then(function (result) {
-        that.setModalTramitacionesMasivasBusyState(false);
-        if (result === true) {
-          sap.m.MessageBox.show(
-            "Hay licencias con agentes cargados, desea sobrescribir?", {
-            icon: sap.m.MessageBox.Icon.INFORMATION,
-            title: "Alerta",
-            actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
-            onClose: function (oAction) {
-              if (oAction == 'YES') {
-                that._tramitarMasivamente(aLicenciasSelectedFull, aTramitaciones);
-              }
-            }
-          });
-        } else {
-          that._tramitarMasivamente(aLicenciasSelectedFull, aTramitaciones);
-        }
-      });
-    });
-  } else {
-    MessageBoxHelper.showAlert("Alerta", "Debe completar los campos faltantes.");
-  }
-},
+			// 1) validación de campos (igual que antes)
+			if (this.validTramitaciones(aTramitaciones)) {
+				this.setModalTramitacionesMasivasBusyState(true);
+				ReportesService.getLicenciasFullData(aLicenciasSelected).then((aLicenciaFull) => {
+					var aLicenciasSelectedFull = aLicenciaFull;
+					this.checkSiLicenciasTienenTramitaciones(aLicenciasSelectedFull, aTramitaciones).then(function (result) {
+						that.setModalTramitacionesMasivasBusyState(false);
+						if (result === true) {
+							sap.m.MessageBox.show(
+								"Hay licencias con agentes cargados, desea sobrescribir?", {
+								icon: sap.m.MessageBox.Icon.INFORMATION,
+								title: "Alerta",
+								actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+								onClose: function (oAction) {
+									if (oAction == 'YES') {
+										that._tramitarMasivamente(aLicenciasSelectedFull, aTramitaciones);
+									}
+								}
+							});
+						} else {
+							that._tramitarMasivamente(aLicenciasSelectedFull, aTramitaciones);
+						}
+					});
+				});
+			} else {
+				MessageBoxHelper.showAlert("Alerta", "Debe completar los campos faltantes.");
+			}
+		},
 
 
 		getLicenseStatusByOperationType: function (sOperation) {
@@ -4209,18 +4059,18 @@ _refreshAndDetectStateChanges: function () {
 			// ya que el orden lo da back end , para eso se utilizo el parametro dontFilter
 			LicenseService.GETWithFilters(aFilters, bDontFilter);
 			this.localFiltering();
-			 // 👇 solo limpia si NO pedimos “saltarlo” desde Tramitación Masiva
-  if (!this._skipCleanSelectionsOnce) {
-    this.cleanSelections();
-  } else {
-    this._skipCleanSelectionsOnce = false; // consumir el “pase”
-  }
-},
+			// 👇 solo limpia si NO pedimos “saltarlo” desde Tramitación Masiva
+			if (!this._skipCleanSelectionsOnce) {
+				this.cleanSelections();
+			} else {
+				this._skipCleanSelectionsOnce = false; // consumir el “pase”
+			}
+		},
 
-cleanSelections: function () {
-  if (this._skipCleanSelectionsOnce) { this._skipCleanSelectionsOnce = false; return; }
-  this.getView().byId("auditTable").removeSelections(true);
-},
+		cleanSelections: function () {
+			if (this._skipCleanSelectionsOnce) { this._skipCleanSelectionsOnce = false; return; }
+			this.getView().byId("auditTable").removeSelections(true);
+		},
 
 
 		getEval: function (filterExtendedWithoutWerks) {

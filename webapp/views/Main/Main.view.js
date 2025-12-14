@@ -212,16 +212,53 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Main", {
 		var mainPage = new sap.m.Page({
 			title: "{i18n>title}",
 			floatingFooter: false,
-			enableScrolling: true,
+			enableScrolling: false,
 			showHeader: false,
 			footer: new sap.m.Bar({
 				contentLeft: [
-					new sap.m.Button({
+					new sap.m.MenuButton({
 						text: "Reportes",
 						menuPosition: sap.ui.core.Popup.Dock.BeginTop,
-						press: [oController.openReportesSheet, oController]
+						menu: new sap.m.Menu({
+							items: [
+								new sap.m.MenuItem({
+									icon: "sap-icon://doc-attachment",
+									text: "Solicitud de acuerdo",
+									press: [oController.solicitudAcuerdoExport, oController]
+								}),
+								new sap.m.MenuItem({
+									icon: "sap-icon://excel-attachment",
+									text: "Programación semanal (reunion CAMMESA)",
+									press: [oController.handleSemanalCammesa, oController]
+								}),
+								new sap.m.MenuItem({
+									icon: "sap-icon://excel-attachment",
+									text: "Comparación de licencias.",
+									press: [oController.reportLicenseComparison, oController]
+								}),
+								new sap.m.MenuItem({
+									icon: "sap-icon://pdf-attachment",
+									text: "Parte Diario de LT autorizadas.",
+									press: [oController.handleDiaryPartLT, oController]
+								}),
+								new sap.m.MenuItem({
+									icon: "sap-icon://excel-attachment",
+									text: "Parte de Trabajos Diario y Semanal.",
+									press: [oController.handleWorkReportCammesa, oController]
+								}),
+								new sap.m.MenuItem({
+									icon: "sap-icon://pdf-attachment",
+									text: "Reporte de Licencias.",
+									press: [oController.downloadLicenses, oController]
+								}),
+								new sap.m.MenuItem({
+									icon: "sap-icon://pdf-attachment",
+									text: "Exportar Solicitudes y Licencias",
+									press: [oController.exportMultipleLics, oController]
+								})
+							]
+						})
 					}).addStyleClass("buttonInverted"),
-
 					new sap.m.Button({
 						iconFirst: true,
 						text: "{i18n>goToGantt}",
@@ -285,7 +322,6 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Main", {
 						iconFirst: true,
 						text: "Tramitacion Masiva",
 						tooltip: "Tramitacion Masiva",
-						
 						enabled: {
 							parts: ["UserJsonModel>/roles", "permisosModel>/"],
 							//uso el mismo que el boton del listado principal
