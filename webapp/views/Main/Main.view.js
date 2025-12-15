@@ -332,7 +332,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Main", {
 							//uso el mismo que el boton del listado principal
 							formatter: oController.rolVisualization("listado/tramitacionMasiva")
 						},
-						press: [oController.onMassivePress, oController]
+						press: [oController.checkTramitacionMasivaEstados, oController]
 
 
 					}).addStyleClass("buttonInverted"),
