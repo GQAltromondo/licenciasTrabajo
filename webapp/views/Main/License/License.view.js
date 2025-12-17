@@ -101,15 +101,15 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								formatter: oController.rolStatusEdition("transferencia/")
 							},
 							items: {
-										path: "JefesPreviewModel>/",
-										templateShareable: false,
-										length:2000,
-										template: new sap.ui.core.Item({
-											key: "{JefesPreviewModel>Key}",
-											text: "{JefesPreviewModel>Key} - {JefesPreviewModel>Display}"
-										})
-									}
-					
+								path: "JefesPreviewModel>/",
+								templateShareable: false,
+								length: 2000,
+								template: new sap.ui.core.Item({
+									key: "{JefesPreviewModel>Key}",
+									text: "{JefesPreviewModel>Key} - {JefesPreviewModel>Display}"
+								})
+							}
+
 						}),
 						new sap.m.Label({
 							text: "Fecha y hora",
@@ -524,27 +524,38 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 			noDataText: "No hay colocaciones",
 			columns: [
 				new sap.m.Column({
-					width: "20%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Fecha"
 					})
 				}),
 				new sap.m.Column({
-					width: "15%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Hora"
 					})
 				}),
 				new sap.m.Column({
-					width: "20%",
+					width: "200px",
+					header: new sap.m.Text({
+						text: "COT/COTDT"
+					})
+				}),
+				new sap.m.Column({
+					width: "200px",
 					header: new sap.m.Text({
 						text: "ET"
 					})
 				}),
 				new sap.m.Column({
-					width: "40%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Comentarios"
+					})
+				}),
+				new sap.m.Column({
+					header: new sap.m.Text({
+						text: "Tipo"
 					})
 				}),
 				new sap.m.Column({
@@ -625,9 +636,24 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							value: "{ColocacionTableJsonModel>Coment}",
 							width: "100%"
 						}),
+						new sap.m.RadioButtonGroup({
+								enabled: {
+								parts: [
+									"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"ColocacionTableJsonModel>enabled", "ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("colocacion/")
+							},
+							columns: 2,
+							selectedIndex: "{ColocacionTableJsonModel>Tipo}",
+							buttons: [
+								new sap.m.RadioButton({ text: "PAT" }),
+								new sap.m.RadioButton({ text: "PAT/A" })
+							]
+						}),
 
 						new sap.m.Button({
-							text: "Agregar ET",
+							text: "Colocar",
 							enabled: {
 								parts: [
 									"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
@@ -657,25 +683,25 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 			noDataText: "No hay retiros",
 			columns: [
 				new sap.m.Column({
-					width: "20%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Fecha"
 					})
 				}),
 				new sap.m.Column({
-					width: "15%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Hora"
 					})
 				}),
 				new sap.m.Column({
-					width: "20%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "ET"
 					})
 				}),
 				new sap.m.Column({
-					width: "40%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Comentarios"
 					})
@@ -761,7 +787,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 						}),
 
 						new sap.m.Button({
-							text: "Agregar ET",
+							text: "Retirar",
 							enabled: {
 								parts: [
 									"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
@@ -791,25 +817,37 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 			noDataText: "No hay inhibiciones",
 			columns: [
 				new sap.m.Column({
-					width: "20%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Fecha"
 					})
 				}),
 				new sap.m.Column({
-					width: "15%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Hora"
 					})
 				}),
 				new sap.m.Column({
-					width: "20%",
+					width: "200px",
+					header: new sap.m.Text({
+						text: "COT/COTDT"
+					})
+				}),
+				new sap.m.Column({
+					width: "200px",
 					header: new sap.m.Text({
 						text: "ET"
 					})
 				}),
 				new sap.m.Column({
-					width: "40%",
+					width: "200px",
+					header: new sap.m.Text({
+						text: "Técnico de ET"
+					})
+				}),
+				new sap.m.Column({
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Comentarios"
 					})
@@ -862,7 +900,28 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							dateValue: "{InhibicionTableJsonModel>Time}",
 							displayFormat: "HH:mm"
 						}),
+						new sap.m.Text({
+							text: "{InhibicionTableJsonModel>Cot}"
+						}),
+						new sap.m.ComboBox({
+							width: "100%",
+							enabled: {
+								parts: [
+									"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"InhibicionTableJsonModel>enabled", "InhibicionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("inhibicion/")
+							},
 
+							selectedKey: "{InhibicionTableJsonModel>Tplnr}",
+							items: {
+								path: "EstacionesJsonModel>/EstacionesPorRegion",
+								template: new sap.ui.core.Item({
+									key: "{EstacionesJsonModel>Codigo}",
+									text: "{EstacionesJsonModel>Codigo} - {EstacionesJsonModel>Descripcion}"
+								})
+							},
+						}),
 						new sap.m.ComboBox({
 							width: "100%",
 							enabled: {
@@ -895,7 +954,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 						}),
 
 						new sap.m.Button({
-							text: "Agregar ET",
+							text: "Inhibir",
 							enabled: {
 								parts: [
 									"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
@@ -925,25 +984,37 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 			noDataText: "No hay habilitaciones",
 			columns: [
 				new sap.m.Column({
-					width: "20%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Fecha"
 					})
 				}),
 				new sap.m.Column({
-					width: "15%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Hora"
 					})
 				}),
 				new sap.m.Column({
-					width: "20%",
+					width: "200px",
+					header: new sap.m.Text({
+						text: "COT/COTDT"
+					})
+				}),
+				new sap.m.Column({
+					width: "200px",
 					header: new sap.m.Text({
 						text: "ET"
 					})
 				}),
 				new sap.m.Column({
-					width: "40%",
+					width: "200px",
+					header: new sap.m.Text({
+						text: "Técnico de ET"
+					})
+				}),
+				new sap.m.Column({
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Comentarios"
 					})
@@ -999,7 +1070,29 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							displayFormat: "HH:mm",
 							valueFormat: "HH:mm"
 						}),
+						new sap.m.Text({
+							text: "{HabilitacionTableJsonModel>Cot}"
+						}),
+						new sap.m.ComboBox({
+							width: "100%",
+							enabled: {
+								parts: [
+									"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"HabilitacionTableJsonModel>enabled", "HabilitacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("habilitacion/")
+							},
+							change: [oController.handleLegacyValidationDeliveries, oController],
 
+							selectedKey: "{HabilitacionTableJsonModel>Tplnr}",
+							items: {
+								path: "EstacionesJsonModel>/EstacionesPorRegion",
+								template: new sap.ui.core.Item({
+									key: "{EstacionesJsonModel>Codigo}",
+									text: "{EstacionesJsonModel>Codigo} - {EstacionesJsonModel>Descripcion}"
+								})
+							},
+						}),
 						new sap.m.ComboBox({
 							width: "100%",
 							enabled: {
@@ -1034,7 +1127,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 						}),
 
 						new sap.m.Button({
-							text: "Agregar ET",
+							text: "Habilitar",
 							enabled: {
 								parts: [
 									"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
@@ -1405,9 +1498,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 										],
 										formatter: oController.rolStatusEdition("entregas/")
 									},
-									//change: [oController.handleLegacyValidationDeliveries, oController],
-									// valueState: "{DeliveryTableJsonModel>TejtValueState}",
-									// valueStateText: "{DeliveryTableJsonModel>TejtValueStateText}",
+
 									selectedKey: "{DeliveryTableJsonModel>TecET}",
 									items: {
 										templateShareable: false,
@@ -1416,16 +1507,6 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 											key: "{PersonalHabilitadoModel>Legajo}",
 											text: "{PersonalHabilitadoModel>Nombre} {PersonalHabilitadoModel>Legajo}"
 										}),
-										// filters: new sap.ui.model.Filter([
-										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M04"),
-										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M08"),
-										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M12"),
-										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M16"),
-										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M20"),
-										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M24"),
-										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M28"),
-										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "PE5")
-										// ], false)
 									}
 								}),
 								new sap.m.Text({
@@ -4188,12 +4269,12 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									new sap.m.Panel({
 										expandable: true,
 										expanded: true,
-										headerText: "Colocacion y retiro de PAT",
+										headerText: "Colocación y retiro de PAT",
 										content: [
 											new sap.m.Panel({
 												expandable: true,
 												expanded: true,
-												headerText: "Colocacion",
+												headerText: "Colocar",
 												content: [
 													oColocacionTable
 												]
@@ -4202,7 +4283,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 											new sap.m.Panel({
 												expandable: true,
 												expanded: true,
-												headerText: "Retiro de PAT",
+												headerText: "Retirar",
 												content: [
 													oRetiroTable
 												]
@@ -4212,12 +4293,12 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									new sap.m.Panel({
 										expandable: true,
 										expanded: true,
-										headerText: "Inhibicion y habilitacion de Recierre",
+										headerText: "Inhibición y habilitación de Recierre",
 										content: [
 											new sap.m.Panel({
 												expandable: true,
 												expanded: true,
-												headerText: "Inhibicion",
+												headerText: "Inhibir",
 												content: [
 													oInhibicionTable
 												]
@@ -4226,7 +4307,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 											new sap.m.Panel({
 												expandable: true,
 												expanded: true,
-												headerText: "Habilitacion",
+												headerText: "Habilitar",
 												content: [
 													oHabilitacionTable
 												]

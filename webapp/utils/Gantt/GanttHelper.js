@@ -7,7 +7,7 @@ sap.ui.define([
 
 		formatData: function (registros) {
 			var timeZoneOffsetMs = new Date().getTimezoneOffset() * 60 * 1000;
-			
+
 			registros.forEach(function (registro) {
 				registro.LunesI = new Date(registro.Lunes.getTime() + registro.LunesI.ms + timeZoneOffsetMs);
 				registro.LunesF = new Date(registro.Lunes.getTime() + registro.LunesF.ms + timeZoneOffsetMs);
@@ -23,52 +23,57 @@ sap.ui.define([
 				registro.SabadoF = new Date(registro.Sabado.getTime() + registro.SabadoF.ms + timeZoneOffsetMs);
 				registro.DomingoI = new Date(registro.Domingo.getTime() + registro.DomingoI.ms + timeZoneOffsetMs);
 				registro.DomingoF = new Date(registro.Domingo.getTime() + registro.DomingoF.ms + timeZoneOffsetMs);
-				
+
 			});
 		},
-		
-		getDataOnlyWithDates: function(registros){
+
+		getDataOnlyWithDates: function (registros) {
 			var that = this;
 			var timeZoneOffsetMs = new Date().getTimezoneOffset() * 60 * 1000;
 			var registrosFiltrados = [];
-			
-			registros.map(function(item){
-				var LunesI	   =	new Date(item.Lunes.getTime()	  + item.LunesI.ms     + timeZoneOffsetMs);
-				var LunesF     =	new Date(item.Lunes.getTime()	  + item.LunesF.ms     + timeZoneOffsetMs);
-				var MartesI    =	new Date(item.Martes.getTime()    + item.MartesI.ms    + timeZoneOffsetMs);
-				var MartesF    =	new Date(item.Martes.getTime()	  + item.MartesF.ms    + timeZoneOffsetMs);
-				var MiercolesI =	new Date(item.Miercoles.getTime() + item.MiercolesI.ms + timeZoneOffsetMs);
-				var MiercolesF =	new Date(item.Miercoles.getTime() + item.MiercolesF.ms + timeZoneOffsetMs);
-				var JuevesI    =	new Date(item.Jueves.getTime()	  + item.JuevesI.ms    + timeZoneOffsetMs);
-				var JuevesF    =	new Date(item.Jueves.getTime()    + item.JuevesF.ms    + timeZoneOffsetMs);
-				var ViernesI   =	new Date(item.Viernes.getTime()   + item.ViernesI.ms   + timeZoneOffsetMs);
-				var ViernesF   =	new Date(item.Viernes.getTime()   + item.ViernesF.ms   + timeZoneOffsetMs);
-				var SabadoI    =	new Date(item.Sabado.getTime()    + item.SabadoI.ms    + timeZoneOffsetMs);
-				var SabadoF    =	new Date(item.Sabado.getTime()    + item.SabadoF.ms    + timeZoneOffsetMs);
-				var DomingoI   =	new Date(item.Domingo.getTime()   + item.DomingoI.ms   + timeZoneOffsetMs);
-				var DomingoF   =	new Date(item.Domingo.getTime()   + item.DomingoF.ms   + timeZoneOffsetMs);
-				
-				if( that.getBooleanDiffInicioYFin(LunesI,LunesF)||that.getBooleanDiffInicioYFin(MartesI,MartesF)||that.getBooleanDiffInicioYFin(MiercolesI,MiercolesF)||
-					that.getBooleanDiffInicioYFin(JuevesI,JuevesF)||that.getBooleanDiffInicioYFin(ViernesI,ViernesF)||that.getBooleanDiffInicioYFin(SabadoI,SabadoF)||
-					that.getBooleanDiffInicioYFin(DomingoI,DomingoF)
-				){
+
+			registros.map(function (item) {
+				var LunesI = new Date(item.Lunes.getTime() + item.LunesI.ms + timeZoneOffsetMs);
+				var LunesF = new Date(item.Lunes.getTime() + item.LunesF.ms + timeZoneOffsetMs);
+				var MartesI = new Date(item.Martes.getTime() + item.MartesI.ms + timeZoneOffsetMs);
+				var MartesF = new Date(item.Martes.getTime() + item.MartesF.ms + timeZoneOffsetMs);
+				var MiercolesI = new Date(item.Miercoles.getTime() + item.MiercolesI.ms + timeZoneOffsetMs);
+				var MiercolesF = new Date(item.Miercoles.getTime() + item.MiercolesF.ms + timeZoneOffsetMs);
+				var JuevesI = new Date(item.Jueves.getTime() + item.JuevesI.ms + timeZoneOffsetMs);
+				var JuevesF = new Date(item.Jueves.getTime() + item.JuevesF.ms + timeZoneOffsetMs);
+				var ViernesI = new Date(item.Viernes.getTime() + item.ViernesI.ms + timeZoneOffsetMs);
+				var ViernesF = new Date(item.Viernes.getTime() + item.ViernesF.ms + timeZoneOffsetMs);
+				var SabadoI = new Date(item.Sabado.getTime() + item.SabadoI.ms + timeZoneOffsetMs);
+				var SabadoF = new Date(item.Sabado.getTime() + item.SabadoF.ms + timeZoneOffsetMs);
+				var DomingoI = new Date(item.Domingo.getTime() + item.DomingoI.ms + timeZoneOffsetMs);
+				var DomingoF = new Date(item.Domingo.getTime() + item.DomingoF.ms + timeZoneOffsetMs);
+
+				if (that.getBooleanDiffInicioYFin(LunesI, LunesF) || that.getBooleanDiffInicioYFin(MartesI, MartesF) || that.getBooleanDiffInicioYFin(MiercolesI, MiercolesF) ||
+					that.getBooleanDiffInicioYFin(JuevesI, JuevesF) || that.getBooleanDiffInicioYFin(ViernesI, ViernesF) || that.getBooleanDiffInicioYFin(SabadoI, SabadoF) ||
+					that.getBooleanDiffInicioYFin(DomingoI, DomingoF)
+				) {
 					registrosFiltrados.push(item);
 				}
 			});
 			return registrosFiltrados;
 		},
-		
-		getBooleanDiffInicioYFin: function(inicio, fin) {
-			if(inicio && fin){
-				var dif = inicio.getTime() - fin.getTime();
-				
-				if ( dif !== 0 ) {
-					return true;
-				}
-				return false;
-			}else {
-				return false;
+
+		getBooleanDiffInicioYFin: function (inicio, fin) {
+
+			//GQ - Modifi Gantt
+			if (inicio && fin) {
+				return true
 			}
+			// if(inicio && fin){
+			// 	var dif = inicio.getTime() - fin.getTime();
+
+			// 	if ( dif !== 0 ) {
+			// 		return true;
+			// 	}
+			// 	return false;
+			// }else {
+			// 	return false;
+			// }
 		},
 
 		getTimeLineOptions: function () {

@@ -718,73 +718,97 @@ sap.ui.define([
 			});
 		},
 		generateInhibicionHabilitacion: function (oLicense) {
-			var aInhibicion = [];
-			var aHabilitacion = [];
+			let aInhibicion = [];
+			let aHabilitacion = [];
 
-			// Obtener previos (por si no existen aún, evitar errores)
-			let aInhibicionesPrev = oLicense.InhibicionRecierre_nav || [];
-			let aHabilitacionesPrev = oLicense.HabilitacionRecierre_nav || [];
+			const aInhibicionesPrev = oLicense.InhibicionRecierre_nav || [];
+			const aHabilitacionesPrev = oLicense.HabilitacionRecierre_nav || [];
 
-			let iCountInhibiciones = aInhibicionesPrev.length;
-			let iCountHabilitaciones = aHabilitacionesPrev.length;
-
-			// Clonar registros anteriores si existen
-			if (iCountInhibiciones > 0) {
-				let aClone = jQuery.extend(true, [], aInhibicionesPrev);
+			if (aInhibicionesPrev.length) {
+				const aClone = jQuery.extend(true, [], aInhibicionesPrev);
 				aClone.forEach(o => o.showPrevValue = true);
 				aInhibicion = aInhibicion.concat(aClone);
 			}
 
-			if (iCountHabilitaciones > 0) {
-				let aClone = jQuery.extend(true, [], aHabilitacionesPrev);
+			if (aHabilitacionesPrev.length) {
+				const aClone = jQuery.extend(true, [], aHabilitacionesPrev);
 				aClone.forEach(o => o.showPrevValue = true);
 				aHabilitacion = aHabilitacion.concat(aClone);
 			}
 
-			// Determinar si se permite inhibición o habilitación
-			let bCanInhibir = (iCountInhibiciones === iCountHabilitaciones);
-			let bCanHabilitar = (iCountInhibiciones > iCountHabilitaciones);
-
-			// Fecha de habilitación/inhibición
-			let oFechaHoy = new Date();
-			let oFechaValida = (oFechaHoy > FormatHelper.formatDatesGMT(oLicense.Solbeg) &&
-				oFechaHoy < FormatHelper.formatDatesGMT(oLicense.Solend)) ? oFechaHoy : FormatHelper.formatDatesGMT(oLicense.Solend);
-
-			if (bCanInhibir) {
-				aInhibicion.push({
-					Id: oLicense.Id,
-					Empresa: oLicense.Empresa,
-					Datehab: oFechaValida,
-					Time: new Date(),
-					Tplnr: "",
-					sameDayValidation: true,
-					Coment: "",
-					enabled: true,
-					showPrevValue: false
-				});
-			}
-
-			if (bCanHabilitar) {
-				aHabilitacion.push({
-					Id: oLicense.Id,
-					Empresa: oLicense.Empresa,
-					Datehab: oFechaValida,
-					Time: new Date(),
-					Tplnr: "",
-					Coment: "",
-					enabled: true,
-					showPrevValue: false,
-					sameDayValidation: true,
-				});
-			}
-
-			this.checkIfInhibitionHasMade(aHabilitacion, aInhibicion);
-
-			// Setear datos en los modelos
 			AppManagementHelper.getModel("HabilitacionTableJsonModel").setData({ Habilitacion: aHabilitacion });
 			AppManagementHelper.getModel("InhibicionTableJsonModel").setData({ Inhibicion: aInhibicion });
-		}
-		,
+		},
+
+
+		// generateInhibicionHabilitacion: function (oLicense) {
+		// 	var aInhibicion = [];
+		// 	var aHabilitacion = [];
+
+		// 	// Obtener previos (por si no existen aún, evitar errores)
+		// 	let aInhibicionesPrev = oLicense.InhibicionRecierre_nav || [];
+		// 	let aHabilitacionesPrev = oLicense.HabilitacionRecierre_nav || [];
+
+		// 	let iCountInhibiciones = aInhibicionesPrev.length;
+		// 	let iCountHabilitaciones = aHabilitacionesPrev.length;
+
+		// 	// Clonar registros anteriores si existen
+		// 	if (iCountInhibiciones > 0) {
+		// 		let aClone = jQuery.extend(true, [], aInhibicionesPrev);
+		// 		aClone.forEach(o => o.showPrevValue = true);
+		// 		aInhibicion = aInhibicion.concat(aClone);
+		// 	}
+
+		// 	if (iCountHabilitaciones > 0) {
+		// 		let aClone = jQuery.extend(true, [], aHabilitacionesPrev);
+		// 		aClone.forEach(o => o.showPrevValue = true);
+		// 		aHabilitacion = aHabilitacion.concat(aClone);
+		// 	}
+
+		// 	// Determinar si se permite inhibición o habilitación
+		// 	let bCanInhibir = (iCountInhibiciones === iCountHabilitaciones);
+		// 	let bCanHabilitar = (iCountInhibiciones > iCountHabilitaciones);
+
+		// 	// Fecha de habilitación/inhibición
+		// 	let oFechaHoy = new Date();
+		// 	let oFechaValida = (oFechaHoy > FormatHelper.formatDatesGMT(oLicense.Solbeg) &&
+		// 		oFechaHoy < FormatHelper.formatDatesGMT(oLicense.Solend)) ? oFechaHoy : FormatHelper.formatDatesGMT(oLicense.Solend);
+
+		// 	if (bCanInhibir) {
+		// 		aInhibicion.push({
+		// 			Id: oLicense.Id,
+		// 			Empresa: oLicense.Empresa,
+		// 			Datehab: oFechaValida,
+		// 			Time: new Date(),
+		// 			Tplnr: "",
+		// 			sameDayValidation: true,
+		// 			Coment: "",
+		// 			enabled: true,
+		// 			showPrevValue: false
+		// 		});
+		// 	}
+
+		// 	if (bCanHabilitar) {
+		// 		aHabilitacion.push({
+		// 			Id: oLicense.Id,
+		// 			Empresa: oLicense.Empresa,
+		// 			Datehab: oFechaValida,
+		// 			Time: new Date(),
+		// 			Tplnr: "",
+		// 			Coment: "",
+		// 			enabled: true,
+		// 			showPrevValue: false,
+		// 			sameDayValidation: true,
+		// 		});
+		// 	}
+
+		// 	this.checkIfInhibitionHasMade(aHabilitacion, aInhibicion);
+
+		// 	// Setear datos en los modelos
+		// 	AppManagementHelper.getModel("HabilitacionTableJsonModel").setData({ Habilitacion: aHabilitacion });
+		// 	AppManagementHelper.getModel("InhibicionTableJsonModel").setData({ Inhibicion: aInhibicion });
+		// }
+		// ,
 		generatePlacementRemoval: function (oLicense) {
 			const oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
 			const aDataTODOS = oModel.getProperty("/Todos") || [];

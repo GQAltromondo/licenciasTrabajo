@@ -117,18 +117,22 @@ sap.ui.define([
 			});
 			this.getView().setModel(oModel, "Regiones");
 		},
-		onFormatRectangle: function (inicio, fin) {
-			if (inicio && fin) {
-				var dif = fin.getTime() - inicio.getTime();
+		// onFormatRectangle: function (inicio, fin) {
+		// 	if (inicio && fin) {
+		// 		var dif = fin.getTime() - inicio.getTime();
 
-				if (dif !== 0) {
-					return true;
-				}
-				return false;
-			} else {
-				return false;
-			}
-		},
+		// 		if (dif !== 0) {
+		// 			return true;
+		// 		}
+		// 		return false;
+		// 	} else {
+		// 		return false;
+		// 	}
+		// },
+		onFormatRectangle: function (inicio, fin) {
+  return !!(inicio && fin);
+},
+
 		getGanttData: function () {
 			//	this.getView().byId("FilterPanel").setProperty("expanded", false);
 
@@ -650,6 +654,20 @@ sap.ui.define([
 			}
 			return dateArray;
 		},
+		ganttEndTimeMin: function (dI, dF) {
+  if (!dI || !dF) return dF;
+
+  const i = (dI instanceof Date) ? dI : new Date(dI);
+  const f = (dF instanceof Date) ? dF : new Date(dF);
+
+  if (isNaN(i) || isNaN(f)) return dF;
+
+  // si son iguales => “barra mínima” visible
+  if (i.getTime() === f.getTime()) {
+    return new Date(f.getTime() + 60 * 1000); // 1 minuto (ajustá a gusto)
+  }
+  return f;
+},
 		// fin funcionalidad export
 	});
 });
