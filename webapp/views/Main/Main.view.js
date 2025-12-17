@@ -218,6 +218,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Main", {
 				contentLeft: [
 					new sap.m.MenuButton({
 						text: "Reportes",
+						menuPosition: sap.ui.core.Popup.Dock.BeginTop,
 						menu: new sap.m.Menu({
 							items: [
 								new sap.m.MenuItem({
