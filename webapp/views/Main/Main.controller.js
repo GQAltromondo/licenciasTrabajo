@@ -441,6 +441,7 @@ sap.ui.define([
 		},
 
 		goToEdit: function (oEvent, bManualPress) {
+			LegacyValidationHelper.createLegacyComboStateModel();
 			BusyDialogHelper.open();
 			var oFilterSelectionModel = AppManagementHelper.getModel("FilterSelectionJsonModel");
 			var oDeliveryModel = AppManagementHelper.getModel("DeliveryTableJsonModel");

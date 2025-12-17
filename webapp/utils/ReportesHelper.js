@@ -1506,7 +1506,7 @@ sap.ui.define([
 		reporteSemanalCammesa: function (fechadesde, fechahasta, society, daysInBetWeen) {
 			return new Promise((resolve, reject) => {
 				ReportesService.semanalCamesa(society, fechadesde, fechahasta).then(async (data) => {
-					var aData = data;
+					var aData = data.results;
 					if (aData.length > 0) {
 						aData.forEach((e) => {
 							e.Solend = this.getDateFormat(e.Solend);
@@ -1652,30 +1652,30 @@ sap.ui.define([
 		},
 
 		findDate: function (attr, aDays, license, value, horarios, aDiasAnulados) {
-			const sDateFound = aDays.find(oDate => oDate.stringDate === attr);
-			if (!sDateFound) return value; // Retorna antes si no encuentra la fecha
+			var sDateFound = aDays.find((oDate) => {
+				return oDate.stringDate === attr;
+			})
+			if (sDateFound) {
+				const foundDays = horarios.find(element => element.stringDate === sDateFound.stringDate)
+				//INI TRNS99 - ver si la fecha esta autorizada o no
+				const foundNoAutorizado = aDiasAnulados.find(element => FormatHelper.formatDateLicense(element.Fecha) === sDateFound.stringDate)
+				//FIN TNRS99
 
-			// Buscar si hay un día en license.Horarios.results que coincida con sDateFound
-			const foundDays = license.Horarios.results.find(element => {
-
-				return FormatHelper.formatDateLicense(element.Fecha) === sDateFound.stringDate;
-			});
-
-			// Definir foundNoAutorizado antes de usarla
-			const foundNoAutorizado = aDiasAnulados.some(element =>
-				FormatHelper.formatDateLicense(element.Fecha) === sDateFound.stringDate
-			);
-
-			if (foundNoAutorizado) return ".";
-
-			if (foundDays || license.Timend === "Continua") {
-				let enserv = license.Equstat === "" ? "F/S" : "E/S";
-				return (license.Jobcond === "04" || license.Jobcond === "05") ? "TcT" : enserv;
+				//INI - 10/03/2023 - EXT-MSUELDIA - Se agrega validacion segun license.Timend
+				//si tiene el valor "Continua" se debe calcular valor de enserv por mas que no encuentre dias
+				if ((foundDays || license.Timend === 'Continua') && !foundNoAutorizado) {
+					//FIN - 10/03/2023 - EXT-MSUELDIA - Se agrega validacion segun license.Timend
+					var enserv = "";
+					enserv = license.Equstat === "" ? "F/S" : "E/S";
+					enserv = license.Jobcond === "04" || license.Jobcond === "05" ? "TcT" : enserv;
+					return enserv;
+				} else {
+					return "."
+				}
+			} else {
+				return value;
 			}
-
-			return ".";
-		}
-		,
+		},
 
 		setEquipmentStatus: async function (license, horarios, aDiasAnulados) {
 			var aDaysIntervalFromLicense = this.getDayIntervalsOfLicense(license.Solbeg, license.Solend);
@@ -1924,12 +1924,12 @@ sap.ui.define([
 		// },
 		createHeaderWithFilteredData: function (aLicenses, sheetType) {
 			const categoriasPorTipoEquipo = this.dictionary;
+			//Primer del 70, hacer get a nueva entidad filtrado por empresa y matchear con el nuevo diccionario.
 
-			let aFiltered = aLicenses
-				.filter(license => categoriasPorTipoEquipo[license.Tipoequipo] === sheetType)
-				.filter(license => license.Timbeg && license.Timend); // GQ FIX 2102
-
-			var header = this.getHeaderObject(sheetType);
+			let aFiltered = aLicenses.filter((license) => categoriasPorTipoEquipo[license.Tipoequipo] == sheetType);
+			//categoriasPorTipoEquipo[license.Tipoequipo]
+			//funcion que retorne objeto especificopara es et o lineas
+			var header = this.getHeaderObject(sheetType)
 
 			let mapExcelData = license => {
 				if (license.Licstat === "01") {
@@ -1937,35 +1937,37 @@ sap.ui.define([
 				} else if (license.Licstat === "06") {
 					license.usersAgreement = "NO";
 				} else {
-					license.usersAgreement = "";
+					license.usersAgreement = ""
 				}
 
 				if (license.Tipolicencia === "EM") {
-					license.TipMante = "De Emergencia";
+					license.TipMante = 'De Emergencia';
 				} else if (license.Tipolicencia === "N" || license.Tipolicencia === "TE") {
-					license.TipMante = "No Urgente";
+					license.TipMante = 'No Urgente';
 				} else {
-					license.TipMante = "";
+					license.TipMante = '';
 				}
-
 				license.Equnr = license.Equnr;
 				license.Solbeg = FormatHelper.formatDateLicenseReportDiary(license.Solbeg);
 				license.TrabajoFS = license.Equstat === "" ? "X" : "";
 				license.TrabajoES = license.Equstat === "X" ? "X" : "";
 
-				license.Rdisparo = license.Rdisparo === "X" ? "SI" : "NO";
-				license.DescEstacion = license.DescEstacion;
-
-				license.tipoEquipo = license.tipoEquipo || license.Tipoequipo;
+				license.Rdisparo === "X" ? license.Rdisparo = "SI" : license.Rdisparo = "NO";
+				license.DescEstacion = license.DescEstacion //FormatterHelper.getDescEstacion(license.Tplnr);
+				// issue 504 - el campo Tipoequipo trae un valor incorrecto , se remplazo por el campo tipoEquipo
+				//	license.tipoEquipo = license.Tipoequipo;
+				if (license.tipoEquipo) {
+					license.tipoEquipo = license.tipoEquipo;
+				} else {
+					license.tipoEquipo = license.Tipoequipo;
+				}
 				license.Tipinterv = this.formatTipinterv(license.Tipinterv);
 				license.Tension = license.Tension;
 				license.ID = license.Id;
+				license.Timbeg = license.Timbeg ? FormatterHelper.msTohoursSeconds(license.Timbeg.ms + 3 * 60 * 60 * 1000) : "";
+				license.Timend = license.Timend ? FormatterHelper.msTohoursSeconds(license.Timend.ms + 3 * 60 * 60 * 1000) : "";
 
-			
-				license.Timbeg = FormatterHelper.msTohoursSeconds(license.Timbeg.ms + 3 * 60 * 60 * 1000);
-				license.Timend = FormatterHelper.msTohoursSeconds(license.Timend.ms + 3 * 60 * 60 * 1000);
-
-				license.Tiemporep = FormatterHelper.getTiempoReposicionDesc(license.Tiemporep);
+				license.Tiemporep = FormatterHelper.getTiempoReposicionDesc(license.Tiemporep)
 
 				let obj = {};
 				for (let key in header) {

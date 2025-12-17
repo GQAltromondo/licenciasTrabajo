@@ -28,7 +28,7 @@ sap.ui.define([
 			var obj = items[0].getBindingContext("EstacionesJsonModel").getObject();
 			var sKey = obj.Estacion;
 			var sEmpresa = "100";
-			EquiposService.loadEquipos(sKey,  sEmpresa);
+			EquiposService.loadEquipos(sKey, sEmpresa);
 			AppManagementHelper.getModel("FilterSelectionJsonModel").setProperty("/enabledComboEQUIPO", true);
 			//TODO uncomment if decide to select region based on ET
 
@@ -712,7 +712,61 @@ sap.ui.define([
 				Turno: aTurnos
 			});
 		},
+		generatePlacementRemoval: function (oLicense) {
+			var oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
+			var aDataTODOS = oModel.getProperty("/Todos");
 
+			var aColocaciones = [];
+			var aRetiros = [];
+
+			var oColocacion = {
+				Empresa: oLicense.Empresa,
+				Datehab: new Date() > FormatHelper.formatDatesGMT(oLicense.Solbeg) && new Date() < FormatHelper.formatDatesGMT(oLicense.Solend) ?
+					new Date() : oLicense.Solend,
+				Id: oLicense.Id,
+				Time: new Date(),
+				Coment: "",
+				Tplnr: ""
+			};
+			var oRetiro = {
+				Empresa: oLicense.Empresa,
+				Datehab: new Date() > FormatHelper.formatDatesGMT(oLicense.Solbeg) && new Date() < FormatHelper.formatDatesGMT(oLicense.Solend) ?
+					new Date() : oLicense.Solend,
+				Id: oLicense.Id,
+				Time: new Date(),
+				Coment: "",
+				Tplnr: "",
+			};
+
+			if (oLicense.ColocacionPAT_nav.length > 0) {
+				let aCloneColocaciones = jQuery.extend(true, [], oLicense.ColocacionPAT_nav);
+				aColocaciones = aColocaciones.concat(aCloneColocaciones);
+				aColocaciones.push(oColocacion)
+
+			} else {
+				aColocaciones = [oColocacion]
+			}
+
+			//	this.formatUTCDates(aColocaciones);
+
+			if (oLicense.RetiroPAT_nav.length > 0) {
+				let aCloneRetiros = jQuery.extend(true, [], oLicense.RetiroPAT_nav);
+				aRetiros = aRetiros.concat(aCloneRetiros);
+				aRetiros.push(oRetiro)
+
+			} else {
+				aRetiros = [oRetiro]
+
+			}
+			//	this.formatUTCDates(aRetiros);
+
+			AppManagementHelper.getModel("RetiroTableJsonModel").setData({
+				Retiro: aRetiros
+			});
+			AppManagementHelper.getModel("ColocacionTableJsonModel").setData({
+				Colocacion: aColocaciones
+			});
+		},
 		generateInhibicionHabilitacion: function (oLicense) {
 			var oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
 			var aDataTODOS = oModel.getProperty("/Todos");
@@ -770,13 +824,13 @@ sap.ui.define([
 					let aCloneHabilitaciones = jQuery.extend(true, [], oLicense.HabilitacionRecierre_nav);
 					aHabilitacion = aHabilitacion.concat(aCloneHabilitaciones);
 				}
-				//this.formatUTCDates(aInhibicion);
+				//	this.formatUTCDates(aInhibicion);
 				aInhibicion.push({
 					Empresa: oLicense.Empresa,
 					Datehab: new Date() > oLicense.Solbeg && new Date() < oLicense.Solend ? new Date() : oLicense.Solend,
 					Id: oLicense.Id,
 					Time: new Date(),
-					Coment: "",
+					Commen: "",
 					Tplnr: '',
 
 				});
@@ -785,7 +839,7 @@ sap.ui.define([
 					Datehab: new Date() > oLicense.Solbeg && new Date() < oLicense.Solend ? new Date() : oLicense.Solend,
 					Id: oLicense.Id,
 					Time: new Date(),
-					Coment: "",
+					Commen: "",
 					Tplnr: '',
 
 				});
@@ -798,89 +852,7 @@ sap.ui.define([
 				Inhibicion: aInhibicion
 			});
 		},
-		generatePlacementRemoval: function (oLicense) {
-			var oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
-			var aDataTODOS = oModel.getProperty("/Todos");
 
-			var aColocaciones = [];
-			var aRetiros = [];
-
-			if (oLicense.Period === "C") {
-				
-				if (oLicense.ColocacionPAT_nav.length > 0) {
-					let aCloneColocaciones = jQuery.extend(true, [], oLicense.ColocacionPAT_nav);
-
-					aColocaciones = aColocaciones.concat(aCloneColocaciones);
-				}
-
-				if (oLicense.RetiroPAT_nav.length > 0) {
-					let aCloneRetiros = jQuery.extend(true, [], oLicense.RetiroPAT_nav);
-
-					aRetiros = aRetiros.concat(aCloneRetiros);
-				}
-				//this.formatUTCDates(aColocaciones);
-
-				var oRetiro = {
-					Id: oLicense.Id,
-					Empresa: oLicense.Empresa,
-					Datehab: new Date() > FormatHelper.formatDatesGMT(oLicense.Solbeg) && new Date() < FormatHelper.formatDatesGMT(oLicense.Solend) ?
-						new Date() : oLicense.Solend,
-					Time: new Date(),
-					Tplnr: "",
-					Coment: "",
-				};
-				var oColocacion = {
-					Id: oLicense.Id,
-					Empresa: oLicense.Empresa,
-					Datehab: new Date() > FormatHelper.formatDatesGMT(oLicense.Solbeg) && new Date() < FormatHelper.formatDatesGMT(oLicense.Solend) ?
-						new Date() : oLicense.Solend,
-					Time: new Date(),
-					Tplnr: "",
-					Coment: "",
-				};
-				//Revisar y agregar .length
-
-				aColocaciones.push(oColocacion);
-				aRetiros.push(oRetiro);
-
-			} else {
-				if (oLicense.ColocacionPAT_nav.length > 0) {
-					let aCloneColocaciones = jQuery.extend(true, [], oLicense.ColocacionPAT_nav);
-
-					aColocaciones = aColocaciones.concat(aCloneColocaciones);
-				}
-				if (oLicense.RetiroPAT_nav.length > 0) {
-					let aCloneRetiros = jQuery.extend(true, [], oLicense.RetiroPAT_nav);
-					aRetiros = aRetiros.concat(aCloneRetiros);
-				}
-				//this.formatUTCDates(aColocaciones);
-				aColocaciones.push({
-					Empresa: oLicense.Empresa,
-					Datehab: new Date() > oLicense.Solbeg && new Date() < oLicense.Solend ? new Date() : oLicense.Solend,
-					Id: oLicense.Id,
-					Time: new Date(),
-					Coment: "",
-					Tplnr: '',
-
-				});
-				aRetiros.push({
-					Empresa: oLicense.Empresa,
-					Datehab: new Date() > oLicense.Solbeg && new Date() < oLicense.Solend ? new Date() : oLicense.Solend,
-					Id: oLicense.Id,
-					Time: new Date(),
-					Coment: "",
-					Tplnr: '',
-
-				});
-			}
-
-			AppManagementHelper.getModel("RetiroTableJsonModel").setData({
-				Retiro: aRetiros
-			});
-			AppManagementHelper.getModel("ColocacionTableJsonModel").setData({
-				Colocacion: aColocaciones
-			});
-		},
 		setPersonalHabilitadoParaCboEntraga: function (oLicense) {
 			var oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
 			var aDataTODOS = oModel.getProperty("/Todos");
