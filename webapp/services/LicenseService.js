@@ -1905,6 +1905,7 @@ sap.ui.define([
 						var nameLegacyObservator = "";
 						var vieneDeCoordinacion = false;
 						var vieneDeCancelacion = false;
+						var vieneDeCalendarioTramitacion = false;
 						var nameLegacyCoordinator = this.getLastCoordinator();
 						var nameLegacyTramitador = oLicence.Tramitador;
 						var MotivoObservacion = "";
