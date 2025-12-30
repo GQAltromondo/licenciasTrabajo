@@ -882,6 +882,15 @@ sap.ui.define([
 		generatePlacementRemoval: function (oLicense) {
 			const aColPrev = oLicense.ColocacionPAT_nav || [];
 			const aRetPrev = oLicense.RetiroPAT_nav || [];
+			var aDataTODOS = AppManagementHelper.getModel("PersonalHabilitadoModel").getProperty("/Todos");
+
+			var aDevolution = [];
+			var aDelivery = [];
+
+
+
+
+		
 
 			const cloneArr = (a) => jQuery.extend(true, [], a || []);
 			const cloneObj = (o) => jQuery.extend(true, {}, o || {});
@@ -942,6 +951,11 @@ sap.ui.define([
 			const aColocaciones = cloneArr(aColPrev).map((o) => {
 				const c = markPrevCol(o);
 				c.__lid = c.__lid || ("BK_" + makeKey(c));
+
+
+
+				c.Jt = aDataTODOS.find(oItem => oItem.Legajo === c.Jt);
+
 				return c;
 			});
 
@@ -950,11 +964,9 @@ sap.ui.define([
 				Id: oLicense.Id,
 				Empresa: oLicense.Empresa,
 				sameDayValidation: true,
-
 				// 👇 usar directamente valores de la licencia
 				Datehab: oLicense.Solbeg,
 				Time: oLicense.Timbeg,
-
 				Tplnr: "",
 				Pat: "X",
 				Tecet: "",

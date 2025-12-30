@@ -612,8 +612,13 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							displayFormat: "HH:mm"
 						}),
 						new sap.m.Text({
-							text: "{ColocacionTableJsonModel>Jt}"
+							// text: "{ColocacionTableJsonModel>Jt}"
+							text: {
+								path: "DeliveryTableJsonModel>Jt",
+								formatter: $.proxy(oController.handleUserName, oController)
+							}
 						}),
+
 						new sap.m.ComboBox({
 							width: "100%",
 							enabled: {
@@ -834,7 +839,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 						new sap.m.HBox({
 							items: [
 								new sap.m.ComboBox({
-								
+
 									width: "100%",
 									enabled: {
 										parts: [
@@ -854,7 +859,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 										}),
 									}
 								}),
-								
+
 							]
 						}),
 						new sap.m.Input({
@@ -1031,7 +1036,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 						new sap.m.HBox({
 							items: [
 								new sap.m.ComboBox({
-									
+
 									width: "100%",
 									enabled: {
 										parts: [
@@ -1051,7 +1056,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 										}),
 									}
 								}),
-							
+
 							]
 						}),
 
@@ -1141,7 +1146,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 			items: {
 				path: "HabilitacionTableJsonModel>/Habilitacion",
 				template: new sap.m.ColumnListItem({
-				
+
 					cells: [
 
 						new sap.m.DatePicker({
@@ -1160,7 +1165,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							enabled: {
 								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
 									"HabilitacionTableJsonModel>enabled",
-									 "ValidateFirstContModel>/fd"
+									"ValidateFirstContModel>/fd"
 								],
 								formatter: oController.rolStatusEdition("habilitacion/")
 							},
@@ -1175,7 +1180,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							enabled: {
 								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
 									"HabilitacionTableJsonModel>enabled",
-									 "ValidateFirstContModel>/fd"
+									"ValidateFirstContModel>/fd"
 								],
 								formatter: oController.rolStatusEdition("habilitacion/")
 							},
@@ -1240,7 +1245,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							enabled: {
 								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
 									"HabilitacionTableJsonModel>enabled",
-								 "ValidateFirstContModel>/fd"
+									"ValidateFirstContModel>/fd"
 								],
 								formatter: oController.rolStatusEdition("habilitacion/")
 							},
@@ -1253,9 +1258,9 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							enabled: {
 								parts: [
 									"LicenseJsonModel>/Licstat",
-									 "UserJsonModel>/roles",
-									  "statusModel>/",
-									   "LicenseJsonModel>/Werks",
+									"UserJsonModel>/roles",
+									"statusModel>/",
+									"LicenseJsonModel>/Werks",
 									"HabilitacionTableJsonModel>canSend", "ValidateFirstContModel>/fd"
 								],
 								formatter: oController.rolStatusEdition("habilitacion/")
