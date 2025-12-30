@@ -119,9 +119,9 @@
 				</gnt2:ContainerToolbar>
 			</gnt2:toolbar>
 			<gnt2:ganttCharts>
-				<gnt2:GanttChartWithTable id="ganttView2" height="200px">
+				<gnt2:GanttChartWithTable id="ganttView2"  >
 					<gnt2:table>
-						<Table id="ganntTable2" fixedColumnCount="1" rows="{ path: 'TempSeleccionado>/' }" selectionMode="None">
+						<Table id="ganntTable2" fixedColumnCount="1" rows="{ path: 'TempSeleccionado>/' }" selectionMode="None" >
 							<extension/>
 							<rowSettingsTemplate>
 								<gnt2:GanttRowSettings>
@@ -229,7 +229,7 @@
 						</gnt-cal:CalendarDefs>
 					</gnt2:calendarDef>-->
 				</gnt2:GanttChartWithTable>
-				<gnt2:GanttChartWithTable id="ganttView" heigth="100%">
+				<gnt2:GanttChartWithTable id="ganttView" height="90%">
 					<gnt2:table>
 						<Table selectionMode="MultiToggle" id="ganntTable" selectionBehavior="Row" rowSelectionChange="onRowSelection" enableColumnReordering="true" fixedColumnCount="1" rows="{ path: 'RequerimentsModel>/data' }">
 							<extension/>

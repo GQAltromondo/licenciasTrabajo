@@ -477,7 +477,7 @@ sap.ui.define([
 
 						emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"],
 						hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]
-						].map(permiso => permiso && permiso.Mail );
+						].map(permiso => permiso && permiso.Mail);
 
 						let usuariosAsignados = {
 							Coordinador: currentUser.Legajo + ", " + currentName,
@@ -758,74 +758,186 @@ sap.ui.define([
 			BusyDialogHelper.close();
 			var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
 			var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
-			MessageBoxHelper.showAlert("Alerta", "Se ha realizado la colocacion de manera correcta", $.proxy(this.FIND, this, license));
+			MessageBoxHelper.showAlert("Alerta", "Se ha realizado la inhibicion de manera correcta", $.proxy(this.FIND, this, license));
 
 		},
 
 		errorPOSTInhibicion: function (error) {
 			BusyDialogHelper.close();
-			MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al crear el registro de colocacion");
+			MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al crear el registro de inhibicion");
 		},
 
-		ColocacionPATLicence: function (oColocacionPAT) {
+		ColocacionPATLicence: function (oColocacionPAT, oMeta) {
 			var oLicence = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			var licenseClone = LicenceHelper.cloneLicense(oLicence);
-			//licenseClone.Licstat = "07";
+
 			this.updateLicense(licenseClone, {
-				success: $.proxy(this.successPUTLicenceColocacionPAT, this, oColocacionPAT, licenseClone),
+				success: $.proxy(this.successPUTLicenceColocacionPAT, this, oColocacionPAT, licenseClone, oMeta),
 				error: $.proxy(this.errorPUTLicenceColocacionPAT, this)
 			});
 		},
-		successPUTLicenceColocacionPAT: function (oColocacionPAT, licenseClone) {
+
+		successPUTLicenceColocacionPAT: function (oColocacionPAT, licenseClone, oMeta) {
 			var entity = "/ColocacionPATSet";
 			oColocacionPAT.Datehab = FormatHelper.getUTCdate(oColocacionPAT.Datehab);
+
 			oDataService.getModel("TransenerOperaciones").create(entity, oColocacionPAT, {
-				success: $.proxy(this.successPOSTColocacionPAT, this, oColocacionPAT, licenseClone),
-				error: $.proxy(this.errorPOSTColocacionPAT, this)
+				success: $.proxy(this.successPOSTColocacionPAT, this, oMeta),
+				error: $.proxy(this.errorPOSTColocacionPAT, this, oMeta)
 			});
 		},
-		successPOSTColocacionPAT: function (data) {
-			BusyDialogHelper.close();
-			var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
-			MessageBoxHelper.showAlert("Alerta", "Se ha realizado la colocacion de manera correcta", $.proxy(this.FIND, this, license));
 
+		successPOSTColocacionPAT: function (oMeta, data) {
+			BusyDialogHelper.close();
+
+			const sRefId = oMeta && oMeta.RefId;
+			const sLid = oMeta && oMeta.__lid;
+
+			if (sRefId) {
+				// ✅ 1) marcar colocación enviada como backend
+				const oColModel = AppManagementHelper.getModel("ColocacionTableJsonModel");
+				const aCol = oColModel.getProperty("/Colocacion") || [];
+
+				const iCol = aCol.findIndex(x =>
+					(sLid && x.__lid === sLid) || x.RefId === sRefId
+				);
+
+				if (iCol >= 0) {
+					// mergeo response del backend si viene (data)
+					const oUpdatedCol = jQuery.extend(true, {}, aCol[iCol], data || {});
+					oUpdatedCol.__lid = aCol[iCol].__lid || sLid;
+
+					oUpdatedCol.enabled = false;
+					oUpdatedCol.showPrevValue = true;
+
+					// flags del flujo nuevo
+					oUpdatedCol.fromBackend = true;
+					oUpdatedCol.isNew = false;
+					oUpdatedCol.canSend = false;
+
+					oColModel.setProperty(`/Colocacion/${iCol}`, oUpdatedCol);
+				}
+
+				// ✅ 2) habilitar el retiro espejo correspondiente (NO crear nuevos)
+				const oRetModel = AppManagementHelper.getModel("RetiroTableJsonModel");
+				const aRet = oRetModel.getProperty("/Retiro") || [];
+
+				const iRet = aRet.findIndex(x =>
+					(sLid && x.__lid === sLid) || x.RefId === sRefId
+				);
+
+				if (iRet >= 0) {
+					const oRet = jQuery.extend(true, {}, aRet[iRet]);
+
+					// Si era espejo de la colocación nueva, ahora lo habilito
+					oRet.enabled = true;
+					oRet.canSend = true;
+
+					oRet.isMirror = true;
+					oRet.fromBackend = false;  // retiro todavía no está en backend
+					oRet.isRemoval = true;
+					oRet.__lid = oRet.__lid || sLid;
+
+					// (opcional) Si querés que el retiro refleje los datos actuales de colocación:
+					if (iCol >= 0) {
+						const oCol = oColModel.getProperty(`/Colocacion/${iCol}`);
+						// copio campos relevantes, sin pisar flags de retiro
+						oRet.Id = oCol.Id;
+						oRet.Empresa = oCol.Empresa;
+						oRet.Datehab = oCol.Datehab;
+						oRet.Time = oCol.Time;
+						oRet.Tplnr = oCol.Tplnr;
+						oRet.Jt = oCol.Jt;
+						oRet.Pat = oCol.Pat;
+						oRet.Tecet = oCol.Tecet;
+						oRet.Coment = oCol.Coment;
+						oRet.RefId = oCol.RefId;
+					}
+
+					oRetModel.setProperty(`/Retiro/${iRet}`, oRet);
+				}
+			}
+
+			var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
+			MessageBoxHelper.showAlert(
+				"Alerta",
+				"Se ha realizado la colocacion de manera correcta",
+				$.proxy(this.FIND, this, license)
+			);
 		},
 
-		errorPOSTColocacionPAT: function (error) {
+
+		errorPOSTColocacionPAT: function (oMeta, error) {
 			BusyDialogHelper.close();
 			MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al crear el registro de colocacion");
 		},
 
-		RetiroPATLicence: function (oRetiroPAT) {
+
+		RetiroPATLicence: function (oRetiroPAT, oMeta) {
 			var oLicence = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			var licenseClone = LicenceHelper.cloneLicense(oLicence);
-			//licenseClone.Licstat = "07";
+
 			this.updateLicense(licenseClone, {
-				success: $.proxy(this.successPUTLicenceRetiroPAT, this, oRetiroPAT, licenseClone),
+				success: $.proxy(this.successPUTLicenceRetiroPAT, this, oRetiroPAT, licenseClone, oMeta),
 				error: $.proxy(this.errorPUTLicenceRetiroPAT, this)
 			});
 		},
-		successPUTLicenceRetiroPAT: function (oRetiroPAT, licenseClone) {
+
+		successPUTLicenceRetiroPAT: function (oRetiroPAT, licenseClone, oMeta) {
 			var entity = "/RetiroPATSet";
 			oRetiroPAT.Datehab = FormatHelper.getUTCdate(oRetiroPAT.Datehab);
+
 			oDataService.getModel("TransenerOperaciones").create(entity, oRetiroPAT, {
-				success: $.proxy(this.successPOSTRetiroPAT, this, oRetiroPAT, licenseClone),
-				error: $.proxy(this.errorPOSTRetiroPAT, this)
+				success: $.proxy(this.successPOSTRetiroPAT, this, oMeta),
+				error: $.proxy(this.errorPOSTRetiroPAT, this, oMeta)
 			});
 		},
-		successPOSTRetiroPAT: function (data) {
-			var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
-			BusyDialogHelper.close();
-			var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
-			var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
-			MessageBoxHelper.showAlert("Alerta", "Se ha realizado el Retiro de manera correcta", $.proxy(this.FIND, this, license));
 
+		successPOSTRetiroPAT: function (oMeta, data) {
+			BusyDialogHelper.close();
+
+			const sRefId = oMeta && oMeta.RefId;
+			const sLid = oMeta && oMeta.__lid;
+
+			if (sRefId) {
+				const oModel = AppManagementHelper.getModel("RetiroTableJsonModel");
+				const aRetiros = oModel.getProperty("/Retiro") || [];
+
+				const i = aRetiros.findIndex(r =>
+					(sLid && r.__lid === sLid) || r.RefId === sRefId
+				);
+
+				if (i >= 0) {
+					// mergeo data del backend si viene
+					const oUpdated = jQuery.extend(true, {}, aRetiros[i], data || {});
+					oUpdated.__lid = aRetiros[i].__lid || sLid;
+
+					// ✅ estado final retiro guardado
+					oUpdated.enabled = false;        // inputs bloqueados
+					oUpdated.canSend = false;        // botón deshabilitado (si lo usás)
+					oUpdated.showPrevValue = true;
+
+					oUpdated.fromBackend = true;
+					oUpdated.isNew = false;
+					oUpdated.isMirror = false;       // ya no es espejo: existe en backend
+					oUpdated.isRemoval = true;       // si lo usás para distinguir
+
+					oModel.setProperty(`/Retiro/${i}`, oUpdated);
+				}
+			}
+
+			MessageBoxHelper.showAlert(
+				"Alerta",
+				"Se ha realizado el Retiro de manera correcta",
+				$.proxy(this.FIND, this, AppManagementHelper.getModel("LicenseJsonModel").getData())
+			);
 		},
 
-		errorPOSTRetiroPAT: function (error) {
+		errorPOSTRetiroPAT: function (oMeta, error) {
 			BusyDialogHelper.close();
 			MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al crear el registro de retiro");
 		},
+
 		coordinateLicence: function (oCoordination) {
 			var oLicence = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			var licenseClone = LicenceHelper.cloneLicense(oLicence);
@@ -883,7 +995,7 @@ sap.ui.define([
 						"Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]].map(permiso => permiso &&
 							permiso.Mail);
 				} else {
-					aEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail );
+					aEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail);
 				}
 
 				var sEmails = aEmails.join(",");
@@ -1288,7 +1400,7 @@ sap.ui.define([
 				} else {
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos["Jefe_Trabajo"],
 					hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]
-					].map(permiso => permiso && permiso.Mail );
+					].map(permiso => permiso && permiso.Mail);
 					sEmailEt = res[2].results && res[2].results !== 0 ? res[2].results.map(e => (e.Mail)).join(",") : "";
 				}
 
@@ -1425,7 +1537,7 @@ sap.ui.define([
 				let infAdicional = causaAnulado + "\n" + license.Obscausa;
 				let stringEmails = "";
 
-				stringEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail ).join(",");
+				stringEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail).join(",");
 
 				var usuariosAsignados = {
 					Coordinador: hashPermisos["COORDINADOR"] ? hashPermisos["COORDINADOR"].Legajo + ", " + hashPermisos["COORDINADOR"].Nombre : "",
@@ -1860,7 +1972,7 @@ sap.ui.define([
 					hashPermisos["COORDINADOR"] = hashPermisos["COORDINADOR"] || "";
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 						"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
-							permiso.Mail ).join(",");
+							permiso.Mail).join(",");
 
 					var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 					var sCurrentUserMail = oUserJson.email;
@@ -1940,7 +2052,7 @@ sap.ui.define([
 					hashPermisos["COORDINADOR"] = hashPermisos["COORDINADOR"] || "";
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 						"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
-							permiso.Mail ).join(",");
+							permiso.Mail).join(",");
 
 					var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 					var sCurrentUserMail = oUserJson.email;
@@ -2023,8 +2135,8 @@ sap.ui.define([
 				emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 					"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
 
-						permiso.Mail ).join(",");
-				
+						permiso.Mail).join(",");
+
 				var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 				var sCurrentUserMail = oUserJson.email;
 				var sCurrentUserName = oUserJson.nombre + ", " + oUserJson.apellido;
@@ -2151,7 +2263,7 @@ sap.ui.define([
 										MailHelper.sendEmail(
 											oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion,
 											MotivoDeAnulacion, ObservacionDeAnulacion, fechaAnulacion,
-											vieneDeTramitacion, vieneDeObservacion, 
+											vieneDeTramitacion, vieneDeObservacion,
 											comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
 											nameLegacyCoordinator, nameLegacyTramitador,
 											MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut, tramitaciones, false
@@ -2165,7 +2277,7 @@ sap.ui.define([
 											comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
 											nameLegacyCoordinator, nameLegacyTramitador,
 											MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut,
-											tramitaciones, true 
+											tramitaciones, true
 										);
 
 										// --- Log después de los dos envíos ---
@@ -2205,18 +2317,18 @@ sap.ui.define([
 									vieneDeTramitacion, vieneDeObservacion,
 									comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
 									nameLegacyCoordinator, nameLegacyTramitador,
-									MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut,tramitaciones,false
+									MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut, tramitaciones, false
 								);
 
 								// --- Segundo envío (desde calendario de tramitación) ---
 								MailHelper.sendEmail(
 									oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion,
 									MotivoDeAnulacion, ObservacionDeAnulacion, fechaAnulacion,
-									vieneDeTramitacion, vieneDeObservacion, 
+									vieneDeTramitacion, vieneDeObservacion,
 									comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
 									nameLegacyCoordinator, nameLegacyTramitador,
 									MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut,
-									tramitaciones ,true
+									tramitaciones, true
 								);
 
 								// --- Log después de los dos envíos ---
@@ -3256,7 +3368,7 @@ sap.ui.define([
 				this.getFullTramitacionesWithCalendarDates();
 
 			}).catch((e) => {
-				console.error("ACA",e);
+				console.error("ACA", e);
 				BusyDialogHelper.close();
 				MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al obtener permisos")
 			})
@@ -3292,7 +3404,7 @@ sap.ui.define([
 				TeinformoValueStateText: "",
 				JefetraValueState: "Success",
 				JefetraValueStateText: "",
-				IdJefeTrj:""
+				IdJefeTrj: ""
 			});
 			aTransfers.forEach((e) => {
 				e.enabledCombo = e.Trjindex === undefined || e.Trjindex === "";
@@ -3411,7 +3523,7 @@ sap.ui.define([
 			var aLicenses = FormatHelper.removeResults(data);
 			FormatHelper.formatTimesFromGetLicenses(aLicenses);
 
-		
+
 			aLicenses.forEach((oLicense) => {
 				oLicense.ArbplDesc = this.getArbplDesc(oLicense.Arbpl);
 				oLicense.EqustatText = this.getEqustatText(oLicense.Equstat);

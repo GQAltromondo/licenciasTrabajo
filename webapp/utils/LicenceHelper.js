@@ -718,22 +718,160 @@ sap.ui.define([
 			});
 		},
 		generateInhibicionHabilitacion: function (oLicense) {
-			let aInhibicion = [];
-			let aHabilitacion = [];
+			const aInhPrev = oLicense.InhibicionRecierre_nav || [];
+			const aHabPrev = oLicense.HabilitacionRecierre_nav || [];
 
-			const aInhibicionesPrev = oLicense.InhibicionRecierre_nav || [];
-			const aHabilitacionesPrev = oLicense.HabilitacionRecierre_nav || [];
+			const cloneArr = (a) => jQuery.extend(true, [], a || []);
+			const cloneObj = (o) => jQuery.extend(true, {}, o || {});
 
-			if (aInhibicionesPrev.length) {
-				const aClone = jQuery.extend(true, [], aInhibicionesPrev);
-				aClone.forEach(o => o.showPrevValue = true);
-				aInhibicion = aInhibicion.concat(aClone);
-			}
+			const genLocalId = () => ("LID_" + Date.now() + "_" + Math.floor(Math.random() * 100000));
 
-			if (aHabilitacionesPrev.length) {
-				const aClone = jQuery.extend(true, [], aHabilitacionesPrev);
-				aClone.forEach(o => o.showPrevValue = true);
-				aHabilitacion = aHabilitacion.concat(aClone);
+			const toDateStr = (v) => {
+				if (!v) return "";
+				const d = (v instanceof Date) ? v : new Date(v);
+				if (isNaN(d.getTime())) return String(v);
+				const dd = String(d.getDate()).padStart(2, "0");
+				const mm = String(d.getMonth() + 1).padStart(2, "0");
+				const yy = d.getFullYear();
+				return `${yy}-${mm}-${dd}`;
+			};
+
+			const toTimeStr = (v) => {
+				if (!v) return "";
+				const d = (v instanceof Date) ? v : new Date(v);
+				if (isNaN(d.getTime())) return String(v);
+				const hh = String(d.getHours()).padStart(2, "0");
+				const mi = String(d.getMinutes()).padStart(2, "0");
+				return `${hh}:${mi}`;
+			};
+
+			// 🔑 clave natural para emparejar INH<->HAB (si falla el match, achicá campos)
+			const makeKey = (o) => ([
+				o.Id || "",
+				o.Empresa || "",
+				toDateStr(o.Datehab),
+				toTimeStr(o.Time),
+				String(o.Tplnr || ""),
+				String(o.Jt || ""),
+				String(o.Pat || ""),
+				String(o.Tecet || "")
+			].join("|"));
+
+			const markPrevInh = (o) => {
+				o.showPrevValue = true;
+				o.fromBackend = true;
+				o.isNew = false;
+				o.enabled = false;
+				o.canSend = false;
+				return o;
+			};
+
+			const markPrevHab = (o) => {
+				o.showPrevValue = true;
+				o.fromBackend = true;
+				o.isNew = false;
+				o.isMirror = false;
+				o.enabled = false;
+				o.canSend = false;
+				return o;
+			};
+
+			// ===== 1) INHIBICIONES backend + 1 nueva =====
+			const aInhibicion = cloneArr(aInhPrev).map((o) => {
+				const c = markPrevInh(o);
+				c.__lid = c.__lid || ("BK_" + makeKey(c));
+				return c;
+			});
+
+			const oNewInh = {
+				__lid: genLocalId(),
+				Id: oLicense.Id,
+				Empresa: oLicense.Empresa,
+				sameDayValidation: true,
+
+				// 👇 usar valores de la licencia
+				Datehab: oLicense.Solbeg,
+				Time: oLicense.Timbeg,
+
+				Tplnr: "",
+				Tecet: "",
+				Jt: AppManagementHelper.getStringUserLegacy(),
+				Coment: "",
+				enabled: true,
+				showPrevValue: false,
+				fromBackend: false,
+				isNew: true,
+				canSend: true
+			};
+
+			aInhibicion.push(oNewInh);
+
+			// ===== 2) HABILITACIONES (por cada inhibición backend creo pareja) =====
+			const aInhBackend = aInhibicion.filter(i => !i.isNew);
+
+			// index habilitaciones backend por key
+			const mHabByKey = {};
+			cloneArr(aHabPrev).forEach((h) => {
+				const k = makeKey(h);
+				if (!mHabByKey[k]) mHabByKey[k] = [];
+				mHabByKey[k].push(h);
+			});
+
+			const takePrevHab = (oInh) => {
+				const k = makeKey(oInh);
+				const q = mHabByKey[k];
+				if (q && q.length) return q.shift();
+				return null;
+			};
+
+			let aHabilitacion = aInhBackend.map((oInh) => {
+				const oPrevHab = takePrevHab(oInh);
+
+				if (oPrevHab) {
+					const oHab = markPrevHab(cloneObj(oPrevHab));
+					oHab.__lid = oHab.__lid || oInh.__lid; // link visual con la inhibición
+					return oHab;
+				}
+
+				// mirror habilitado (editable)
+				const oMirror = cloneObj(oInh);
+				oMirror.Coment = "";
+				oMirror.isMirror = true;
+				oMirror.fromBackend = false;
+				oMirror.showPrevValue = false;
+				oMirror.enabled = true;
+				oMirror.canSend = true;
+				oMirror.__lid = oInh.__lid;
+				return oMirror;
+			});
+
+			// orphans: habilitaciones backend que no matchearon
+			Object.keys(mHabByKey).forEach((k) => {
+				(mHabByKey[k] || []).forEach((h) => {
+					aHabilitacion.push(markPrevHab(cloneObj(h)));
+				});
+			});
+
+			// (opcional) dedup por “ET” con prioridad backend (igual que retiro)
+			const etKey = (o) => [String(o.Tplnr || ""), String(o.Pat || "")].join("|");
+			const bestByEt = {};
+			aHabilitacion.forEach((h) => {
+				const k = etKey(h);
+				if (!bestByEt[k]) { bestByEt[k] = h; return; }
+
+				const curr = bestByEt[k];
+				const currIsBackend = !!curr.fromBackend;
+				const hIsBackend = !!h.fromBackend;
+
+				if (!currIsBackend && hIsBackend) bestByEt[k] = h; // prioridad backend
+			});
+			aHabilitacion = Object.values(bestByEt);
+
+			// si tenés una función equivalente para fechas de recierre, usala.
+			// si Datehab/Time viene igual que PAT, podés reutilizar:
+			if (typeof this.formatUTCDatesHab === "function") {
+				this.formatUTCDatesHab(aInhibicion);
+				this.formatUTCDatesHab(aHabilitacion);
 			}
 
 			AppManagementHelper.getModel("HabilitacionTableJsonModel").setData({ Habilitacion: aHabilitacion });
@@ -741,133 +879,178 @@ sap.ui.define([
 		},
 
 
-		// generateInhibicionHabilitacion: function (oLicense) {
-		// 	var aInhibicion = [];
-		// 	var aHabilitacion = [];
-
-		// 	// Obtener previos (por si no existen aún, evitar errores)
-		// 	let aInhibicionesPrev = oLicense.InhibicionRecierre_nav || [];
-		// 	let aHabilitacionesPrev = oLicense.HabilitacionRecierre_nav || [];
-
-		// 	let iCountInhibiciones = aInhibicionesPrev.length;
-		// 	let iCountHabilitaciones = aHabilitacionesPrev.length;
-
-		// 	// Clonar registros anteriores si existen
-		// 	if (iCountInhibiciones > 0) {
-		// 		let aClone = jQuery.extend(true, [], aInhibicionesPrev);
-		// 		aClone.forEach(o => o.showPrevValue = true);
-		// 		aInhibicion = aInhibicion.concat(aClone);
-		// 	}
-
-		// 	if (iCountHabilitaciones > 0) {
-		// 		let aClone = jQuery.extend(true, [], aHabilitacionesPrev);
-		// 		aClone.forEach(o => o.showPrevValue = true);
-		// 		aHabilitacion = aHabilitacion.concat(aClone);
-		// 	}
-
-		// 	// Determinar si se permite inhibición o habilitación
-		// 	let bCanInhibir = (iCountInhibiciones === iCountHabilitaciones);
-		// 	let bCanHabilitar = (iCountInhibiciones > iCountHabilitaciones);
-
-		// 	// Fecha de habilitación/inhibición
-		// 	let oFechaHoy = new Date();
-		// 	let oFechaValida = (oFechaHoy > FormatHelper.formatDatesGMT(oLicense.Solbeg) &&
-		// 		oFechaHoy < FormatHelper.formatDatesGMT(oLicense.Solend)) ? oFechaHoy : FormatHelper.formatDatesGMT(oLicense.Solend);
-
-		// 	if (bCanInhibir) {
-		// 		aInhibicion.push({
-		// 			Id: oLicense.Id,
-		// 			Empresa: oLicense.Empresa,
-		// 			Datehab: oFechaValida,
-		// 			Time: new Date(),
-		// 			Tplnr: "",
-		// 			sameDayValidation: true,
-		// 			Coment: "",
-		// 			enabled: true,
-		// 			showPrevValue: false
-		// 		});
-		// 	}
-
-		// 	if (bCanHabilitar) {
-		// 		aHabilitacion.push({
-		// 			Id: oLicense.Id,
-		// 			Empresa: oLicense.Empresa,
-		// 			Datehab: oFechaValida,
-		// 			Time: new Date(),
-		// 			Tplnr: "",
-		// 			Coment: "",
-		// 			enabled: true,
-		// 			showPrevValue: false,
-		// 			sameDayValidation: true,
-		// 		});
-		// 	}
-
-		// 	this.checkIfInhibitionHasMade(aHabilitacion, aInhibicion);
-
-		// 	// Setear datos en los modelos
-		// 	AppManagementHelper.getModel("HabilitacionTableJsonModel").setData({ Habilitacion: aHabilitacion });
-		// 	AppManagementHelper.getModel("InhibicionTableJsonModel").setData({ Inhibicion: aInhibicion });
-		// }
-		// ,
 		generatePlacementRemoval: function (oLicense) {
-			const oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
-			const aDataTODOS = oModel.getProperty("/Todos") || [];
+			const aColPrev = oLicense.ColocacionPAT_nav || [];
+			const aRetPrev = oLicense.RetiroPAT_nav || [];
 
-			const aColocaciones = [];
-			const aRetiros = [];
+			const cloneArr = (a) => jQuery.extend(true, [], a || []);
+			const cloneObj = (o) => jQuery.extend(true, {}, o || {});
 
-			const aColocacionesPrev = oLicense.ColocacionPAT_nav || [];
-			const aRetirosPrev = oLicense.RetiroPAT_nav || [];
+			const genLocalId = () => ("LID_" + Date.now() + "_" + Math.floor(Math.random() * 100000));
 
-			const iColocacionesCount = aColocacionesPrev.length;
-			const iRetirosCount = aRetirosPrev.length;
-
-			const cloneAndFormat = (aSource) => {
-				const aClone = jQuery.extend(true, [], aSource);
-				aClone.forEach(o => o.showPrevValue = true);
-				this.formatUTCDatesHab(aClone);
-				return aClone;
+			const toDateStr = (v) => {
+				if (!v) return "";
+				const d = (v instanceof Date) ? v : new Date(v);
+				if (isNaN(d.getTime())) return String(v);
+				const dd = String(d.getDate()).padStart(2, "0");
+				const mm = String(d.getMonth() + 1).padStart(2, "0");
+				const yy = d.getFullYear();
+				return `${yy}-${mm}-${dd}`;
 			};
 
-			if (iColocacionesCount > 0) {
-				aColocaciones.push(...cloneAndFormat(aColocacionesPrev));
-			}
+			const toTimeStr = (v) => {
+				if (!v) return "";
+				const d = (v instanceof Date) ? v : new Date(v);
+				if (isNaN(d.getTime())) return String(v);
+				const hh = String(d.getHours()).padStart(2, "0");
+				const mi = String(d.getMinutes()).padStart(2, "0");
+				return `${hh}:${mi}`;
+			};
 
-			if (iRetirosCount > 0) {
-				aRetiros.push(...cloneAndFormat(aRetirosPrev));
-			}
+			// 🔑 clave natural para emparejar (si te falla el match, achicá campos)
+			const makeKey = (o) => ([
+				o.Id || "",
+				o.Empresa || "",
+				toDateStr(o.Datehab),
+				toTimeStr(o.Time),
+				String(o.Tplnr || ""),
+				String(o.Jt || ""),
+				String(o.Pat || ""),
+				String(o.Tecet || "")
+			].join("|"));
 
-			const isPlacementAllowed = (iColocacionesCount === iRetirosCount);
-			const isRemovalAllowed = (iColocacionesCount > iRetirosCount);
+			const markPrevCol = (o) => {
+				o.showPrevValue = true;
+				o.fromBackend = true;
+				o.isNew = false;
+				o.enabled = false;
+				o.canSend = false;
+				return o;
+			};
 
-			const createNewEntry = () => ({
+			const markPrevRet = (o) => {
+				o.showPrevValue = true;
+				o.fromBackend = true;
+				o.isNew = false;
+				o.isMirror = false;
+				o.enabled = false;
+				o.canSend = false;
+				return o;
+			};
+
+			// ===== 1) COLOCACIONES backend + 1 nueva =====
+			const aColocaciones = cloneArr(aColPrev).map((o) => {
+				const c = markPrevCol(o);
+				c.__lid = c.__lid || ("BK_" + makeKey(c));
+				return c;
+			});
+
+			const oNewCol = {
+				__lid: genLocalId(),
 				Id: oLicense.Id,
 				Empresa: oLicense.Empresa,
 				sameDayValidation: true,
-				Datehab: new Date(),
-				Time: new Date(),
+
+				// 👇 usar directamente valores de la licencia
+				Datehab: oLicense.Solbeg,
+				Time: oLicense.Timbeg,
+
 				Tplnr: "",
+				Pat: "X",
+				Tecet: "",
+				Jt: AppManagementHelper.getStringUserLegacy(),
 				Coment: "",
 				enabled: true,
-				showPrevValue: false
+				showPrevValue: false,
+				fromBackend: false,
+				isNew: true,
+				canSend: true
+			};
+
+
+			aColocaciones.push(oNewCol);
+
+			// ===== 2) RETIROS =====
+			const aColBackend = aColocaciones.filter(c => !c.isNew);
+
+			// index retiros backend por key (cola)
+			const mRetByKey = {};
+			cloneArr(aRetPrev).forEach((r) => {
+				const k = makeKey(r);
+				if (!mRetByKey[k]) mRetByKey[k] = [];
+				mRetByKey[k].push(r);
 			});
 
-			if (isPlacementAllowed) {
-				aColocaciones.push(createNewEntry());
-			}
+			const takePrevRetiro = (oCol) => {
+				const k = makeKey(oCol);
+				const q = mRetByKey[k];
+				if (q && q.length) return q.shift();
+				return null;
+			};
 
-			if (isRemovalAllowed) {
-				aRetiros.push(createNewEntry());
-			}
+			let aRetiros = aColBackend.map((oCol) => {
+				const oPrevRet = takePrevRetiro(oCol);
 
-			this.checkIfPlacementHasMade(aColocaciones, aRetiros);
+				if (oPrevRet) {
+					const oRet = markPrevRet(cloneObj(oPrevRet));
+					oRet.__lid = oRet.__lid || oCol.__lid;
+					return oRet;
+				}
 
-			AppManagementHelper.getModel("RetiroTableJsonModel").setData({ Retiro: aRetiros });
+				// espejo habilitado
+				const oMirror = cloneObj(oCol);
+				oMirror.Coment = "";
+				oMirror.isMirror = true;
+				oMirror.fromBackend = false;
+				oMirror.showPrevValue = false;
+				oMirror.enabled = true;
+				oMirror.canSend = true;
+				oMirror.__lid = oCol.__lid;
+				return oMirror;
+			});
+
+			// agrego orphans (retiros backend que no matchearon por makeKey)
+			Object.keys(mRetByKey).forEach((k) => {
+				(mRetByKey[k] || []).forEach((r) => {
+					aRetiros.push(markPrevRet(cloneObj(r)));
+				});
+			});
+
+			const etKey = (o) => [
+				String(o.Tplnr || ""),
+				String(o.Pat || "")
+			].join("|");
+
+			// 👉 si querés SOLO ET, usá: const etKey = (o) => String(o.Tplnr || "");
+			const bestByEt = {};
+			aRetiros.forEach((r) => {
+				const k = etKey(r);
+				if (!bestByEt[k]) {
+					bestByEt[k] = r;
+					return;
+				}
+				const curr = bestByEt[k];
+				const currIsBackend = !!curr.fromBackend;
+				const rIsBackend = !!r.fromBackend;
+
+				// prioridad backend
+				if (!currIsBackend && rIsBackend) {
+					bestByEt[k] = r;
+				}
+			});
+			aRetiros = Object.values(bestByEt);
+
+			this.formatUTCDatesHab(aColocaciones);
+			this.formatUTCDatesHab(aRetiros);
+
 			AppManagementHelper.getModel("ColocacionTableJsonModel").setData({ Colocacion: aColocaciones });
-		}
+			AppManagementHelper.getModel("RetiroTableJsonModel").setData({ Retiro: aRetiros });
+		},
 
 
-		,
+
+
+
 		setPersonalHabilitadoParaCboEntraga: function (oLicense) {
 			var oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
 			var aDataTODOS = oModel.getProperty("/Todos");

@@ -264,8 +264,8 @@ sap.ui.define([
 			this.oDialogTable.close();
 			this.oDialogTable.destroy(true);
 		},
-		
-		
+
+
 
 		onChangeSelectionRegion: function (evt) {
 			//return; //TODO remove this this is to go back to ordenes input
@@ -503,101 +503,101 @@ sap.ui.define([
 		// },
 
 		unifilarValid: function (oUnifilar) {
-  var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
-  this.oDialogSelection.setBusy(true);
+			var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
+			this.oDialogSelection.setBusy(true);
 
-  // helper local para resolver versión desde distintas fuentes
-  function resolveVersion(fromItem, fromResults) {
-    // a) campos típicos
-    let v = fromItem.NumVersion ?? fromItem.Version ?? fromItem.Numversion ?? fromItem.NroVersion;
+			// helper local para resolver versión desde distintas fuentes
+			function resolveVersion(fromItem, fromResults) {
+				// a) campos típicos
+				let v = fromItem.NumVersion ?? fromItem.Version ?? fromItem.Numversion ?? fromItem.NroVersion;
 
-    // b) si no vino, intento en el resultado del backend por Idunifilar
-    if (!v && fromResults && fromResults.length) {
-      const id = String(fromItem.IdUnifilar ?? fromItem.Idunifilar ?? fromItem.Id ?? "");
-      let found = null;
-      if (id) found = fromResults.find(r => String(r.Idunifilar ?? r.Id) === id);
-      if (!found) {
-        // último intento: por Tipo + (si existe) ET
-        const tipo = String(fromItem.TipoUnifilar ?? fromItem.Tipo ?? "");
-        const et   = String(fromItem.Et ?? fromItem.ET ?? "");
-        found = fromResults.find(r => String(r.TipoUnifilar) === tipo && (!et || String(r.Et) === et));
-      }
-      if (found) v = found.NumVersion ?? found.Version;
-    }
+				// b) si no vino, intento en el resultado del backend por Idunifilar
+				if (!v && fromResults && fromResults.length) {
+					const id = String(fromItem.IdUnifilar ?? fromItem.Idunifilar ?? fromItem.Id ?? "");
+					let found = null;
+					if (id) found = fromResults.find(r => String(r.Idunifilar ?? r.Id) === id);
+					if (!found) {
+						// último intento: por Tipo + (si existe) ET
+						const tipo = String(fromItem.TipoUnifilar ?? fromItem.Tipo ?? "");
+						const et = String(fromItem.Et ?? fromItem.ET ?? "");
+						found = fromResults.find(r => String(r.TipoUnifilar) === tipo && (!et || String(r.Et) === et));
+					}
+					if (found) v = found.NumVersion ?? found.Version;
+				}
 
-    // c) último recurso: parsear de textos (p.ej. "2 v — E.T. ABSTO")
-    if (!v) {
-      const texts = [
-        String(fromItem.IdUnifilar ?? ""),
-        String(fromItem.Descripcion ?? fromItem.Nombre ?? fromItem.Title ?? "")
-      ];
-      for (const s of texts) {
-        // “2 v …” o “… v 2”
-        let m = s.match(/^\s*(\d+)\s*v\b/i) || s.match(/\bv\s*(\d+)\b/i);
-        if (m && m[1]) { v = m[1]; break; }
-      }
-    }
+				// c) último recurso: parsear de textos (p.ej. "2 v — E.T. ABSTO")
+				if (!v) {
+					const texts = [
+						String(fromItem.IdUnifilar ?? ""),
+						String(fromItem.Descripcion ?? fromItem.Nombre ?? fromItem.Title ?? "")
+					];
+					for (const s of texts) {
+						// “2 v …” o “… v 2”
+						let m = s.match(/^\s*(\d+)\s*v\b/i) || s.match(/\bv\s*(\d+)\b/i);
+						if (m && m[1]) { v = m[1]; break; }
+					}
+				}
 
-    // d) devuelvo string (o vacío si no hubo suerte)
-    return v != null ? String(v) : "";
-  }
+				// d) devuelvo string (o vacío si no hubo suerte)
+				return v != null ? String(v) : "";
+			}
 
-  LicenseService.getUnifilares(oLicense, (data) => {
-    this.oDialogSelection.setBusy(false);
+			LicenseService.getUnifilares(oLicense, (data) => {
+				this.oDialogSelection.setBusy(false);
 
-    // log de respaldo
-    console.log("[unifilarValid] item recibido:", oUnifilar);
-    console.log("[unifilarValid] results del backend:", data && data.results);
+				// log de respaldo
+				console.log("[unifilarValid] item recibido:", oUnifilar);
+				console.log("[unifilarValid] results del backend:", data && data.results);
 
-    // (si usás el modelo local)
-    var oModel = AppManagementHelper.getModel("UnifilarListModel");
-    oModel.setData({ Unifilares: data.results, index: (data.results || []).length + 1 });
+				// (si usás el modelo local)
+				var oModel = AppManagementHelper.getModel("UnifilarListModel");
+				oModel.setData({ Unifilares: data.results, index: (data.results || []).length + 1 });
 
-	// En tu payload, IdUnifilar es el número de versión
-	var sVersion        = String(oUnifilar.IdUnifilar);
-	var sRealIdUnifilar = String(oUnifilar.IdUnifilar); // si más adelante te llega un ID real distinto, lo cambiamos
-	var sTipo           = String(oUnifilar.TipoUnifilar || "");
+				// En tu payload, IdUnifilar es el número de versión
+				var sVersion = String(oUnifilar.IdUnifilar);
+				var sRealIdUnifilar = String(oUnifilar.IdUnifilar); // si más adelante te llega un ID real distinto, lo cambiamos
+				var sTipo = String(oUnifilar.TipoUnifilar || "");
 
 
-    // Si aún así no se pudo, NO bloqueo: uso fallback "1" y dejo log.
-    if (!sVersion) {
-      console.warn("[unifilarValid] No se pudo resolver la versión; uso fallback '1'. Item:", oUnifilar);
-      sVersion = "1";
-    }
+				// Si aún así no se pudo, NO bloqueo: uso fallback "1" y dejo log.
+				if (!sVersion) {
+					console.warn("[unifilarValid] No se pudo resolver la versión; uso fallback '1'. Item:", oUnifilar);
+					sVersion = "1";
+				}
 
-    // índice temporal
-    var sIndex = (new Date().valueOf().toString(36) + Math.random().toString(36).slice(2)).slice(1, 19);
+				// índice temporal
+				var sIndex = (new Date().valueOf().toString(36) + Math.random().toString(36).slice(2)).slice(1, 19);
 
-    // Issue #498
-    var oLicencia = AppManagementHelper.getModel("LicenseJsonModel").getData();
-    var sLicenciaCreada = (oLicencia.Id && oLicencia.Tipo === "L") ? oLicencia.Id : "";
+				// Issue #498
+				var oLicencia = AppManagementHelper.getModel("LicenseJsonModel").getData();
+				var sLicenciaCreada = (oLicencia.Id && oLicencia.Tipo === "L") ? oLicencia.Id : "";
 
-    var oModelSelectionData = AppManagementHelper.getModel("SelectionUnifilarModel").getData();
+				var oModelSelectionData = AppManagementHelper.getModel("SelectionUnifilarModel").getData();
 
-    // CrossApp nav (ojo con 'Id': acá es la licencia)
-    var navigationService = sap.ushell.Container.getService('CrossApplicationNavigation');
-    var hash = navigationService.hrefForExternal({
-      target: { semanticObject: 'GestionUnifilaresV1', action: 'Display' },
-      params: {
-        LicenciaCreada : sLicenciaCreada,
-        Tipo           : String(oUnifilar.TipoUnifilar || ""),
-        Version        : String(oUnifilar.IdUnifilar),          // ✅ ahora viaja
-        Empresa        : oLicense.Empresa,
-        Anio           : oLicense.Anio,
-        Id             : oLicense.Idunifilar,    // ✅ más consistente que Idunifilar
-        IdUnifilar     : sIndex,              // temporal
-        RealIdUnifilar : String(oUnifilar.IdUnifilar),     // lo que venga del item (texto o id)
-        Centro         : oModelSelectionData.Region,
-        ET             : oModelSelectionData.ET,
-        Mode           : "C"
-      }
-    });
+				// CrossApp nav (ojo con 'Id': acá es la licencia)
+				var navigationService = sap.ushell.Container.getService('CrossApplicationNavigation');
+				var hash = navigationService.hrefForExternal({
+					target: { semanticObject: 'GestionUnifilaresV1', action: 'Display' },
+					params: {
+						LicenciaCreada: sLicenciaCreada,
+						Tipo: String(oUnifilar.TipoUnifilar || ""),
+						Version: String(oUnifilar.IdUnifilar),          // ✅ ahora viaja
+						Empresa: oLicense.Empresa,
+						Anio: oLicense.Anio,
+						Id: oLicense.Idunifilar,    // ✅ más consistente que Idunifilar
+						IdUnifilar: sIndex,              // temporal
+						RealIdUnifilar: String(oUnifilar.IdUnifilar),     // lo que venga del item (texto o id)
+						Centro: oModelSelectionData.Region,
+						ET: oModelSelectionData.ET,
+						Mode: "C"
+					}
+				});
 
-    var url = window.location.href.split('#')[0] + hash;
-    sap.m.URLHelper.redirect(url, true);
+				var url = window.location.href.split('#')[0] + hash;
+				sap.m.URLHelper.redirect(url, true);
 
-  }, $.proxy(this.onErrorGetUnifilares, this));
-},
+			}, $.proxy(this.onErrorGetUnifilares, this));
+		},
 
 
 		openUnifilarURL: function (oEvent) {
@@ -2079,64 +2079,299 @@ sap.ui.define([
 				LicenseService.deliveryLicence(oDelivery);
 			}
 		},
-		sendHabilitacion: function (oEvent) {
-			var oHabilitacion = oEvent.getSource().getParent().getBindingContext("HabilitacionTableJsonModel").getObject();
+		
 
-			var oValidation = this.validateSend(oHabilitacion)
-			if (!oValidation.valid) {
-				MessageBoxHelper.showAlert("Alerta", oValidation.message);
-			} else {
-				BusyDialogHelper.open();
-				delete oHabilitacion.sameDayValidation;
-				delete oHabilitacion.enabled;
-				delete oHabilitacion.TejtValueStateText;
-				delete oHabilitacion.showPrevValue;
-				LicenseService.HabilitacionLicence(oHabilitacion);
-			}
-		},
 		sendInhibicion: function (oEvent) {
-			var oInhibicion = oEvent.getSource().getParent().getBindingContext("InhibicionTableJsonModel").getObject();
-			var oValidation = this.validateSend(oInhibicion)
-			if (!oValidation.valid) {
+			const oModelInh = AppManagementHelper.getModel("InhibicionTableJsonModel");
+			const oModelHab = AppManagementHelper.getModel("HabilitacionTableJsonModel");
 
-				MessageBoxHelper.showAlert("Alerta", oValidation.message);
-			} else {
-				BusyDialogHelper.open();
-				delete oInhibicion.sameDayValidation;
-				delete oInhibicion.enabled;
-				delete oInhibicion.TejtValueStateText;
-				delete oInhibicion.showPrevValue;
-				LicenseService.InhibicionLicence(oInhibicion);
+			const oCtx = oEvent.getSource().getParent().getBindingContext("InhibicionTableJsonModel");
+			if (!oCtx) return;
+
+			const sPath = oCtx.getPath();           // ej: "/Inhibicion/3"
+			const oInh = oCtx.getObject() || {};
+
+			const oValidation = this.validateSend(oInh);
+			if (!oValidation.valid) {
+				return MessageBoxHelper.showAlert("Alerta", oValidation.message);
 			}
+
+			BusyDialogHelper.open();
+
+			const sLid = oInh.__lid;
+			const sRefId = oInh.RefId;
+
+			// ✅ payload limpio (NO mutar el objeto del modelo)
+			const oPayload = jQuery.extend(true, {}, oInh);
+
+			delete oPayload.sameDayValidation;
+			delete oPayload.enabled;
+			delete oPayload.TejtValueStateText;
+			delete oPayload.showPrevValue;
+			delete oPayload.__lid;
+			delete oPayload.isMirror;
+			delete oPayload.canSend;
+			delete oPayload.isNew;
+			delete oPayload.Datelicencia;
+			delete oPayload.fromBackend;
+			delete oPayload.Jt; // si Jt es solo de UI/usuario y backend lo deriva, dejalo borrado
+
+			LicenseService.InhibicionLicence(
+				oPayload,
+				{ RefId: sRefId },
+				{
+					success: (oResponse) => {
+						// 1) marco inhibición como "backend"
+						const oUpdated = jQuery.extend(true, {}, oInh, oResponse || {});
+						oUpdated.__lid = sLid;
+						oUpdated.fromBackend = true;
+						oUpdated.isNew = false;
+						oUpdated.enabled = false;
+						oUpdated.canSend = false;
+						oUpdated.showPrevValue = true;
+
+						oModelInh.setProperty(sPath, oUpdated);
+
+						// 2) habilito habilitación espejo (misma __lid)
+						this._enableHabilitacionForLid(sLid);
+
+						oModelInh.refresh(true);
+						oModelHab.refresh(true);
+
+						BusyDialogHelper.close();
+						MessageToast.show("Inhibición guardada");
+					},
+					error: (e) => {
+						BusyDialogHelper.close();
+						MessageBoxHelper.showAlert("Error", "No se pudo guardar la inhibición.");
+					}
+				}
+			);
 		},
+
+		/**
+		 * Habilita la fila espejo en HabilitacionTableJsonModel
+		 * que tenga la misma __lid que la inhibición guardada.
+		 */
+		_enableHabilitacionForLid: function (sLid) {
+			const oModelHab = AppManagementHelper.getModel("HabilitacionTableJsonModel");
+			const aHab = oModelHab.getProperty("/Habilitacion") || [];
+
+			const iIdx = aHab.findIndex(h => h && h.__lid === sLid);
+			if (iIdx < 0) return;
+
+			const oHab = jQuery.extend(true, {}, aHab[iIdx]);
+
+			// Si ya es backend, no lo habilito
+			if (oHab.fromBackend) return;
+
+			oHab.enabled = true;
+			oHab.canSend = true;
+
+			// por coherencia con tu flujo espejo:
+			oHab.isMirror = true;
+			oHab.showPrevValue = false;
+
+			oModelHab.setProperty(`/Habilitacion/${iIdx}`, oHab);
+		},
+		sendHabilitacion: function (oEvent) {
+			const oModelHab = AppManagementHelper.getModel("HabilitacionTableJsonModel");
+
+			const oCtx = oEvent.getSource().getParent().getBindingContext("HabilitacionTableJsonModel");
+			if (!oCtx) return;
+
+			const sPath = oCtx.getPath();            // ej: "/Habilitacion/2"
+			const oHab = oCtx.getObject() || {};
+
+			const oValidation = this.validateSend(oHab);
+			if (!oValidation.valid) {
+				return MessageBoxHelper.showAlert("Alerta", oValidation.message);
+			}
+
+			BusyDialogHelper.open();
+
+			const sLid = oHab.__lid;
+			const sRefId = oHab.RefId;
+
+			// ✅ NO mutar el modelo
+			const oPayload = jQuery.extend(true, {}, oHab);
+
+			// limpiar campos de UI / control
+			delete oPayload.sameDayValidation;
+			delete oPayload.enabled;
+			delete oPayload.TejtValueStateText;
+			delete oPayload.showPrevValue;
+			delete oPayload.__lid;
+			delete oPayload.isMirror;
+			delete oPayload.canSend;
+			delete oPayload.isNew;
+			delete oPayload.Datelicencia;
+			delete oPayload.fromBackend;
+			delete oPayload.Jt;
+			delete oPayload.LicenciaTrabajo
+
+			LicenseService.HabilitacionLicence(
+				oPayload,
+				{ RefId: sRefId },
+				{
+					success: (oResponse) => {
+						// 1) marcar habilitación como backend
+						const oUpdated = jQuery.extend(true, {}, oHab, oResponse || {});
+						oUpdated.__lid = sLid;
+						oUpdated.fromBackend = true;
+						oUpdated.isNew = false;
+						oUpdated.enabled = false;
+						oUpdated.canSend = false;
+						oUpdated.showPrevValue = true;
+						oUpdated.isMirror = false;
+
+						oModelHab.setProperty(sPath, oUpdated);
+						oModelHab.refresh(true);
+
+						BusyDialogHelper.close();
+						MessageToast.show("Habilitación guardada");
+					},
+					error: (e) => {
+						BusyDialogHelper.close();
+						MessageBoxHelper.showAlert("Error", "No se pudo guardar la habilitación.");
+					}
+				}
+			);
+		},
+
 		sendColocacionPAT: function (oEvent) {
-			var oColocacionPAT = oEvent.getSource().getParent().getBindingContext("ColocacionTableJsonModel").getObject();
-			var oValidation = this.validateSend(oColocacionPAT)
+			const oModelCol = AppManagementHelper.getModel("ColocacionTableJsonModel");
+			const oModelRet = AppManagementHelper.getModel("RetiroTableJsonModel");
+
+			const oCtx = oEvent.getSource().getParent().getBindingContext("ColocacionTableJsonModel");
+			const sPath = oCtx.getPath();          // ej: "/Colocacion/3"
+			const oCol = oCtx.getObject();
+
+			const oValidation = this.validateSend(oCol);
 			if (!oValidation.valid) {
-				MessageBoxHelper.showAlert("Alerta", oValidation.message);
-			} else {
-				BusyDialogHelper.open();
-				delete oColocacionPAT.sameDayValidation;
-				delete oColocacionPAT.enabled;
-				delete oColocacionPAT.TejtValueStateText;
-				delete oColocacionPAT.showPrevValue;
-				LicenseService.ColocacionPATLicence(oColocacionPAT);
+				return MessageBoxHelper.showAlert("Alerta", oValidation.message);
 			}
+
+			BusyDialogHelper.open();
+
+
+			const sLid = oCol.__lid;
+			const sRefId = oCol.RefId;
+
+			const oPayload = jQuery.extend(true, {}, oCol);
+
+			delete oPayload.sameDayValidation;
+			delete oPayload.enabled;
+			delete oPayload.TejtValueStateText;
+			delete oPayload.showPrevValue;
+			delete oPayload.__lid;
+			delete oPayload.isRemoval;
+			delete oPayload.canSend;
+			delete oPayload.isNew;
+			delete oPayload.Datelicencia;
+			delete oPayload.fromBackend;
+			delete oPayload.Jt;
+			delete
+
+				LicenseService.ColocacionPATLicence(
+					oPayload,
+					{ RefId: sRefId },
+					{
+						success: (oResponse) => {
+							// 1) marco colocación como "backend"
+							const oUpdated = jQuery.extend(true, {}, oCol, oResponse || {});
+							oUpdated.__lid = sLid;
+							oUpdated.fromBackend = true;
+							oUpdated.isNew = false;
+							oUpdated.enabled = false;
+							oUpdated.canSend = false;
+							oUpdated.showPrevValue = true;
+
+							oModelCol.setProperty(sPath, oUpdated);
+
+							// 2) habilito retiro espejo (misma __lid)
+							this._enableRetiroForLid(sLid);
+
+							oModelCol.refresh(true);
+							oModelRet.refresh(true);
+
+							BusyDialogHelper.close();
+							MessageToast.show("Colocación guardada");
+						},
+						error: (e) => {
+							BusyDialogHelper.close();
+							MessageBoxHelper.showAlert("Error", "No se pudo guardar la colocación.");
+						}
+					}
+				);
 		},
+		_enableRetiroForLid: function (sLid) {
+			const oModelRet = AppManagementHelper.getModel("RetiroTableJsonModel");
+			const aRet = oModelRet.getProperty("/Retiro") || [];
+
+			const iIdx = aRet.findIndex(r => r && r.__lid === sLid);
+			if (iIdx < 0) return;
+
+			// si era espejo de la colocación nueva, ahora se habilita
+			const oRet = jQuery.extend(true, {}, aRet[iIdx]);
+			if (oRet.isMirror && !oRet.fromBackend) {
+				oRet.enabled = true;
+				oRet.canSend = true;
+				oRet.isNew = false;
+			}
+
+			oModelRet.setProperty(`/Retiro/${iIdx}`, oRet);
+		},
+
+		// sendRetiroPAT: function (oEvent) {
+		// 	var oRetiroPAT = oEvent.getSource().getParent().getBindingContext("RetiroTableJsonModel").getObject();
+		// 	var oValidation = this.validateSend(oRetiroPAT)
+		// 	if (!oValidation.valid) {
+		// 		MessageBoxHelper.showAlert("Alerta", oValidation.message);
+		// 	} else {
+		// 		BusyDialogHelper.open();
+		// 		delete oRetiroPAT.sameDayValidation;
+		// 		delete oRetiroPAT.enabled;
+		// 		delete oRetiroPAT.TejtValueStateText;
+		// 		delete oRetiroPAT.showPrevValue;
+		// 		LicenseService.RetiroPATLicence(oRetiroPAT);
+		// 	}
+		// },
 		sendRetiroPAT: function (oEvent) {
-			var oRetiroPAT = oEvent.getSource().getParent().getBindingContext("RetiroTableJsonModel").getObject();
-			var oValidation = this.validateSend(oRetiroPAT)
+			const oCtx = oEvent.getSource().getParent().getBindingContext("RetiroTableJsonModel");
+			const oRetiroPAT = oCtx.getObject();
+
+			const oValidation = this.validateSend(oRetiroPAT);
 			if (!oValidation.valid) {
-				MessageBoxHelper.showAlert("Alerta", oValidation.message);
-			} else {
-				BusyDialogHelper.open();
-				delete oRetiroPAT.sameDayValidation;
-				delete oRetiroPAT.enabled;
-				delete oRetiroPAT.TejtValueStateText;
-				delete oRetiroPAT.showPrevValue;
-				LicenseService.RetiroPATLicence(oRetiroPAT);
+				return MessageBoxHelper.showAlert("Alerta", oValidation.message);
 			}
+
+			BusyDialogHelper.open();
+
+			const oPayload = jQuery.extend(true, {}, oRetiroPAT);
+			const sRefId = oPayload.RefId;
+			const sLid = oRetiroPAT.__lid;
+
+			delete oPayload.sameDayValidation;
+			delete oPayload.enabled;
+			delete oPayload.TejtValueStateText;
+			delete oPayload.showPrevValue;
+			delete oPayload.__lid;
+			delete oPayload.isRemoval;
+
+			// ✅ nuevos: solo UI
+			delete oPayload.canSend;
+			delete oPayload.isNew;
+			delete oPayload.Datelicencia; // por si viene con ese nombre
+			delete oPayload.fromBackend;
+			delete oPayload.isMirror
+
+			LicenseService.RetiroPATLicence(oPayload, { RefId: sRefId, __lid: sLid });
 		},
+
+
+
+
 
 		sendDevolution: function (oEvent) {
 			BusyDialogHelper.open();
@@ -4781,8 +5016,8 @@ sap.ui.define([
 			sap.ui.getCore().byId("TransfHabJefeTrabajoComb").setSelectedKey("")
 			sap.ui.getCore().byId("JefeTrabajoSupComb").setSelectedKey("")
 			sap.ui.getCore().byId("JefeTrabajoCombo").setSelectedKey("")
-sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items")
-sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
+			sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items")
+			sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 			const lic = oView.getModel("LicenseJsonModel");
 			lic.setProperty("/IdHabJefeSup", "")
 			lic.setProperty("/IdHabJefe", "")
@@ -5013,13 +5248,13 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 		refreshJefesFromLicense: function () {
 			const view = this.getView();
 
-		
+
 			const comboMap = {
 				"JefeTrabajoCombo": { licProp: "TipoHabJefe", modelName: "JefesPreviewModel" },
 				"JefeTrabajoSupComb": { licProp: "TipoHabJefeSup", modelName: "JefesSupPreviewModel" }
 			};
 
-			
+
 			const licData = (view.getModel("LicenseJsonModel")?.getData?.()) || {};
 			var sIdHabJefe = (licData.IdHabJefe || "").trim();
 			var sIdHabJefeSup = (licData.IdHabJefeSup || "").trim();
@@ -5028,12 +5263,12 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 			const jobcond = String(licData.Jobcond || "").padStart(2, "0");
 			const isTct = (jobcond === "04" || jobcond === "05");
 
-			
+
 			const phModel = view.getModel("PersonalHabilitadoModel") || sap.ui.getCore().getModel("PersonalHabilitadoModel");
 			const srcPath = isTct ? "/JefeDeTrabajoTct" : "/JefeDeTrabajo";
 			const source = (phModel && phModel.getProperty(srcPath)) || [];
 
-		
+
 			const dedupeBy = (arr, keyFn) => {
 				const m = new Map();
 				arr.forEach(it => {
@@ -5056,11 +5291,11 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 				IdHabilitacion: it.IdHabilitacion
 			});
 
-			
+
 			Object.values(comboMap).forEach(({ licProp, modelName }) => {
 				const tipoHabKey = String(licData?.[licProp] || "").trim();
 
-				
+
 				let model = view.getModel(modelName);
 				if (!model) {
 					model = new sap.ui.model.json.JSONModel([]);
@@ -5068,14 +5303,14 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 					view.setModel(model, modelName);
 				}
 
-				
+
 				if (!tipoHabKey) {
 					const allProjected = dedupeBy(source, it => it.Legajo).map(projectRow);
 					model.setData(allProjected);
 					return;
 				}
 
-				
+
 				const matches = (row) => {
 					if (isTct) {
 						return String(row.TipoHab || "") === tipoHabKey || String(row.Lote || "") === tipoHabKey;
@@ -5085,9 +5320,9 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 
 				const projected = dedupeBy(source.filter(matches), it => it.Legajo).map(projectRow);
 
-				
+
 				model.setData(projected);
-				
+
 			});
 		},
 
@@ -5318,7 +5553,198 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "N");
 			}
 
-		}
+		},
+
+		onChangePAT: function (oEvent) {
+			const oSrc = oEvent.getSource();
+			const oCtx = oSrc.getBindingContext("ColocacionTableJsonModel");
+			if (!oCtx) return;
+
+			const iIndex = oEvent.getParameter("selectedIndex"); // 0=PAT, 1=PAT/A
+			const sRowPath = oCtx.getPath();
+			const oRow = oCtx.getObject() || {};
+
+			// Nuevo PAT según selección
+			const sNewPat = (iIndex === 0) ? "X" : "";
+
+			// Guardar el anterior para revertir si falla
+			const sOldPat = (oRow.Pat === "X") ? "X" : "";
+
+			// Seteo nuevo PAT en modelo
+			oCtx.getModel().setProperty(sRowPath + "/Pat", sNewPat);
+
+			// Validar con la ET actual de la fila
+			const sEt = oRow.Tplnr || "";
+			const sExcludeLid = oRow.__lid;
+
+			const res = this._checkEtAllowsPatPair(
+				"ColocacionTableJsonModel",
+				"/Colocacion",
+				sEt,
+				sNewPat,
+				sExcludeLid
+			);
+
+			if (!res.ok) {
+				// Revertir PAT en modelo
+				oCtx.getModel().setProperty(sRowPath + "/Pat", sOldPat);
+
+				// Revertir UI (RadioButtonGroup) al índice anterior
+				const iOldIndex = (sOldPat === "X") ? 0 : 1;
+				if (typeof oSrc.setSelectedIndex === "function") {
+					oSrc.setSelectedIndex(iOldIndex);
+				}
+
+				sap.m.MessageBox.error(res.message);
+				return;
+			}
+		},
+
+
+
+
+		onEtChangeValidatePatPair: function (oEvent) {
+			const oSrc = oEvent.getSource();
+			const oCtx = oSrc.getBindingContext("ColocacionTableJsonModel");
+			if (!oCtx) return;
+
+			const sRowPath = oCtx.getPath();
+			const oRow = oCtx.getObject() || {};
+
+			const sNewEt = (typeof oSrc.getSelectedKey === "function")
+				? oSrc.getSelectedKey()
+				: (typeof oSrc.getValue === "function" ? oSrc.getValue() : "");
+
+			// PAT: solo "X"; si no, vacío
+			const sPat = (oRow.Pat === "X") ? "X" : "";
+			const sExcludeLid = oRow.__lid;
+
+			const res = this._checkEtAllowsPatPair(
+				"ColocacionTableJsonModel",
+				"/Colocacion",
+				sNewEt,
+				sPat,
+				sExcludeLid
+			);
+
+			if (!res.ok) {
+				const sOldEt = oRow.Tplnr || "";
+
+				// revertir en modelo
+				oCtx.getModel().setProperty(sRowPath + "/Tplnr", sOldEt);
+
+				// revertir en control
+				if (typeof oSrc.setSelectedKey === "function") oSrc.setSelectedKey(sOldEt);
+				if (typeof oSrc.setValue === "function") oSrc.setValue(sOldEt);
+
+				sap.m.MessageBox.error(res.message);
+				return;
+			}
+
+			// OK
+			oCtx.getModel().setProperty(sRowPath + "/Tplnr", sNewEt);
+		},
+
+		_checkEtAllowsPatPair: function (sModelName, sPathRows, sEt, sPat, sExcludeLid) {
+			const oModel = AppManagementHelper.getModel(sModelName);
+			const aRows = (oModel && oModel.getProperty(sPathRows)) || [];
+
+			if (!sEt) {
+				return { ok: false, message: "Seleccione una ET válida." };
+			}
+
+			// CORTA en el primer match: misma ET + mismo PAT
+			for (let i = 0; i < aRows.length; i++) {
+				const r = aRows[i];
+				if (!r) continue;
+
+				// ignoro la misma fila
+				if (sExcludeLid && r.__lid === sExcludeLid) continue;
+
+				if (r.Tplnr === sEt) {
+					const rPat = (r.Pat === "X") ? "X" : "";
+					if (rPat === sPat) {
+						return {
+							ok: false,
+							message: `Ya existe una colocacion con esa caracteristica en la ET ${sEt}.`
+						};
+					}
+					// misma ET pero PAT distinto => permitido
+				}
+			}
+
+			return { ok: true };
+		},
+
+		onEtChangeValidateEtInhibicion: function (oEvent) {
+			const oSrc = oEvent.getSource();
+			const oCtx = oSrc.getBindingContext("InhibicionTableJsonModel");
+			if (!oCtx) return;
+
+			const sRowPath = oCtx.getPath();
+			const oRow = oCtx.getObject() || {};
+
+			const sNewEt = (typeof oSrc.getSelectedKey === "function")
+				? oSrc.getSelectedKey()
+				: (typeof oSrc.getValue === "function" ? oSrc.getValue() : "");
+
+			const sExcludeLid = oRow.__lid;
+
+			const res = this._checkEtUniqueOnly(
+				"InhibicionTableJsonModel",
+				"/Inhibicion",
+				sNewEt,
+				sExcludeLid
+			);
+
+			if (!res.ok) {
+				const sOldEt = oRow.Tplnr || "";
+
+				// revertir en modelo
+				oCtx.getModel().setProperty(sRowPath + "/Tplnr", sOldEt);
+
+				// revertir en control
+				if (typeof oSrc.setSelectedKey === "function") oSrc.setSelectedKey(sOldEt);
+				if (typeof oSrc.setValue === "function") oSrc.setValue(sOldEt);
+
+				sap.m.MessageBox.error(res.message);
+				return;
+			}
+
+			// OK
+			oCtx.getModel().setProperty(sRowPath + "/Tplnr", sNewEt);
+		},
+
+		_checkEtUniqueOnly: function (sModelName, sPathRows, sEt, sExcludeLid) {
+			const oModel = AppManagementHelper.getModel(sModelName);
+			const aRows = (oModel && oModel.getProperty(sPathRows)) || [];
+
+			if (!sEt) {
+				return { ok: false, message: "Seleccione una ET válida." };
+			}
+
+			// CORTA en el primer match: misma ET (sin mirar PAT)
+			for (let i = 0; i < aRows.length; i++) {
+				const r = aRows[i];
+				if (!r) continue;
+
+				// ignoro la misma fila
+				if (sExcludeLid && r.__lid === sExcludeLid) continue;
+
+				if (r.Tplnr === sEt) {
+					return {
+						ok: false,
+						message: `Ya existe una inhibición para la ET ${sEt}.`
+					};
+				}
+			}
+
+			return { ok: true };
+		},
+
+
+
+
 
 	});
 });
