@@ -854,19 +854,21 @@ sap.ui.define([
 			
 			BusyDialogHelper.open();
 			const CHUNK_SIZE = 200;
-			const aChunks = chunkArray(aData, CHUNK_SIZE);
+			const aChunks = this.chunkArray(aData, CHUNK_SIZE);
 
-			// 🔁 ACÁ es donde se vuelve a llamar al mismo service
-			const aPromises = aChunks.map(chunk =>
-				ReportesService.getLicenciasFullData(chunk)
-			);
+			let fullData = [];
 
-			// ⏳ Esperamos a que TODAS las llamadas terminen
-			Promise.all(aPromises).then((aResults) => {
+			aChunks.reduce((p, chunk, index) => {
+				return p.then(() => {
+					console.log(`Procesando chunk ${index + 1}/${aChunks.length}`);
+					return ReportesService.getLicenciasFullData(chunk);
+				}).then((result) => {
+					fullData = fullData.concat(result);
+				});
+			}, Promise.resolve())
 
-				const fullData = aResults.flat(); // concatena manteniendo orden
-				var data = fullData;              // 🔑 ahora "data" vuelve a existir
-				//that.allFullLicences = fullData;  // 🔑 mismos índices que aData
+			.then(() => {
+				var data = fullData;
 
 			//ReportesService.getLicenciasFullData(aData).then((data) => {
 				that.allFullLicences = data;
@@ -1108,7 +1110,7 @@ sap.ui.define([
 					);
 					for (var oLicencia of aLicencias) {
 						//var aEntregas = oLicencia.EntregasLicencia_nav.results;
-						var aEntregas = getResults(oLicencia.EntregasLicencia_nav);
+						var aEntregas = that.getResults(oLicencia.EntregasLicencia_nav);
 						if (aEntregas.length !== 0) { //Solo agarro las Licencias que tienen Entregas
 							for (var Entrega of aEntregas) { // Recorro cada entrega de cada licencia
 								var anio = Entrega.Anio;
@@ -1137,7 +1139,7 @@ sap.ui.define([
 					);
 					for (var oLicencia of aLicencias) {
 						//var aColocaciones = oLicencia.ColocacionPAT_nav.results;
-						var aColocaciones = getResults(oLicencia.ColocacionPAT_nav);
+						var aColocaciones = that.getResults(oLicencia.ColocacionPAT_nav);
 						if (aColocaciones.length !== 0) {
 							for (var Colocacion of aColocaciones) {
 
@@ -1160,7 +1162,7 @@ sap.ui.define([
 					);
 					for (var oLicencia of aLicencias) {
 						//var aRetiros = oLicencia.RetiroPAT_nav.results;
-						var aRetiros = getResults(oLicencia.RetiroPAT_nav);
+						var aRetiros = that.getResults(oLicencia.RetiroPAT_nav);
 						if (aRetiros.length !== 0) {
 							for (var Retiro of aRetiros) {
 
@@ -1182,7 +1184,7 @@ sap.ui.define([
 					);
 					for (var oLicencia of aLicencias) {
 						//var aHabilitaciones = oLicencia.HabilitacionRecierre_nav.results
-						var aHabilitaciones = getResults(oLicencia.HabilitacionRecierre_nav);
+						var aHabilitaciones = that.getResults(oLicencia.HabilitacionRecierre_nav);
 						if (aHabilitaciones.length !== 0) {
 							for (var Habilitacion of aHabilitaciones) {
 
@@ -1204,7 +1206,7 @@ sap.ui.define([
 					);
 					for (var oLicencia of aLicencias) {
 						//var aInhibiciones = oLicencia.InhibicionRecierre_nav.results
-						var aInhibiciones = getResults(oLicencia.InhibicionRecierre_nav);
+						var aInhibiciones = that.getResults(oLicencia.InhibicionRecierre_nav);
 						if (aInhibiciones.length !== 0) {
 							for (var Inhibicion of aInhibiciones) {
 
@@ -1231,7 +1233,7 @@ sap.ui.define([
 					);
 					for (var oLicencia of aLicencias) {
 						//var aItems = oLicencia.DevolucionLicencia_nav.results;
-						var aItems = getResults(oLicencia.DevolucionLicencia_nav);
+						var aItems = that.getResults(oLicencia.DevolucionLicencia_nav);
 						if (aItems.length !== 0) {
 							for (var Item of aItems) {
 								var anio = Item.Anio;
@@ -1259,7 +1261,7 @@ sap.ui.define([
 					);
 					for (var oLicencia of aLicencias) {
 						//var aItems = oLicencia.SuspensionLicencia_nav.results;
-						var aItems = getResults(oLicencia.SuspensionLicencia_nav);
+						var aItems = that.getResults(oLicencia.SuspensionLicencia_nav);
 						if (aItems.length !== 0) {
 							for (var Item of aItems) {
 								var anio = Item.Anio;
@@ -1286,7 +1288,7 @@ sap.ui.define([
 					);
 					for (var oLicencia of aLicencias) {
 						//var aItems = oLicencia.ReanudacionLicencia_nav.results;
-						var aItems = getResults(oLicencia.ReanudacionLicencia_nav);
+						var aItems = that.getResults(oLicencia.ReanudacionLicencia_nav);
 						if (aItems.length !== 0) {
 							for (var Item of aItems) {
 								var anio = Item.Anio;
@@ -1336,7 +1338,7 @@ sap.ui.define([
 					);
 					for (var oLicencia of aLicencias) {
 						//var aItems = oLicencia.TransferenciaJefeTrabajo_nav.results;
-						var aItems = getResults(oLicencia.TransferenciaJefeTrabajo_nav);
+						var aItems = that.getResults(oLicencia.TransferenciaJefeTrabajo_nav);
 						if (aItems.length !== 0) {
 							for (var Item of aItems) {
 								var anio = Item.Anio;
@@ -1367,7 +1369,7 @@ sap.ui.define([
 					);
 					for (let oLicencia of aLicencias) {
 						//let aItems = oLicencia.ObservacionesLicencia_nav.results;
-						let aItems = getResults(oLicencia.ObservacionesLicencia_nav);
+						let aItems = that.getResults(oLicencia.ObservacionesLicencia_nav);
 						if (aItems.length !== 0) {
 							for (let Item of aItems) {
 								let anio = Item.Anio;
@@ -1396,7 +1398,7 @@ sap.ui.define([
 					);
 					for (let oLicencia of aLicencias) {
 						//let aItems = oLicencia.CoordinacionesLicencia_nav.results;
-						let aItems = getResults(oLicencia.CoordinacionesLicencia_nav);
+						let aItems = that.getResults(oLicencia.CoordinacionesLicencia_nav);
 						if (aItems.length !== 0) {
 							for (let Item of aItems) {
 								let anio = Item.Anio;
@@ -1468,7 +1470,7 @@ sap.ui.define([
 					);
 					for (var oLicencia of aLicencias) {
 						//var aItems = oLicencia.TramitacionesLicencia_nav.results;
-						var aItems = getResults(oLicencia.TramitacionesLicencia_nav);
+						var aItems = that.getResults(oLicencia.TramitacionesLicencia_nav);
 						if (aItems.length !== 0) {
 							for (var Item of aItems) {
 								var Sociedad = Item.Empresa;
