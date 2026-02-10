@@ -884,14 +884,6 @@ sap.ui.define([
 			const aRetPrev = oLicense.RetiroPAT_nav || [];
 			var aDataTODOS = AppManagementHelper.getModel("PersonalHabilitadoModel").getProperty("/Todos");
 
-			var aDevolution = [];
-			var aDelivery = [];
-
-
-
-
-		
-
 			const cloneArr = (a) => jQuery.extend(true, [], a || []);
 			const cloneObj = (o) => jQuery.extend(true, {}, o || {});
 

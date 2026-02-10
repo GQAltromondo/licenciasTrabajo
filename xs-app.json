@@ -3,6 +3,27 @@
   "authenticationMethod": "route",
   "routes": [
     {
+      "source": "^/bpmworkflowruntime/(.*)$",
+      "target": "/public/workflow/rest/$1",
+      "service": "com.sap.spa.processautomation",
+      "endpoint": "api",
+      "authenticationType": "xsuaa"
+    },
+    {
+      "source": "/destinations/SAP_Gateway/(.*)",
+      "target": "$1",
+      "destination": "SAP_Gateway",
+      "authenticationType": "xsuaa",
+      "csrfProtection": false
+    },
+    {
+      "source": "^/sap/(.*)$",
+      "target": "/sap/$1",
+      "destination": "None",
+      "authenticationType": "xsuaa",
+      "csrfProtection": false
+    },
+    {
       "source": "^/IAS/(.*)$",
       "target": "$1",
       "destination": "IAS",
@@ -19,13 +40,6 @@
       "destination": "SAP_Gateway",
       "authenticationType": "xsuaa",
       "csrfProtection": false
-    },
-    {
-      "source": "^/bpmworkflowruntime/(.*)$",
-      "target": "/public/workflow/rest/$1",
-      "service": "com.sap.spa.processautomation",
-      "endpoint": "api",
-      "authenticationType": "xsuaa"
     },
     {
       "source": "^/resources/(.*)$",
