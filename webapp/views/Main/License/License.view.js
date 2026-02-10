@@ -876,14 +876,14 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							enabled: {
 								parts: [
 									"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-									"ColocacionTableJsonModel>enabled", "ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+									"RetiroTableJsonModel>enabled", "RetiroTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
 								],
 								formatter: oController.rolStatusEdition("retiro/")
 							},
 							columns: 2,
 
 							selectedIndex: {
-								path: "ColocacionTableJsonModel>Pat",
+								path: "RetiroTableJsonModel>Pat",
 								formatter: function (v) {
 									// SOLO si es "X" => PAT (0). En cualquier otro caso => PAT/A (1)
 									return (v === "X") ? 0 : 1;

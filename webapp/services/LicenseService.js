@@ -709,25 +709,56 @@ sap.ui.define([
 		// licstat 09 = generada
 		// licstat 07 coordinada
 
-		HabilitacionLicence: function (oHabilitacion) {
+		HabilitacionLicence: function (oHabilitacion, oMeta) {
 			var oLicence = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			var licenseClone = LicenceHelper.cloneLicense(oLicence);
 			//licenseClone.Licstat = "07";
 			this.updateLicense(licenseClone, {
-				success: $.proxy(this.successPUTLicenceHab, this, oHabilitacion, licenseClone),
+				success: $.proxy(this.successPUTLicenceHab, this, oHabilitacion, licenseClone, oMeta),
 				error: $.proxy(this.errorPUTLicenceHab, this)
 			});
 		},
-		successPUTLicenceHab: function (oHabilitacion, licenseClone) {
+		successPUTLicenceHab: function (oHabilitacion, licenseClone, oMeta) {
 			var entity = "/HabilitacionRecierreSet";
 			oHabilitacion.Datehab = FormatHelper.getUTCdate(oHabilitacion.Datehab);
 			oDataService.getModel("TransenerOperaciones").create(entity, oHabilitacion, {
-				success: $.proxy(this.successPOSTHabilitacion, this, oHabilitacion, licenseClone),
-				error: $.proxy(this.errorPOSTHabilitacion, this)
+				success: $.proxy(this.successPOSTHabilitacion, this, oMeta, oHabilitacion),
+				error: $.proxy(this.errorPOSTHabilitacion, this, oMeta)
 			});
 		},
-		successPOSTHabilitacion: function (data) {
+		successPOSTHabilitacion: function (data, oMeta, oHabilitacion) {
 			BusyDialogHelper.close();
+
+			const sRefId = oMeta && oMeta.RefId;
+			const sLid = oMeta && oMeta.__lid;
+
+			// Actualizar modelo ANTES de llamar a FIND para preservar la fecha
+			if (sRefId || sLid) {
+				const oModelHab = AppManagementHelper.getModel("HabilitacionTableJsonModel");
+				const aHab = oModelHab.getProperty("/Habilitacion") || [];
+
+				const iHab = aHab.findIndex(x =>
+					(sLid && x.__lid === sLid) || (sRefId && x.RefId === sRefId)
+				);
+
+				if (iHab >= 0) {
+					// Preservar Datehab del objeto original antes de mergear con data del backend
+					const oOriginal = aHab[iHab];
+					const oUpdated = jQuery.extend(true, {}, oOriginal, data || {});
+					// Mantener Datehab del objeto original para preservar la fecha ingresada
+					oUpdated.Datehab = oOriginal.Datehab;
+					oUpdated.__lid = oOriginal.__lid || sLid;
+					oUpdated.fromBackend = true;
+					oUpdated.isNew = false;
+					oUpdated.enabled = false;
+					oUpdated.canSend = false;
+					oUpdated.showPrevValue = true;
+					oUpdated.isMirror = false;
+
+					oModelHab.setProperty(`/Habilitacion/${iHab}`, oUpdated);
+				}
+			}
+
 			var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			MessageBoxHelper.showAlert("Alerta", "Se ha realizado la habilitación de manera correcta", $.proxy(this.FIND, this, license));
 		},
@@ -736,30 +767,74 @@ sap.ui.define([
 			BusyDialogHelper.close();
 			MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al crear el registro de habilitación");
 		},
-		InhibicionLicence: function (oInhibicion) {
+		InhibicionLicence: function (oInhibicion, oMeta) {
 			var oLicence = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			var licenseClone = LicenceHelper.cloneLicense(oLicence);
 			//	licenseClone.Licstat = "07";
 			this.updateLicense(licenseClone, {
-				success: $.proxy(this.successPUTLicenceInhib, this, oInhibicion, licenseClone),
+				success: $.proxy(this.successPUTLicenceInhib, this, oInhibicion, licenseClone, oMeta),
 				error: $.proxy(this.errorPUTLicenceHab, this)
 			});
 		},
-		successPUTLicenceInhib: function (oInhibicion, licenseClone) {
+		successPUTLicenceInhib: function (oInhibicion, licenseClone, oMeta) {
 			var entity = "/InhibicionRecierreSet";
 			oInhibicion.Datehab = FormatHelper.getUTCdate(oInhibicion.Datehab);
 			oDataService.getModel("TransenerOperaciones").create(entity, oInhibicion, {
-				success: $.proxy(this.successPOSTInhibicion, this, oInhibicion, licenseClone),
-				error: $.proxy(this.errorPOSTInhibicion, this)
+				success: $.proxy(this.successPOSTInhibicion, this, oMeta, oInhibicion),
+				error: $.proxy(this.errorPOSTInhibicion, this, oMeta)
 			});
 		},
-		successPOSTInhibicion: function (data) {
-			var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
+		successPOSTInhibicion: function (data, oMeta, oInhibicion) {
 			BusyDialogHelper.close();
-			var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
+
+			const sRefId = oMeta && oMeta.RefId;
+			const sLid = oMeta && oMeta.__lid;
+
+			// Actualizar modelo ANTES de llamar a FIND para preservar la fecha
+			if (sRefId || sLid) {
+				const oModelInh = AppManagementHelper.getModel("InhibicionTableJsonModel");
+				const aInh = oModelInh.getProperty("/Inhibicion") || [];
+
+				const iInh = aInh.findIndex(x =>
+					(sLid && x.__lid === sLid) || (sRefId && x.RefId === sRefId)
+				);
+
+				if (iInh >= 0) {
+					// Preservar Datehab del objeto original antes de mergear con data del backend
+					const oOriginal = aInh[iInh];
+					const oUpdated = jQuery.extend(true, {}, oOriginal, data || {});
+					// Mantener Datehab del objeto original para preservar la fecha ingresada
+					oUpdated.Datehab = oOriginal.Datehab;
+					oUpdated.__lid = oOriginal.__lid || sLid;
+					oUpdated.fromBackend = true;
+					oUpdated.isNew = false;
+					oUpdated.enabled = false;
+					oUpdated.canSend = false;
+					oUpdated.showPrevValue = true;
+
+					oModelInh.setProperty(`/Inhibicion/${iInh}`, oUpdated);
+				}
+
+				// Habilitar Habilitación espejo (misma __lid)
+				const oModelHab = AppManagementHelper.getModel("HabilitacionTableJsonModel");
+				const aHab = oModelHab.getProperty("/Habilitacion") || [];
+
+				const iHab = aHab.findIndex(h => h && h.__lid === sLid);
+				if (iHab >= 0) {
+					const oHab = jQuery.extend(true, {}, aHab[iHab]);
+					// Si ya es backend, no lo habilito
+					if (!oHab.fromBackend) {
+						oHab.enabled = true;
+						oHab.canSend = true;
+						oHab.isMirror = true;
+						oHab.showPrevValue = false;
+						oModelHab.setProperty(`/Habilitacion/${iHab}`, oHab);
+					}
+				}
+			}
+
 			var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			MessageBoxHelper.showAlert("Alerta", "Se ha realizado la inhibicion de manera correcta", $.proxy(this.FIND, this, license));
-
 		},
 
 		errorPOSTInhibicion: function (error) {
@@ -793,13 +868,13 @@ sap.ui.define([
 			const sRefId = oMeta && oMeta.RefId;
 			const sLid = oMeta && oMeta.__lid;
 
-			if (sRefId) {
+			if (sRefId || sLid) {
 				// ✅ 1) marcar colocación enviada como backend
 				const oColModel = AppManagementHelper.getModel("ColocacionTableJsonModel");
 				const aCol = oColModel.getProperty("/Colocacion") || [];
 
 				const iCol = aCol.findIndex(x =>
-					(sLid && x.__lid === sLid) || x.RefId === sRefId
+					(sLid && x.__lid === sLid) || (sRefId && x.RefId === sRefId)
 				);
 
 				if (iCol >= 0) {
@@ -818,30 +893,28 @@ sap.ui.define([
 					oColModel.setProperty(`/Colocacion/${iCol}`, oUpdatedCol);
 				}
 
-				// ✅ 2) habilitar el retiro espejo correspondiente (NO crear nuevos)
+				// ✅ 2) crear/habilitar el retiro espejo correspondiente
 				const oRetModel = AppManagementHelper.getModel("RetiroTableJsonModel");
 				const aRet = oRetModel.getProperty("/Retiro") || [];
 
 				const iRet = aRet.findIndex(x =>
-					(sLid && x.__lid === sLid) || x.RefId === sRefId
+					(sLid && x.__lid === sLid) || (sRefId && x.RefId === sRefId)
 				);
 
-				if (iRet >= 0) {
-					const oRet = jQuery.extend(true, {}, aRet[iRet]);
+				if (iCol >= 0) {
+					const oCol = oColModel.getProperty(`/Colocacion/${iCol}`);
+					
+					if (iRet >= 0) {
+						// Retiro existe: actualizar y habilitar
+						const oRet = jQuery.extend(true, {}, aRet[iRet]);
+						oRet.enabled = true;
+						oRet.canSend = true;
+						oRet.isMirror = true;
+						oRet.fromBackend = false;
+						oRet.isRemoval = true;
+						oRet.__lid = oRet.__lid || sLid;
 
-					// Si era espejo de la colocación nueva, ahora lo habilito
-					oRet.enabled = true;
-					oRet.canSend = true;
-
-					oRet.isMirror = true;
-					oRet.fromBackend = false;  // retiro todavía no está en backend
-					oRet.isRemoval = true;
-					oRet.__lid = oRet.__lid || sLid;
-
-					// (opcional) Si querés que el retiro refleje los datos actuales de colocación:
-					if (iCol >= 0) {
-						const oCol = oColModel.getProperty(`/Colocacion/${iCol}`);
-						// copio campos relevantes, sin pisar flags de retiro
+						// Copiar datos de la Colocación (incluido Pat)
 						oRet.Id = oCol.Id;
 						oRet.Empresa = oCol.Empresa;
 						oRet.Datehab = oCol.Datehab;
@@ -852,9 +925,24 @@ sap.ui.define([
 						oRet.Tecet = oCol.Tecet;
 						oRet.Coment = oCol.Coment;
 						oRet.RefId = oCol.RefId;
-					}
 
-					oRetModel.setProperty(`/Retiro/${iRet}`, oRet);
+						oRetModel.setProperty(`/Retiro/${iRet}`, oRet);
+					} else {
+						// Retiro no existe: crear nuevo mirror con datos de la Colocación
+						const oNewRet = jQuery.extend(true, {}, oCol);
+						oNewRet.Coment = "";
+						oNewRet.isMirror = true;
+						oNewRet.fromBackend = false;
+						oNewRet.showPrevValue = false;
+						oNewRet.enabled = true;
+						oNewRet.canSend = true;
+						oNewRet.isNew = false;
+						oNewRet.isRemoval = true;
+						oNewRet.__lid = sLid;
+
+						aRet.push(oNewRet);
+						oRetModel.setProperty("/Retiro", aRet);
+					}
 				}
 			}
 

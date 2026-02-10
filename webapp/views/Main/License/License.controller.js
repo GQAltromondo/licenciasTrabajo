@@ -2118,34 +2118,7 @@ sap.ui.define([
 
 			LicenseService.InhibicionLicence(
 				oPayload,
-				{ RefId: sRefId },
-				{
-					success: (oResponse) => {
-						// 1) marco inhibición como "backend"
-						const oUpdated = jQuery.extend(true, {}, oInh, oResponse || {});
-						oUpdated.__lid = sLid;
-						oUpdated.fromBackend = true;
-						oUpdated.isNew = false;
-						oUpdated.enabled = false;
-						oUpdated.canSend = false;
-						oUpdated.showPrevValue = true;
-
-						oModelInh.setProperty(sPath, oUpdated);
-
-						// 2) habilito habilitación espejo (misma __lid)
-						this._enableHabilitacionForLid(sLid);
-
-						oModelInh.refresh(true);
-						oModelHab.refresh(true);
-
-						BusyDialogHelper.close();
-						MessageToast.show("Inhibición guardada");
-					},
-					error: (e) => {
-						BusyDialogHelper.close();
-						MessageBoxHelper.showAlert("Error", "No se pudo guardar la inhibición.");
-					}
-				}
+				{ RefId: sRefId, __lid: sLid }
 			);
 		},
 
@@ -2212,30 +2185,7 @@ sap.ui.define([
 
 			LicenseService.HabilitacionLicence(
 				oPayload,
-				{ RefId: sRefId },
-				{
-					success: (oResponse) => {
-						// 1) marcar habilitación como backend
-						const oUpdated = jQuery.extend(true, {}, oHab, oResponse || {});
-						oUpdated.__lid = sLid;
-						oUpdated.fromBackend = true;
-						oUpdated.isNew = false;
-						oUpdated.enabled = false;
-						oUpdated.canSend = false;
-						oUpdated.showPrevValue = true;
-						oUpdated.isMirror = false;
-
-						oModelHab.setProperty(sPath, oUpdated);
-						oModelHab.refresh(true);
-
-						BusyDialogHelper.close();
-						MessageToast.show("Habilitación guardada");
-					},
-					error: (e) => {
-						BusyDialogHelper.close();
-						MessageBoxHelper.showAlert("Error", "No se pudo guardar la habilitación.");
-					}
-				}
+				{ RefId: sRefId, __lid: sLid }
 			);
 		},
 
@@ -2271,42 +2221,16 @@ sap.ui.define([
 			delete oPayload.Datelicencia;
 			delete oPayload.fromBackend;
 			delete oPayload.Jt;
-			delete
 
-				LicenseService.ColocacionPATLicence(
-					oPayload,
-					{ RefId: sRefId },
-					{
-						success: (oResponse) => {
-							// 1) marco colocación como "backend"
-							const oUpdated = jQuery.extend(true, {}, oCol, oResponse || {});
-							oUpdated.__lid = sLid;
-							oUpdated.fromBackend = true;
-							oUpdated.isNew = false;
-							oUpdated.enabled = false;
-							oUpdated.canSend = false;
-							oUpdated.showPrevValue = true;
-
-							oModelCol.setProperty(sPath, oUpdated);
-
-							// 2) habilito retiro espejo (misma __lid)
-							this._enableRetiroForLid(sLid);
-
-							oModelCol.refresh(true);
-							oModelRet.refresh(true);
-
-							BusyDialogHelper.close();
-							MessageToast.show("Colocación guardada");
-						},
-						error: (e) => {
-							BusyDialogHelper.close();
-							MessageBoxHelper.showAlert("Error", "No se pudo guardar la colocación.");
-						}
-					}
-				);
+			LicenseService.ColocacionPATLicence(
+				oPayload,
+				{ RefId: sRefId, __lid: sLid }
+			);
 		},
 		_enableRetiroForLid: function (sLid) {
+			const oModelCol = AppManagementHelper.getModel("ColocacionTableJsonModel");
 			const oModelRet = AppManagementHelper.getModel("RetiroTableJsonModel");
+			const aCol = oModelCol.getProperty("/Colocacion") || [];
 			const aRet = oModelRet.getProperty("/Retiro") || [];
 
 			const iIdx = aRet.findIndex(r => r && r.__lid === sLid);
@@ -2320,23 +2244,23 @@ sap.ui.define([
 				oRet.isNew = false;
 			}
 
+			// Copiar datos de la Colocación al Retiro (incluido Pat)
+			const iCol = aCol.findIndex(c => c && c.__lid === sLid);
+			if (iCol >= 0) {
+				const oCol = aCol[iCol];
+				oRet.Id = oCol.Id;
+				oRet.Empresa = oCol.Empresa;
+				oRet.Datehab = oCol.Datehab;
+				oRet.Time = oCol.Time;
+				oRet.Tplnr = oCol.Tplnr;
+				oRet.Jt = oCol.Jt;
+				oRet.Pat = oCol.Pat;
+				oRet.Tecet = oCol.Tecet;
+				oRet.RefId = oCol.RefId;
+			}
+
 			oModelRet.setProperty(`/Retiro/${iIdx}`, oRet);
 		},
-
-		// sendRetiroPAT: function (oEvent) {
-		// 	var oRetiroPAT = oEvent.getSource().getParent().getBindingContext("RetiroTableJsonModel").getObject();
-		// 	var oValidation = this.validateSend(oRetiroPAT)
-		// 	if (!oValidation.valid) {
-		// 		MessageBoxHelper.showAlert("Alerta", oValidation.message);
-		// 	} else {
-		// 		BusyDialogHelper.open();
-		// 		delete oRetiroPAT.sameDayValidation;
-		// 		delete oRetiroPAT.enabled;
-		// 		delete oRetiroPAT.TejtValueStateText;
-		// 		delete oRetiroPAT.showPrevValue;
-		// 		LicenseService.RetiroPATLicence(oRetiroPAT);
-		// 	}
-		// },
 		sendRetiroPAT: function (oEvent) {
 			const oCtx = oEvent.getSource().getParent().getBindingContext("RetiroTableJsonModel");
 			const oRetiroPAT = oCtx.getObject();

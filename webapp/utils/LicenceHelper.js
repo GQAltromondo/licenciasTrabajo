@@ -777,9 +777,24 @@ sap.ui.define([
 			};
 
 			// ===== 1) INHIBICIONES backend + 1 nueva =====
+			// Preservar __lid de objetos ya guardados antes de regenerarlos
+			const oModelInh = AppManagementHelper.getModel("InhibicionTableJsonModel");
+			const aInhCurrent = oModelInh.getProperty("/Inhibicion") || [];
+			const mPreservedLidsInh = {};
+			aInhCurrent.forEach((inh) => {
+				if (inh && inh.fromBackend && inh.RefId && inh.__lid) {
+					mPreservedLidsInh[inh.RefId] = inh.__lid;
+				}
+			});
+
 			const aInhibicion = cloneArr(aInhPrev).map((o) => {
 				const c = markPrevInh(o);
-				c.__lid = c.__lid || ("BK_" + makeKey(c));
+				// Preservar __lid si ya existe en el modelo actual
+				if (o.RefId && mPreservedLidsInh[o.RefId]) {
+					c.__lid = mPreservedLidsInh[o.RefId];
+				} else {
+					c.__lid = c.__lid || ("BK_" + makeKey(c));
+				}
 				return c;
 			});
 
@@ -829,7 +844,12 @@ sap.ui.define([
 
 				if (oPrevHab) {
 					const oHab = markPrevHab(cloneObj(oPrevHab));
-					oHab.__lid = oHab.__lid || oInh.__lid; // link visual con la inhibición
+					// Preservar __lid si ya existe en el modelo actual
+					if (oPrevHab.RefId && mPreservedLidsHab[oPrevHab.RefId]) {
+						oHab.__lid = mPreservedLidsHab[oPrevHab.RefId];
+					} else {
+						oHab.__lid = oHab.__lid || oInh.__lid; // link visual con la inhibición
+					}
 					return oHab;
 				}
 
@@ -867,12 +887,58 @@ sap.ui.define([
 			});
 			aHabilitacion = Object.values(bestByEt);
 
+			// Preservar fechas de objetos ya guardados antes de aplicar formatUTCDatesHab
+			const oModelHab = AppManagementHelper.getModel("HabilitacionTableJsonModel");
+			const aHabCurrent = oModelHab.getProperty("/Habilitacion") || [];
+
+			// Mapa de fechas preservadas por RefId y __lid (ambos como keys)
+			const mPreservedDatesInh = {};
+			aInhCurrent.forEach((inh) => {
+				if (inh && inh.fromBackend && inh.Datehab) {
+					if (inh.RefId) mPreservedDatesInh[`RefId_${inh.RefId}`] = inh.Datehab;
+					if (inh.__lid) mPreservedDatesInh[`__lid_${inh.__lid}`] = inh.Datehab;
+				}
+			});
+			
+			// También preservar __lid de Habilitaciones
+			const mPreservedLidsHab = {};
+			aHabCurrent.forEach((hab) => {
+				if (hab && hab.fromBackend && hab.RefId && hab.__lid) {
+					mPreservedLidsHab[hab.RefId] = hab.__lid;
+				}
+			});
+
+			const mPreservedDatesHab = {};
+			aHabCurrent.forEach((hab) => {
+				if (hab && hab.fromBackend && hab.Datehab) {
+					if (hab.RefId) mPreservedDatesHab[`RefId_${hab.RefId}`] = hab.Datehab;
+					if (hab.__lid) mPreservedDatesHab[`__lid_${hab.__lid}`] = hab.Datehab;
+				}
+			});
+
 			// si tenés una función equivalente para fechas de recierre, usala.
 			// si Datehab/Time viene igual que PAT, podés reutilizar:
 			if (typeof this.formatUTCDatesHab === "function") {
 				this.formatUTCDatesHab(aInhibicion);
 				this.formatUTCDatesHab(aHabilitacion);
 			}
+
+			// Restaurar fechas preservadas DESPUÉS de formatUTCDatesHab para asegurar que se mantengan
+			aInhibicion.forEach((inh) => {
+				const preservedDate = (inh.RefId && mPreservedDatesInh[`RefId_${inh.RefId}`]) ||
+				                      (inh.__lid && mPreservedDatesInh[`__lid_${inh.__lid}`]);
+				if (preservedDate) {
+					inh.Datehab = preservedDate;
+				}
+			});
+
+			aHabilitacion.forEach((hab) => {
+				const preservedDate = (hab.RefId && mPreservedDatesHab[`RefId_${hab.RefId}`]) ||
+				                      (hab.__lid && mPreservedDatesHab[`__lid_${hab.__lid}`]);
+				if (preservedDate) {
+					hab.Datehab = preservedDate;
+				}
+			});
 
 			AppManagementHelper.getModel("HabilitacionTableJsonModel").setData({ Habilitacion: aHabilitacion });
 			AppManagementHelper.getModel("InhibicionTableJsonModel").setData({ Inhibicion: aInhibicion });
