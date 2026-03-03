@@ -881,6 +881,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								formatter: oController.rolStatusEdition("retiro/")
 							},
 							value: "{RetiroTableJsonModel>Coment}",
+							tooltip: "{RetiroTableJsonModel>Coment}",
 							width: "100%"
 						}),
 						new sap.m.ComboBox({
@@ -1101,7 +1102,8 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								],
 								formatter: oController.rolStatusEdition("inhibicion/")
 							},
-							value: "{InhibicionTableJsonModel>Coment}"
+							value: "{InhibicionTableJsonModel>Coment}",
+							tooltip: "{InhibicionTableJsonModel>Coment}"
 						}),
 
 						new sap.m.Button({
@@ -1274,6 +1276,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								formatter: oController.rolStatusEdition("habilitacion/")
 							},
 							value: "{HabilitacionTableJsonModel>Coment}",
+							tooltip: "{HabilitacionTableJsonModel>Coment}",
 
 						}),
 
