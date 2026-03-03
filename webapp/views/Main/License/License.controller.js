@@ -2670,7 +2670,7 @@ sap.ui.define([
 				const sPat = (oObject.Pat || "").trim();
 				if (!sPat) {
 					oValidationObject.valid = false;
-					oValidationObject.message = "Debe seleccionar PAT o PAT/A para realizar el retiro.";
+					oValidationObject.message = "Debe seleccionar PAT o PAT/A para realizar la colocacion.";
 					return oValidationObject;
 				}
 			}

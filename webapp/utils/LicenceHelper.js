@@ -1007,6 +1007,7 @@ sap.ui.define([
 					oRet.__lid = oRet.__lid || oCol.__lid;
 					oRet.Tecet = "";
 					oRet.enabledTecet = true;
+					if (!oRet.Pat) oRet.Pat = "A";
 					return oRet;
 				}
 
