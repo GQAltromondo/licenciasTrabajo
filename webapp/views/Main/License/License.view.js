@@ -629,7 +629,10 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								formatter: oController.rolStatusEdition("colocacion/")
 							},
 							selectedKey: "{ColocacionTableJsonModel>Tplnr}",
-							tooltip: "{ColocacionTableJsonModel>Tplnr}",
+							tooltip: {
+								path: "ColocacionTableJsonModel>Tplnr",
+								formatter: $.proxy(oController.formatTplnrTooltip, oController)
+							},
 							change: [oController.onEtChangeValidatePatPair, oController],
 							items: {
 								path: "EstacionesJsonModel>/EstacionesPorRegion",
@@ -653,7 +656,10 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									},
 
 									selectedKey: "{ColocacionTableJsonModel>Tecet}",
-									tooltip: "{ColocacionTableJsonModel>Tecet}",
+									tooltip: {
+										path: "ColocacionTableJsonModel>Tecet",
+										formatter: $.proxy(oController.formatTecetTooltip, oController)
+									},
 									items: {
 										templateShareable: false,
 										path: "PersonalHabilitadoModel>/TecnicosEt",
@@ -841,7 +847,10 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							// 	formatter: oController.rolStatusEdition("retiro/")
 							// },
 							selectedKey: "{RetiroTableJsonModel>Tplnr}",
-							tooltip: "{RetiroTableJsonModel>Tplnr}",
+							tooltip: {
+								path: "RetiroTableJsonModel>Tplnr",
+								formatter: $.proxy(oController.formatTplnrTooltip, oController)
+							},
 							items: {
 								path: "EstacionesJsonModel>/EstacionesPorRegion",
 								template: new sap.ui.core.Item({
@@ -864,7 +873,10 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									},
 
 									selectedKey: "{RetiroTableJsonModel>Tecet}",
-									tooltip: "{RetiroTableJsonModel>Tecet}",
+									tooltip: {
+										path: "RetiroTableJsonModel>Tecet",
+										formatter: $.proxy(oController.formatTecetTooltip, oController)
+									},
 									items: {
 										templateShareable: false,
 										path: "PersonalHabilitadoModel>/TecnicosEt",
@@ -1063,7 +1075,10 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							},
 							change: [oController.onEtChangeValidateEtInhibicion, oController],
 							selectedKey: "{InhibicionTableJsonModel>Tplnr}",
-							tooltip: "{InhibicionTableJsonModel>Tplnr}",
+							tooltip: {
+								path: "InhibicionTableJsonModel>Tplnr",
+								formatter: $.proxy(oController.formatTplnrTooltip, oController)
+							},
 							items: {
 								path: "EstacionesJsonModel>/EstacionesPorRegion",
 								template: new sap.ui.core.Item({
@@ -1086,7 +1101,10 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									},
 
 									selectedKey: "{InhibicionTableJsonModel>Tecet}",
-									tooltip: "{InhibicionTableJsonModel>Tecet}",
+									tooltip: {
+										path: "InhibicionTableJsonModel>Tecet",
+										formatter: $.proxy(oController.formatTecetTooltip, oController)
+									},
 									items: {
 										templateShareable: false,
 										path: "PersonalHabilitadoModel>/TecnicosEt",
@@ -1240,7 +1258,10 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							change: [oController.handleLegacyValidationDeliveries, oController],
 
 							selectedKey: "{HabilitacionTableJsonModel>Tplnr}",
-							tooltip: "{HabilitacionTableJsonModel>Tplnr}",
+							tooltip: {
+								path: "HabilitacionTableJsonModel>Tplnr",
+								formatter: $.proxy(oController.formatTplnrTooltip, oController)
+							},
 							items: {
 								path: "EstacionesJsonModel>/EstacionesPorRegion",
 								template: new sap.ui.core.Item({
@@ -1262,7 +1283,10 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									},
 
 									selectedKey: "{HabilitacionTableJsonModel>Tecet}",
-									tooltip: "{HabilitacionTableJsonModel>Tecet}",
+									tooltip: {
+										path: "HabilitacionTableJsonModel>Tecet",
+										formatter: $.proxy(oController.formatTecetTooltip, oController)
+									},
 									items: {
 										templateShareable: false,
 										path: "PersonalHabilitadoModel>/TecnicosEt",

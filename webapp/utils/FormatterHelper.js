@@ -182,6 +182,22 @@ sap.ui.define([
 			}
 			return "";
 		},
+		getPersonalHabilitadoLabel: function (legajo) {
+			let personales = AppManagementHelper.getModel("PersonalHabilitadoModel").getProperty("/Todos");
+			for (let i = 0; i < personales.length; i++) {
+				let personal = personales[i];
+				if (personal.Legajo == legajo) return personal.Nombre + " " + personal.Legajo;
+			}
+			return legajo || "";
+		},
+		getEstacionLabel: function (codigo) {
+			let estaciones = AppManagementHelper.getModel("EstacionesJsonModel").getProperty("/EstacionesPorRegion");
+			if (!estaciones) return codigo || "";
+			for (let i = 0; i < estaciones.length; i++) {
+				if (estaciones[i].Codigo == codigo) return estaciones[i].Codigo + " - " + estaciones[i].Descripcion;
+			}
+			return codigo || "";
+		},
 		getTipoHabName: function (tipoHab) {
 			const get = AppManagementHelper.getModel.bind(AppManagementHelper);
 

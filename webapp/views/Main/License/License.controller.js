@@ -55,6 +55,14 @@ sap.ui.define([
 			return AppManagementHelper.getUser();
 		},
 
+		formatTplnrTooltip: function (codigo) {
+			return FormatterHelper.getEstacionLabel(codigo);
+		},
+
+		formatTecetTooltip: function (legajo) {
+			return FormatterHelper.getPersonalHabilitadoLabel(legajo);
+		},
+
 		enableEspecifyBarra: function (oEvent) {
 			var oFilterSelecitonJsonModel = AppManagementHelper.getModel("FilterSelectionJsonModel");
 			var oLicenseJsonModel = AppManagementHelper.getModel("LicenseJsonModel");
