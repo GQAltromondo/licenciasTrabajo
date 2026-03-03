@@ -941,6 +941,7 @@ sap.ui.define([
 				o.isNew = false;
 				o.isMirror = false;
 				o.enabled = false;
+				o.enabledTecet = false;
 				o.canSend = false;
 				return o;
 			};
@@ -1004,6 +1005,8 @@ sap.ui.define([
 				if (oPrevRet) {
 					const oRet = markPrevRet(cloneObj(oPrevRet));
 					oRet.__lid = oRet.__lid || oCol.__lid;
+					oRet.Tecet = "";
+					oRet.enabledTecet = true;
 					return oRet;
 				}
 
@@ -1014,6 +1017,7 @@ sap.ui.define([
 				oMirror.fromBackend = false;
 				oMirror.showPrevValue = false;
 				oMirror.enabled = true;
+				oMirror.enabledTecet = true;
 				oMirror.canSend = true;
 				oMirror.Datehab = now;
 				oMirror.Time = now;

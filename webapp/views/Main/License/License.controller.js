@@ -5483,6 +5483,17 @@ sap.ui.define([
 
 		onChangePAT: function (oEvent) {
 			const oSrc = oEvent.getSource();
+
+			// Retiro table context
+			const oRetCtx = oSrc.getBindingContext("RetiroTableJsonModel");
+			if (oRetCtx) {
+				const sKey = oSrc.getSelectedKey();
+				const sVal = (sKey === "X") ? "X" : (sKey === "A") ? "A" : "";
+				oRetCtx.getModel().setProperty(oRetCtx.getPath() + "/Pat", sVal);
+				return;
+			}
+
+			// Colocacion table context
 			const oCtx = oSrc.getBindingContext("ColocacionTableJsonModel");
 			if (!oCtx) return;
 
