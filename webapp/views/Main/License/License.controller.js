@@ -2263,7 +2263,7 @@ sap.ui.define([
 			const oCtx = oEvent.getSource().getParent().getBindingContext("RetiroTableJsonModel");
 			const oRetiroPAT = oCtx.getObject();
 
-			const oValidation = this.validateSend(oRetiroPAT);
+			const oValidation = this.validateSend(oRetiroPAT, "RETIRO");
 			if (!oValidation.valid) {
 				return MessageBoxHelper.showAlert("Alerta", oValidation.message);
 			}
@@ -2665,6 +2665,15 @@ sap.ui.define([
 			}
 
 		
+
+			if (sType === "RETIRO") {
+				const sPat = (oObject.Pat || "").trim();
+				if (!sPat) {
+					oValidationObject.valid = false;
+					oValidationObject.message = "Debe seleccionar PAT o PAT/A para realizar el retiro.";
+					return oValidationObject;
+				}
+			}
 
 			return oValidationObject;
 		},
