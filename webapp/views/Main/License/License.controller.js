@@ -2115,6 +2115,7 @@ sap.ui.define([
 			delete oPayload.Datelicencia;
 			delete oPayload.fromBackend;
 			delete oPayload.Jt; // si Jt es solo de UI/usuario y backend lo deriva, dejalo borrado
+			delete oPayload.enabledTecet;
 
 			LicenseService.InhibicionLicence(
 				oPayload,
@@ -2182,6 +2183,7 @@ sap.ui.define([
 			delete oPayload.fromBackend;
 			delete oPayload.Jt;
 			delete oPayload.LicenciaTrabajo
+			delete oPayload.enabledTecet;
 
 			LicenseService.HabilitacionLicence(
 				oPayload,
