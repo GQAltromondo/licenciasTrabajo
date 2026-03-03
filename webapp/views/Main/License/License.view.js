@@ -673,6 +673,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								formatter: oController.rolStatusEdition("colocacion/")
 							},
 							value: "{ColocacionTableJsonModel>Coment}",
+							tooltip: "{ColocacionTableJsonModel>Coment}",
 							width: "100%"
 						}),
 						new sap.m.ComboBox({
