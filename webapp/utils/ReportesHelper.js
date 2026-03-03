@@ -1116,7 +1116,7 @@ sap.ui.define([
 								var ET = Colocacion.Tplnr;
 								var TecnicoET = Colocacion.Jt + " " + FormatterHelper.getPersonalHabilitadoName(Colocacion.Jt);
 								var comentarios = Colocacion.Coment;
-								var pat = Colocacion.Pat === "X" ? "PAT" : (Colocacion.Pat === "A" ? "PAT/A" : "");
+								var pat = Colocacion.Pat === "X" ? "PAT" : (Colocacion.Pat === "" ? "PAT/A" : "");
 
 
 								Hoja3ToExport.push([numLic, fecha, hora, ET, TecnicoET, comentarios, pat]);
@@ -1141,7 +1141,7 @@ sap.ui.define([
 								var ET = Retiro.Tplnr;
 								var TecnicoET = Retiro.Jt + " " + FormatterHelper.getPersonalHabilitadoName(Retiro.Jt);
 								var comentarios = Retiro.Coment;
-								var pat = Retiro.Pat === "X" ? "PAT" : (Retiro.Pat === "A" ? "PAT/A" : "");
+								var pat = Retiro.Pat === "X" ? "PAT" : (Retiro.Pat === "" ? "PAT/A" : "");
 								Hoja3ToExport.push([numLic, fecha, hora, ET, TecnicoET, comentarios, pat]);
 							}
 						}
@@ -1161,7 +1161,7 @@ sap.ui.define([
 								var fecha = Habilitacion.Datehab; // TODO: este campo correcto ???
 								var hora = that.getHoraMin(Habilitacion.Time); // TODO: este campo correcto ???
 								var ET = Habilitacion.Tplnr;
-								var TecnicoET = Habilitacion.TecET + " " + FormatterHelper.getPersonalHabilitadoName(Habilitacion.TecET);
+								var TecnicoET = Habilitacion.Jt + " " + FormatterHelper.getPersonalHabilitadoName(Habilitacion.Jt);
 								var comentarios = Habilitacion.Coment;
 
 								Hoja3ToExport.push([numLic, fecha, hora, ET, TecnicoET, comentarios]);
@@ -1172,7 +1172,7 @@ sap.ui.define([
 				}
 				function getInhibiciones(aLicencias) {
 					Hoja3ToExport.push(
-						[''], ["INHIBICIONES"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Tecnico ET", "Comentarios", "Pat"]
+						[''], ["INHIBICIONES"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Tecnico ET", "Comentarios"]
 					);
 					for (var oLicencia of aLicencias) {
 						var aInhibiciones = oLicencia.InhibicionRecierre_nav.results
@@ -1183,7 +1183,7 @@ sap.ui.define([
 								var fecha = Inhibicion.Datehab; // TODO: este campo correcto ???
 								var hora = that.getHoraMin(Inhibicion.Time); // TODO: este campo correcto ???
 								var ET = Inhibicion.Tplnr;
-								var TecnicoET = Inhibicion.TecET + " " + FormatterHelper.getPersonalHabilitadoName(Inhibicion.TecET);
+								var TecnicoET = Inhibicion.Jt + " " + FormatterHelper.getPersonalHabilitadoName(Inhibicion.Jt);
 								var comentarios = Inhibicion.Coment;
 
 								Hoja3ToExport.push([numLic, fecha, hora, ET, TecnicoET, comentarios]);
