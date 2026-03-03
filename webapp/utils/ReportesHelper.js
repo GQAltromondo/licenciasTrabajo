@@ -968,9 +968,9 @@ sap.ui.define([
 					ot: license.Aufnr,
 					fechahorageneracion: that.getFechaHora(license.Gdate),
 					solicitantesup: license.SolSuplente + ' ' + FormatterHelper.getSolicitanteName(license.SolSuplente),
-					tipohabJefe:license.TipoHabJefe + ' ' + FormatterHelper.getTipoHabName(license.TipoHabJefe),
+					tipohabJefe: license.TipoHabJefe + ' ' + FormatterHelper.getTipoHabName(license.TipoHabJefe),
 					jefedetrabajo: license.Jefe + ' ' + FormatterHelper.getPersonalHabilitadoName(license.Jefe), //Ticket 571 punto 5, usamos la property Todos para recuperar el jefe en vez de JefeDeTrabajo
-					tipohabJefeSup :license.TipoHabJefeSup + ' ' + FormatterHelper.getTipoHabName(license.TipoHabJefeSup),
+					tipohabJefeSup: license.TipoHabJefeSup + ' ' + FormatterHelper.getTipoHabName(license.TipoHabJefeSup),
 					jefedetrabajosup: license.JefeSuplente + ' ' + FormatterHelper.getPersonalHabilitadoName(license.JefeSuplente), //Ticket 571 punto 5, usamos la property Todos para recuperar el jefe suplente en vez de Solicitante
 					tipointerv: FormatterHelper.getTipoIntervencion(license.Tipinterv),
 					periodoestacional: FormatterHelper.getPerestac(license.Estacional),
@@ -1114,9 +1114,12 @@ sap.ui.define([
 								var fecha = Colocacion.Datehab; // TODO: este campo correcto ???
 								var hora = that.getHoraMin(Colocacion.Time); // TODO: este campo correcto ???
 								var ET = Colocacion.Tplnr;
+								var TecnicoET = Colocacion.TecET + " " + FormatterHelper.getPersonalHabilitadoName(Colocacion.TecET);
 								var comentarios = Colocacion.Coment;
+								var pat = Colocacion.Pat;
 
-								Hoja3ToExport.push([numLic, fecha, hora, ET, comentarios]);
+
+								Hoja3ToExport.push([numLic, fecha, hora, ET, TecnicoET, comentarios, pat]);
 							}
 						}
 					}
@@ -1136,9 +1139,10 @@ sap.ui.define([
 								var fecha = Retiro.Datehab; // TODO: este campo correcto ???
 								var hora = that.getHoraMin(Retiro.Time); // TODO: este campo correcto ???
 								var ET = Retiro.Tplnr;
+								var TecnicoET = Retiro.TecET + " " + FormatterHelper.getPersonalHabilitadoName(Retiro.TecET);
 								var comentarios = Retiro.Coment;
-
-								Hoja3ToExport.push([numLic, fecha, hora, ET, comentarios]);
+								var pat = Retiro.Pat;
+								Hoja3ToExport.push([numLic, fecha, hora, ET, TecnicoET, comentarios, pat]);
 							}
 						}
 					}
@@ -1157,9 +1161,10 @@ sap.ui.define([
 								var fecha = Habilitacion.Datehab; // TODO: este campo correcto ???
 								var hora = that.getHoraMin(Habilitacion.Time); // TODO: este campo correcto ???
 								var ET = Habilitacion.Tplnr;
+								var TecnicoET = Habilitacion.TecET + " " + FormatterHelper.getPersonalHabilitadoName(Habilitacion.TecET);
 								var comentarios = Habilitacion.Coment;
 
-								Hoja3ToExport.push([numLic, fecha, hora, ET, comentarios]);
+								Hoja3ToExport.push([numLic, fecha, hora, ET, TecnicoET, comentarios]);
 							}
 						}
 					}
@@ -1178,9 +1183,10 @@ sap.ui.define([
 								var fecha = Inhibicion.Datehab; // TODO: este campo correcto ???
 								var hora = that.getHoraMin(Inhibicion.Time); // TODO: este campo correcto ???
 								var ET = Inhibicion.Tplnr;
+								var TecnicoET = Inhibicion.TecET + " " + FormatterHelper.getPersonalHabilitadoName(Inhibicion.TecET);
 								var comentarios = Inhibicion.Coment;
 
-								Hoja3ToExport.push([numLic, fecha, hora, ET, comentarios]);
+								Hoja3ToExport.push([numLic, fecha, hora, ET, TecnicoET, comentarios]);
 							}
 						}
 					}
@@ -1961,7 +1967,7 @@ sap.ui.define([
 				license.Tension = license.Tension;
 				license.ID = license.Id;
 
-			
+
 				license.Timbeg = FormatterHelper.msTohoursSeconds(license.Timbeg.ms + 3 * 60 * 60 * 1000);
 				license.Timend = FormatterHelper.msTohoursSeconds(license.Timend.ms + 3 * 60 * 60 * 1000);
 
