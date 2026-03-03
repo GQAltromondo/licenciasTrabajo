@@ -1041,7 +1041,10 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							displayFormat: "HH:mm"
 						}),
 						new sap.m.Text({
-							text: "{InhibicionTableJsonModel>Jt}"
+							text: {
+								path: "InhibicionTableJsonModel>Jt",
+								formatter: $.proxy(oController.handleUserName, oController)
+							}
 						}),
 						new sap.m.ComboBox({
 							width: "100%",
@@ -1218,7 +1221,10 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							valueFormat: "HH:mm"
 						}),
 						new sap.m.Text({
-							text: "{HabilitacionTableJsonModel>Cot}"
+							text: {
+								path: "HabilitacionTableJsonModel>Cot",
+								formatter: $.proxy(oController.handleUserName, oController)
+							}
 						}),
 						new sap.m.ComboBox({
 							width: "100%",
