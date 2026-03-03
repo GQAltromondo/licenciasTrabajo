@@ -987,7 +987,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 					})
 				}),
 				new sap.m.Column({
-					width: "200px",
+	
 					header: new sap.m.Text({
 						text: "Comentarios"
 					})
@@ -1157,7 +1157,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 					})
 				}),
 				new sap.m.Column({
-					width: "200px",
+					
 					header: new sap.m.Text({
 						text: "Comentarios"
 					})
