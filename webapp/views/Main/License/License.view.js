@@ -851,7 +851,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									enabled: {
 										parts: [
 											"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-											"RetiroTableJsonModel>enabledTecet", "RetiroTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+											"RetiroTableJsonModel>enabledTecet", "ValidateFirstContModel>/fd"
 										],
 										formatter: oController.rolStatusEdition("retiro/")
 									},
