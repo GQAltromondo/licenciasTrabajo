@@ -1242,14 +1242,13 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 						new sap.m.HBox({
 							items: [
 								new sap.m.ComboBox({
-									visible: "{= !${HabilitacionTableJsonModel>showPrevValue}}",
 									width: "100%",
 									enabled: {
 										parts: [
 											"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-											"HabilitacionTableJsonModel>enabled", "HabilitacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+											"HabilitacionTableJsonModel>enabledTecet", "ValidateFirstContModel>/fd"
 										],
-										formatter: oController.rolStatusEdition("retiro/")
+										formatter: oController.rolStatusEdition("habilitacion/")
 									},
 
 									selectedKey: "{HabilitacionTableJsonModel>Tecet}",
@@ -1261,10 +1260,6 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 											text: "{PersonalHabilitadoModel>Nombre} {PersonalHabilitadoModel>Legajo}"
 										}),
 									}
-								}),
-								new sap.m.Text({
-									visible: "{HabilitacionTableJsonModel>showPrevValue}",
-									text: "{HabilitacionTableJsonModel>TecETPrev/Legajo} - {HabilitacionTableJsonModel>TecETPrev/Nombre}"
 								}),
 							]
 						}),

@@ -779,6 +779,7 @@ sap.ui.define([
 				o.isNew = false;
 				o.isMirror = false;
 				o.enabled = false;
+				o.enabledTecet = false;
 				o.canSend = false;
 				return o;
 			};
@@ -834,6 +835,8 @@ sap.ui.define([
 				if (oPrevHab) {
 					const oHab = markPrevHab(cloneObj(oPrevHab));
 					oHab.__lid = oHab.__lid || oInh.__lid; // link visual con la inhibición
+					oHab.Tecet = "";
+					oHab.enabledTecet = true;
 					return oHab;
 				}
 
@@ -844,6 +847,8 @@ sap.ui.define([
 				oMirror.fromBackend = false;
 				oMirror.showPrevValue = false;
 				oMirror.enabled = true;
+				oMirror.enabledTecet = true;
+				oMirror.Tecet = "";
 				oMirror.canSend = true;
 				oMirror.Datehab = now;
 				oMirror.Time = now;
