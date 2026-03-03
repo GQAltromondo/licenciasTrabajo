@@ -1075,7 +1075,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 											"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
 											"InhibicionTableJsonModel>enabled", "InhibicionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
 										],
-										formatter: oController.rolStatusEdition("retiro/")
+										formatter: oController.rolStatusEdition("inhibicion/")
 									},
 
 									selectedKey: "{InhibicionTableJsonModel>Tecet}",
@@ -1112,14 +1112,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								],
 								formatter: oController.rolStatusEdition("inhibicion/")
 							},
-							visible: {
-								parts: [{
-									path: "InhibicionTableJsonModel>enabled"
-								}],
-								formatter: function (bEnabled) {
-									return bEnabled;
-								}
-							},
+							visible: true,
 							press: [oController.sendInhibicion, oController]
 						}).addStyleClass("buttonInverted")
 					]
