@@ -1103,7 +1103,7 @@ sap.ui.define([
 				var Hoja3ToExport = []
 				function getColocaciones(aLicencias) {
 					Hoja3ToExport.push(
-						["COLOCACIONES"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Comentarios"]
+						["COLOCACIONES"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Tecnico ET", "Comentarios", "Pat"]
 					);
 					for (var oLicencia of aLicencias) {
 						var aColocaciones = oLicencia.ColocacionPAT_nav.results
@@ -1114,9 +1114,9 @@ sap.ui.define([
 								var fecha = Colocacion.Datehab; // TODO: este campo correcto ???
 								var hora = that.getHoraMin(Colocacion.Time); // TODO: este campo correcto ???
 								var ET = Colocacion.Tplnr;
-								var TecnicoET = Colocacion.TecET + " " + FormatterHelper.getPersonalHabilitadoName(Colocacion.TecET);
+								var TecnicoET = Colocacion.Jt + " " + FormatterHelper.getPersonalHabilitadoName(Colocacion.Jt);
 								var comentarios = Colocacion.Coment;
-								var pat = Colocacion.Pat;
+								var pat = Colocacion.Pat === "X" ? "PAT" : (Colocacion.Pat === "A" ? "PAT/A" : "");
 
 
 								Hoja3ToExport.push([numLic, fecha, hora, ET, TecnicoET, comentarios, pat]);
@@ -1128,7 +1128,7 @@ sap.ui.define([
 
 				function getRetiros(aLicencias) {
 					Hoja3ToExport.push(
-						[''], ["RETIROS"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Comentarios"]
+						[''], ["RETIROS"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Tecnico ET", "Comentarios", "Pat"]
 					);
 					for (var oLicencia of aLicencias) {
 						var aRetiros = oLicencia.RetiroPAT_nav.results
@@ -1139,9 +1139,9 @@ sap.ui.define([
 								var fecha = Retiro.Datehab; // TODO: este campo correcto ???
 								var hora = that.getHoraMin(Retiro.Time); // TODO: este campo correcto ???
 								var ET = Retiro.Tplnr;
-								var TecnicoET = Retiro.TecET + " " + FormatterHelper.getPersonalHabilitadoName(Retiro.TecET);
+								var TecnicoET = Retiro.Jt + " " + FormatterHelper.getPersonalHabilitadoName(Retiro.Jt);
 								var comentarios = Retiro.Coment;
-								var pat = Retiro.Pat;
+								var pat = Retiro.Pat === "X" ? "PAT" : (Retiro.Pat === "A" ? "PAT/A" : "");
 								Hoja3ToExport.push([numLic, fecha, hora, ET, TecnicoET, comentarios, pat]);
 							}
 						}
@@ -1150,7 +1150,7 @@ sap.ui.define([
 				}
 				function getHabilitaciones(aLicencias) {
 					Hoja3ToExport.push(
-						[''], ["HABILITACIONES"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Comentarios"]
+						[''], ["HABILITACIONES"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Tecnico ET", "Comentarios"]
 					);
 					for (var oLicencia of aLicencias) {
 						var aHabilitaciones = oLicencia.HabilitacionRecierre_nav.results
@@ -1172,7 +1172,7 @@ sap.ui.define([
 				}
 				function getInhibiciones(aLicencias) {
 					Hoja3ToExport.push(
-						[''], ["INHIBICIONES"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Comentarios"]
+						[''], ["INHIBICIONES"], ["Num. de Licencia", "Fecha", "Hora", "ET", "Tecnico ET", "Comentarios", "Pat"]
 					);
 					for (var oLicencia of aLicencias) {
 						var aInhibiciones = oLicencia.InhibicionRecierre_nav.results
