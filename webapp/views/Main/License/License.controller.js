@@ -5591,7 +5591,8 @@ sap.ui.define([
 				sNewEt,
 				sPat,
 				sExcludeLid,
-				"inhibición"
+				"inhibición",
+				false
 			);
 
 			if (!res.ok) {
@@ -5612,7 +5613,7 @@ sap.ui.define([
 			return (v === "X") ? "X" : "A";
 		},
 
-		_checkEtPatUnique: function (sModelName, sPathRows, sEt, sPat, sExcludeLid, sEntityLabel) {
+		_checkEtPatUnique: function (sModelName, sPathRows, sEt, sPat, sExcludeLid, sEntityLabel, bCheckPat) {
 			const oModel = AppManagementHelper.getModel(sModelName);
 			const aRows = (oModel && oModel.getProperty(sPathRows)) || [];
 
@@ -5627,19 +5628,20 @@ sap.ui.define([
 				if (sExcludeLid && r.__lid === sExcludeLid) return false;
 
 				const rEt = r.Tplnr;
+				if (bCheckPat === false) return rEt === sEt;
 				const rPatNorm = this._normalizePat(r.Pat);
 
 				return rEt === sEt && rPatNorm === sPatNorm;
 			});
 
 			if (bExists) {
-				const sPatLabel = (sPatNorm === "X") ? "PAT" : "PAT/A";
 				const sWhat = sEntityLabel || "registro";
+				const sPatLabel = (sPatNorm === "X") ? "PAT" : "PAT/A";
+				const sMsg = bCheckPat === false
+					? `Ya existe una ${sWhat} para la ET ${sEt}.`
+					: `Ya existe una ${sWhat} para la ET ${sEt} con ${sPatLabel}.`;
 
-				return {
-					ok: false,
-					message: `Ya existe una ${sWhat} para la ET ${sEt} con ${sPatLabel}.`
-				};
+				return { ok: false, message: sMsg };
 			}
 
 			return { ok: true };
