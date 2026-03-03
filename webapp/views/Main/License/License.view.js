@@ -646,9 +646,9 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									enabled: {
 										parts: [
 											"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-											"ColocacionTableJsonModel>enabled", "ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+											 "ColocacionTableJsonModel>enabled","ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
 										],
-										formatter: oController.rolStatusEdition("retiro/")
+										formatter: oController.rolStatusEdition("colocacion/")
 									},
 
 									selectedKey: "{ColocacionTableJsonModel>Tecet}",
@@ -675,31 +675,38 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							value: "{ColocacionTableJsonModel>Coment}",
 							width: "100%"
 						}),
-						new sap.m.RadioButtonGroup({
+						new sap.m.ComboBox({
 							enabled: {
 								parts: [
-									"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-									"ColocacionTableJsonModel>enabled", "ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+									"LicenseJsonModel>/Licstat",
+									"UserJsonModel>/roles",
+									"statusModel>/",
+									"LicenseJsonModel>/Werks",
+									"ColocacionTableJsonModel>enabled",
+									"ColocacionTableJsonModel>sameDayValidation",
+									"ValidateFirstContModel>/fd"
 								],
 								formatter: oController.rolStatusEdition("colocacion/")
 							},
-							columns: 2,
 
-
-							selectedIndex: {
+							selectedKey: {
 								path: "ColocacionTableJsonModel>Pat",
 								formatter: function (v) {
-									// SOLO si es "X" => PAT (0). En cualquier otro caso => PAT/A (1)
-									return (v === "X") ? 0 : 1;
+									// 3 estados:
+									// null/undefined => sin selección
+									// "X" => PAT
+									// "" (o cualquier otro) => PAT/A
+									if (v === null || v === undefined) return "__NONE__";
+									return (v === "X") ? "X" : "A";
 								}
 							},
 
+							change: oController.onChangePAT.bind(oController),
 
-							select: oController.onChangePAT,
-
-							buttons: [
-								new sap.m.RadioButton({ text: "PAT" }),
-								new sap.m.RadioButton({ text: "PAT/A" })
+							items: [
+								new sap.ui.core.Item({ key: "__NONE__", text: "-- Elegir --" }),
+								new sap.ui.core.Item({ key: "X", text: "PAT" }),
+								new sap.ui.core.Item({ key: "A", text: "PAT/A" })
 							]
 						}),
 
@@ -872,31 +879,50 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							value: "{RetiroTableJsonModel>Coment}",
 							width: "100%"
 						}),
-						new sap.m.RadioButtonGroup({
+						new sap.m.ComboBox({
+
 							enabled: {
 								parts: [
-									"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-									"RetiroTableJsonModel>enabled", "RetiroTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+									"LicenseJsonModel>/Licstat",
+									"UserJsonModel>/roles",
+									"statusModel>/",
+									"LicenseJsonModel>/Werks",
+									"RetiroTableJsonModel>enabled",
+									"RetiroTableJsonModel>sameDayValidation",
+									"ValidateFirstContModel>/fd"
 								],
 								formatter: oController.rolStatusEdition("retiro/")
 							},
-							columns: 2,
 
-							selectedIndex: {
+							selectedKey: {
 								path: "RetiroTableJsonModel>Pat",
 								formatter: function (v) {
-									// SOLO si es "X" => PAT (0). En cualquier otro caso => PAT/A (1)
-									return (v === "X") ? 0 : 1;
+									// Si es "X" => PAT
+									// Si es "A" => PAT/A
+									// Si viene vacío/null => vacío
+									if (v === "X") return "X";
+									if (v === "A") return "A";
+									return "";
 								}
 							},
 
+							change: oController.onChangePAT.bind(oController),
 
-							select: oController.onChangePAT,
-
-							buttons: [
-								new sap.m.RadioButton({ text: "PAT" }),
-								new sap.m.RadioButton({ text: "PAT/A" })
+							items: [
+								new sap.ui.core.Item({
+									key: "",
+									text: "-- Seleccionar --"
+								}),
+								new sap.ui.core.Item({
+									key: "X",
+									text: "PAT"
+								}),
+								new sap.ui.core.Item({
+									key: "A",
+									text: "PAT/A"
+								})
 							]
+
 						}),
 						new sap.m.Button({
 							text: "Retirar",

@@ -2079,7 +2079,7 @@ sap.ui.define([
 				LicenseService.deliveryLicence(oDelivery);
 			}
 		},
-		
+
 
 		sendInhibicion: function (oEvent) {
 			const oModelInh = AppManagementHelper.getModel("InhibicionTableJsonModel");
@@ -2091,7 +2091,7 @@ sap.ui.define([
 			const sPath = oCtx.getPath();           // ej: "/Inhibicion/3"
 			const oInh = oCtx.getObject() || {};
 
-			const oValidation = this.validateSend(oInh);
+			const oValidation = this.validateSend(oInh,"INHIBICION");
 			if (!oValidation.valid) {
 				return MessageBoxHelper.showAlert("Alerta", oValidation.message);
 			}
@@ -2190,14 +2190,12 @@ sap.ui.define([
 		},
 
 		sendColocacionPAT: function (oEvent) {
-			const oModelCol = AppManagementHelper.getModel("ColocacionTableJsonModel");
-			const oModelRet = AppManagementHelper.getModel("RetiroTableJsonModel");
 
 			const oCtx = oEvent.getSource().getParent().getBindingContext("ColocacionTableJsonModel");
-			const sPath = oCtx.getPath();          // ej: "/Colocacion/3"
+
 			const oCol = oCtx.getObject();
 
-			const oValidation = this.validateSend(oCol);
+			const oValidation = this.validateSend(oCol, "COLOCACION");
 			if (!oValidation.valid) {
 				return MessageBoxHelper.showAlert("Alerta", oValidation.message);
 			}
@@ -2635,34 +2633,38 @@ sap.ui.define([
 
 		},
 		validateSend: function (oObject, sType) {
-			var oValidationObject = {
-				valid: true,
-				message: "Campos requeridos."
-			};
+			var oValidationObject = { valid: true, message: "Campos requeridos." };
 
-			// Validate Datehab
+			// Date / Time / Tplnr ... (lo que ya tenés)
 			if (!oObject.Datehab) {
 				oValidationObject.valid = false;
 				oValidationObject.message = "La fecha es obligatoria";
+				return oValidationObject;
 			}
 
-			// Validate Time
 			if (oObject.Time === null) {
 				oValidationObject.valid = false;
 				oValidationObject.message = "La hora es requerida";
+				return oValidationObject;
 			}
 
-			// // Validate Coment
-			// if (oObject.Coment === '') {
-			// 	oValidationObject.valid = false;
-			// 	oValidationObject.message = "Debe completar un comentario";
-			// }
-
-			// Validate Tplnr
 			if (oObject.Tplnr === "") {
 				oValidationObject.valid = false;
 				oValidationObject.message = "Debe de agregar una Estacion para poder realizar la operación";
+				return oValidationObject;
 			}
+
+			
+			if (sType === "COLOCACION") {
+				const tecet = (oObject.Tecet || "").trim();
+				if (!tecet) {
+					oValidationObject.valid = false;
+					oValidationObject.message = "Debe completar el campo TECET.";
+					return oValidationObject;
+				}
+			}
+
+		
 
 			return oValidationObject;
 		},
@@ -5484,47 +5486,31 @@ sap.ui.define([
 			const oCtx = oSrc.getBindingContext("ColocacionTableJsonModel");
 			if (!oCtx) return;
 
-			const iIndex = oEvent.getParameter("selectedIndex"); // 0=PAT, 1=PAT/A
 			const sRowPath = oCtx.getPath();
 			const oRow = oCtx.getObject() || {};
 
-			// Nuevo PAT según selección
-			const sNewPat = (iIndex === 0) ? "X" : "";
+			const sKey = oSrc.getSelectedKey();
 
-			// Guardar el anterior para revertir si falla
-			const sOldPat = (oRow.Pat === "X") ? "X" : "";
+			if (sKey === "__NONE__") {
+				oCtx.getModel().setProperty(sRowPath + "/Pat", null);
+				return;
+			}
 
-			// Seteo nuevo PAT en modelo
-			oCtx.getModel().setProperty(sRowPath + "/Pat", sNewPat);
+			const sNewPatModel = (sKey === "X") ? "X" : "";
 
-			// Validar con la ET actual de la fila
-			const sEt = oRow.Tplnr || "";
-			const sExcludeLid = oRow.__lid;
+			oCtx.getModel().setProperty(sRowPath + "/Pat", sNewPatModel);
 
-			const res = this._checkEtAllowsPatPair(
+			const res = this._validateCurrentRowEtPat(
+				oCtx,
 				"ColocacionTableJsonModel",
 				"/Colocacion",
-				sEt,
-				sNewPat,
-				sExcludeLid
+				"colocación"
 			);
 
 			if (!res.ok) {
-				// Revertir PAT en modelo
-				oCtx.getModel().setProperty(sRowPath + "/Pat", sOldPat);
-
-				// Revertir UI (RadioButtonGroup) al índice anterior
-				const iOldIndex = (sOldPat === "X") ? 0 : 1;
-				if (typeof oSrc.setSelectedIndex === "function") {
-					oSrc.setSelectedIndex(iOldIndex);
-				}
-
 				sap.m.MessageBox.error(res.message);
-				return;
 			}
 		},
-
-
 
 
 		onEtChangeValidatePatPair: function (oEvent) {
@@ -5533,72 +5519,25 @@ sap.ui.define([
 			if (!oCtx) return;
 
 			const sRowPath = oCtx.getPath();
-			const oRow = oCtx.getObject() || {};
 
 			const sNewEt = (typeof oSrc.getSelectedKey === "function")
 				? oSrc.getSelectedKey()
-				: (typeof oSrc.getValue === "function" ? oSrc.getValue() : "");
+				: oSrc.getValue();
 
-			// PAT: solo "X"; si no, vacío
-			const sPat = (oRow.Pat === "X") ? "X" : "";
-			const sExcludeLid = oRow.__lid;
+			oCtx.getModel().setProperty(sRowPath + "/Tplnr", sNewEt);
 
-			const res = this._checkEtAllowsPatPair(
+			const res = this._validateCurrentRowEtPat(
+				oCtx,
 				"ColocacionTableJsonModel",
 				"/Colocacion",
-				sNewEt,
-				sPat,
-				sExcludeLid
+				"colocación"
 			);
 
 			if (!res.ok) {
-				const sOldEt = oRow.Tplnr || "";
-
-				// revertir en modelo
-				oCtx.getModel().setProperty(sRowPath + "/Tplnr", sOldEt);
-
-				// revertir en control
-				if (typeof oSrc.setSelectedKey === "function") oSrc.setSelectedKey(sOldEt);
-				if (typeof oSrc.setValue === "function") oSrc.setValue(sOldEt);
-
 				sap.m.MessageBox.error(res.message);
-				return;
 			}
-
-			// OK
-			oCtx.getModel().setProperty(sRowPath + "/Tplnr", sNewEt);
 		},
 
-		_checkEtAllowsPatPair: function (sModelName, sPathRows, sEt, sPat, sExcludeLid) {
-			const oModel = AppManagementHelper.getModel(sModelName);
-			const aRows = (oModel && oModel.getProperty(sPathRows)) || [];
-
-			if (!sEt) {
-				return { ok: false, message: "Seleccione una ET válida." };
-			}
-
-			// CORTA en el primer match: misma ET + mismo PAT
-			for (let i = 0; i < aRows.length; i++) {
-				const r = aRows[i];
-				if (!r) continue;
-
-				// ignoro la misma fila
-				if (sExcludeLid && r.__lid === sExcludeLid) continue;
-
-				if (r.Tplnr === sEt) {
-					const rPat = (r.Pat === "X") ? "X" : "";
-					if (rPat === sPat) {
-						return {
-							ok: false,
-							message: `Ya existe una colocacion con esa caracteristica en la ET ${sEt}.`
-						};
-					}
-					// misma ET pero PAT distinto => permitido
-				}
-			}
-
-			return { ok: true };
-		},
 
 		onEtChangeValidateEtInhibicion: function (oEvent) {
 			const oSrc = oEvent.getSource();
@@ -5612,34 +5551,37 @@ sap.ui.define([
 				? oSrc.getSelectedKey()
 				: (typeof oSrc.getValue === "function" ? oSrc.getValue() : "");
 
+			const sPat = oRow.Pat;
 			const sExcludeLid = oRow.__lid;
 
-			const res = this._checkEtUniqueOnly(
+			const res = this._checkEtPatUnique(
 				"InhibicionTableJsonModel",
 				"/Inhibicion",
 				sNewEt,
-				sExcludeLid
+				sPat,
+				sExcludeLid,
+				"inhibición"
 			);
 
 			if (!res.ok) {
 				const sOldEt = oRow.Tplnr || "";
-
-				// revertir en modelo
 				oCtx.getModel().setProperty(sRowPath + "/Tplnr", sOldEt);
-
-				// revertir en control
 				if (typeof oSrc.setSelectedKey === "function") oSrc.setSelectedKey(sOldEt);
 				if (typeof oSrc.setValue === "function") oSrc.setValue(sOldEt);
-
 				sap.m.MessageBox.error(res.message);
 				return;
 			}
 
-			// OK
 			oCtx.getModel().setProperty(sRowPath + "/Tplnr", sNewEt);
 		},
 
-		_checkEtUniqueOnly: function (sModelName, sPathRows, sEt, sExcludeLid) {
+
+		_normalizePat: function (v) {
+			// PAT: "X" => PAT, cualquier otra cosa => PAT/A
+			return (v === "X") ? "X" : "A";
+		},
+
+		_checkEtPatUnique: function (sModelName, sPathRows, sEt, sPat, sExcludeLid, sEntityLabel) {
 			const oModel = AppManagementHelper.getModel(sModelName);
 			const aRows = (oModel && oModel.getProperty(sPathRows)) || [];
 
@@ -5647,27 +5589,49 @@ sap.ui.define([
 				return { ok: false, message: "Seleccione una ET válida." };
 			}
 
-			// CORTA en el primer match: misma ET (sin mirar PAT)
-			for (let i = 0; i < aRows.length; i++) {
-				const r = aRows[i];
-				if (!r) continue;
+			const sPatNorm = this._normalizePat(sPat);
 
-				// ignoro la misma fila
-				if (sExcludeLid && r.__lid === sExcludeLid) continue;
+			const bExists = aRows.some(r => {
+				if (!r) return false;
+				if (sExcludeLid && r.__lid === sExcludeLid) return false;
 
-				if (r.Tplnr === sEt) {
-					return {
-						ok: false,
-						message: `Ya existe una inhibición para la ET ${sEt}.`
-					};
-				}
+				const rEt = r.Tplnr;
+				const rPatNorm = this._normalizePat(r.Pat);
+
+				return rEt === sEt && rPatNorm === sPatNorm;
+			});
+
+			if (bExists) {
+				const sPatLabel = (sPatNorm === "X") ? "PAT" : "PAT/A";
+				const sWhat = sEntityLabel || "registro";
+
+				return {
+					ok: false,
+					message: `Ya existe una ${sWhat} para la ET ${sEt} con ${sPatLabel}.`
+				};
 			}
 
 			return { ok: true };
 		},
+		_validateCurrentRowEtPat: function (oCtx, sModelName, sPathRows, sEntityLabel) {
+			const oRow = oCtx.getObject() || {};
+			const sEt = oRow.Tplnr;
+			const sPat = oRow.Pat;
+			const sExcludeLid = oRow.__lid;
 
+			if (!sEt || sPat === null || sPat === undefined) {
+				return { ok: true };
+			}
 
-
+			return this._checkEtPatUnique(
+				sModelName,
+				sPathRows,
+				sEt,
+				sPat,
+				sExcludeLid,
+				sEntityLabel
+			);
+		}
 
 
 	});
