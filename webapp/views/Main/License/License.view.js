@@ -901,7 +901,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									// Si es "A" => PAT/A
 									// Si viene vacío/null => vacío
 									if (v === "X") return "X";
-									if (v === "A") return "A";
+									if (v === "") return "A";
 									return "";
 								}
 							},
