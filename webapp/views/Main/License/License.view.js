@@ -821,7 +821,10 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							displayFormat: "HH:mm"
 						}),
 						new sap.m.Text({
-							text: "{RetiroTableJsonModel>Jt}"
+							text: {
+								path: "RetiroTableJsonModel>Jt",
+								formatter: $.proxy(oController.handleUserName, oController)
+							}
 						}),
 						new sap.m.ComboBox({
 
