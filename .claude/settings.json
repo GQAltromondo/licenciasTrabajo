@@ -6,7 +6,8 @@
       "Bash(node c:/Users/Guillote/Desktop/ALTROMONDO/licenciasTrabajo/patch1.js)",
       "Bash(node c:/Users/Guillote/Desktop/ALTROMONDO/licenciasTrabajo/patch2.js)",
       "Bash(node c:/Users/Guillote/Desktop/ALTROMONDO/licenciasTrabajo/patch.js)",
-      "Bash(python3 -c \":*)"
+      "Bash(python3 -c \":*)",
+      "Bash(node \"c:/Users/Guillote/Desktop/ALTROMONDO/licenciasTrabajo/addTooltips.js\")"
     ]
   }
 }

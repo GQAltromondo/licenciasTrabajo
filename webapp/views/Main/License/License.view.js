@@ -629,6 +629,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								formatter: oController.rolStatusEdition("colocacion/")
 							},
 							selectedKey: "{ColocacionTableJsonModel>Tplnr}",
+							tooltip: "{ColocacionTableJsonModel>Tplnr}",
 							change: [oController.onEtChangeValidatePatPair, oController],
 							items: {
 								path: "EstacionesJsonModel>/EstacionesPorRegion",
@@ -652,6 +653,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									},
 
 									selectedKey: "{ColocacionTableJsonModel>Tecet}",
+									tooltip: "{ColocacionTableJsonModel>Tecet}",
 									items: {
 										templateShareable: false,
 										path: "PersonalHabilitadoModel>/TecnicosEt",
@@ -839,6 +841,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							// 	formatter: oController.rolStatusEdition("retiro/")
 							// },
 							selectedKey: "{RetiroTableJsonModel>Tplnr}",
+							tooltip: "{RetiroTableJsonModel>Tplnr}",
 							items: {
 								path: "EstacionesJsonModel>/EstacionesPorRegion",
 								template: new sap.ui.core.Item({
@@ -861,6 +864,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									},
 
 									selectedKey: "{RetiroTableJsonModel>Tecet}",
+									tooltip: "{RetiroTableJsonModel>Tecet}",
 									items: {
 										templateShareable: false,
 										path: "PersonalHabilitadoModel>/TecnicosEt",
@@ -1059,6 +1063,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							},
 							change: [oController.onEtChangeValidateEtInhibicion, oController],
 							selectedKey: "{InhibicionTableJsonModel>Tplnr}",
+							tooltip: "{InhibicionTableJsonModel>Tplnr}",
 							items: {
 								path: "EstacionesJsonModel>/EstacionesPorRegion",
 								template: new sap.ui.core.Item({
@@ -1081,6 +1086,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									},
 
 									selectedKey: "{InhibicionTableJsonModel>Tecet}",
+									tooltip: "{InhibicionTableJsonModel>Tecet}",
 									items: {
 										templateShareable: false,
 										path: "PersonalHabilitadoModel>/TecnicosEt",
@@ -1234,6 +1240,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							change: [oController.handleLegacyValidationDeliveries, oController],
 
 							selectedKey: "{HabilitacionTableJsonModel>Tplnr}",
+							tooltip: "{HabilitacionTableJsonModel>Tplnr}",
 							items: {
 								path: "EstacionesJsonModel>/EstacionesPorRegion",
 								template: new sap.ui.core.Item({
@@ -1255,6 +1262,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									},
 
 									selectedKey: "{HabilitacionTableJsonModel>Tecet}",
+									tooltip: "{HabilitacionTableJsonModel>Tecet}",
 									items: {
 										templateShareable: false,
 										path: "PersonalHabilitadoModel>/TecnicosEt",
