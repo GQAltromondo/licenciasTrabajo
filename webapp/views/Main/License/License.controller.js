@@ -2666,7 +2666,7 @@ sap.ui.define([
 
 		
 
-			if (sType === "RETIRO") {
+			if ( sType === "COLOCACION") {
 				const sPat = (oObject.Pat || "").trim();
 				if (!sPat) {
 					oValidationObject.valid = false;
@@ -5516,7 +5516,7 @@ sap.ui.define([
 				return;
 			}
 
-			const sNewPatModel = (sKey === "X") ? "X" : "";
+			const sNewPatModel = (sKey === "X") ? "X" : (sKey === "A") ? "A" : null;
 
 			oCtx.getModel().setProperty(sRowPath + "/Pat", sNewPatModel);
 
