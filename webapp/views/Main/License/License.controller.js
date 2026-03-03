@@ -2287,6 +2287,7 @@ sap.ui.define([
 			delete oPayload.Datelicencia; // por si viene con ese nombre
 			delete oPayload.fromBackend;
 			delete oPayload.isMirror
+			delete oPayload.enabledTecet
 
 			LicenseService.RetiroPATLicence(oPayload, { RefId: sRefId, __lid: sLid });
 		},
