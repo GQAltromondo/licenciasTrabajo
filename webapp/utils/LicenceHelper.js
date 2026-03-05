@@ -835,7 +835,7 @@ sap.ui.define([
 				if (oPrevHab) {
 					const oHab = markPrevHab(cloneObj(oPrevHab));
 					oHab.__lid = oHab.__lid || oInh.__lid; // link visual con la inhibición
-					oHab.Tecet = "";
+					oHab.Tecet = oLicense.Tecet || "";
 					oHab.enabledTecet = true;
 					return oHab;
 				}
@@ -848,7 +848,7 @@ sap.ui.define([
 				oMirror.showPrevValue = false;
 				oMirror.enabled = true;
 				oMirror.enabledTecet = true;
-				oMirror.Tecet = "";
+				oMirror.Tecet = oLicense.Tecet || "";
 				oMirror.canSend = true;
 				oMirror.Datehab = now;
 				oMirror.Time = now;
@@ -1010,7 +1010,7 @@ sap.ui.define([
 				if (oPrevRet) {
 					const oRet = markPrevRet(cloneObj(oPrevRet));
 					oRet.__lid = oRet.__lid || oCol.__lid;
-					oRet.Tecet = "";
+					oRet.Tecet = oLicense.Tecet || "";
 					oRet.enabledTecet = true;
 					if (!oRet.Pat) oRet.Pat = "A";
 					return oRet;
@@ -1024,7 +1024,7 @@ sap.ui.define([
 				oMirror.showPrevValue = false;
 				oMirror.enabled = true;
 				oMirror.enabledTecet = true;
-				oMirror.Tecet = "";
+				oMirror.Tecet = oLicense.Tecet || "";
 				oMirror.canSend = true;
 				oMirror.Datehab = now;
 				oMirror.Time = now;
