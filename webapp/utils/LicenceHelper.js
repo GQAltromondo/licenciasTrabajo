@@ -847,7 +847,6 @@ sap.ui.define([
 				oMirror.showPrevValue = false;
 				oMirror.enabled = true;
 				oMirror.enabledTecet = true;
-				oMirror.Tecet = oLicense.Tecet || "";
 				oMirror.canSend = true;
 				oMirror.Datehab = now;
 				oMirror.Time = now;
