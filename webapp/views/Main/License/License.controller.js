@@ -2165,7 +2165,7 @@ sap.ui.define([
 			const sPath = oCtx.getPath();            // ej: "/Habilitacion/2"
 			const oHab = oCtx.getObject() || {};
 
-			const oValidation = this.validateSend(oHab);
+			const oValidation = this.validateSend(oHab, "HABILITACION");
 			if (!oValidation.valid) {
 				return MessageBoxHelper.showAlert("Alerta", oValidation.message);
 			}
@@ -2666,7 +2666,7 @@ sap.ui.define([
 			}
 
 			
-			if (sType === "COLOCACION") {
+			if (sType === "COLOCACION" || sType === "HABILITACION" || sType === "RETIRO") {
 				const tecet = (oObject.Tecet || "").trim();
 				if (!tecet) {
 					oValidationObject.valid = false;
@@ -2678,8 +2678,7 @@ sap.ui.define([
 		
 
 			if ( sType === "COLOCACION") {
-				const sPat = (oObject.Pat || "").trim();
-				if (!sPat) {
+				if (oObject.Pat === null || oObject.Pat === undefined) {
 					oValidationObject.valid = false;
 					oValidationObject.message = "Debe seleccionar PAT o PAT/A para realizar la colocacion.";
 					return oValidationObject;
@@ -5508,7 +5507,7 @@ sap.ui.define([
 			const oRetCtx = oSrc.getBindingContext("RetiroTableJsonModel");
 			if (oRetCtx) {
 				const sKey = oSrc.getSelectedKey();
-				const sVal = (sKey === "X") ? "X" : (sKey === "A") ? "A" : "";
+				const sVal = (sKey === "X") ? "X" : (sKey === "__PAT__") ? "" : null;
 				oRetCtx.getModel().setProperty(oRetCtx.getPath() + "/Pat", sVal);
 				return;
 			}
@@ -5527,7 +5526,7 @@ sap.ui.define([
 				return;
 			}
 
-			const sNewPatModel = (sKey === "X") ? "X" : (sKey === "A") ? "A" : null;
+			const sNewPatModel = (sKey === "X") ? "X" : (sKey === "__PAT__") ? "" : null;
 
 			oCtx.getModel().setProperty(sRowPath + "/Pat", sNewPatModel);
 
@@ -5540,6 +5539,22 @@ sap.ui.define([
 
 			if (!res.ok) {
 				sap.m.MessageBox.error(res.message);
+			}
+		},
+
+		onTecetChange: function (oEvent) {
+			const oSrc = oEvent.getSource();
+			const sKey = oSrc.getSelectedKey();
+
+			const oRetCtx = oSrc.getBindingContext("RetiroTableJsonModel");
+			if (oRetCtx) {
+				oRetCtx.getModel().setProperty(oRetCtx.getPath() + "/Tecet", sKey);
+				return;
+			}
+
+			const oHabCtx = oSrc.getBindingContext("HabilitacionTableJsonModel");
+			if (oHabCtx) {
+				oHabCtx.getModel().setProperty(oHabCtx.getPath() + "/Tecet", sKey);
 			}
 		},
 

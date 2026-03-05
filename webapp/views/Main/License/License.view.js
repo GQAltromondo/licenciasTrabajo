@@ -701,12 +701,12 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							selectedKey: {
 								path: "ColocacionTableJsonModel>Pat",
 								formatter: function (v) {
-									// 3 estados:
-									// null/undefined => sin selección
-									// "X" => PAT
-									// "" (o cualquier otro) => PAT/A
+																// null/undefined => sin selección
+									// "" => PAT  (backend "" = PAT)
+									// "X" => PAT/A (backend "X" = PAT/A)
 									if (v === null || v === undefined) return "__NONE__";
-									return (v === "X") ? "X" : "A";
+									if (v === "") return "__PAT__";
+									return "X";
 								}
 							},
 
@@ -714,8 +714,8 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 
 							items: [
 								new sap.ui.core.Item({ key: "__NONE__", text: "-- Elegir --" }),
-								new sap.ui.core.Item({ key: "X", text: "PAT" }),
-								new sap.ui.core.Item({ key: "A", text: "PAT/A" })
+								new sap.ui.core.Item({ key: "__PAT__", text: "PAT" }),
+								new sap.ui.core.Item({ key: "X", text: "PAT/A" })
 							]
 						}),
 
@@ -873,6 +873,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									},
 
 									selectedKey: "{RetiroTableJsonModel>Tecet}",
+									change: oController.onTecetChange.bind(oController),
 									tooltip: {
 										path: "RetiroTableJsonModel>Tecet",
 										formatter: $.proxy(oController.formatTecetTooltip, oController)
@@ -918,12 +919,12 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							selectedKey: {
 								path: "RetiroTableJsonModel>Pat",
 								formatter: function (v) {
-									// Si es "X" => PAT
-									// Si es "A" => PAT/A
-									// Si viene vacío/null => vacío
-									if (v === "X") return "X";
-									if (v === "") return "A";
-									return "";
+																// null/undefined => sin selección
+									// "" => PAT  (backend "" = PAT)
+									// "X" => PAT/A (backend "X" = PAT/A)
+									if (v === null || v === undefined) return "__NONE__";
+									if (v === "") return "__PAT__";
+									return "X";
 								}
 							},
 
@@ -931,15 +932,15 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 
 							items: [
 								new sap.ui.core.Item({
-									key: "",
+									key: "__NONE__",
 									text: "-- Seleccionar --"
 								}),
 								new sap.ui.core.Item({
-									key: "X",
+									key: "__PAT__",
 									text: "PAT"
 								}),
 								new sap.ui.core.Item({
-									key: "A",
+									key: "X",
 									text: "PAT/A"
 								})
 							]
@@ -1283,6 +1284,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									},
 
 									selectedKey: "{HabilitacionTableJsonModel>Tecet}",
+									change: oController.onTecetChange.bind(oController),
 									tooltip: {
 										path: "HabilitacionTableJsonModel>Tecet",
 										formatter: $.proxy(oController.formatTecetTooltip, oController)
