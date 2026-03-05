@@ -10,7 +10,8 @@
       "Bash(node \"c:/Users/Guillote/Desktop/ALTROMONDO/licenciasTrabajo/addTooltips.js\")",
       "Bash(node \"c:/Users/Guillote/Desktop/ALTROMONDO/licenciasTrabajo/fix_checkEt.js\")",
       "Bash(node fix_pat.js)",
-      "Bash(node fix_tecet.js)"
+      "Bash(node fix_tecet.js)",
+      "Bash(node fix_tecet2.js)"
     ]
   }
 }
