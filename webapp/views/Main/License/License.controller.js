@@ -2574,12 +2574,31 @@ sap.ui.define([
 				this.isDateDeliveryValid = oEvent.getParameter("valid");
 			}
 
+			// Para Colocacion y Retiro: el DatePicker muestra Datelicencia pero el backend usa Datehab
+			// Sincronizamos Datehab cada vez que el usuario cambia la fecha
+			if ((sModel === "ColocacionTableJsonModel" || sModel === "RetiroTableJsonModel") &&
+				oEvent.getSource().getMetadata().getName() === "sap.m.DatePicker") {
+				const dNewDate = oEvent.getSource().getDateValue();
+				if (dNewDate) {
+					AppManagementHelper.getModel(sModel).setProperty(oBindingPath + "/Datehab", dNewDate);
+				}
+			}
+
 			if (sModel === "DeliveryTableJsonModel") {
 				if (oContextData.Time && oContextData.Datelicencia) {
 					AppManagementHelper.getModel(sModel).setProperty(oBindingPath + "/enabledInputMotivo", false);
 					AppManagementHelper.getModel(sModel).setProperty(oBindingPath + "/Motivono", "")
 				} else {
 					AppManagementHelper.getModel(sModel).setProperty(oBindingPath + "/enabledInputMotivo", true)
+				}
+			}
+
+			// Para Inhibicion y Habilitacion: sincronizar Datehab desde el DatePicker
+			if ((sModel === "InhibicionTableJsonModel" || sModel === "HabilitacionTableJsonModel") &&
+				oEvent.getSource().getMetadata().getName() === "sap.m.DatePicker") {
+				const dNewDate = oEvent.getSource().getDateValue();
+				if (dNewDate) {
+					AppManagementHelper.getModel(sModel).setProperty(oBindingPath + "/Datehab", dNewDate);
 				}
 			}
 

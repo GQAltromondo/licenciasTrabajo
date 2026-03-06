@@ -1034,7 +1034,6 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									}
 								})
 							},
-							change: $.proxy(oController.handleDateChange, oController, "InhibicionTableJsonModel"),
 							enabled: {
 								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
 									"InhibicionTableJsonModel>enabled",
@@ -1042,6 +1041,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								],
 								formatter: oController.rolStatusEdition("inhibicion/")
 							},
+							change: $.proxy(oController.handleDateChange, oController, "InhibicionTableJsonModel"),
 							dateValue: "{InhibicionTableJsonModel>Datehab}",
 							minDate: "{LicenseJsonModel>/Solbeg}",
 							maxDate: "{LicenseJsonModel>/Solend}",
@@ -1214,7 +1214,6 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									}
 								})
 							},
-							change: $.proxy(oController.handleDateChange, oController, "HabilitacionTableJsonModel"),
 							enabled: {
 								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
 									"HabilitacionTableJsonModel>enabled",
@@ -1222,6 +1221,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								],
 								formatter: oController.rolStatusEdition("habilitacion/")
 							},
+							change: $.proxy(oController.handleDateChange, oController, "HabilitacionTableJsonModel"),
 							dateValue: "{HabilitacionTableJsonModel>Datehab}",
 							minDate: "{LicenseJsonModel>/Solbeg}",
 							maxDate: "{LicenseJsonModel>/Solend}",
