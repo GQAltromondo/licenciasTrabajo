@@ -879,8 +879,8 @@ sap.ui.define([
 			// si tenés una función equivalente para fechas de recierre, usala.
 			// si Datehab/Time viene igual que PAT, podés reutilizar:
 			if (typeof this.formatUTCDatesHab === "function") {
-				this.formatUTCDatesHab(aInhibicion.filter(function(o) { return !o.fromBackend; }));
-				this.formatUTCDatesHab(aHabilitacion.filter(function(o) { return !o.fromBackend; }));
+				this.formatUTCDatesHab(aInhibicion);
+				this.formatUTCDatesHab(aHabilitacion);
 			}
 
 			AppManagementHelper.getModel("HabilitacionTableJsonModel").setData({ Habilitacion: aHabilitacion });
@@ -1058,8 +1058,8 @@ sap.ui.define([
 			});
 			aRetiros = Object.values(bestByEt);
 
-			this.formatUTCDatesHab(aColocaciones.filter(function(c) { return !c.fromBackend; }));
-			this.formatUTCDatesHab(aRetiros.filter(function(r) { return !r.fromBackend; }));
+			this.formatUTCDatesHab(aColocaciones);
+			this.formatUTCDatesHab(aRetiros);
 
 			AppManagementHelper.getModel("ColocacionTableJsonModel").setData({ Colocacion: aColocaciones });
 			AppManagementHelper.getModel("RetiroTableJsonModel").setData({ Retiro: aRetiros });
