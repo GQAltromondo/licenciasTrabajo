@@ -612,11 +612,11 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							displayFormat: "HH:mm"
 						}),
 						new sap.m.Text({
-							// text: "{ColocacionTableJsonModel>Jt}"
-							text: {
-								path: "DeliveryTableJsonModel>Jt",
-								formatter: $.proxy(oController.handleUserName, oController)
-							}
+							 text: "{ColocacionTableJsonModel>Cot}"
+							// text: {
+							// 	path: "DeliveryTableJsonModel>Jt",
+							// 	formatter: $.proxy(oController.handleUserName, oController)
+							// }
 						}),
 
 						new sap.m.ComboBox({

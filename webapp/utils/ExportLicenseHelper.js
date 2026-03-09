@@ -1917,6 +1917,20 @@ sap.ui.define([
 					bold: true,
 					fontSize: 8,
 					border: [false, false, false, false]
+				},
+				{
+					text: "COT/COTDT",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				},
+				{
+					text: "Tecnico ET",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
 				}, {
 					text: "Comentarios ",
 					alignment: 'center',
@@ -1934,6 +1948,19 @@ sap.ui.define([
 					border: [true, false, false, false]
 				}, {
 					text: "ET",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				}, {
+					text: "COT/COTDT",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				},
+				{
+					text: "Tecnico ET",
 					alignment: 'center',
 					bold: true,
 					fontSize: 8,
@@ -1964,6 +1991,16 @@ sap.ui.define([
 						fontSize: 8,
 						border: [false, false, false, false]
 					}, {
+						text: item.Jt,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}, {
+						text: item.Tecet,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}, {
 						text: item.Coment,
 						alignment: 'center',
 						fontSize: 8,
@@ -1989,6 +2026,16 @@ sap.ui.define([
 						fontSize: 8,
 						border: [false, false, false, false]
 					}, {
+						text: item.Jt,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}, {
+						text: item.Tecet,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}, {
 						text: item.Coment,
 						alignment: 'center',
 						fontSize: 8,
@@ -1999,12 +2046,12 @@ sap.ui.define([
 			content.push({
 				columns: [{
 					table: {
-						widths: ['30%', '30%', '30%'],
+						widths: ['20%', '20%', '20%','20%','20%'],
 						body: colocacionTableRow
 					}
 				}, {
 					table: {
-						widths: ['30%', '30%', '30%'],
+						widths: ['20%', '20%', '20%','20%','20%'],
 						body: retiroTableRow
 					}
 
@@ -2881,7 +2928,7 @@ sap.ui.define([
 						fontSize: 9,
 						text: item.TipoJefeTrj + " - " + FormatterHelper.getTipoHabName(item.TipoJefeTrj)
 					}],
-					 margin: [0, 0, 0, 10]
+					margin: [0, 0, 0, 10]
 				});
 
 				content.push({
