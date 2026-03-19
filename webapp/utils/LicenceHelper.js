@@ -917,16 +917,13 @@ sap.ui.define([
 				return `${hh}:${mi}`;
 			};
 
-			// 🔑 clave natural para emparejar (si te falla el match, achicá campos)
+			// 🔑 clave estable: solo campos que identifican la relación colocación↔retiro
+			// (sin Datehab, Time, Jt, Tecet que cambian entre colocación y retiro)
 			const makeKey = (o) => ([
 				o.Id || "",
 				o.Empresa || "",
-				toDateStr(o.Datehab),
-				toTimeStr(o.Time),
 				String(o.Tplnr || ""),
-				String(o.Jt || ""),
-				String(o.Pat || ""),
-				String(o.Tecet || "")
+				String(o.Pat || "")
 			].join("|"));
 
 			const markPrevCol = (o) => {
