@@ -918,14 +918,17 @@ sap.ui.define([
 			};
 
 			// 🔑 clave completa para __lid (incluye fecha para unicidad)
-			const makeKey = (o) => [
-				o.Id || "",
-				o.Empresa || "",
-				toDateStr(o.Datehab),
-				toTimeStr(o.Time),
-				String(o.Tplnr || ""),
-				String(o.Pat || "")
-			].join("|");
+			var makeKey = function (o) {
+				if (!o) return "";
+				return [
+					o.Id || "",
+					o.Empresa || "",
+					toDateStr(o.Datehab),
+					toTimeStr(o.Time),
+					String(o.Tplnr || ""),
+					String(o.Pat || "")
+				].join("|");
+			};
 
 			const markPrevCol = (o) => {
 				o.showPrevValue = true;
@@ -980,36 +983,35 @@ sap.ui.define([
 
 			aColocaciones.push(oNewCol);
 
-			// ===== 2) RETIROS (emparejados por RefId) =====
+			// ===== 2) RETIROS (emparejados por Tplnr) =====
 			const aColBackend = aColocaciones.filter(c => !c.isNew);
 
-			// Indexar retiros backend por RefId
-			const mRetByRef = {};
-			const aRetCloned = cloneArr(aRetPrev);
-			aRetCloned.forEach((r) => {
-				var sRef = String(r.RefId || "");
-				if (sRef) {
-					if (!mRetByRef[sRef]) mRetByRef[sRef] = [];
-					mRetByRef[sRef].push(r);
+			// Indexar retiros backend por Tplnr (cola FIFO por ET)
+			const mRetByET = {};
+			cloneArr(aRetPrev).forEach(function (r) {
+				var k = String(r.Tplnr || "");
+				if (k) {
+					if (!mRetByET[k]) mRetByET[k] = [];
+					mRetByET[k].push(r);
 				}
 			});
 
-			let aRetiros = aColBackend.map((oCol) => {
-				var sRef = String(oCol.RefId || "");
+			var aRetiros = aColBackend.map(function (oCol) {
+				var k = String(oCol.Tplnr || "");
 				var oPrevRet = null;
-				if (sRef && mRetByRef[sRef] && mRetByRef[sRef].length) {
-					oPrevRet = mRetByRef[sRef].shift();
+				if (k && mRetByET[k] && mRetByET[k].length) {
+					oPrevRet = mRetByET[k].shift();
 				}
 
 				if (oPrevRet) {
-					const oRet = markPrevRet(cloneObj(oPrevRet));
-					oRet.__lid = oRet.__lid || oCol.__lid;
+					var oRet = markPrevRet(cloneObj(oPrevRet));
+					oRet.__lid = oCol.__lid;
 					oRet.enabledTecet = true;
 					return oRet;
 				}
 
 				// No hay retiro en backend para esta colocación → espejo habilitado
-				const oMirror = cloneObj(oCol);
+				var oMirror = cloneObj(oCol);
 				oMirror.Coment = "";
 				oMirror.isMirror = true;
 				oMirror.fromBackend = false;
@@ -1023,9 +1025,9 @@ sap.ui.define([
 				return oMirror;
 			});
 
-			// Huérfanos: retiros backend que no matchearon por RefId
-			Object.keys(mRetByRef).forEach((k) => {
-				(mRetByRef[k] || []).forEach((r) => {
+			// Huérfanos: retiros backend que no matchearon
+			Object.keys(mRetByET).forEach(function (k) {
+				(mRetByET[k] || []).forEach(function (r) {
 					aRetiros.push(markPrevRet(cloneObj(r)));
 				});
 			});

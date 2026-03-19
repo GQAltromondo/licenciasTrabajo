@@ -984,7 +984,7 @@ sap.ui.define([
 		successPOSTRetiroPAT: function (oMeta, data) {
 			BusyDialogHelper.close();
 
-			var sRefId = (data && data.RefId) || (oMeta && oMeta.RefId) || "";
+			var sLid = oMeta && oMeta.__lid;
 			var oLicenseData = AppManagementHelper.getModel("LicenseJsonModel").getData();
 
 			MessageBoxHelper.showAlert(
@@ -992,12 +992,12 @@ sap.ui.define([
 				"Se ha realizado el Retiro de manera correcta",
 				$.proxy(function () {
 					this.FIND(oLicenseData, function () {
-						if (!sRefId) return;
+						if (!sLid) return;
 						var oRetModel = AppManagementHelper.getModel("RetiroTableJsonModel");
 						var aRetiros = oRetModel.getProperty("/Retiro") || [];
 
 						for (var i = 0; i < aRetiros.length; i++) {
-							if (String(aRetiros[i].RefId || "") === String(sRefId)) {
+							if (aRetiros[i].__lid === sLid) {
 								oRetModel.setProperty("/Retiro/" + i + "/enabled", false);
 								oRetModel.setProperty("/Retiro/" + i + "/canSend", false);
 								oRetModel.setProperty("/Retiro/" + i + "/showPrevValue", true);
