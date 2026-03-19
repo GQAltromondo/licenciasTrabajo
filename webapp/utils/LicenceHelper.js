@@ -917,14 +917,15 @@ sap.ui.define([
 				return `${hh}:${mi}`;
 			};
 
-			// 🔑 clave estable: solo campos que identifican la relación colocación↔retiro
-			// (sin Datehab, Time, Jt, Tecet que cambian entre colocación y retiro)
-			const makeKey = (o) => ([
+			// 🔑 clave completa para __lid (incluye fecha para unicidad)
+			const makeKey = (o) => [
 				o.Id || "",
 				o.Empresa || "",
+				toDateStr(o.Datehab),
+				toTimeStr(o.Time),
 				String(o.Tplnr || ""),
 				String(o.Pat || "")
-			].join("|"));
+			].join("|");
 
 			const markPrevCol = (o) => {
 				o.showPrevValue = true;
@@ -951,10 +952,8 @@ sap.ui.define([
 				const c = markPrevCol(o);
 				c.__lid = c.__lid || ("BK_" + makeKey(c));
 
-
-
 				c.Jt = aDataTODOS.find(oItem => oItem.Legajo === c.Jt);
-				c.Cot= AppManagementHelper.getStringUserLegacy();
+				c.Cot = AppManagementHelper.getStringUserLegacy();
 				return c;
 			});
 			const now = new Date();
@@ -979,29 +978,28 @@ sap.ui.define([
 				canSend: true
 			};
 
-
 			aColocaciones.push(oNewCol);
 
-			// ===== 2) RETIROS =====
+			// ===== 2) RETIROS (emparejados por RefId) =====
 			const aColBackend = aColocaciones.filter(c => !c.isNew);
 
-			// index retiros backend por key (cola)
-			const mRetByKey = {};
-			cloneArr(aRetPrev).forEach((r) => {
-				const k = makeKey(r);
-				if (!mRetByKey[k]) mRetByKey[k] = [];
-				mRetByKey[k].push(r);
+			// Indexar retiros backend por RefId
+			const mRetByRef = {};
+			const aRetCloned = cloneArr(aRetPrev);
+			aRetCloned.forEach((r) => {
+				var sRef = String(r.RefId || "");
+				if (sRef) {
+					if (!mRetByRef[sRef]) mRetByRef[sRef] = [];
+					mRetByRef[sRef].push(r);
+				}
 			});
 
-			const takePrevRetiro = (oCol) => {
-				const k = makeKey(oCol);
-				const q = mRetByKey[k];
-				if (q && q.length) return q.shift();
-				return null;
-			};
-
 			let aRetiros = aColBackend.map((oCol) => {
-				const oPrevRet = takePrevRetiro(oCol);
+				var sRef = String(oCol.RefId || "");
+				var oPrevRet = null;
+				if (sRef && mRetByRef[sRef] && mRetByRef[sRef].length) {
+					oPrevRet = mRetByRef[sRef].shift();
+				}
 
 				if (oPrevRet) {
 					const oRet = markPrevRet(cloneObj(oPrevRet));
@@ -1010,7 +1008,7 @@ sap.ui.define([
 					return oRet;
 				}
 
-				// espejo habilitado
+				// No hay retiro en backend para esta colocación → espejo habilitado
 				const oMirror = cloneObj(oCol);
 				oMirror.Coment = "";
 				oMirror.isMirror = true;
@@ -1025,36 +1023,12 @@ sap.ui.define([
 				return oMirror;
 			});
 
-			// agrego orphans (retiros backend que no matchearon por makeKey)
-			Object.keys(mRetByKey).forEach((k) => {
-				(mRetByKey[k] || []).forEach((r) => {
+			// Huérfanos: retiros backend que no matchearon por RefId
+			Object.keys(mRetByRef).forEach((k) => {
+				(mRetByRef[k] || []).forEach((r) => {
 					aRetiros.push(markPrevRet(cloneObj(r)));
 				});
 			});
-
-			const etKey = (o) => [
-				String(o.Tplnr || ""),
-				String(o.Pat || "")
-			].join("|");
-
-			// 👉 si querés SOLO ET, usá: const etKey = (o) => String(o.Tplnr || "");
-			const bestByEt = {};
-			aRetiros.forEach((r) => {
-				const k = etKey(r);
-				if (!bestByEt[k]) {
-					bestByEt[k] = r;
-					return;
-				}
-				const curr = bestByEt[k];
-				const currIsBackend = !!curr.fromBackend;
-				const rIsBackend = !!r.fromBackend;
-
-				// prioridad backend
-				if (!currIsBackend && rIsBackend) {
-					bestByEt[k] = r;
-				}
-			});
-			aRetiros = Object.values(bestByEt);
 
 			this.formatUTCDatesHab(aColocaciones);
 			this.formatUTCDatesHab(aRetiros);

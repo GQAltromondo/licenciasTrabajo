@@ -984,40 +984,30 @@ sap.ui.define([
 		successPOSTRetiroPAT: function (oMeta, data) {
 			BusyDialogHelper.close();
 
-			const sRefId = oMeta && oMeta.RefId;
-			const sLid = oMeta && oMeta.__lid;
-
-			if (sRefId) {
-				const oModel = AppManagementHelper.getModel("RetiroTableJsonModel");
-				const aRetiros = oModel.getProperty("/Retiro") || [];
-
-				const i = aRetiros.findIndex(r =>
-					(sLid && r.__lid === sLid) || r.RefId === sRefId
-				);
-
-				if (i >= 0) {
-					// mergeo data del backend si viene
-					const oUpdated = jQuery.extend(true, {}, aRetiros[i], data || {});
-					oUpdated.__lid = aRetiros[i].__lid || sLid;
-
-					// ✅ estado final retiro guardado
-					oUpdated.enabled = false;        // inputs bloqueados
-					oUpdated.canSend = false;        // botón deshabilitado (si lo usás)
-					oUpdated.showPrevValue = true;
-
-					oUpdated.fromBackend = true;
-					oUpdated.isNew = false;
-					oUpdated.isMirror = false;       // ya no es espejo: existe en backend
-					oUpdated.isRemoval = true;       // si lo usás para distinguir
-
-					oModel.setProperty(`/Retiro/${i}`, oUpdated);
-				}
-			}
+			var sRefId = (data && data.RefId) || (oMeta && oMeta.RefId) || "";
+			var oLicenseData = AppManagementHelper.getModel("LicenseJsonModel").getData();
 
 			MessageBoxHelper.showAlert(
 				"Alerta",
 				"Se ha realizado el Retiro de manera correcta",
-				$.proxy(this.FIND, this, AppManagementHelper.getModel("LicenseJsonModel").getData())
+				$.proxy(function () {
+					this.FIND(oLicenseData, function () {
+						if (!sRefId) return;
+						var oRetModel = AppManagementHelper.getModel("RetiroTableJsonModel");
+						var aRetiros = oRetModel.getProperty("/Retiro") || [];
+
+						for (var i = 0; i < aRetiros.length; i++) {
+							if (String(aRetiros[i].RefId || "") === String(sRefId)) {
+								oRetModel.setProperty("/Retiro/" + i + "/enabled", false);
+								oRetModel.setProperty("/Retiro/" + i + "/canSend", false);
+								oRetModel.setProperty("/Retiro/" + i + "/showPrevValue", true);
+								oRetModel.setProperty("/Retiro/" + i + "/fromBackend", true);
+								oRetModel.setProperty("/Retiro/" + i + "/isMirror", false);
+								break;
+							}
+						}
+					});
+				}, this)
 			);
 		},
 
