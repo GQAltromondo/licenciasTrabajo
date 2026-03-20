@@ -989,15 +989,15 @@ sap.ui.define([
 			// Set de IdFila que ya tienen retiro en backend
 			var retiredSet = {};
 			cloneArr(aRetPrev).forEach(function (r) {
-				var sId = String(r.IdFila || "");
-				if (sId) retiredSet[sId] = true;
+				var sId = String(r.IdFila != null ? r.IdFila : "");
+				if (sId !== "") retiredSet[sId] = true;
 			});
 
 			var aRetiros = [];
 			aColBackend.forEach(function (oCol) {
-				var sId = String(oCol.IdFila || "");
+				var sId = String(oCol.IdFila != null ? oCol.IdFila : "");
 
-				if (sId && retiredSet[sId]) {
+				if (sId !== "" && retiredSet[sId]) {
 					// Ya existe retiro en backend → no dibujar mirror
 					return;
 				}
