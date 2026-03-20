@@ -986,19 +986,26 @@ sap.ui.define([
 			// ===== 2) RETIROS =====
 			var aColBackend = aColocaciones.filter(function (c) { return !c.isNew; });
 
-			// Set de IdFila que ya tienen retiro en backend
-			var retiredSet = {};
+			// Indexar retiros backend por IdFila
+			var mRetByIdFila = {};
 			cloneArr(aRetPrev).forEach(function (r) {
 				var sId = String(r.IdFila != null ? r.IdFila : "");
-				if (sId !== "") retiredSet[sId] = true;
+				if (sId !== "") {
+					if (!mRetByIdFila[sId]) mRetByIdFila[sId] = [];
+					mRetByIdFila[sId].push(r);
+				}
 			});
 
 			var aRetiros = [];
 			aColBackend.forEach(function (oCol) {
 				var sId = String(oCol.IdFila != null ? oCol.IdFila : "");
 
-				if (sId !== "" && retiredSet[sId]) {
-					// Ya existe retiro en backend → no dibujar mirror
+				if (sId !== "" && mRetByIdFila[sId] && mRetByIdFila[sId].length) {
+					// Ya existe retiro en backend → mostrar deshabilitado
+					var oRet = markPrevRet(cloneObj(mRetByIdFila[sId].shift()));
+					oRet.__lid = oCol.__lid;
+					oRet.enabledTecet = true;
+					aRetiros.push(oRet);
 					return;
 				}
 
