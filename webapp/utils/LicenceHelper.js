@@ -956,7 +956,7 @@ sap.ui.define([
 				c.__lid = c.__lid || ("BK_" + makeKey(c));
 
 				c.Jt = aDataTODOS.find(oItem => oItem.Legajo === c.Jt);
-				c.Cot = AppManagementHelper.getStringUserLegacy();
+				c.CotCotdt = AppManagementHelper.getStringUserLegacy();
 				return c;
 			});
 			const now = new Date();
@@ -972,7 +972,7 @@ sap.ui.define([
 				Pat: null,
 				Tecet: "",
 				Jt: AppManagementHelper.getStringUserLegacy(),
-				Cot: AppManagementHelper.getStringUserLegacy(),
+				CotCotdt: AppManagementHelper.getStringUserLegacy(),
 				Coment: "",
 				enabled: true,
 				showPrevValue: false,

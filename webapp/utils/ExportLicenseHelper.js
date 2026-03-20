@@ -2682,7 +2682,7 @@ sap.ui.define([
 						border: [false, false, false, false]
 					}, {
 						// text: AppManagementHelper.getUser() ? AppManagementHelper.getUser() : '', //item.Cot,
-						text: item.Cot,
+						text: item.CotCotdt,
 						alignment: 'center',
 						fontSize: 8,
 						border: [false, false, false, false]

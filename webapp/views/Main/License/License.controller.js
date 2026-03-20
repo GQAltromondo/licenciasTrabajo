@@ -2283,7 +2283,7 @@ sap.ui.define([
 			const oPayload = jQuery.extend(true, {}, oRetiroPAT);
 			const sRefId = oPayload.RefId;
 			const sLid = oRetiroPAT.__lid;
-
+			
 			delete oPayload.sameDayValidation;
 			delete oPayload.enabled;
 			delete oPayload.TejtValueStateText;
