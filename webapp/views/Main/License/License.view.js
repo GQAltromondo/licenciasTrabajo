@@ -612,7 +612,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							displayFormat: "HH:mm"
 						}),
 						new sap.m.Text({
-							 text: "{ColocacionTableJsonModel>Cot}"
+							 text: "{ColocacionTableJsonModel>CotCotdt}"
 							// text: {
 							// 	path: "DeliveryTableJsonModel>Jt",
 							// 	formatter: $.proxy(oController.handleUserName, oController)
@@ -831,7 +831,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 						}),
 						new sap.m.Text({
 							text: {
-								path: "RetiroTableJsonModel>Jt",
+								path: "RetiroTableJsonModel>CotCotdt",
 								formatter: $.proxy(oController.handleUserName, oController)
 							}
 						}),

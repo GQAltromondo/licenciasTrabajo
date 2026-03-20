@@ -1991,7 +1991,7 @@ sap.ui.define([
 						fontSize: 8,
 						border: [false, false, false, false]
 					}, {
-						text: item.Jt,
+						text: item.CotCotdt,
 						alignment: 'center',
 						fontSize: 8,
 						border: [false, false, false, false]
@@ -2026,7 +2026,7 @@ sap.ui.define([
 						fontSize: 8,
 						border: [false, false, false, false]
 					}, {
-						text: item.Jt,
+						text: item.CotCotdt,
 						alignment: 'center',
 						fontSize: 8,
 						border: [false, false, false, false]
@@ -2682,7 +2682,7 @@ sap.ui.define([
 						border: [false, false, false, false]
 					}, {
 						// text: AppManagementHelper.getUser() ? AppManagementHelper.getUser() : '', //item.Cot,
-						text: item.CotCotdt,
+						text: item.Cot,
 						alignment: 'center',
 						fontSize: 8,
 						border: [false, false, false, false]
