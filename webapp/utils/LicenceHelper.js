@@ -983,34 +983,26 @@ sap.ui.define([
 
 			aColocaciones.push(oNewCol);
 
-			// ===== 2) RETIROS (emparejados por Tplnr) =====
-			const aColBackend = aColocaciones.filter(c => !c.isNew);
+			// ===== 2) RETIROS =====
+			var aColBackend = aColocaciones.filter(function (c) { return !c.isNew; });
 
-			// Indexar retiros backend por Tplnr (cola FIFO por ET)
-			const mRetByET = {};
+			// Set de IdFila que ya tienen retiro en backend
+			var retiredSet = {};
 			cloneArr(aRetPrev).forEach(function (r) {
-				var k = String(r.Tplnr || "");
-				if (k) {
-					if (!mRetByET[k]) mRetByET[k] = [];
-					mRetByET[k].push(r);
-				}
+				var sId = String(r.IdFila || "");
+				if (sId) retiredSet[sId] = true;
 			});
 
-			var aRetiros = aColBackend.map(function (oCol) {
-				var k = String(oCol.Tplnr || "");
-				var oPrevRet = null;
-				if (k && mRetByET[k] && mRetByET[k].length) {
-					oPrevRet = mRetByET[k].shift();
+			var aRetiros = [];
+			aColBackend.forEach(function (oCol) {
+				var sId = String(oCol.IdFila || "");
+
+				if (sId && retiredSet[sId]) {
+					// Ya existe retiro en backend → no dibujar mirror
+					return;
 				}
 
-				if (oPrevRet) {
-					var oRet = markPrevRet(cloneObj(oPrevRet));
-					oRet.__lid = oCol.__lid;
-					oRet.enabledTecet = true;
-					return oRet;
-				}
-
-				// No hay retiro en backend para esta colocación → espejo habilitado
+				// No existe retiro → crear instancia para poder retirar
 				var oMirror = cloneObj(oCol);
 				oMirror.Coment = "";
 				oMirror.isMirror = true;
@@ -1022,14 +1014,7 @@ sap.ui.define([
 				oMirror.Datehab = now;
 				oMirror.Time = now;
 				oMirror.__lid = oCol.__lid;
-				return oMirror;
-			});
-
-			// Huérfanos: retiros backend que no matchearon
-			Object.keys(mRetByET).forEach(function (k) {
-				(mRetByET[k] || []).forEach(function (r) {
-					aRetiros.push(markPrevRet(cloneObj(r)));
-				});
+				aRetiros.push(oMirror);
 			});
 
 			this.formatUTCDatesHab(aColocaciones);
