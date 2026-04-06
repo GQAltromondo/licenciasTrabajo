@@ -5610,33 +5610,10 @@ sap.ui.define([
 			if (!oCtx) return;
 
 			const sRowPath = oCtx.getPath();
-			const oRow = oCtx.getObject() || {};
 
 			const sNewEt = (typeof oSrc.getSelectedKey === "function")
 				? oSrc.getSelectedKey()
 				: (typeof oSrc.getValue === "function" ? oSrc.getValue() : "");
-
-			const sPat = oRow.Pat;
-			const sExcludeLid = oRow.__lid;
-
-			const res = this._checkEtPatUnique(
-				"InhibicionTableJsonModel",
-				"/Inhibicion",
-				sNewEt,
-				sPat,
-				sExcludeLid,
-				"inhibición",
-				false
-			);
-
-			if (!res.ok) {
-				const sOldEt = oRow.Tplnr || "";
-				oCtx.getModel().setProperty(sRowPath + "/Tplnr", sOldEt);
-				if (typeof oSrc.setSelectedKey === "function") oSrc.setSelectedKey(sOldEt);
-				if (typeof oSrc.setValue === "function") oSrc.setValue(sOldEt);
-				sap.m.MessageBox.error(res.message);
-				return;
-			}
 
 			oCtx.getModel().setProperty(sRowPath + "/Tplnr", sNewEt);
 		},

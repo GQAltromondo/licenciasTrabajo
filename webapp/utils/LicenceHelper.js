@@ -814,33 +814,31 @@ sap.ui.define([
 			// ===== 2) HABILITACIONES (por cada inhibición backend creo pareja) =====
 			const aInhBackend = aInhibicion.filter(i => !i.isNew);
 
-			// index habilitaciones backend por key
-			const mHabByKey = {};
-			cloneArr(aHabPrev).forEach((h) => {
-				const k = makeKey(h);
-				if (!mHabByKey[k]) mHabByKey[k] = [];
-				mHabByKey[k].push(h);
+			// Indexar habilitaciones backend por IdFila
+			var mHabByIdFila = {};
+			cloneArr(aHabPrev).forEach(function (h) {
+				var sId = String(h.IdFila != null ? h.IdFila : "");
+				if (sId !== "") {
+					if (!mHabByIdFila[sId]) mHabByIdFila[sId] = [];
+					mHabByIdFila[sId].push(h);
+				}
 			});
 
-			const takePrevHab = (oInh) => {
-				const k = makeKey(oInh);
-				const q = mHabByKey[k];
-				if (q && q.length) return q.shift();
-				return null;
-			};
+			var aHabilitacion = [];
+			aInhBackend.forEach(function (oInh) {
+				var sId = String(oInh.IdFila != null ? oInh.IdFila : "");
 
-			let aHabilitacion = aInhBackend.map((oInh) => {
-				const oPrevHab = takePrevHab(oInh);
-
-				if (oPrevHab) {
-					const oHab = markPrevHab(cloneObj(oPrevHab));
-					oHab.__lid = oHab.__lid || oInh.__lid; // link visual con la inhibición
-					oHab.enabledTecet = true;
-					return oHab;
+				if (sId !== "" && mHabByIdFila[sId] && mHabByIdFila[sId].length) {
+					// Ya existe habilitación en backend → mostrar deshabilitada
+					var oHab = markPrevHab(cloneObj(mHabByIdFila[sId].shift()));
+					oHab.__lid = oInh.__lid;
+					oHab.enabledTecet = false;
+					aHabilitacion.push(oHab);
+					return;
 				}
 
-				// mirror habilitado (editable)
-				const oMirror = cloneObj(oInh);
+				// No existe habilitación → crear mirror editable
+				var oMirror = cloneObj(oInh);
 				oMirror.Coment = "";
 				oMirror.isMirror = true;
 				oMirror.fromBackend = false;
@@ -851,30 +849,8 @@ sap.ui.define([
 				oMirror.Datehab = now;
 				oMirror.Time = now;
 				oMirror.__lid = oInh.__lid;
-				return oMirror;
+				aHabilitacion.push(oMirror);
 			});
-
-			// orphans: habilitaciones backend que no matchearon
-			Object.keys(mHabByKey).forEach((k) => {
-				(mHabByKey[k] || []).forEach((h) => {
-					aHabilitacion.push(markPrevHab(cloneObj(h)));
-				});
-			});
-
-			// (opcional) dedup por “ET” con prioridad backend (igual que retiro)
-			const etKey = (o) => [String(o.Tplnr || ""), String(o.Pat || "")].join("|");
-			const bestByEt = {};
-			aHabilitacion.forEach((h) => {
-				const k = etKey(h);
-				if (!bestByEt[k]) { bestByEt[k] = h; return; }
-
-				const curr = bestByEt[k];
-				const currIsBackend = !!curr.fromBackend;
-				const hIsBackend = !!h.fromBackend;
-
-				if (!currIsBackend && hIsBackend) bestByEt[k] = h; // prioridad backend
-			});
-			aHabilitacion = Object.values(bestByEt);
 
 			// si tenés una función equivalente para fechas de recierre, usala.
 			// si Datehab/Time viene igual que PAT, podés reutilizar:
@@ -1004,7 +980,7 @@ sap.ui.define([
 					// Ya existe retiro en backend → mostrar deshabilitado
 					var oRet = markPrevRet(cloneObj(mRetByIdFila[sId].shift()));
 					oRet.__lid = oCol.__lid;
-					oRet.enabledTecet = true;
+					oRet.enabledTecet = false;
 					aRetiros.push(oRet);
 					return;
 				}
