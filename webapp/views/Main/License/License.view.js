@@ -859,19 +859,10 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								})
 							},
 						}),
-						new sap.m.HBox({
-							items: [
-								new sap.m.ComboBox({
+						new sap.m.ComboBox({
 
 									width: "100%",
-									enabled: {
-										parts: [
-											"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-											"RetiroTableJsonModel>enabledTecet", "ValidateFirstContModel>/fd"
-										],
-										formatter: oController.rolStatusEdition("retiro/")
-									},
-
+									enabled: "{RetiroTableJsonModel>enabledTecet}",
 									selectedKey: "{RetiroTableJsonModel>Tecet}",
 									change: oController.onTecetChange.bind(oController),
 									tooltip: {
@@ -887,9 +878,6 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 										}),
 									}
 								}),
-
-							]
-						}),
 						new sap.m.Input({
 							enabled: {
 								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
@@ -1271,17 +1259,9 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								})
 							},
 						}),
-						new sap.m.HBox({
-							items: [
-								new sap.m.ComboBox({
+						new sap.m.ComboBox({
 									width: "100%",
-									enabled: {
-										parts: [
-											"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-											"HabilitacionTableJsonModel>enabledTecet", "ValidateFirstContModel>/fd"
-										],
-										formatter: oController.rolStatusEdition("habilitacion/")
-									},
+									enabled: "{HabilitacionTableJsonModel>enabledTecet}",
 
 									selectedKey: "{HabilitacionTableJsonModel>Tecet}",
 									change: oController.onTecetChange.bind(oController),
@@ -1298,8 +1278,6 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 										}),
 									}
 								}),
-							]
-						}),
 
 						new sap.m.Input({
 							enabled: {
