@@ -2046,12 +2046,12 @@ sap.ui.define([
 			content.push({
 				columns: [{
 					table: {
-						widths: ['20%', '20%', '20%','20%','20%'],
+						widths: ['20%', '20%', '20%', '20%', '20%'],
 						body: colocacionTableRow
 					}
 				}, {
 					table: {
-						widths: ['20%', '20%', '20%','20%','20%'],
+						widths: ['20%', '20%', '20%', '20%', '20%'],
 						body: retiroTableRow
 					}
 
@@ -2068,7 +2068,7 @@ sap.ui.define([
 					widths: ['*'],
 					body: [
 						[{
-							text: "HABILITACION e INHIBICION DE RECIERRE",
+							text: "INHIBICION y HABILITACION DE RECIERRE",
 							alignment: 'center',
 							fillColor: tableFillColor
 						}]
@@ -2080,16 +2080,16 @@ sap.ui.define([
 					widths: ['*', '*'],
 					body: [
 						[{
-							text: "Habilitacion",
-							alignment: 'center',
-							fontSize: 10,
-							fillColor: tableFillColor2
-						}, {
 							text: "Inhibicion",
 							alignment: 'center',
 							fontSize: 10,
 							fillColor: tableFillColor2
-						},]
+						}, {
+							text: "Habilitacion",
+							alignment: 'center',
+							fontSize: 10,
+							fillColor: tableFillColor2
+						}]
 					]
 				}
 			});
@@ -2189,12 +2189,12 @@ sap.ui.define([
 				columns: [{
 					table: {
 						widths: ['30%', '30%', '30%'],
-						body: habilitacionTableRow
+						body: inhibicionTableRow
 					}
 				}, {
 					table: {
 						widths: ['30%', '30%', '30%'],
-						body: inhibicionTableRow
+						body: habilitacionTableRow
 					}
 
 				}],

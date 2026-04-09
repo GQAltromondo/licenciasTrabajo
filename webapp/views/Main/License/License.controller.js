@@ -2684,7 +2684,24 @@ sap.ui.define([
 				return oValidationObject;
 			}
 
-			
+			if (sType === "COLOCACION") {
+				var aActiveColEts = (AppManagementHelper.getModel("ColocacionTableJsonModel").getProperty("/activeEts")) || [];
+				if (aActiveColEts.indexOf(oObject.Tplnr) >= 0) {
+					oValidationObject.valid = false;
+					oValidationObject.message = "Ya existe una colocación activa para la ET " + oObject.Tplnr + ". Debe realizar el retiro antes de colocar nuevamente.";
+					return oValidationObject;
+				}
+			}
+
+			if (sType === "INHIBICION") {
+				var aActiveInhEts = (AppManagementHelper.getModel("InhibicionTableJsonModel").getProperty("/activeEts")) || [];
+				if (aActiveInhEts.indexOf(oObject.Tplnr) >= 0) {
+					oValidationObject.valid = false;
+					oValidationObject.message = "Ya existe una inhibición activa para la ET " + oObject.Tplnr + ". Debe realizar la habilitación antes de inhibir nuevamente.";
+					return oValidationObject;
+				}
+			}
+
 			if (sType === "COLOCACION" || sType === "HABILITACION" || sType === "RETIRO") {
 				const tecet = (oObject.Tecet || "").trim();
 				if (!tecet) {
@@ -5616,65 +5633,76 @@ sap.ui.define([
 				: (typeof oSrc.getValue === "function" ? oSrc.getValue() : "");
 
 			oCtx.getModel().setProperty(sRowPath + "/Tplnr", sNewEt);
+
+			if (!sNewEt) return;
+
+			var resActive = this._checkEtNotActive("InhibicionTableJsonModel", sNewEt, "inhibición");
+			if (!resActive.ok) {
+				sap.m.MessageBox.error(resActive.message);
+				return;
+			}
+
+			var oRow = oCtx.getObject() || {};
+			var resLocal = this._checkEtUniqueInNewRows(
+				"InhibicionTableJsonModel", "/Inhibicion", sNewEt, oRow.__lid, "inhibición"
+			);
+			if (!resLocal.ok) {
+				sap.m.MessageBox.error(resLocal.message);
+			}
 		},
 
 
-		_normalizePat: function (v) {
-			// PAT: "X" => PAT, cualquier otra cosa => PAT/A
-			return (v === "X") ? "X" : "A";
-		},
+		_checkEtNotActive: function (sModelName, sEt, sEntityLabel) {
+			if (!sEt) return { ok: true };
 
-		_checkEtPatUnique: function (sModelName, sPathRows, sEt, sPat, sExcludeLid, sEntityLabel, bCheckPat) {
-			const oModel = AppManagementHelper.getModel(sModelName);
-			const aRows = (oModel && oModel.getProperty(sPathRows)) || [];
+			var oModel = AppManagementHelper.getModel(sModelName);
+			var aActiveEts = (oModel && oModel.getProperty("/activeEts")) || [];
 
-			if (!sEt) {
-				return { ok: false, message: "Seleccione una ET válida." };
+			if (aActiveEts.indexOf(sEt) >= 0) {
+				var sWhat = sEntityLabel || "registro";
+				return {
+					ok: false,
+					message: "Ya existe una " + sWhat + " activa para la ET " + sEt +
+						". Debe completarse el proceso correspondiente antes de crear una nueva."
+				};
 			}
-
-			const sPatNorm = this._normalizePat(sPat);
-
-			const bExists = aRows.some(r => {
-				if (!r) return false;
-				if (sExcludeLid && r.__lid === sExcludeLid) return false;
-
-				const rEt = r.Tplnr;
-				if (bCheckPat === false) return rEt === sEt;
-				const rPatNorm = this._normalizePat(r.Pat);
-
-				return rEt === sEt && rPatNorm === sPatNorm;
-			});
-
-			if (bExists) {
-				const sWhat = sEntityLabel || "registro";
-				const sPatLabel = (sPatNorm === "X") ? "PAT" : "PAT/A";
-				const sMsg = bCheckPat === false
-					? `Ya existe una ${sWhat} para la ET ${sEt}.`
-					: `Ya existe una ${sWhat} para la ET ${sEt} con ${sPatLabel}.`;
-
-				return { ok: false, message: sMsg };
-			}
-
 			return { ok: true };
 		},
-		_validateCurrentRowEtPat: function (oCtx, sModelName, sPathRows, sEntityLabel) {
-			const oRow = oCtx.getObject() || {};
-			const sEt = oRow.Tplnr;
-			const sPat = oRow.Pat;
-			const sExcludeLid = oRow.__lid;
 
-			if (!sEt || sPat === null || sPat === undefined) {
-				return { ok: true };
+		_checkEtUniqueInNewRows: function (sModelName, sPathRows, sEt, sExcludeLid, sEntityLabel) {
+			if (!sEt) return { ok: true };
+
+			var oModel = AppManagementHelper.getModel(sModelName);
+			var aRows = (oModel && oModel.getProperty(sPathRows)) || [];
+
+			var bDuplicate = aRows.some(function (r) {
+				if (!r || !r.isNew) return false;
+				if (sExcludeLid && r.__lid === sExcludeLid) return false;
+				return r.Tplnr === sEt;
+			});
+
+			if (bDuplicate) {
+				return {
+					ok: false,
+					message: "Ya existe una " + (sEntityLabel || "registro") + " nueva para la ET " + sEt + "."
+				};
 			}
+			return { ok: true };
+		},
 
-			return this._checkEtPatUnique(
-				sModelName,
-				sPathRows,
-				sEt,
-				sPat,
-				sExcludeLid,
-				sEntityLabel
-			);
+		_validateCurrentRowEtPat: function (oCtx, sModelName, sPathRows, sEntityLabel) {
+			var oRow = oCtx.getObject() || {};
+			var sEt = oRow.Tplnr;
+
+			if (!sEt) return { ok: true };
+
+			var resActive = this._checkEtNotActive(sModelName, sEt, sEntityLabel);
+			if (!resActive.ok) return resActive;
+
+			var resLocal = this._checkEtUniqueInNewRows(sModelName, sPathRows, sEt, oRow.__lid, sEntityLabel);
+			if (!resLocal.ok) return resLocal;
+
+			return { ok: true };
 		}
 
 

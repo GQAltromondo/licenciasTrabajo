@@ -825,6 +825,7 @@ sap.ui.define([
 			});
 
 			var aHabilitacion = [];
+			var aActiveInhEts = [];
 			aInhBackend.forEach(function (oInh) {
 				var sId = String(oInh.IdFila != null ? oInh.IdFila : "");
 
@@ -837,7 +838,12 @@ sap.ui.define([
 					return;
 				}
 
-				// No existe habilitación → crear mirror editable
+				// No existe habilitación → ET activa (inhibición sin habilitar)
+				if (oInh.Tplnr && aActiveInhEts.indexOf(oInh.Tplnr) === -1) {
+					aActiveInhEts.push(oInh.Tplnr);
+				}
+
+				// Crear mirror editable
 				var oMirror = cloneObj(oInh);
 				oMirror.Coment = "";
 				oMirror.isMirror = true;
@@ -860,7 +866,7 @@ sap.ui.define([
 			}
 
 			AppManagementHelper.getModel("HabilitacionTableJsonModel").setData({ Habilitacion: aHabilitacion });
-			AppManagementHelper.getModel("InhibicionTableJsonModel").setData({ Inhibicion: aInhibicion });
+			AppManagementHelper.getModel("InhibicionTableJsonModel").setData({ Inhibicion: aInhibicion, activeEts: aActiveInhEts });
 		},
 
 
@@ -973,6 +979,7 @@ sap.ui.define([
 			});
 
 			var aRetiros = [];
+			var aActiveColEts = [];
 			aColBackend.forEach(function (oCol) {
 				var sId = String(oCol.IdFila != null ? oCol.IdFila : "");
 
@@ -985,7 +992,12 @@ sap.ui.define([
 					return;
 				}
 
-				// No existe retiro → crear instancia para poder retirar
+				// No existe retiro → ET activa (colocación sin retirar)
+				if (oCol.Tplnr && aActiveColEts.indexOf(oCol.Tplnr) === -1) {
+					aActiveColEts.push(oCol.Tplnr);
+				}
+
+				// Crear instancia para poder retirar
 				var oMirror = cloneObj(oCol);
 				oMirror.Coment = "";
 				oMirror.isMirror = true;
@@ -1003,7 +1015,7 @@ sap.ui.define([
 			this.formatUTCDatesHab(aColocaciones);
 			this.formatUTCDatesHab(aRetiros);
 
-			AppManagementHelper.getModel("ColocacionTableJsonModel").setData({ Colocacion: aColocaciones });
+			AppManagementHelper.getModel("ColocacionTableJsonModel").setData({ Colocacion: aColocaciones, activeEts: aActiveColEts });
 			AppManagementHelper.getModel("RetiroTableJsonModel").setData({ Retiro: aRetiros });
 		},
 
