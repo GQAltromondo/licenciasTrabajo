@@ -1145,8 +1145,8 @@ sap.ui.define([
 			content = this.createTramitacion(Tramitaciones, content);
 			content = this.createAnulacion(licencia, content);
 			content = this.createEntregasDevoluciones(licencia, Entregas, content, Devoluciones);
-			// content = this.createColocacionesRetiros(licencia,Colocaciones,content,Retiros)
-			//	 content = this.createHabilitacionesInhibiciones(licencia,Habilitaciones,content,Inhibiciones)
+			content = this.createColocacionesRetiros(licencia,Colocaciones,content,Retiros)
+			content = this.createHabilitacionesInhibiciones(licencia,Habilitaciones,content,Inhibiciones)
 			content = this.createSuspensionReanudacion(content, Suspensiones, Reanudaciones,);
 			content = this.createCancelacion(licencia, content);
 			content = this.createLicTrabAutorizNoEntregEnTiempoReal(content, Entregas);
@@ -2197,11 +2197,11 @@ sap.ui.define([
 						body: habilitacionTableRow
 					}
 
-		// 		}],
-		// 		margin: [0, 0, 0, 20]
-		// 	});
-		// 	return content;
-		// },
+				}],
+				margin: [0, 0, 0, 20]
+			});
+			return content;
+		},
 		createAnulacion: function (licencia, content) {
 			var tableFillColor = '#c4bd96';
 			var tableFillColor2 = '#2980ba';
