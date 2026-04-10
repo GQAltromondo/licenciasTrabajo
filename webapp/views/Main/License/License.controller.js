@@ -4421,6 +4421,66 @@ sap.ui.define([
 			return oLicense.Solbeg !== null && oLicense.Solend !== null && oLicense.Timend !== null && oLicense.Timbeg !== null
 		},
 
+		onOpenComentariosDialog: function (oEvent) {
+			var oSource = oEvent.getSource();
+			var sModelName = oSource.data("modelName");
+			var sPropertyName = oSource.data("propertyName");
+
+			var oInput = oSource.getParent().getItems()[0];
+			var bEditable = oInput.getEnabled();
+
+			var oContext = oSource.getBindingContext(sModelName);
+			var sPath = oContext.getPath() + "/" + sPropertyName;
+			var sCurrentValue = oContext.getModel().getProperty(sPath);
+
+			var oTextArea = new sap.m.TextArea({
+				value: sCurrentValue,
+				editable: bEditable,
+				width: "100%",
+				rows: 10,
+				growing: true,
+				growingMaxLines: 20
+			});
+
+			var aButtons = [];
+			if (bEditable) {
+				aButtons.push(
+					new sap.m.Button({
+						text: "Guardar",
+						icon: "sap-icon://save",
+						press: function (oEvt) {
+							oContext.getModel().setProperty(sPath, oTextArea.getValue());
+							oEvt.getSource().getParent().close();
+						}
+					}).addStyleClass("buttonInverted floatLeft")
+				);
+			}
+			aButtons.push(
+				new sap.m.Button({
+					text: bEditable ? "Cancelar" : "Cerrar",
+					icon: "sap-icon://decline",
+					press: function (oEvt) {
+						oEvt.getSource().getParent().close();
+					}
+				}).addStyleClass("buttonInverted floatLeft")
+			);
+
+			var oDialog = new sap.m.Dialog({
+				title: "Comentarios",
+				contentWidth: "500px",
+				resizable: true,
+				draggable: true,
+				afterClose: function (oEvt) {
+					oEvt.getSource().destroy(true);
+				},
+				content: [oTextArea],
+				buttons: aButtons
+			}).addStyleClass("customDialog");
+
+			this.getView().addDependent(oDialog);
+			oDialog.open();
+		},
+
 		closeDailyDialog: function () {
 			this.dailyDialog.close();
 			this.dailyDialog.destroy(true);

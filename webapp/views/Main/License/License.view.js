@@ -672,17 +672,32 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 
 							]
 						}),
-						new sap.m.Input({
-							enabled: {
-								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-									"ColocacionTableJsonModel>enabled",
-									"ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-								],
-								formatter: oController.rolStatusEdition("colocacion/")
-							},
-							value: "{ColocacionTableJsonModel>Coment}",
-							tooltip: "{ColocacionTableJsonModel>Coment}",
-							width: "100%"
+						new sap.m.HBox({
+							alignItems: "Center",
+							items: [
+								new sap.m.Input({
+									enabled: {
+										parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+											"ColocacionTableJsonModel>enabled",
+											"ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+										],
+										formatter: oController.rolStatusEdition("colocacion/")
+									},
+									value: "{ColocacionTableJsonModel>Coment}",
+									tooltip: "{ColocacionTableJsonModel>Coment}",
+									width: "100%"
+								}),
+								new sap.m.Button({
+									icon: "sap-icon://display",
+									type: "Transparent",
+									tooltip: "Ver comentario completo",
+									press: [oController.onOpenComentariosDialog, oController],
+									customData: [
+										new sap.ui.core.CustomData({ key: "modelName", value: "ColocacionTableJsonModel" }),
+										new sap.ui.core.CustomData({ key: "propertyName", value: "Coment" })
+									]
+								})
+							]
 						}),
 						new sap.m.ComboBox({
 							enabled: {
@@ -878,16 +893,31 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 										}),
 									}
 								}),
-						new sap.m.Input({
-							enabled: {
-								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-									"RetiroTableJsonModel>enabled", "ValidateFirstContModel>/fd"
-								],
-								formatter: oController.rolStatusEdition("retiro/")
-							},
-							value: "{RetiroTableJsonModel>Coment}",
-							tooltip: "{RetiroTableJsonModel>Coment}",
-							width: "100%"
+						new sap.m.HBox({
+							alignItems: "Center",
+							items: [
+								new sap.m.Input({
+									enabled: {
+										parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+											"RetiroTableJsonModel>enabled", "ValidateFirstContModel>/fd"
+										],
+										formatter: oController.rolStatusEdition("retiro/")
+									},
+									value: "{RetiroTableJsonModel>Coment}",
+									tooltip: "{RetiroTableJsonModel>Coment}",
+									width: "100%"
+								}),
+								new sap.m.Button({
+									icon: "sap-icon://display",
+									type: "Transparent",
+									tooltip: "Ver comentario completo",
+									press: [oController.onOpenComentariosDialog, oController],
+									customData: [
+										new sap.ui.core.CustomData({ key: "modelName", value: "RetiroTableJsonModel" }),
+										new sap.ui.core.CustomData({ key: "propertyName", value: "Coment" })
+									]
+								})
+							]
 						}),
 						new sap.m.ComboBox({
 
@@ -1107,16 +1137,32 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							]
 						}),
 
-						new sap.m.Input({
-							enabled: {
-								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-									"InhibicionTableJsonModel>enabled",
-									"InhibicionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-								],
-								formatter: oController.rolStatusEdition("inhibicion/")
-							},
-							value: "{InhibicionTableJsonModel>Coment}",
-							tooltip: "{InhibicionTableJsonModel>Coment}"
+						new sap.m.HBox({
+							alignItems: "Center",
+							items: [
+								new sap.m.Input({
+									enabled: {
+										parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+											"InhibicionTableJsonModel>enabled",
+											"InhibicionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+										],
+										formatter: oController.rolStatusEdition("inhibicion/")
+									},
+									value: "{InhibicionTableJsonModel>Coment}",
+									tooltip: "{InhibicionTableJsonModel>Coment}",
+									width: "100%"
+								}),
+								new sap.m.Button({
+									icon: "sap-icon://display",
+									type: "Transparent",
+									tooltip: "Ver comentario completo",
+									press: [oController.onOpenComentariosDialog, oController],
+									customData: [
+										new sap.ui.core.CustomData({ key: "modelName", value: "InhibicionTableJsonModel" }),
+										new sap.ui.core.CustomData({ key: "propertyName", value: "Coment" })
+									]
+								})
+							]
 						}),
 
 						new sap.m.Button({
@@ -1279,17 +1325,32 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									}
 								}),
 
-						new sap.m.Input({
-							enabled: {
-								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-									"HabilitacionTableJsonModel>enabled",
-									"ValidateFirstContModel>/fd"
-								],
-								formatter: oController.rolStatusEdition("habilitacion/")
-							},
-							value: "{HabilitacionTableJsonModel>Coment}",
-							tooltip: "{HabilitacionTableJsonModel>Coment}",
-
+						new sap.m.HBox({
+							alignItems: "Center",
+							items: [
+								new sap.m.Input({
+									enabled: {
+										parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+											"HabilitacionTableJsonModel>enabled",
+											"ValidateFirstContModel>/fd"
+										],
+										formatter: oController.rolStatusEdition("habilitacion/")
+									},
+									value: "{HabilitacionTableJsonModel>Coment}",
+									tooltip: "{HabilitacionTableJsonModel>Coment}",
+									width: "100%"
+								}),
+								new sap.m.Button({
+									icon: "sap-icon://display",
+									type: "Transparent",
+									tooltip: "Ver comentario completo",
+									press: [oController.onOpenComentariosDialog, oController],
+									customData: [
+										new sap.ui.core.CustomData({ key: "modelName", value: "HabilitacionTableJsonModel" }),
+										new sap.ui.core.CustomData({ key: "propertyName", value: "Coment" })
+									]
+								})
+							]
 						}),
 
 						new sap.m.Button({
@@ -2154,15 +2215,31 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								})
 							}
 						}),
-						new sap.m.Input({
-							enabled: {
-								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-									"ReanudationTableJsonModel>enabled"
-								],
-								formatter: oController.rolStatusEdition("entregas/")
-							},
-							value: "{ReanudationTableJsonModel>Comentarios}",
-							tooltip: "{ReanudationTableJsonModel>Comentarios}"
+						new sap.m.HBox({
+							alignItems: "Center",
+							items: [
+								new sap.m.Input({
+									enabled: {
+										parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+											"ReanudationTableJsonModel>enabled"
+										],
+										formatter: oController.rolStatusEdition("entregas/")
+									},
+									value: "{ReanudationTableJsonModel>Comentarios}",
+									tooltip: "{ReanudationTableJsonModel>Comentarios}",
+									width: "100%"
+								}),
+								new sap.m.Button({
+									icon: "sap-icon://display",
+									type: "Transparent",
+									tooltip: "Ver comentario completo",
+									press: [oController.onOpenComentariosDialog, oController],
+									customData: [
+										new sap.ui.core.CustomData({ key: "modelName", value: "ReanudationTableJsonModel" }),
+										new sap.ui.core.CustomData({ key: "propertyName", value: "Comentarios" })
+									]
+								})
+							]
 						}),
 						new sap.m.HBox({
 							items: [
