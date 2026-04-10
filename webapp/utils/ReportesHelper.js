@@ -831,18 +831,6 @@ sap.ui.define([
 
 		allFullLicences: [],
 
-		chunkArray: function (array, size) {
-			const result = [];
-			for (let i = 0; i < array.length; i += size) {
-				result.push(array.slice(i, i + size));
-			}
-			return result;
-		},
-
-		getResults: function (oNav) {
-    		return oNav && Array.isArray(oNav.results) ? oNav.results : [];
-		},
-
 		createExcelLicencias: function (aData) {
 			//Formato de fecha dd/MM/yyyy
 			this.oFormatYyyymmdd = sap.ui.core.format.DateFormat.getInstance({
@@ -851,26 +839,7 @@ sap.ui.define([
 			});
 
 			var that = this;
-			
-			BusyDialogHelper.open();
-			const CHUNK_SIZE = 200;
-			const aChunks = this.chunkArray(aData, CHUNK_SIZE);
-
-			let fullData = [];
-
-			aChunks.reduce((p, chunk, index) => {
-				return p.then(() => {
-					console.log(`Procesando chunk ${index + 1}/${aChunks.length}`);
-					return ReportesService.getLicenciasFullData(chunk);
-				}).then((result) => {
-					fullData = fullData.concat(result);
-				});
-			}, Promise.resolve())
-
-			.then(() => {
-				var data = fullData;
-
-			//ReportesService.getLicenciasFullData(aData).then((data) => {
+			ReportesService.getLicenciasFullData(aData).then((data) => {
 				that.allFullLicences = data;
 				BusyDialogHelper.close();
 				make_xlsx_lib(XLSX);
@@ -1109,8 +1078,7 @@ sap.ui.define([
 					]
 					);
 					for (var oLicencia of aLicencias) {
-						//var aEntregas = oLicencia.EntregasLicencia_nav.results;
-						var aEntregas = that.getResults(oLicencia.EntregasLicencia_nav);
+						var aEntregas = oLicencia.EntregasLicencia_nav.results;
 						if (aEntregas.length !== 0) { //Solo agarro las Licencias que tienen Entregas
 							for (var Entrega of aEntregas) { // Recorro cada entrega de cada licencia
 								var anio = Entrega.Anio;
@@ -1138,8 +1106,7 @@ sap.ui.define([
 						["COLOCACIONES"], ["Num. de Licencia", "Fecha", "Hora", "ET", "COT/COTDT", "Tecnico ET", "Comentarios", "Pat"]
 					);
 					for (var oLicencia of aLicencias) {
-						//var aColocaciones = oLicencia.ColocacionPAT_nav.results;
-						var aColocaciones = that.getResults(oLicencia.ColocacionPAT_nav);
+						var aColocaciones = oLicencia.ColocacionPAT_nav.results
 						if (aColocaciones.length !== 0) {
 							for (var Colocacion of aColocaciones) {
 
@@ -1165,8 +1132,7 @@ sap.ui.define([
 						[''], ["RETIROS"], ["Num. de Licencia", "Fecha", "Hora", "ET", "COT/COTDT", "Tecnico ET", "Comentarios", "Pat"]
 					);
 					for (var oLicencia of aLicencias) {
-						//var aRetiros = oLicencia.RetiroPAT_nav.results;
-						var aRetiros = that.getResults(oLicencia.RetiroPAT_nav);
+						var aRetiros = oLicencia.RetiroPAT_nav.results
 						if (aRetiros.length !== 0) {
 							for (var Retiro of aRetiros) {
 
@@ -1189,8 +1155,7 @@ sap.ui.define([
 						[''], ["HABILITACIONES"], ["Num. de Licencia", "Fecha", "Hora", "ET", "COT/COTDT", "Tecnico ET", "Comentarios"]
 					);
 					for (var oLicencia of aLicencias) {
-						//var aHabilitaciones = oLicencia.HabilitacionRecierre_nav.results
-						var aHabilitaciones = that.getResults(oLicencia.HabilitacionRecierre_nav);
+						var aHabilitaciones = oLicencia.HabilitacionRecierre_nav.results
 						if (aHabilitaciones.length !== 0) {
 							for (var Habilitacion of aHabilitaciones) {
 
@@ -1213,8 +1178,7 @@ sap.ui.define([
 						[''], ["INHIBICIONES"], ["Num. de Licencia", "Fecha", "Hora", "ET", "COT/COTDT", "Tecnico ET", "Comentarios"]
 					);
 					for (var oLicencia of aLicencias) {
-						//var aInhibiciones = oLicencia.InhibicionRecierre_nav.results
-						var aInhibiciones = that.getResults(oLicencia.InhibicionRecierre_nav);
+						var aInhibiciones = oLicencia.InhibicionRecierre_nav.results
 						if (aInhibiciones.length !== 0) {
 							for (var Inhibicion of aInhibiciones) {
 
@@ -1242,8 +1206,7 @@ sap.ui.define([
 					]
 					);
 					for (var oLicencia of aLicencias) {
-						//var aItems = oLicencia.DevolucionLicencia_nav.results;
-						var aItems = that.getResults(oLicencia.DevolucionLicencia_nav);
+						var aItems = oLicencia.DevolucionLicencia_nav.results;
 						if (aItems.length !== 0) {
 							for (var Item of aItems) {
 								var anio = Item.Anio;
@@ -1270,8 +1233,7 @@ sap.ui.define([
 					]
 					);
 					for (var oLicencia of aLicencias) {
-						//var aItems = oLicencia.SuspensionLicencia_nav.results;
-						var aItems = that.getResults(oLicencia.SuspensionLicencia_nav);
+						var aItems = oLicencia.SuspensionLicencia_nav.results;
 						if (aItems.length !== 0) {
 							for (var Item of aItems) {
 								var anio = Item.Anio;
@@ -1297,8 +1259,7 @@ sap.ui.define([
 						[" "], ["REANUDACIONES"], ["Año", "Num. de Licencia", "Id de evento", "Fecha", "Hora", "COT/COTDT", "Tecnico ET"]
 					);
 					for (var oLicencia of aLicencias) {
-						//var aItems = oLicencia.ReanudacionLicencia_nav.results;
-						var aItems = that.getResults(oLicencia.ReanudacionLicencia_nav);
+						var aItems = oLicencia.ReanudacionLicencia_nav.results;
 						if (aItems.length !== 0) {
 							for (var Item of aItems) {
 								var anio = Item.Anio;
@@ -1347,8 +1308,7 @@ sap.ui.define([
 						["TRANSFERENCIAS"], ["Año", "Num. de Licencia", "Id de evento", "Fecha", "Hora", "COT/COTDT", "Técnico Informó", "Nuevo JT"]
 					);
 					for (var oLicencia of aLicencias) {
-						//var aItems = oLicencia.TransferenciaJefeTrabajo_nav.results;
-						var aItems = that.getResults(oLicencia.TransferenciaJefeTrabajo_nav);
+						var aItems = oLicencia.TransferenciaJefeTrabajo_nav.results;
 						if (aItems.length !== 0) {
 							for (var Item of aItems) {
 								var anio = Item.Anio;
@@ -1378,8 +1338,7 @@ sap.ui.define([
 					]
 					);
 					for (let oLicencia of aLicencias) {
-						//let aItems = oLicencia.ObservacionesLicencia_nav.results;
-						let aItems = that.getResults(oLicencia.ObservacionesLicencia_nav);
+						let aItems = oLicencia.ObservacionesLicencia_nav.results;
 						if (aItems.length !== 0) {
 							for (let Item of aItems) {
 								let anio = Item.Anio;
@@ -1407,8 +1366,7 @@ sap.ui.define([
 						["Coordinaciones de las Licencias"], ["Año", "Num. de Licencia", "Id de evento", "Fecha", "Hora", "Usuario", "Observación"]
 					);
 					for (let oLicencia of aLicencias) {
-						//let aItems = oLicencia.CoordinacionesLicencia_nav.results;
-						let aItems = that.getResults(oLicencia.CoordinacionesLicencia_nav);
+						let aItems = oLicencia.CoordinacionesLicencia_nav.results;
 						if (aItems.length !== 0) {
 							for (let Item of aItems) {
 								let anio = Item.Anio;
@@ -1479,8 +1437,7 @@ sap.ui.define([
 					]
 					);
 					for (var oLicencia of aLicencias) {
-						//var aItems = oLicencia.TramitacionesLicencia_nav.results;
-						var aItems = that.getResults(oLicencia.TramitacionesLicencia_nav);
+						var aItems = oLicencia.TramitacionesLicencia_nav.results;
 						if (aItems.length !== 0) {
 							for (var Item of aItems) {
 								var Sociedad = Item.Empresa;
@@ -1559,7 +1516,7 @@ sap.ui.define([
 		reporteSemanalCammesa: function (fechadesde, fechahasta, society, daysInBetWeen) {
 			return new Promise((resolve, reject) => {
 				ReportesService.semanalCamesa(society, fechadesde, fechahasta).then(async (data) => {
-					var aData = data.results;
+					var aData = data;
 					if (aData.length > 0) {
 						aData.forEach((e) => {
 							e.Solend = this.getDateFormat(e.Solend);
@@ -1705,30 +1662,30 @@ sap.ui.define([
 		},
 
 		findDate: function (attr, aDays, license, value, horarios, aDiasAnulados) {
-			var sDateFound = aDays.find((oDate) => {
-				return oDate.stringDate === attr;
-			})
-			if (sDateFound) {
-				const foundDays = horarios.find(element => element.stringDate === sDateFound.stringDate)
-				//INI TRNS99 - ver si la fecha esta autorizada o no
-				const foundNoAutorizado = aDiasAnulados.find(element => FormatHelper.formatDateLicense(element.Fecha) === sDateFound.stringDate)
-				//FIN TNRS99
+			const sDateFound = aDays.find(oDate => oDate.stringDate === attr);
+			if (!sDateFound) return value; // Retorna antes si no encuentra la fecha
 
-				//INI - 10/03/2023 - EXT-MSUELDIA - Se agrega validacion segun license.Timend
-				//si tiene el valor "Continua" se debe calcular valor de enserv por mas que no encuentre dias
-				if ((foundDays || license.Timend === 'Continua') && !foundNoAutorizado) {
-					//FIN - 10/03/2023 - EXT-MSUELDIA - Se agrega validacion segun license.Timend
-					var enserv = "";
-					enserv = license.Equstat === "" ? "F/S" : "E/S";
-					enserv = license.Jobcond === "04" || license.Jobcond === "05" ? "TcT" : enserv;
-					return enserv;
-				} else {
-					return "."
-				}
-			} else {
-				return value;
+			// Buscar si hay un día en license.Horarios.results que coincida con sDateFound
+			const foundDays = license.Horarios.results.find(element => {
+
+				return FormatHelper.formatDateLicense(element.Fecha) === sDateFound.stringDate;
+			});
+
+			// Definir foundNoAutorizado antes de usarla
+			const foundNoAutorizado = aDiasAnulados.some(element =>
+				FormatHelper.formatDateLicense(element.Fecha) === sDateFound.stringDate
+			);
+
+			if (foundNoAutorizado) return ".";
+
+			if (foundDays || license.Timend === "Continua") {
+				let enserv = license.Equstat === "" ? "F/S" : "E/S";
+				return (license.Jobcond === "04" || license.Jobcond === "05") ? "TcT" : enserv;
 			}
-		},
+
+			return ".";
+		}
+		,
 
 		setEquipmentStatus: async function (license, horarios, aDiasAnulados) {
 			var aDaysIntervalFromLicense = this.getDayIntervalsOfLicense(license.Solbeg, license.Solend);
@@ -1977,12 +1934,12 @@ sap.ui.define([
 		// },
 		createHeaderWithFilteredData: function (aLicenses, sheetType) {
 			const categoriasPorTipoEquipo = this.dictionary;
-			//Primer del 70, hacer get a nueva entidad filtrado por empresa y matchear con el nuevo diccionario.
 
-			let aFiltered = aLicenses.filter((license) => categoriasPorTipoEquipo[license.Tipoequipo] == sheetType);
-			//categoriasPorTipoEquipo[license.Tipoequipo]
-			//funcion que retorne objeto especificopara es et o lineas
-			var header = this.getHeaderObject(sheetType)
+			let aFiltered = aLicenses
+				.filter(license => categoriasPorTipoEquipo[license.Tipoequipo] === sheetType)
+				.filter(license => license.Timbeg && license.Timend); // GQ FIX 2102
+
+			var header = this.getHeaderObject(sheetType);
 
 			let mapExcelData = license => {
 				if (license.Licstat === "01") {
@@ -1990,30 +1947,26 @@ sap.ui.define([
 				} else if (license.Licstat === "06") {
 					license.usersAgreement = "NO";
 				} else {
-					license.usersAgreement = ""
+					license.usersAgreement = "";
 				}
 
 				if (license.Tipolicencia === "EM") {
-					license.TipMante = 'De Emergencia';
+					license.TipMante = "De Emergencia";
 				} else if (license.Tipolicencia === "N" || license.Tipolicencia === "TE") {
-					license.TipMante = 'No Urgente';
+					license.TipMante = "No Urgente";
 				} else {
-					license.TipMante = '';
+					license.TipMante = "";
 				}
+
 				license.Equnr = license.Equnr;
 				license.Solbeg = FormatHelper.formatDateLicenseReportDiary(license.Solbeg);
 				license.TrabajoFS = license.Equstat === "" ? "X" : "";
 				license.TrabajoES = license.Equstat === "X" ? "X" : "";
 
-				license.Rdisparo === "X" ? license.Rdisparo = "SI" : license.Rdisparo = "NO";
-				license.DescEstacion = license.DescEstacion //FormatterHelper.getDescEstacion(license.Tplnr);
-				// issue 504 - el campo Tipoequipo trae un valor incorrecto , se remplazo por el campo tipoEquipo
-				//	license.tipoEquipo = license.Tipoequipo;
-				if (license.tipoEquipo) {
-					license.tipoEquipo = license.tipoEquipo;
-				} else {
-					license.tipoEquipo = license.Tipoequipo;
-				}
+				license.Rdisparo = license.Rdisparo === "X" ? "SI" : "NO";
+				license.DescEstacion = license.DescEstacion;
+
+				license.tipoEquipo = license.tipoEquipo || license.Tipoequipo;
 				license.Tipinterv = this.formatTipinterv(license.Tipinterv);
 				license.Tension = license.Tension;
 				license.ID = license.Id;
@@ -2022,7 +1975,7 @@ sap.ui.define([
 				license.Timbeg = FormatterHelper.msTohoursSeconds(license.Timbeg.ms + 3 * 60 * 60 * 1000);
 				license.Timend = FormatterHelper.msTohoursSeconds(license.Timend.ms + 3 * 60 * 60 * 1000);
 
-				license.Tiemporep = FormatterHelper.getTiempoReposicionDesc(license.Tiemporep)
+				license.Tiemporep = FormatterHelper.getTiempoReposicionDesc(license.Tiemporep);
 
 				let obj = {};
 				for (let key in header) {
