@@ -16,6 +16,38 @@
 				"ope_oper-turno_cot"
 			]
 		},
+		"colocacion": {
+			"all": [
+				"Jefe_Turno_COT",
+				"Jefe_Turno_COTDT",
+				"Operador_COTDT",
+				"Operador_COT"
+			]
+		},
+		"retiro": {
+			"all": [
+				"Jefe_Turno_COT",
+				"Jefe_Turno_COTDT",
+				"Operador_COTDT",
+				"Operador_COT"
+			]
+		},
+		"inhibicion": {
+			"all": [
+				"Jefe_Turno_COT",
+				"Jefe_Turno_COTDT",
+				"Operador_COTDT",
+				"Operador_COT"
+			]
+		},
+		"habilitacion": {
+			"all": [
+				"Jefe_Turno_COT",
+				"Jefe_Turno_COTDT",
+				"Operador_COTDT",
+				"Operador_COT"
+			]
+		},
 		"transferencia": {
 			"all": [
 				"ope_jefe_turno_cot",
@@ -59,6 +91,38 @@
 				"ope_jefe_turno_cotdt",
 				"ope_oper-turno_cotdt",
 				"ope_oper-turno_cot"
+			]
+		},
+		"colocacion": {
+			"all": [
+				"Jefe_Turno_COT",
+				"Jefe_Turno_COTDT",
+				"Operador_COTDT",
+				"Operador_COT"
+			]
+		},
+		"retiro": {
+			"all": [
+				"Jefe_Turno_COT",
+				"Jefe_Turno_COTDT",
+				"Operador_COTDT",
+				"Operador_COT"
+			]
+		},
+		"inhibicion": {
+			"all": [
+				"Jefe_Turno_COT",
+				"Jefe_Turno_COTDT",
+				"Operador_COTDT",
+				"Operador_COT"
+			]
+		},
+		"habilitacion": {
+			"all": [
+				"Jefe_Turno_COT",
+				"Jefe_Turno_COTDT",
+				"Operador_COTDT",
+				"Operador_COT"
 			]
 		},
 		"transferencia": {

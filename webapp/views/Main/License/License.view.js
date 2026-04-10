@@ -101,15 +101,15 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								formatter: oController.rolStatusEdition("transferencia/")
 							},
 							items: {
-										path: "JefesPreviewModel>/",
-										templateShareable: false,
-										length:2000,
-										template: new sap.ui.core.Item({
-											key: "{JefesPreviewModel>Key}",
-											text: "{JefesPreviewModel>Key} - {JefesPreviewModel>Display}"
-										})
-									}
-					
+								path: "JefesPreviewModel>/",
+								templateShareable: false,
+								length: 2000,
+								template: new sap.ui.core.Item({
+									key: "{JefesPreviewModel>Key}",
+									text: "{JefesPreviewModel>Key} - {JefesPreviewModel>Display}"
+								})
+							}
+
 						}),
 						new sap.m.Label({
 							text: "Fecha y hora",
@@ -524,27 +524,43 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 			noDataText: "No hay colocaciones",
 			columns: [
 				new sap.m.Column({
-					width: "20%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Fecha"
 					})
 				}),
 				new sap.m.Column({
-					width: "15%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Hora"
 					})
 				}),
 				new sap.m.Column({
-					width: "20%",
+					width: "200px",
+					header: new sap.m.Text({
+						text: "COT/COTDT"
+					})
+				}),
+				new sap.m.Column({
+					width: "200px",
 					header: new sap.m.Text({
 						text: "ET"
 					})
 				}),
 				new sap.m.Column({
-					width: "40%",
+					header: new sap.m.Text({
+						text: "Técnico de ET"
+					})
+				}),
+				new sap.m.Column({
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Comentarios"
+					})
+				}),
+				new sap.m.Column({
+					header: new sap.m.Text({
+						text: "Tipo"
 					})
 				}),
 				new sap.m.Column({
@@ -556,7 +572,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 			items: {
 				path: "ColocacionTableJsonModel>/Colocacion",
 				template: new sap.m.ColumnListItem({
-					visible: "{ColocacionTableJsonModel>enabled}",
+
 					cells: [
 						new sap.m.DatePicker({
 							specialDates: {
@@ -571,40 +587,53 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								})
 							},
 							change: $.proxy(oController.handleDateChange, oController, "ColocacionTableJsonModel"),
-							// enabled: {
-							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"ColocacionTableJsonModel>enabled",
-							// 		"ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("colocaciones/")
-							// },
-							dateValue: "{ColocacionTableJsonModel>Datehab}",
+							enabled: {
+								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"ColocacionTableJsonModel>enabled",
+									"ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("entregas/")
+							},
+							dateValue: "{ColocacionTableJsonModel>Datelicencia}",
 							minDate: "{LicenseJsonModel>/Solbeg}",
 							maxDate: "{LicenseJsonModel>/Solend}",
 							displayFormat: "dd-MM-yyyy"
 						}),
 						new sap.m.TimePicker({
 							change: [oController.handleDateChange, oController],
-							// enabled: {
-							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"ColocacionTableJsonModel>enabled",
-							// 		"ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("colocacion/")
-							// },
+							enabled: {
+								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"ColocacionTableJsonModel>enabled",
+									"ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("colocacion/")
+							},
 							dateValue: "{ColocacionTableJsonModel>Time}",
 							displayFormat: "HH:mm"
 						}),
+						new sap.m.Text({
+							 text: "{ColocacionTableJsonModel>CotCotdt}"
+							// text: {
+							// 	path: "DeliveryTableJsonModel>Jt",
+							// 	formatter: $.proxy(oController.handleUserName, oController)
+							// }
+						}),
+
 						new sap.m.ComboBox({
 							width: "100%",
-							// enabled: {
-							// 	parts: [
-							// 		"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"ColocacionTableJsonModel>enabled", "ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("colocacion/")
-							// },
+							enabled: {
+								parts: [
+									"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"ColocacionTableJsonModel>enabled", "ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("colocacion/")
+							},
 							selectedKey: "{ColocacionTableJsonModel>Tplnr}",
+							tooltip: {
+								path: "ColocacionTableJsonModel>Tplnr",
+								formatter: $.proxy(oController.formatTplnrTooltip, oController)
+							},
+							change: [oController.onEtChangeValidatePatPair, oController],
 							items: {
 								path: "EstacionesJsonModel>/EstacionesPorRegion",
 								template: new sap.ui.core.Item({
@@ -613,36 +642,108 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								})
 							},
 						}),
+						new sap.m.HBox({
+							items: [
+								new sap.m.ComboBox({
 
-						new sap.m.Input({
-							// enabled: {
-							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"ColocacionTableJsonModel>enabled",
-							// 		"ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("colocacion/")
-							// },
-							value: "{ColocacionTableJsonModel>Coment}",
-							width: "100%"
+									width: "100%",
+									enabled: {
+										parts: [
+											"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+											 "ColocacionTableJsonModel>enabled","ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+										],
+										formatter: oController.rolStatusEdition("colocacion/")
+									},
+
+									selectedKey: "{ColocacionTableJsonModel>Tecet}",
+									tooltip: {
+										path: "ColocacionTableJsonModel>Tecet",
+										formatter: $.proxy(oController.formatTecetTooltip, oController)
+									},
+									items: {
+										templateShareable: false,
+										path: "PersonalHabilitadoModel>/TecnicosEt",
+										template: new sap.ui.core.Item({
+											key: "{PersonalHabilitadoModel>Legajo}",
+											text: "{PersonalHabilitadoModel>Nombre} {PersonalHabilitadoModel>Legajo}"
+										}),
+									}
+								}),
+
+							]
+						}),
+						new sap.m.HBox({
+							alignItems: "Center",
+							items: [
+								new sap.m.Input({
+									enabled: {
+										parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+											"ColocacionTableJsonModel>enabled",
+											"ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+										],
+										formatter: oController.rolStatusEdition("colocacion/")
+									},
+									value: "{ColocacionTableJsonModel>Coment}",
+									tooltip: "{ColocacionTableJsonModel>Coment}",
+									width: "100%"
+								}),
+								new sap.m.Button({
+									icon: "sap-icon://display",
+									type: "Transparent",
+									tooltip: "Ver comentario completo",
+									press: [oController.onOpenComentariosDialog, oController],
+									customData: [
+										new sap.ui.core.CustomData({ key: "modelName", value: "ColocacionTableJsonModel" }),
+										new sap.ui.core.CustomData({ key: "propertyName", value: "Coment" })
+									]
+								})
+							]
+						}),
+						new sap.m.ComboBox({
+							enabled: {
+								parts: [
+									"LicenseJsonModel>/Licstat",
+									"UserJsonModel>/roles",
+									"statusModel>/",
+									"LicenseJsonModel>/Werks",
+									"ColocacionTableJsonModel>enabled",
+									"ColocacionTableJsonModel>sameDayValidation",
+									"ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("colocacion/")
+							},
+
+							selectedKey: {
+								path: "ColocacionTableJsonModel>Pat",
+								formatter: function (v) {
+																// null/undefined => sin selección
+									// "" => PAT  (backend "" = PAT)
+									// "X" => PAT/A (backend "X" = PAT/A)
+									if (v === null || v === undefined) return "__NONE__";
+									if (v === "") return "__PAT__";
+									return "X";
+								}
+							},
+
+							change: oController.onChangePAT.bind(oController),
+
+							items: [
+								new sap.ui.core.Item({ key: "__NONE__", text: "-- Elegir --" }),
+								new sap.ui.core.Item({ key: "__PAT__", text: "PAT" }),
+								new sap.ui.core.Item({ key: "X", text: "PAT/A" })
+							]
 						}),
 
 						new sap.m.Button({
-							text: "Agregar ET",
-							// enabled: {
-							// 	parts: [
-							// 		"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"ColocacionTableJsonModel>enabled", "ColocacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("colocacion/")
-							// },
-							visible: {
-								parts: [{
-									path: "ColocacionTableJsonModel>enabled"
-								}],
-								formatter: function (bEnabled) {
-									return bEnabled;
-								}
+							text: "Colocar",
+							enabled: {
+								parts: [
+									"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"ColocacionTableJsonModel>enabled", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("colocacion/")
 							},
+							visible: true,
 							press: [oController.sendColocacionPAT, oController]
 						}).addStyleClass("buttonInverted")
 					]
@@ -657,27 +758,43 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 			noDataText: "No hay retiros",
 			columns: [
 				new sap.m.Column({
-					width: "20%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Fecha"
 					})
 				}),
 				new sap.m.Column({
-					width: "15%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Hora"
 					})
 				}),
 				new sap.m.Column({
-					width: "20%",
+					width: "200px",
+					header: new sap.m.Text({
+						text: "COT/COTDT"
+					})
+				}),
+				new sap.m.Column({
+					width: "200px",
 					header: new sap.m.Text({
 						text: "ET"
 					})
 				}),
 				new sap.m.Column({
-					width: "40%",
+					header: new sap.m.Text({
+						text: "Técnico de ET"
+					})
+				}),
+				new sap.m.Column({
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Comentarios"
+					})
+				}),
+				new sap.m.Column({
+					header: new sap.m.Text({
+						text: "Tipo"
 					})
 				}),
 				new sap.m.Column({
@@ -704,14 +821,13 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								})
 							},
 							change: $.proxy(oController.handleDateChange, oController, "RetiroTableJsonModel"),
-							// enabled: {
-							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"RetiroTableJsonModel>enabled",
-							// 		"RetiroTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("retiro/")
-							// },
-							dateValue: "{RetiroTableJsonModel>Datehab}",
+							enabled: {
+								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"RetiroTableJsonModel>enabled", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("retiro/")
+							},
+							dateValue: "{RetiroTableJsonModel>Datelicencia}",
 							minDate: "{LicenseJsonModel>/Solbeg}",
 							maxDate: "{LicenseJsonModel>/Solend}",
 							displayFormat: "dd-MM-yyyy"
@@ -721,24 +837,35 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							enabled: {
 								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
 									"RetiroTableJsonModel>enabled",
-									"RetiroTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+									"ValidateFirstContModel>/fd"
 								],
 								formatter: oController.rolStatusEdition("retiro/")
 							},
 							dateValue: "{RetiroTableJsonModel>Time}",
 							displayFormat: "HH:mm"
 						}),
+						new sap.m.Text({
+							text: {
+								path: "RetiroTableJsonModel>CotCotdt",
+								formatter: $.proxy(oController.handleUserName, oController)
+							}
+						}),
 						new sap.m.ComboBox({
 
 							width: "100%",
+							enabled: false,
 							// enabled: {
 							// 	parts: [
 							// 		"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"RetiroTableJsonModel>enabled", "RetiroTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+							// 		"RetiroTableJsonModel>enabled",  "ValidateFirstContModel>/fd"
 							// 	],
 							// 	formatter: oController.rolStatusEdition("retiro/")
 							// },
 							selectedKey: "{RetiroTableJsonModel>Tplnr}",
+							tooltip: {
+								path: "RetiroTableJsonModel>Tplnr",
+								formatter: $.proxy(oController.formatTplnrTooltip, oController)
+							},
 							items: {
 								path: "EstacionesJsonModel>/EstacionesPorRegion",
 								template: new sap.ui.core.Item({
@@ -747,38 +874,114 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								})
 							},
 						}),
+						new sap.m.ComboBox({
 
-						new sap.m.Input({
-							// enabled: {
-							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"RetiroTableJsonModel>enabled",
-							// 		"RetiroTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("retiro/")
-							// },
-							value: "{RetiroTableJsonModel>Coment}",
-							width: "100%"
+									width: "100%",
+									enabled: "{RetiroTableJsonModel>enabledTecet}",
+									selectedKey: "{RetiroTableJsonModel>Tecet}",
+									change: oController.onTecetChange.bind(oController),
+									tooltip: {
+										path: "RetiroTableJsonModel>Tecet",
+										formatter: $.proxy(oController.formatTecetTooltip, oController)
+									},
+									items: {
+										templateShareable: false,
+										path: "PersonalHabilitadoModel>/TecnicosEt",
+										template: new sap.ui.core.Item({
+											key: "{PersonalHabilitadoModel>Legajo}",
+											text: "{PersonalHabilitadoModel>Nombre} {PersonalHabilitadoModel>Legajo}"
+										}),
+									}
+								}),
+						new sap.m.HBox({
+							alignItems: "Center",
+							items: [
+								new sap.m.Input({
+									enabled: {
+										parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+											"RetiroTableJsonModel>enabled", "ValidateFirstContModel>/fd"
+										],
+										formatter: oController.rolStatusEdition("retiro/")
+									},
+									value: "{RetiroTableJsonModel>Coment}",
+									tooltip: "{RetiroTableJsonModel>Coment}",
+									width: "100%"
+								}),
+								new sap.m.Button({
+									icon: "sap-icon://display",
+									type: "Transparent",
+									tooltip: "Ver comentario completo",
+									press: [oController.onOpenComentariosDialog, oController],
+									customData: [
+										new sap.ui.core.CustomData({ key: "modelName", value: "RetiroTableJsonModel" }),
+										new sap.ui.core.CustomData({ key: "propertyName", value: "Coment" })
+									]
+								})
+							]
 						}),
+						new sap.m.ComboBox({
 
-						new sap.m.Button({
-							text: "Agregar ET",
-							// enabled: {
-							// 	parts: [
-							// 		"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"RetiroTableJsonModel>enabled", "RetiroTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("retiro/")
-							// },
-							visible: {
-								parts: [{
-									path: "RetiroTableJsonModel>enabled"
-								}],
-								formatter: function (bEnabled) {
-									return bEnabled;
+							enabled: {
+								parts: [
+									"LicenseJsonModel>/Licstat",
+									"UserJsonModel>/roles",
+									"statusModel>/",
+									"LicenseJsonModel>/Werks",
+									"RetiroTableJsonModel>enabled",
+									"RetiroTableJsonModel>sameDayValidation",
+									"ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("retiro/")
+							},
+
+							selectedKey: {
+								path: "RetiroTableJsonModel>Pat",
+								formatter: function (v) {
+																// null/undefined => sin selección
+									// "" => PAT  (backend "" = PAT)
+									// "X" => PAT/A (backend "X" = PAT/A)
+									if (v === null || v === undefined) return "__NONE__";
+									if (v === "") return "__PAT__";
+									return "X";
 								}
 							},
+
+							change: oController.onChangePAT.bind(oController),
+
+							items: [
+								new sap.ui.core.Item({
+									key: "__NONE__",
+									text: "-- Seleccionar --"
+								}),
+								new sap.ui.core.Item({
+									key: "__PAT__",
+									text: "PAT"
+								}),
+								new sap.ui.core.Item({
+									key: "X",
+									text: "PAT/A"
+								})
+							]
+
+						}),
+						new sap.m.Button({
+							text: "Retirar",
+							enabled: {
+								parts: [
+									"LicenseJsonModel>/Licstat",
+									"UserJsonModel>/roles",
+									"statusModel>/",
+									"LicenseJsonModel>/Werks",
+									"RetiroTableJsonModel>canSend",
+									"ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("retiro/")
+							},
+							visible: true,
 							press: [oController.sendRetiroPAT, oController]
 						}).addStyleClass("buttonInverted")
+
+
 					]
 				})
 			}
@@ -791,25 +994,37 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 			noDataText: "No hay inhibiciones",
 			columns: [
 				new sap.m.Column({
-					width: "20%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Fecha"
 					})
 				}),
 				new sap.m.Column({
-					width: "15%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Hora"
 					})
 				}),
 				new sap.m.Column({
-					width: "20%",
+					width: "200px",
+					header: new sap.m.Text({
+						text: "COT/COTDT"
+					})
+				}),
+				new sap.m.Column({
+					width: "200px",
 					header: new sap.m.Text({
 						text: "ET"
 					})
 				}),
 				new sap.m.Column({
-					width: "40%",
+					width: "200px",
+					header: new sap.m.Text({
+						text: "Técnico de ET"
+					})
+				}),
+				new sap.m.Column({
+	
 					header: new sap.m.Text({
 						text: "Comentarios"
 					})
@@ -823,7 +1038,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 			items: {
 				path: "InhibicionTableJsonModel>/Inhibicion",
 				template: new sap.m.ColumnListItem({
-					visible: "{InhibicionTableJsonModel>enabled}",
+
 					cells: [
 						new sap.m.DatePicker({
 							specialDates: {
@@ -837,14 +1052,14 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									}
 								})
 							},
+							enabled: {
+								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"InhibicionTableJsonModel>enabled",
+									"InhibicionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("inhibicion/")
+							},
 							change: $.proxy(oController.handleDateChange, oController, "InhibicionTableJsonModel"),
-							// enabled: {
-							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"InhibicionTableJsonModel>enabled",
-							// 		"InhibicionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("inhibicion/")
-							// },
 							dateValue: "{InhibicionTableJsonModel>Datehab}",
 							minDate: "{LicenseJsonModel>/Solbeg}",
 							maxDate: "{LicenseJsonModel>/Solend}",
@@ -862,18 +1077,27 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							dateValue: "{InhibicionTableJsonModel>Time}",
 							displayFormat: "HH:mm"
 						}),
-
+						new sap.m.Text({
+							text: {
+								path: "InhibicionTableJsonModel>Jt",
+								formatter: $.proxy(oController.handleUserName, oController)
+							}
+						}),
 						new sap.m.ComboBox({
 							width: "100%",
-							// enabled: {
-							// 	parts: [
-							// 		"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"InhibicionTableJsonModel>enabled", "InhibicionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("inhibicion/")
-							// },
-
+							enabled: {
+								parts: [
+									"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"InhibicionTableJsonModel>enabled", "InhibicionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("inhibicion/")
+							},
+							change: [oController.onEtChangeValidateEtInhibicion, oController],
 							selectedKey: "{InhibicionTableJsonModel>Tplnr}",
+							tooltip: {
+								path: "InhibicionTableJsonModel>Tplnr",
+								formatter: $.proxy(oController.formatTplnrTooltip, oController)
+							},
 							items: {
 								path: "EstacionesJsonModel>/EstacionesPorRegion",
 								template: new sap.ui.core.Item({
@@ -882,35 +1106,75 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								})
 							},
 						}),
+						new sap.m.HBox({
+							items: [
+								new sap.m.ComboBox({
 
-						new sap.m.Input({
-							// enabled: {
-							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"InhibicionTableJsonModel>enabled",
-							// 		"InhibicionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("inhibicion/")
-							// },
-							value: "{InhibicionTableJsonModel>Coment}"
+									width: "100%",
+									enabled: {
+										parts: [
+											"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+											"InhibicionTableJsonModel>enabled", "InhibicionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+										],
+										formatter: oController.rolStatusEdition("inhibicion/")
+									},
+
+									selectedKey: "{InhibicionTableJsonModel>Tecet}",
+									tooltip: {
+										path: "InhibicionTableJsonModel>Tecet",
+										formatter: $.proxy(oController.formatTecetTooltip, oController)
+									},
+									items: {
+										templateShareable: false,
+										path: "PersonalHabilitadoModel>/TecnicosEt",
+										template: new sap.ui.core.Item({
+											key: "{PersonalHabilitadoModel>Legajo}",
+											text: "{PersonalHabilitadoModel>Nombre} {PersonalHabilitadoModel>Legajo}"
+										}),
+									}
+								}),
+
+							]
+						}),
+
+						new sap.m.HBox({
+							alignItems: "Center",
+							items: [
+								new sap.m.Input({
+									enabled: {
+										parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+											"InhibicionTableJsonModel>enabled",
+											"InhibicionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+										],
+										formatter: oController.rolStatusEdition("inhibicion/")
+									},
+									value: "{InhibicionTableJsonModel>Coment}",
+									tooltip: "{InhibicionTableJsonModel>Coment}",
+									width: "100%"
+								}),
+								new sap.m.Button({
+									icon: "sap-icon://display",
+									type: "Transparent",
+									tooltip: "Ver comentario completo",
+									press: [oController.onOpenComentariosDialog, oController],
+									customData: [
+										new sap.ui.core.CustomData({ key: "modelName", value: "InhibicionTableJsonModel" }),
+										new sap.ui.core.CustomData({ key: "propertyName", value: "Coment" })
+									]
+								})
+							]
 						}),
 
 						new sap.m.Button({
-							text: "Agregar ET",
-							// enabled: {
-							// 	parts: [
-							// 		"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"InhibicionTableJsonModel>enabled", "InhibicionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("inhibicion/")
-							// },
-							visible: {
-								parts: [{
-									path: "InhibicionTableJsonModel>enabled"
-								}],
-								formatter: function (bEnabled) {
-									return bEnabled;
-								}
+							text: "Inhibir",
+							enabled: {
+								parts: [
+									"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"InhibicionTableJsonModel>enabled", "InhibicionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("inhibicion/")
 							},
+							visible: true,
 							press: [oController.sendInhibicion, oController]
 						}).addStyleClass("buttonInverted")
 					]
@@ -925,25 +1189,37 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 			noDataText: "No hay habilitaciones",
 			columns: [
 				new sap.m.Column({
-					width: "20%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Fecha"
 					})
 				}),
 				new sap.m.Column({
-					width: "15%",
+					width: "200px",
 					header: new sap.m.Text({
 						text: "Hora"
 					})
 				}),
 				new sap.m.Column({
-					width: "20%",
+					width: "200px",
+					header: new sap.m.Text({
+						text: "COT/COTDT"
+					})
+				}),
+				new sap.m.Column({
+					width: "200px",
 					header: new sap.m.Text({
 						text: "ET"
 					})
 				}),
 				new sap.m.Column({
-					width: "40%",
+					width: "200px",
+					header: new sap.m.Text({
+						text: "Técnico de ET"
+					})
+				}),
+				new sap.m.Column({
+					
 					header: new sap.m.Text({
 						text: "Comentarios"
 					})
@@ -957,7 +1233,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 			items: {
 				path: "HabilitacionTableJsonModel>/Habilitacion",
 				template: new sap.m.ColumnListItem({
-					visible: "{HabilitacionTableJsonModel>enabled}",
+
 					cells: [
 
 						new sap.m.DatePicker({
@@ -972,14 +1248,14 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									}
 								})
 							},
+							enabled: {
+								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"HabilitacionTableJsonModel>enabled",
+									"ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("habilitacion/")
+							},
 							change: $.proxy(oController.handleDateChange, oController, "HabilitacionTableJsonModel"),
-							// enabled: {
-							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"HabilitacionTableJsonModel>enabled",
-							// 		"HabilitacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("colocaciones/")
-							// },
 							dateValue: "{HabilitacionTableJsonModel>Datehab}",
 							minDate: "{LicenseJsonModel>/Solbeg}",
 							maxDate: "{LicenseJsonModel>/Solend}",
@@ -991,27 +1267,36 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 							enabled: {
 								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
 									"HabilitacionTableJsonModel>enabled",
-									"HabilitacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+									"ValidateFirstContModel>/fd"
 								],
-								formatter: oController.rolStatusEdition("colocaciones/")
+								formatter: oController.rolStatusEdition("habilitacion/")
 							},
 							dateValue: "{HabilitacionTableJsonModel>Time}",
 							displayFormat: "HH:mm",
 							valueFormat: "HH:mm"
 						}),
-
+						new sap.m.Text({
+							text: {
+								path: "HabilitacionTableJsonModel>Cot",
+								formatter: $.proxy(oController.handleUserName, oController)
+							}
+						}),
 						new sap.m.ComboBox({
 							width: "100%",
-							// enabled: {
-							// 	parts: [
-							// 		"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"HabilitacionTableJsonModel>enabled", "HabilitacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("colocaciones/")
-							// },
+							enabled: {
+								parts: [
+									"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+									"HabilitacionTableJsonModel>enabled", "HabilitacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("habilitacion/")
+							},
 							change: [oController.handleLegacyValidationDeliveries, oController],
 
 							selectedKey: "{HabilitacionTableJsonModel>Tplnr}",
+							tooltip: {
+								path: "HabilitacionTableJsonModel>Tplnr",
+								formatter: $.proxy(oController.formatTplnrTooltip, oController)
+							},
 							items: {
 								path: "EstacionesJsonModel>/EstacionesPorRegion",
 								template: new sap.ui.core.Item({
@@ -1020,36 +1305,67 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								})
 							},
 						}),
+						new sap.m.ComboBox({
+									width: "100%",
+									enabled: "{HabilitacionTableJsonModel>enabledTecet}",
 
-						new sap.m.Input({
-							// enabled: {
-							// 	parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"HabilitacionTableJsonModel>enabled",
-							// 		"HabilitacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("colocaciones/")
-							// },
-							value: "{HabilitacionTableJsonModel>Coment}",
+									selectedKey: "{HabilitacionTableJsonModel>Tecet}",
+									change: oController.onTecetChange.bind(oController),
+									tooltip: {
+										path: "HabilitacionTableJsonModel>Tecet",
+										formatter: $.proxy(oController.formatTecetTooltip, oController)
+									},
+									items: {
+										templateShareable: false,
+										path: "PersonalHabilitadoModel>/TecnicosEt",
+										template: new sap.ui.core.Item({
+											key: "{PersonalHabilitadoModel>Legajo}",
+											text: "{PersonalHabilitadoModel>Nombre} {PersonalHabilitadoModel>Legajo}"
+										}),
+									}
+								}),
 
+						new sap.m.HBox({
+							alignItems: "Center",
+							items: [
+								new sap.m.Input({
+									enabled: {
+										parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+											"HabilitacionTableJsonModel>enabled",
+											"ValidateFirstContModel>/fd"
+										],
+										formatter: oController.rolStatusEdition("habilitacion/")
+									},
+									value: "{HabilitacionTableJsonModel>Coment}",
+									tooltip: "{HabilitacionTableJsonModel>Coment}",
+									width: "100%"
+								}),
+								new sap.m.Button({
+									icon: "sap-icon://display",
+									type: "Transparent",
+									tooltip: "Ver comentario completo",
+									press: [oController.onOpenComentariosDialog, oController],
+									customData: [
+										new sap.ui.core.CustomData({ key: "modelName", value: "HabilitacionTableJsonModel" }),
+										new sap.ui.core.CustomData({ key: "propertyName", value: "Coment" })
+									]
+								})
+							]
 						}),
 
 						new sap.m.Button({
-							text: "Agregar ET",
-							// enabled: {
-							// 	parts: [
-							// 		"LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-							// 		"HabilitacionTableJsonModel>enabled", "HabilitacionTableJsonModel>sameDayValidation", "ValidateFirstContModel>/fd"
-							// 	],
-							// 	formatter: oController.rolStatusEdition("colocaciones/")
-							// },
-							visible: {
-								parts: [{
-									path: "HabilitacionTableJsonModel>enabled"
-								}],
-								formatter: function (bEnabled) {
-									return bEnabled;
-								}
+							text: "Habilitar",
+							enabled: {
+								parts: [
+									"LicenseJsonModel>/Licstat",
+									"UserJsonModel>/roles",
+									"statusModel>/",
+									"LicenseJsonModel>/Werks",
+									"HabilitacionTableJsonModel>canSend", "ValidateFirstContModel>/fd"
+								],
+								formatter: oController.rolStatusEdition("habilitacion/")
 							},
+							visible: true,
 							press: [oController.sendHabilitacion, oController]
 						}).addStyleClass("buttonInverted")
 					]
@@ -1405,9 +1721,7 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 										],
 										formatter: oController.rolStatusEdition("entregas/")
 									},
-									//change: [oController.handleLegacyValidationDeliveries, oController],
-									// valueState: "{DeliveryTableJsonModel>TejtValueState}",
-									// valueStateText: "{DeliveryTableJsonModel>TejtValueStateText}",
+
 									selectedKey: "{DeliveryTableJsonModel>TecET}",
 									items: {
 										templateShareable: false,
@@ -1416,16 +1730,6 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 											key: "{PersonalHabilitadoModel>Legajo}",
 											text: "{PersonalHabilitadoModel>Nombre} {PersonalHabilitadoModel>Legajo}"
 										}),
-										// filters: new sap.ui.model.Filter([
-										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M04"),
-										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M08"),
-										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M12"),
-										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M16"),
-										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M20"),
-										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M24"),
-										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "M28"),
-										// 	new sap.ui.model.Filter("TipoHab", sap.ui.model.FilterOperator.EQ, "PE5")
-										// ], false)
 									}
 								}),
 								new sap.m.Text({
@@ -1911,15 +2215,31 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 								})
 							}
 						}),
-						new sap.m.Input({
-							enabled: {
-								parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
-									"ReanudationTableJsonModel>enabled"
-								],
-								formatter: oController.rolStatusEdition("entregas/")
-							},
-							value: "{ReanudationTableJsonModel>Comentarios}",
-							tooltip: "{ReanudationTableJsonModel>Comentarios}"
+						new sap.m.HBox({
+							alignItems: "Center",
+							items: [
+								new sap.m.Input({
+									enabled: {
+										parts: ["LicenseJsonModel>/Licstat", "UserJsonModel>/roles", "statusModel>/", "LicenseJsonModel>/Werks",
+											"ReanudationTableJsonModel>enabled"
+										],
+										formatter: oController.rolStatusEdition("entregas/")
+									},
+									value: "{ReanudationTableJsonModel>Comentarios}",
+									tooltip: "{ReanudationTableJsonModel>Comentarios}",
+									width: "100%"
+								}),
+								new sap.m.Button({
+									icon: "sap-icon://display",
+									type: "Transparent",
+									tooltip: "Ver comentario completo",
+									press: [oController.onOpenComentariosDialog, oController],
+									customData: [
+										new sap.ui.core.CustomData({ key: "modelName", value: "ReanudationTableJsonModel" }),
+										new sap.ui.core.CustomData({ key: "propertyName", value: "Comentarios" })
+									]
+								})
+							]
 						}),
 						new sap.m.HBox({
 							items: [
@@ -4185,54 +4505,54 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.License.License
 									// 		oTurnoTable
 									// 	]
 									// }),
-									// new sap.m.Panel({
-									// 	expandable: true,
-									// 	expanded: true,
-									// 	headerText: "Colocacion y retiro de PAT",
-									// 	content: [
-									// 		new sap.m.Panel({
-									// 			expandable: true,
-									// 			expanded: true,
-									// 			headerText: "Colocacion",
-									// 			content: [
-									// 				oColocacionTable
-									// 			]
+									new sap.m.Panel({
+										expandable: true,
+										expanded: true,
+										headerText: "Colocación y retiro de PAT",
+										content: [
+											new sap.m.Panel({
+												expandable: true,
+												expanded: true,
+												headerText: "Colocar",
+												content: [
+													oColocacionTable
+												]
 
-									// 		}),
-									// 		new sap.m.Panel({
-									// 			expandable: true,
-									// 			expanded: true,
-									// 			headerText: "Retiro de PAT",
-									// 			content: [
-									// 				oRetiroTable
-									// 			]
-									// 		})
-									// 	]
-									// }),
-									// new sap.m.Panel({
-									// 	expandable: true,
-									// 	expanded: true,
-									// 	headerText: "Inhibicion y habilitacion de PAT",
-									// 	content: [
-									// 		new sap.m.Panel({
-									// 			expandable: true,
-									// 			expanded: true,
-									// 			headerText: "Inhibicion",
-									// 			content: [
-									// 				oInhibicionTable
-									// 			]
+											}),
+											new sap.m.Panel({
+												expandable: true,
+												expanded: true,
+												headerText: "Retirar",
+												content: [
+													oRetiroTable
+												]
+											})
+										]
+									}),
+									new sap.m.Panel({
+										expandable: true,
+										expanded: true,
+										headerText: "Inhibición y habilitación de Recierre",
+										content: [
+											new sap.m.Panel({
+												expandable: true,
+												expanded: true,
+												headerText: "Inhibir",
+												content: [
+													oInhibicionTable
+												]
 
-									// 		}),
-									// 		new sap.m.Panel({
-									// 			expandable: true,
-									// 			expanded: true,
-									// 			headerText: "Habilitacion",
-									// 			content: [
-									// 				oHabilitacionTable
-									// 			]
-									// 		})
-									// 	]
-									// }),
+											}),
+											new sap.m.Panel({
+												expandable: true,
+												expanded: true,
+												headerText: "Habilitar",
+												content: [
+													oHabilitacionTable
+												]
+											})
+										]
+									}),
 									new sap.m.Panel({
 										expandable: true,
 										expanded: true,

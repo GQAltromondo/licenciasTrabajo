@@ -73,8 +73,6 @@ sap.ui.define([
 		},
 
 		setNavigationProperties: function (oObject) {
-
-			console.log(oObject)
 			
 			this.getModel("CoordinationTableJsonModel").setData({
 				Coordinations: oObject.CoordinacionesLicencia_nav

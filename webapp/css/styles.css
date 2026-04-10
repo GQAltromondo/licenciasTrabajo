@@ -1,7 +1,7 @@
 
-.sapUiLoSplitterV>.sapUiLoSplitterContent{
+/* .sapUiLoSplitterV>.sapUiLoSplitterContent{
 	height:unset !important;
-}
+} */
 .sapUiCalItemType02>.sapUiCalItemText {
     background: #d86767 !important;
     box-shadow: none !important;
@@ -89,8 +89,6 @@
 .detailPage .detailTabs span.sapMBtnInner.sapMBtnEmphasized .sapMBtnIcon {
     color: #ece5e5;
 }
-
-.customPanelTitle {}
 
 .detailPage .detailTabs span.sapMBtnInner {
     background: none;

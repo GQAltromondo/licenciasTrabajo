@@ -1,11 +1,17 @@
-<mvc:View xmlns="sap.ui.table" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns:m="sap.m" xmlns:gnt2="sap.gantt.simple"
-	xmlns:axistime="sap.gantt.axistime" xmlns:gnt-cal="sap.gantt.def.cal" xmlns:config="sap.gantt.config" xmlns:l="sap.ui.layout" height="100vh"
-	controllerName="Transener.Operaciones.LicenciasTrabajo.views.Main.Gantt.Gantt">
-	<m:Page showNavButton="false" contentOnlyBusy="true" showHeader="false" >
-		<m:Panel expandable="true" expanded="true" id="FilterPanel" class="customPanel sapUiMediumMarginBottom" >
+<mvc:View xmlns="sap.ui.table"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:m="sap.m"
+	xmlns:gnt2="sap.gantt.simple"
+	xmlns:axistime="sap.gantt.axistime"
+	xmlns:gnt-cal="sap.gantt.def.cal"
+	xmlns:config="sap.gantt.config"
+	xmlns:l="sap.ui.layout" height="100vh" controllerName="Transener.Operaciones.LicenciasTrabajo.views.Main.Gantt.Gantt">
+	<m:Page showNavButton="false" contentOnlyBusy="true" showHeader="false">
+		<m:Panel expandable="true" expanded="true" id="FilterPanel" class="customPanel sapUiMediumMarginBottom">
 			<m:headerToolbar class="customPanel">
 				<m:Toolbar>
-				
+
 					<core:Icon src="sap-icon://filter" class="textBlue"/>
 					<m:Title text="Filtros" class="textBlue"/>
 				</m:Toolbar>
@@ -113,42 +119,20 @@
 				</gnt2:ContainerToolbar>
 			</gnt2:toolbar>
 			<gnt2:ganttCharts>
-				<gnt2:GanttChartWithTable id="ganttView2" shapeDragEnd="handleShapeDragEnd" height="100px" >
+				<gnt2:GanttChartWithTable id="ganttView2"  >
 					<gnt2:table>
-						<Table selectionMode="None" id="ganntTable2"  visibleRowCount="2" selectionBehavior="RowSelector" enableColumnReordering="true" fixedColumnCount="1"
-							rows="{ path: 'TempSeleccionado>/' }">
+						<Table id="ganntTable2" fixedColumnCount="1" rows="{ path: 'TempSeleccionado>/' }" selectionMode="None" >
 							<extension/>
 							<rowSettingsTemplate>
 								<gnt2:GanttRowSettings>
-									<gnt2:shapes1 width="40%">
-										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>LunesI}"
-											endTime="{TempSeleccionado>LunesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
-											strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}"
-											visible="{ parts: [{path: 'TempSeleccionado>LunesI'}, {path: 'TempSeleccionado>LunesF'}], formatter: '.onFormatRectangle'}"/>
-										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>MartesI}"
-											endTime="{TempSeleccionado>MartesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
-											strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}"
-											visible="{ parts: [{path: 'TempSeleccionado>MartesI'}, {path: 'TempSeleccionado>MartesF'}], formatter: '.onFormatRectangle'}"/>
-										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>MiercolesI}"
-											endTime="{TempSeleccionado>MiercolesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
-											strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}"
-											visible="{ parts: [{path: 'TempSeleccionado>MiercolesI'}, {path: 'TempSeleccionado>MiercolesF'}], formatter: '.onFormatRectangle'}"/>
-										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>JuevesI}"
-											endTime="{TempSeleccionado>JuevesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
-											strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}"
-											visible="{ parts: [{path: 'TempSeleccionado>JuevesI'}, {path: 'TempSeleccionado>JuevesF'}], formatter: '.onFormatRectangle'}"/>
-										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>ViernesI}"
-											endTime="{TempSeleccionado>ViernesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
-											strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}"
-											visible="{ parts: [{path: 'TempSeleccionado>ViernesI'}, {path: 'TempSeleccionado>ViernesF'}], formatter: '.onFormatRectangle'}"/>
-										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>SabadoI}"
-											endTime="{TempSeleccionado>SabadoF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
-											strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}"
-											visible="{ parts: [{path: 'TempSeleccionado>SabadoI'}, {path: 'TempSeleccionado>SabadoF'}], formatter: '.onFormatRectangle'}"/>
-										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>DomingoI}"
-											endTime="{TempSeleccionado>DomingoF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
-											strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}"
-											visible="{ parts: [{path: 'TempSeleccionado>DomingoI'}, {path: 'TempSeleccionado>DomingoF'}], formatter: '.onFormatRectangle'}"/>
+									<gnt2:shapes1 >
+										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>LunesI}" endTime="{TempSeleccionado>LunesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e" strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}" visible="{ parts: [{path: 'TempSeleccionado>LunesI'}, {path: 'TempSeleccionado>LunesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>MartesI}" endTime="{TempSeleccionado>MartesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e" strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}" visible="{ parts: [{path: 'TempSeleccionado>MartesI'}, {path: 'TempSeleccionado>MartesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>MiercolesI}" endTime="{TempSeleccionado>MiercolesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e" strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}" visible="{ parts: [{path: 'TempSeleccionado>MiercolesI'}, {path: 'TempSeleccionado>MiercolesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>JuevesI}" endTime="{TempSeleccionado>JuevesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e" strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}" visible="{ parts: [{path: 'TempSeleccionado>JuevesI'}, {path: 'TempSeleccionado>JuevesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>ViernesI}" endTime="{TempSeleccionado>ViernesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e" strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}" visible="{ parts: [{path: 'TempSeleccionado>ViernesI'}, {path: 'TempSeleccionado>ViernesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>SabadoI}" endTime="{TempSeleccionado>SabadoF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e" strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}" visible="{ parts: [{path: 'TempSeleccionado>SabadoI'}, {path: 'TempSeleccionado>SabadoF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{TempSeleccionado>IdLicencia}" countInBirdEye="true" time="{TempSeleccionado>DomingoI}" endTime="{TempSeleccionado>DomingoF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e" strokeWidth="1" strokeDasharray="" fill="{path: 'TempSeleccionado>EnServicio', formatter: '.formatFill'}" visible="{ parts: [{path: 'TempSeleccionado>DomingoI'}, {path: 'TempSeleccionado>DomingoF'}], formatter: '.onFormatRectangle'}"/>
 									</gnt2:shapes1>
 								</gnt2:GanttRowSettings>
 							</rowSettingsTemplate>
@@ -175,7 +159,7 @@
 									<m:Label text="{TempSeleccionado>DescEquipo}"/>
 								</template>
 							</Column>
-								<Column sortProperty="Solicitante" filterProperty="Solicitante" width="140px">
+							<Column sortProperty="Solicitante" filterProperty="Solicitante" width="140px">
 								<m:Text text="Solicitante" wrapping="false"/>
 								<template>
 									<m:Label text="{TempSeleccionado>Solicitante}"/>
@@ -187,7 +171,7 @@
 									<m:Label text="{TempSeleccionado>IdLicencia}"/>
 								</template>
 							</Column>
-							
+
 							<Column sortProperty="Tiemporep" filterProperty="TiemporepText" width="140px">
 								<m:Text text="Tiempo Reposición" wrapping="false"/>
 								<template>
@@ -212,7 +196,7 @@
 									<m:Label text="{TempSeleccionado>Comentarios}"/>
 								</template>
 							</Column>
-						
+
 							<Column sortProperty="StatLicencia" filterProperty="StatLicenciaText" width="120px">
 								<m:Text text="Est. Licen." wrapping="false"/>
 								<template>
@@ -239,49 +223,26 @@
 					</gnt2:axisTimeStrategy>
 					<!--<gnt2:calendarDef>
 						<gnt-cal:CalendarDefs defs="{ path:'calc>/'}">
-							<gnt-cal:Calendar key="{calc>CalendarId}" timeIntervals="{path:'calc>Intervals', templateShareable: 'true'}"
-								backgroundColor="{= ${calc>CalendarId} === 'nwt' ? '#666' : '#ccc' }">
+							<gnt-cal:Calendar key="{calc>CalendarId}" timeIntervals="{path:'calc>Intervals', templateShareable: 'true'}" backgroundColor="{= ${calc>CalendarId} === 'nwt' ? '#666' : '#ccc' }">
 								<gnt-cal:TimeInterval startTime="{calc>StartDateTime}" endTime="{calc>EndDateTime}"/>
 							</gnt-cal:Calendar>
 						</gnt-cal:CalendarDefs>
 					</gnt2:calendarDef>-->
 				</gnt2:GanttChartWithTable>
-				<gnt2:GanttChartWithTable id="ganttView" shapeDragEnd="handleShapeDragEnd" heigth="100%" >
+				<gnt2:GanttChartWithTable id="ganttView" height="90%">
 					<gnt2:table>
-						<Table selectionMode="MultiToggle" id="ganntTable" selectionBehavior="RowOnly" rowSelectionChange="onRowSelection" enableColumnReordering="true" fixedColumnCount="1"
-							rows="{ path: 'RequerimentsModel>/data' }">
+						<Table selectionMode="MultiToggle" id="ganntTable" selectionBehavior="Row" rowSelectionChange="onRowSelection" enableColumnReordering="true" fixedColumnCount="1" rows="{ path: 'RequerimentsModel>/data' }">
 							<extension/>
 							<rowSettingsTemplate>
 								<gnt2:GanttRowSettings>
-									<gnt2:shapes1 width="40%">
-										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>LunesI}"
-											endTime="{RequerimentsModel>LunesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
-											strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}"
-											visible="{ parts: [{path: 'RequerimentsModel>LunesI'}, {path: 'RequerimentsModel>LunesF'}], formatter: '.onFormatRectangle'}"/>
-										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>MartesI}"
-											endTime="{RequerimentsModel>MartesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
-											strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}"
-											visible="{ parts: [{path: 'RequerimentsModel>MartesI'}, {path: 'RequerimentsModel>MartesF'}], formatter: '.onFormatRectangle'}"/>
-										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>MiercolesI}" 
-											endTime="{RequerimentsModel>MiercolesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
-											strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}"
-											visible="{ parts: [{path: 'RequerimentsModel>MiercolesI'}, {path: 'RequerimentsModel>MiercolesF'}], formatter: '.onFormatRectangle'}"/>
-										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>JuevesI}"
-											endTime="{RequerimentsModel>JuevesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
-											strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}"
-											visible="{ parts: [{path: 'RequerimentsModel>JuevesI'}, {path: 'RequerimentsModel>JuevesF'}], formatter: '.onFormatRectangle'}"/>
-										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>ViernesI}"
-											endTime="{RequerimentsModel>ViernesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
-											strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}"
-											visible="{ parts: [{path: 'RequerimentsModel>ViernesI'}, {path: 'RequerimentsModel>ViernesF'}], formatter: '.onFormatRectangle'}"/>
-										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>SabadoI}"
-											endTime="{RequerimentsModel>SabadoF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
-											strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}"
-											visible="{ parts: [{path: 'RequerimentsModel>SabadoI'}, {path: 'RequerimentsModel>SabadoF'}], formatter: '.onFormatRectangle'}"/>
-										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>DomingoI}"
-											endTime="{RequerimentsModel>DomingoF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e"
-											strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}"
-											visible="{ parts: [{path: 'RequerimentsModel>DomingoI'}, {path: 'RequerimentsModel>DomingoF'}], formatter: '.onFormatRectangle'}"/>
+									<gnt2:shapes1 >
+										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>LunesI}" endTime="{RequerimentsModel>LunesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e" strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}" visible="{ parts: [{path: 'RequerimentsModel>LunesI'}, {path: 'RequerimentsModel>LunesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>MartesI}" endTime="{RequerimentsModel>MartesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e" strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}" visible="{ parts: [{path: 'RequerimentsModel>MartesI'}, {path: 'RequerimentsModel>MartesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>MiercolesI}" endTime="{RequerimentsModel>MiercolesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e" strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}" visible="{ parts: [{path: 'RequerimentsModel>MiercolesI'}, {path: 'RequerimentsModel>MiercolesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>JuevesI}" endTime="{RequerimentsModel>JuevesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e" strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}" visible="{ parts: [{path: 'RequerimentsModel>JuevesI'}, {path: 'RequerimentsModel>JuevesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>ViernesI}" endTime="{RequerimentsModel>ViernesF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e" strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}" visible="{ parts: [{path: 'RequerimentsModel>ViernesI'}, {path: 'RequerimentsModel>ViernesF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>SabadoI}" endTime="{RequerimentsModel>SabadoF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e" strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}" visible="{ parts: [{path: 'RequerimentsModel>SabadoI'}, {path: 'RequerimentsModel>SabadoF'}], formatter: '.onFormatRectangle'}"/>
+										<gnt2:BaseRectangle shapeId="{RequerimentsModel>IdLicencia}" countInBirdEye="true" time="{RequerimentsModel>DomingoI}" endTime="{RequerimentsModel>DomingoF}" resizable="false" selectable="true" draggable="true" showTitle="true" tooltip="" stroke="#01070e" strokeWidth="1" strokeDasharray="" fill="{path: 'RequerimentsModel>EnServicio', formatter: '.formatFill'}" visible="{ parts: [{path: 'RequerimentsModel>DomingoI'}, {path: 'RequerimentsModel>DomingoF'}], formatter: '.onFormatRectangle'}"/>
 									</gnt2:shapes1>
 								</gnt2:GanttRowSettings>
 							</rowSettingsTemplate>
@@ -308,7 +269,7 @@
 									<m:Label text="{RequerimentsModel>DescEquipo}"/>
 								</template>
 							</Column>
-								<Column sortProperty="Solicitante" filterProperty="Solicitante" width="140px">
+							<Column sortProperty="Solicitante" filterProperty="Solicitante" width="140px">
 								<m:Text text="Solicitante" wrapping="false"/>
 								<template>
 									<m:Label text="{RequerimentsModel>Solicitante}"/>
@@ -320,7 +281,7 @@
 									<m:Label text="{RequerimentsModel>IdLicencia}"/>
 								</template>
 							</Column>
-							
+
 							<Column sortProperty="Tiemporep" filterProperty="TiemporepText" width="140px">
 								<m:Text text="Tiempo Reposición" wrapping="false"/>
 								<template>
@@ -345,7 +306,7 @@
 									<m:Label text="{RequerimentsModel>Comentarios}"/>
 								</template>
 							</Column>
-						
+
 							<Column sortProperty="StatLicencia" filterProperty="StatLicenciaText" width="120px">
 								<m:Text text="Est. Licen." wrapping="false"/>
 								<template>
@@ -372,8 +333,7 @@
 					</gnt2:axisTimeStrategy>
 					<!--<gnt2:calendarDef>
 						<gnt-cal:CalendarDefs defs="{ path:'calc>/'}">
-							<gnt-cal:Calendar key="{calc>CalendarId}" timeIntervals="{path:'calc>Intervals', templateShareable: 'true'}"
-								backgroundColor="{= ${calc>CalendarId} === 'nwt' ? '#666' : '#ccc' }">
+							<gnt-cal:Calendar key="{calc>CalendarId}" timeIntervals="{path:'calc>Intervals', templateShareable: 'true'}" backgroundColor="{= ${calc>CalendarId} === 'nwt' ? '#666' : '#ccc' }">
 								<gnt-cal:TimeInterval startTime="{calc>StartDateTime}" endTime="{calc>EndDateTime}"/>
 							</gnt-cal:Calendar>
 						</gnt-cal:CalendarDefs>
@@ -384,7 +344,7 @@
 		<m:subHeader>
 			<m:Toolbar width="100%" id="toolbar2">
 				<m:content>
-						<m:Button icon="sap-icon://nav-back" press="goToHome"/>
+					<m:Button icon="sap-icon://nav-back" press="goToHome"/>
 					<m:SearchField width="50%" placeholder="Busqueda rapida" id="fastSearch" liveChange="onFastSearch"/>
 					<m:ToolbarSpacer id="spacer0"/>
 					<Button xmlns="sap.m" text="Exportar Licencias" id="button2" icon="sap-icon://action" press="onExport"/>

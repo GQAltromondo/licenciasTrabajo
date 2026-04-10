@@ -1,1 +1,226 @@
-sap.ui.define(["Transener/Operaciones/LicenciasTrabajo/utils/Gantt/DateHelper"],function(e){"use strict";return{formatData:function(e){var t=(new Date).getTimezoneOffset()*60*1e3;e.forEach(function(e){e.LunesI=new Date(e.Lunes.getTime()+e.LunesI.ms+t);e.LunesF=new Date(e.Lunes.getTime()+e.LunesF.ms+t);e.MartesI=new Date(e.Martes.getTime()+e.MartesI.ms+t);e.MartesF=new Date(e.Martes.getTime()+e.MartesF.ms+t);e.MiercolesI=new Date(e.Miercoles.getTime()+e.MiercolesI.ms+t);e.MiercolesF=new Date(e.Miercoles.getTime()+e.MiercolesF.ms+t);e.JuevesI=new Date(e.Jueves.getTime()+e.JuevesI.ms+t);e.JuevesF=new Date(e.Jueves.getTime()+e.JuevesF.ms+t);e.ViernesI=new Date(e.Viernes.getTime()+e.ViernesI.ms+t);e.ViernesF=new Date(e.Viernes.getTime()+e.ViernesF.ms+t);e.SabadoI=new Date(e.Sabado.getTime()+e.SabadoI.ms+t);e.SabadoF=new Date(e.Sabado.getTime()+e.SabadoF.ms+t);e.DomingoI=new Date(e.Domingo.getTime()+e.DomingoI.ms+t);e.DomingoF=new Date(e.Domingo.getTime()+e.DomingoF.ms+t)})},getDataOnlyWithDates:function(e){var t=this;var n=(new Date).getTimezoneOffset()*60*1e3;var a=[];e.map(function(e){var i=new Date(e.Lunes.getTime()+e.LunesI.ms+n);var m=new Date(e.Lunes.getTime()+e.LunesF.ms+n);var r=new Date(e.Martes.getTime()+e.MartesI.ms+n);var s=new Date(e.Martes.getTime()+e.MartesF.ms+n);var o=new Date(e.Miercoles.getTime()+e.MiercolesI.ms+n);var l=new Date(e.Miercoles.getTime()+e.MiercolesF.ms+n);var g=new Date(e.Jueves.getTime()+e.JuevesI.ms+n);var u=new Date(e.Jueves.getTime()+e.JuevesF.ms+n);var D=new Date(e.Viernes.getTime()+e.ViernesI.ms+n);var d=new Date(e.Viernes.getTime()+e.ViernesF.ms+n);var v=new Date(e.Sabado.getTime()+e.SabadoI.ms+n);var I=new Date(e.Sabado.getTime()+e.SabadoF.ms+n);var M=new Date(e.Domingo.getTime()+e.DomingoI.ms+n);var f=new Date(e.Domingo.getTime()+e.DomingoF.ms+n);if(t.getBooleanDiffInicioYFin(i,m)||t.getBooleanDiffInicioYFin(r,s)||t.getBooleanDiffInicioYFin(o,l)||t.getBooleanDiffInicioYFin(g,u)||t.getBooleanDiffInicioYFin(D,d)||t.getBooleanDiffInicioYFin(v,I)||t.getBooleanDiffInicioYFin(M,f)){a.push(e)}});return a},getBooleanDiffInicioYFin:function(e,t){if(e&&t){var n=e.getTime()-t.getTime();if(n!==0){return true}return false}else{return false}},getTimeLineOptions:function(){return{"1day":{innerInterval:{unit:"d3.time.day",span:1,range:90},largeInterval:{unit:"d3.time.month",span:1,format:"yyyyMMMM"},smallInterval:{unit:"d3.time.day",span:1,pattern:"d. HH:mm"}},"2day":{innerInterval:{unit:"d3.time.day",span:2,range:90},largeInterval:{unit:"d3.time.month",span:1,format:"yyyyMMMM"},smallInterval:{unit:"d3.time.day",span:2,pattern:"d. HH:mm"}},"4day":{innerInterval:{unit:"d3.time.day",span:4,range:90},largeInterval:{unit:"d3.time.month",span:1,format:"yyyyMMMM"},smallInterval:{unit:"d3.time.day",span:4,pattern:"d. HH:mm"}},"1week":{innerInterval:{unit:"d3.time.week",span:1,range:90},largeInterval:{unit:"d3.time.month",span:1,format:"yyyyMMMM"},smallInterval:{unit:"d3.time.week",span:1,pattern:"d. HH:mm"}},"2week":{innerInterval:{unit:"d3.time.week",span:2,range:90},largeInterval:{unit:"d3.time.month",span:1,format:"yyyyMMMM"},smallInterval:{unit:"d3.time.week",span:2,pattern:"d. HH:mm"}},"1month":{innerInterval:{unit:"d3.time.month",span:1,range:90},largeInterval:{unit:"d3.time.month",span:6,format:"yyyyMMMM"},smallInterval:{unit:"d3.time.month",span:1,pattern:"d. HH:mm"}},"2month":{innerInterval:{unit:"d3.time.month",span:2,range:90},largeInterval:{unit:"d3.time.month",span:6,format:"yyyyMMMM"},smallInterval:{unit:"d3.time.month",span:2,pattern:"d. HH:mm"}}}},configAxisTimeStrategy:function(e,t,n,a,i){let m=this.formatDateStrategyTime(n);let r=this.formatDateStrategyTime(a);let s=e.getTimeLineOptions();e.setTimeLineOptions(Object.assign({},s,t));let o=e.getTotalHorizon();o.setStartTime(m);o.setEndTime(r);e.setTotalHorizon(o);let l=e.getVisibleHorizon();l.setStartTime(m);l.setEndTime(r);e.setVisibleHorizon(o);e.setZoomLevel(i)},formatDateStrategyTime:function(t){return e.formatDatePattern(t,"yyyyMMddHHmmss")}}});
+sap.ui.define([
+	"Transener/Operaciones/LicenciasTrabajo/utils/Gantt/DateHelper"
+], function (DateHelper) {
+	"use strict";
+
+	return {
+
+		formatData: function (registros) {
+			var timeZoneOffsetMs = new Date().getTimezoneOffset() * 60 * 1000;
+
+			registros.forEach(function (registro) {
+				registro.LunesI = new Date(registro.Lunes.getTime() + registro.LunesI.ms + timeZoneOffsetMs);
+				registro.LunesF = new Date(registro.Lunes.getTime() + registro.LunesF.ms + timeZoneOffsetMs);
+				registro.MartesI = new Date(registro.Martes.getTime() + registro.MartesI.ms + timeZoneOffsetMs);
+				registro.MartesF = new Date(registro.Martes.getTime() + registro.MartesF.ms + timeZoneOffsetMs);
+				registro.MiercolesI = new Date(registro.Miercoles.getTime() + registro.MiercolesI.ms + timeZoneOffsetMs);
+				registro.MiercolesF = new Date(registro.Miercoles.getTime() + registro.MiercolesF.ms + timeZoneOffsetMs);
+				registro.JuevesI = new Date(registro.Jueves.getTime() + registro.JuevesI.ms + timeZoneOffsetMs);
+				registro.JuevesF = new Date(registro.Jueves.getTime() + registro.JuevesF.ms + timeZoneOffsetMs);
+				registro.ViernesI = new Date(registro.Viernes.getTime() + registro.ViernesI.ms + timeZoneOffsetMs);
+				registro.ViernesF = new Date(registro.Viernes.getTime() + registro.ViernesF.ms + timeZoneOffsetMs);
+				registro.SabadoI = new Date(registro.Sabado.getTime() + registro.SabadoI.ms + timeZoneOffsetMs);
+				registro.SabadoF = new Date(registro.Sabado.getTime() + registro.SabadoF.ms + timeZoneOffsetMs);
+				registro.DomingoI = new Date(registro.Domingo.getTime() + registro.DomingoI.ms + timeZoneOffsetMs);
+				registro.DomingoF = new Date(registro.Domingo.getTime() + registro.DomingoF.ms + timeZoneOffsetMs);
+
+			});
+		},
+
+		getDataOnlyWithDates: function (registros) {
+			var that = this;
+			var timeZoneOffsetMs = new Date().getTimezoneOffset() * 60 * 1000;
+			var registrosFiltrados = [];
+
+			registros.map(function (item) {
+				var LunesI = new Date(item.Lunes.getTime() + item.LunesI.ms + timeZoneOffsetMs);
+				var LunesF = new Date(item.Lunes.getTime() + item.LunesF.ms + timeZoneOffsetMs);
+				var MartesI = new Date(item.Martes.getTime() + item.MartesI.ms + timeZoneOffsetMs);
+				var MartesF = new Date(item.Martes.getTime() + item.MartesF.ms + timeZoneOffsetMs);
+				var MiercolesI = new Date(item.Miercoles.getTime() + item.MiercolesI.ms + timeZoneOffsetMs);
+				var MiercolesF = new Date(item.Miercoles.getTime() + item.MiercolesF.ms + timeZoneOffsetMs);
+				var JuevesI = new Date(item.Jueves.getTime() + item.JuevesI.ms + timeZoneOffsetMs);
+				var JuevesF = new Date(item.Jueves.getTime() + item.JuevesF.ms + timeZoneOffsetMs);
+				var ViernesI = new Date(item.Viernes.getTime() + item.ViernesI.ms + timeZoneOffsetMs);
+				var ViernesF = new Date(item.Viernes.getTime() + item.ViernesF.ms + timeZoneOffsetMs);
+				var SabadoI = new Date(item.Sabado.getTime() + item.SabadoI.ms + timeZoneOffsetMs);
+				var SabadoF = new Date(item.Sabado.getTime() + item.SabadoF.ms + timeZoneOffsetMs);
+				var DomingoI = new Date(item.Domingo.getTime() + item.DomingoI.ms + timeZoneOffsetMs);
+				var DomingoF = new Date(item.Domingo.getTime() + item.DomingoF.ms + timeZoneOffsetMs);
+
+				if (that.getBooleanDiffInicioYFin(LunesI, LunesF) || that.getBooleanDiffInicioYFin(MartesI, MartesF) || that.getBooleanDiffInicioYFin(MiercolesI, MiercolesF) ||
+					that.getBooleanDiffInicioYFin(JuevesI, JuevesF) || that.getBooleanDiffInicioYFin(ViernesI, ViernesF) || that.getBooleanDiffInicioYFin(SabadoI, SabadoF) ||
+					that.getBooleanDiffInicioYFin(DomingoI, DomingoF)
+				) {
+					registrosFiltrados.push(item);
+				}
+			});
+			return registrosFiltrados;
+		},
+
+		getBooleanDiffInicioYFin: function (inicio, fin) {
+
+			//GQ - Modifi Gantt
+			if (inicio && fin) {
+				return true
+			}
+			// if(inicio && fin){
+			// 	var dif = inicio.getTime() - fin.getTime();
+
+			// 	if ( dif !== 0 ) {
+			// 		return true;
+			// 	}
+			// 	return false;
+			// }else {
+			// 	return false;
+			// }
+		},
+
+		getTimeLineOptions: function () {
+			return {
+				"1day": {
+					innerInterval: {
+						unit: "d3.time.day",
+						span: 1,
+						range: 90
+					},
+					largeInterval: {
+						unit: "d3.time.month",
+						span: 1,
+						format: "yyyyMMMM"
+					},
+					smallInterval: {
+						unit: "d3.time.day",
+						span: 1,
+						pattern: "d. HH:mm"
+					}
+				},
+				"2day": {
+					innerInterval: {
+						unit: "d3.time.day",
+						span: 2,
+						range: 90
+					},
+					largeInterval: {
+						unit: "d3.time.month",
+						span: 1,
+						format: "yyyyMMMM"
+					},
+					smallInterval: {
+						unit: "d3.time.day",
+						span: 2,
+						pattern: "d. HH:mm"
+					}
+				},
+				"4day": {
+					innerInterval: {
+						unit: "d3.time.day",
+						span: 4,
+						range: 90
+					},
+					largeInterval: {
+						unit: "d3.time.month",
+						span: 1,
+						format: "yyyyMMMM"
+					},
+					smallInterval: {
+						unit: "d3.time.day",
+						span: 4,
+						pattern: "d. HH:mm"
+					}
+				},
+				"1week": {
+					innerInterval: {
+						unit: "d3.time.week",
+						span: 1,
+						range: 90
+					},
+					largeInterval: {
+						unit: "d3.time.month",
+						span: 1,
+						format: "yyyyMMMM"
+					},
+					smallInterval: {
+						unit: "d3.time.week",
+						span: 1,
+						pattern: "d. HH:mm"
+					}
+				},
+				"2week": {
+					innerInterval: {
+						unit: "d3.time.week",
+						span: 2,
+						range: 90
+					},
+					largeInterval: {
+						unit: "d3.time.month",
+						span: 1,
+						format: "yyyyMMMM"
+					},
+					smallInterval: {
+						unit: "d3.time.week",
+						span: 2,
+						pattern: "d. HH:mm"
+					}
+				},
+				"1month": {
+					innerInterval: {
+						unit: "d3.time.month",
+						span: 1,
+						range: 90
+					},
+					largeInterval: {
+						unit: "d3.time.month",
+						span: 6,
+						format: "yyyyMMMM"
+					},
+					smallInterval: {
+						unit: "d3.time.month",
+						span: 1,
+						pattern: "d. HH:mm"
+					}
+				},
+				"2month": {
+					innerInterval: {
+						unit: "d3.time.month",
+						span: 2,
+						range: 90
+					},
+					largeInterval: {
+						unit: "d3.time.month",
+						span: 6,
+						format: "yyyyMMMM"
+					},
+					smallInterval: {
+						unit: "d3.time.month",
+						span: 2,
+						pattern: "d. HH:mm"
+					}
+				},
+			};
+		},
+
+		configAxisTimeStrategy: function (axisTimeStrategy, timeLineOptions, startDate, endDate, zoomLevel) {
+			let startTime = this.formatDateStrategyTime(startDate);
+			let endTime = this.formatDateStrategyTime(endDate);
+			let oldTimeConfig = axisTimeStrategy.getTimeLineOptions();
+			axisTimeStrategy.setTimeLineOptions(Object.assign({}, oldTimeConfig, timeLineOptions));
+
+			let totalHorizon = axisTimeStrategy.getTotalHorizon();
+			totalHorizon.setStartTime(startTime);
+			totalHorizon.setEndTime(endTime);
+			axisTimeStrategy.setTotalHorizon(totalHorizon);
+
+			let visibleHorizon = axisTimeStrategy.getVisibleHorizon();
+			visibleHorizon.setStartTime(startTime);
+			visibleHorizon.setEndTime(endTime);
+			axisTimeStrategy.setVisibleHorizon(totalHorizon);
+			axisTimeStrategy.setZoomLevel(zoomLevel);
+		},
+
+		formatDateStrategyTime: function (date) {
+			return DateHelper.formatDatePattern(date, "yyyyMMddHHmmss")
+		}
+
+	};
+});

@@ -28,18 +28,21 @@ sap.ui.define([
 	return Controller.extend("Transener.Operaciones.LicenciasTrabajo.views.Main.Gantt.Gantt", {
 
 		onInit: function () {
-
-			var search = location.hash.split("?")[1];
-			var url = new URL(location.origin + "?" + search);
-			this.empresa = url.searchParams.get("Empresa"); //TODO sacar este hardcodeo, esto es solo para probar la app localmente
-			//this.empresa = "100"; // TODO dejar la linea de arriba antes de commitear
-			const oTreeTable = this.byId("ganntTable")
-
+			this.getOwnerComponent().getRouter()
+				.getRoute("Gantt")
+				.attachPatternMatched(this._onRouteMatched, this);
 			var filtersModel = new sap.ui.model.json.JSONModel();
 			this.getView().setModel(filtersModel, "filters");
 
 		},
+		_onRouteMatched: function (oEvent) {
+			var sEmpresa = oEvent.getParameter("arguments").empresa;
+			this.empresa = sEmpresa; // Asignar el valor a la propiedad de la instancia
+			console.log("ID recibido:", sEmpresa);
+		},
+
 		onAfterRendering: function () {
+
 			this.prepareSelectsModel();
 			this.loadListModels();
 			this.loadRegiones(this.empresa);
@@ -58,19 +61,23 @@ sap.ui.define([
 
 		onRowSelection: function (oEvent) {
 			var oTable = this.byId("ganntTable");
-
-			var iSelectedIndex = oTable.getSelectedIndex();
-			if (iSelectedIndex !== -1) {
-				var oContext = oTable.getContextByIndex(iSelectedIndex);
-				var oSelectedRowData = oContext.getObject();
+		
+			var aSelectedIndices = oTable.getSelectedIndices();
+			if (aSelectedIndices.length > 0) {
+				var aSelectedData = aSelectedIndices.map(function(iIndex) {
+					var oContext = oTable.getContextByIndex(iIndex);
+					return oContext.getObject();
+				});
+		
 				var oTempSelectionModel = new sap.ui.model.json.JSONModel();
-				oTempSelectionModel.setData([oSelectedRowData]);
+				oTempSelectionModel.setData(aSelectedData);
 				this.getView().setModel(oTempSelectionModel, "TempSeleccionado");
-
+		
 			} else {
-				sap.m.MessageToast.show("No row selected.");
+				sap.m.MessageToast.show("No rows selected.");
 			}
 		},
+		
 
 		loadLicStatus: function () {
 
@@ -110,18 +117,22 @@ sap.ui.define([
 			});
 			this.getView().setModel(oModel, "Regiones");
 		},
-		onFormatRectangle: function (inicio, fin) {
-			if (inicio && fin) {
-				var dif = fin.getTime() - inicio.getTime();
+		// onFormatRectangle: function (inicio, fin) {
+		// 	if (inicio && fin) {
+		// 		var dif = fin.getTime() - inicio.getTime();
 
-				if (dif !== 0) {
-					return true;
-				}
-				return false;
-			} else {
-				return false;
-			}
-		},
+		// 		if (dif !== 0) {
+		// 			return true;
+		// 		}
+		// 		return false;
+		// 	} else {
+		// 		return false;
+		// 	}
+		// },
+		onFormatRectangle: function (inicio, fin) {
+  return !!(inicio && fin);
+},
+
 		getGanttData: function () {
 			//	this.getView().byId("FilterPanel").setProperty("expanded", false);
 
@@ -205,9 +216,10 @@ sap.ui.define([
 		formatFill: function (EnServicio) {
 
 			if (EnServicio === "") {
-				return "#34e531";
-			} else {
-				return "#e54431";
+				return "#e54431"; // Rojo
+			}
+			if (EnServicio === "X") {
+				return "#34e531"; //Verde
 			}
 		},
 		prepareSelectsModel: function () {
@@ -382,9 +394,9 @@ sap.ui.define([
 			var iMonthHasta = daysInBetWeen.fechahasta.getMonth() + 1;
 
 			var fechahasta = daysInBetWeen.fechahasta.getFullYear().toString() + iMonthHasta.toString().padStart(2,
-				"00") + daysInBetWeen.fechahasta.getDate().toString().padStart(2,"00");
+				"00") + daysInBetWeen.fechahasta.getDate().toString().padStart(2, "00");
 			var fechadesde = daysInBetWeen.fechadesde.getFullYear().toString() + iMonthDesde.toString().padStart(2,
-				"00") + daysInBetWeen.fechadesde.getDate().toString().padStart(2,"00");
+				"00") + daysInBetWeen.fechadesde.getDate().toString().padStart(2, "00");
 			this.reporteSemanalCammesa(fechadesde, fechahasta, this.empresa, daysInBetWeen, aData).then((oMessage) => {
 				BusyDialogHelper.close();
 				sap.m.MessageToast.show(
@@ -642,6 +654,20 @@ sap.ui.define([
 			}
 			return dateArray;
 		},
+		ganttEndTimeMin: function (dI, dF) {
+  if (!dI || !dF) return dF;
+
+  const i = (dI instanceof Date) ? dI : new Date(dI);
+  const f = (dF instanceof Date) ? dF : new Date(dF);
+
+  if (isNaN(i) || isNaN(f)) return dF;
+
+  // si son iguales => “barra mínima” visible
+  if (i.getTime() === f.getTime()) {
+    return new Date(f.getTime() + 60 * 1000); // 1 minuto (ajustá a gusto)
+  }
+  return f;
+},
 		// fin funcionalidad export
 	});
 });

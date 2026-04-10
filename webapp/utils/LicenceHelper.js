@@ -218,6 +218,18 @@ sap.ui.define([
 				oData.Datelicencia = FormatHelper.formatDatesGMT(oData.Datelicencia)
 			})
 		},
+		formatUTCDatesHab: function (aData) {
+			aData.forEach((oData) => {
+				if (oData.Datehab) {
+					// Convertir Datehab una vez y usar el resultado para ambos campos
+					const convertedDate = FormatHelper.formatDatesGMT(oData.Datehab);
+					// Convertir Datehab directamente (para Inhibición/Habilitación que usan Datehab en la UI)
+					oData.Datehab = convertedDate;
+					// También crear Datelicencia (para Colocación/Retiro que usan Datelicencia en la UI)
+					oData.Datelicencia = convertedDate;
+				}
+			})
+		},
 
 		generateSuspentionReanudation: function (oLicense) {
 			var aSuspention = [];
@@ -712,146 +724,304 @@ sap.ui.define([
 				Turno: aTurnos
 			});
 		},
-		generatePlacementRemoval: function (oLicense) {
-			var oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
-			var aDataTODOS = oModel.getProperty("/Todos");
-
-			var aColocaciones = [];
-			var aRetiros = [];
-
-			var oColocacion = {
-				Empresa: oLicense.Empresa,
-				Datehab: new Date() > FormatHelper.formatDatesGMT(oLicense.Solbeg) && new Date() < FormatHelper.formatDatesGMT(oLicense.Solend) ?
-					new Date() : oLicense.Solend,
-				Id: oLicense.Id,
-				Time: new Date(),
-				Coment: "",
-				Tplnr: ""
-			};
-			var oRetiro = {
-				Empresa: oLicense.Empresa,
-				Datehab: new Date() > FormatHelper.formatDatesGMT(oLicense.Solbeg) && new Date() < FormatHelper.formatDatesGMT(oLicense.Solend) ?
-					new Date() : oLicense.Solend,
-				Id: oLicense.Id,
-				Time: new Date(),
-				Coment: "",
-				Tplnr: "",
-			};
-
-			if (oLicense.ColocacionPAT_nav.length > 0) {
-				let aCloneColocaciones = jQuery.extend(true, [], oLicense.ColocacionPAT_nav);
-				aColocaciones = aColocaciones.concat(aCloneColocaciones);
-				aColocaciones.push(oColocacion)
-
-			} else {
-				aColocaciones = [oColocacion]
-			}
-
-			//	this.formatUTCDates(aColocaciones);
-
-			if (oLicense.RetiroPAT_nav.length > 0) {
-				let aCloneRetiros = jQuery.extend(true, [], oLicense.RetiroPAT_nav);
-				aRetiros = aRetiros.concat(aCloneRetiros);
-				aRetiros.push(oRetiro)
-
-			} else {
-				aRetiros = [oRetiro]
-
-			}
-			//	this.formatUTCDates(aRetiros);
-
-			AppManagementHelper.getModel("RetiroTableJsonModel").setData({
-				Retiro: aRetiros
-			});
-			AppManagementHelper.getModel("ColocacionTableJsonModel").setData({
-				Colocacion: aColocaciones
-			});
-		},
 		generateInhibicionHabilitacion: function (oLicense) {
-			var oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
-			var aDataTODOS = oModel.getProperty("/Todos");
+			const aInhPrev = oLicense.InhibicionRecierre_nav || [];
+			const aHabPrev = oLicense.HabilitacionRecierre_nav || [];
+			const now = new Date();
+			const cloneArr = (a) => jQuery.extend(true, [], a || []);
+			const cloneObj = (o) => jQuery.extend(true, {}, o || {});
 
-			var aInhibicion = [];
+			const genLocalId = () => ("LID_" + Date.now() + "_" + Math.floor(Math.random() * 100000));
+
+			const toDateStr = (v) => {
+				if (!v) return "";
+				const d = (v instanceof Date) ? v : new Date(v);
+				if (isNaN(d.getTime())) return String(v);
+				const dd = String(d.getDate()).padStart(2, "0");
+				const mm = String(d.getMonth() + 1).padStart(2, "0");
+				const yy = d.getFullYear();
+				return `${yy}-${mm}-${dd}`;
+			};
+
+			const toTimeStr = (v) => {
+				if (!v) return "";
+				const d = (v instanceof Date) ? v : new Date(v);
+				if (isNaN(d.getTime())) return String(v);
+				const hh = String(d.getHours()).padStart(2, "0");
+				const mi = String(d.getMinutes()).padStart(2, "0");
+				return `${hh}:${mi}`;
+			};
+
+			// 🔑 clave natural para emparejar INH<->HAB (si falla el match, achicá campos)
+			const makeKey = (o) => ([
+				o.Id || "",
+				o.Empresa || "",
+				toDateStr(o.Datehab),
+				toTimeStr(o.Time),
+				String(o.Tplnr || ""),
+				String(o.Jt || ""),
+				String(o.Pat || ""),
+				String(o.Tecet || "")
+			].join("|"));
+
+			const markPrevInh = (o) => {
+				o.showPrevValue = true;
+				o.fromBackend = true;
+				o.isNew = false;
+				o.enabled = false;
+				o.canSend = false;
+				return o;
+			};
+
+			const markPrevHab = (o) => {
+				o.showPrevValue = true;
+				o.fromBackend = true;
+				o.isNew = false;
+				o.isMirror = false;
+				o.enabled = false;
+				o.enabledTecet = false;
+				o.canSend = false;
+				return o;
+			};
+
+			// ===== 1) INHIBICIONES backend + 1 nueva =====
+			const aInhibicion = cloneArr(aInhPrev).map((o) => {
+				const c = markPrevInh(o);
+				c.__lid = c.__lid || ("BK_" + makeKey(c));
+				return c;
+			});
+
+			const oNewInh = {
+				__lid: genLocalId(),
+				Id: oLicense.Id,
+				Empresa: oLicense.Empresa,
+				sameDayValidation: true,
+				Datehab: now,
+				Time: now,
+				Tplnr: "",
+				Tecet: "",
+				Jt: AppManagementHelper.getStringUserLegacy(),
+				Coment: "",
+				enabled: true,
+				showPrevValue: false,
+				fromBackend: false,
+				isNew: true,
+				canSend: true
+			};
+
+			aInhibicion.push(oNewInh);
+
+			// ===== 2) HABILITACIONES (por cada inhibición backend creo pareja) =====
+			const aInhBackend = aInhibicion.filter(i => !i.isNew);
+
+			// Indexar habilitaciones backend por IdFila
+			var mHabByIdFila = {};
+			cloneArr(aHabPrev).forEach(function (h) {
+				var sId = String(h.IdFila != null ? h.IdFila : "");
+				if (sId !== "") {
+					if (!mHabByIdFila[sId]) mHabByIdFila[sId] = [];
+					mHabByIdFila[sId].push(h);
+				}
+			});
+
 			var aHabilitacion = [];
+			var aActiveInhEts = [];
+			aInhBackend.forEach(function (oInh) {
+				var sId = String(oInh.IdFila != null ? oInh.IdFila : "");
 
-			if (oLicense.Period === "C") {
-				// #513 -> Si la licencia tiene inhibiciones:
-
-				//Revisar y agregar .length >0
-				if (oLicense.InhibicionRecierre_nav.length > 0) {
-					let aCloneInhibiciones = jQuery.extend(true, [], oLicense.InhibicionRecierre_nav);
-
-					aInhibicion = aInhibicion.concat(aCloneInhibiciones);
+				if (sId !== "" && mHabByIdFila[sId] && mHabByIdFila[sId].length) {
+					// Ya existe habilitación en backend → mostrar deshabilitada
+					var oHab = markPrevHab(cloneObj(mHabByIdFila[sId].shift()));
+					oHab.__lid = oInh.__lid;
+					oHab.enabledTecet = false;
+					aHabilitacion.push(oHab);
+					return;
 				}
 
-				if (oLicense.HabilitacionRecierre_nav.length > 0) {
-					let aCloneHabilitaciones = jQuery.extend(true, [], oLicense.HabilitacionRecierre_nav);
-
-					aHabilitacion = aHabilitacion.concat(aCloneHabilitaciones);
+				// No existe habilitación → ET activa (inhibición sin habilitar)
+				if (oInh.Tplnr && aActiveInhEts.indexOf(oInh.Tplnr) === -1) {
+					aActiveInhEts.push(oInh.Tplnr);
 				}
-				//this.formatUTCDates(aInhibicion);
 
-				var oHabilitacion = {
-					Id: oLicense.Id,
-					Empresa: oLicense.Empresa,
-					Datehab: new Date() > FormatHelper.formatDatesGMT(oLicense.Solbeg) && new Date() < FormatHelper.formatDatesGMT(oLicense.Solend) ?
-						new Date() : oLicense.Solend,
-					Time: new Date(),
-					Tplnr: "",
-					Coment: "",
-				};
-				var oInhibicion = {
-					Id: oLicense.Id,
-					Empresa: oLicense.Empresa,
-					Datehab: new Date() > FormatHelper.formatDatesGMT(oLicense.Solbeg) && new Date() < FormatHelper.formatDatesGMT(oLicense.Solend) ?
-						new Date() : oLicense.Solend,
-					Time: new Date(),
-					Tplnr: "",
-					Coment: "",
-				};
-				//Revisar y agregar .length
+				// Crear mirror editable
+				var oMirror = cloneObj(oInh);
+				oMirror.Coment = "";
+				oMirror.isMirror = true;
+				oMirror.fromBackend = false;
+				oMirror.showPrevValue = false;
+				oMirror.enabled = true;
+				oMirror.enabledTecet = true;
+				oMirror.canSend = true;
+				oMirror.Datehab = now;
+				oMirror.Time = now;
+				oMirror.__lid = oInh.__lid;
+				aHabilitacion.push(oMirror);
+			});
 
-				aHabilitacion.push(oHabilitacion);
-				aInhibicion.push(oInhibicion);
-
-			} else {
-				if (oLicense.InhibicionRecierre_nav.length > 0) {
-					let aCloneInhibiciones = jQuery.extend(true, [], oLicense.InhibicionRecierre_nav);
-
-					aInhibicion = aInhibicion.concat(aCloneInhibiciones);
-				}
-				if (oLicense.HabilitacionRecierre_nav.length > 0) {
-					let aCloneHabilitaciones = jQuery.extend(true, [], oLicense.HabilitacionRecierre_nav);
-					aHabilitacion = aHabilitacion.concat(aCloneHabilitaciones);
-				}
-				//	this.formatUTCDates(aInhibicion);
-				aInhibicion.push({
-					Empresa: oLicense.Empresa,
-					Datehab: new Date() > oLicense.Solbeg && new Date() < oLicense.Solend ? new Date() : oLicense.Solend,
-					Id: oLicense.Id,
-					Time: new Date(),
-					Commen: "",
-					Tplnr: '',
-
-				});
-				aHabilitacion.push({
-					Empresa: oLicense.Empresa,
-					Datehab: new Date() > oLicense.Solbeg && new Date() < oLicense.Solend ? new Date() : oLicense.Solend,
-					Id: oLicense.Id,
-					Time: new Date(),
-					Commen: "",
-					Tplnr: '',
-
-				});
+			// si tenés una función equivalente para fechas de recierre, usala.
+			// si Datehab/Time viene igual que PAT, podés reutilizar:
+			if (typeof this.formatUTCDatesHab === "function") {
+				this.formatUTCDatesHab(aInhibicion);
+				this.formatUTCDatesHab(aHabilitacion);
 			}
 
-			AppManagementHelper.getModel("HabilitacionTableJsonModel").setData({
-				Habilitacion: aHabilitacion
-			});
-			AppManagementHelper.getModel("InhibicionTableJsonModel").setData({
-				Inhibicion: aInhibicion
-			});
+			AppManagementHelper.getModel("HabilitacionTableJsonModel").setData({ Habilitacion: aHabilitacion });
+			AppManagementHelper.getModel("InhibicionTableJsonModel").setData({ Inhibicion: aInhibicion, activeEts: aActiveInhEts });
 		},
+
+
+		generatePlacementRemoval: function (oLicense) {
+			const aColPrev = oLicense.ColocacionPAT_nav || [];
+			const aRetPrev = oLicense.RetiroPAT_nav || [];
+			var aDataTODOS = AppManagementHelper.getModel("PersonalHabilitadoModel").getProperty("/Todos");
+
+			const cloneArr = (a) => jQuery.extend(true, [], a || []);
+			const cloneObj = (o) => jQuery.extend(true, {}, o || {});
+
+			const genLocalId = () => ("LID_" + Date.now() + "_" + Math.floor(Math.random() * 100000));
+
+			const toDateStr = (v) => {
+				if (!v) return "";
+				const d = (v instanceof Date) ? v : new Date(v);
+				if (isNaN(d.getTime())) return String(v);
+				const dd = String(d.getDate()).padStart(2, "0");
+				const mm = String(d.getMonth() + 1).padStart(2, "0");
+				const yy = d.getFullYear();
+				return `${yy}-${mm}-${dd}`;
+			};
+
+			const toTimeStr = (v) => {
+				if (!v) return "";
+				const d = (v instanceof Date) ? v : new Date(v);
+				if (isNaN(d.getTime())) return String(v);
+				const hh = String(d.getHours()).padStart(2, "0");
+				const mi = String(d.getMinutes()).padStart(2, "0");
+				return `${hh}:${mi}`;
+			};
+
+			// 🔑 clave completa para __lid (incluye fecha para unicidad)
+			var makeKey = function (o) {
+				if (!o) return "";
+				return [
+					o.Id || "",
+					o.Empresa || "",
+					toDateStr(o.Datehab),
+					toTimeStr(o.Time),
+					String(o.Tplnr || ""),
+					String(o.Pat || "")
+				].join("|");
+			};
+
+			const markPrevCol = (o) => {
+				o.showPrevValue = true;
+				o.fromBackend = true;
+				o.isNew = false;
+				o.enabled = false;
+				o.canSend = false;
+				return o;
+			};
+
+			const markPrevRet = (o) => {
+				o.showPrevValue = true;
+				o.fromBackend = true;
+				o.isNew = false;
+				o.isMirror = false;
+				o.enabled = false;
+				o.enabledTecet = false;
+				o.canSend = false;
+				return o;
+			};
+
+			// ===== 1) COLOCACIONES backend + 1 nueva =====
+			const aColocaciones = cloneArr(aColPrev).map((o) => {
+				const c = markPrevCol(o);
+				c.__lid = c.__lid || ("BK_" + makeKey(c));
+
+				c.Jt = aDataTODOS.find(oItem => oItem.Legajo === c.Jt);
+				c.CotCotdt = AppManagementHelper.getStringUserLegacy();
+				return c;
+			});
+			const now = new Date();
+
+			const oNewCol = {
+				__lid: genLocalId(),
+				Id: oLicense.Id,
+				Empresa: oLicense.Empresa,
+				sameDayValidation: true,
+				Datehab: now,
+				Time: now,
+				Tplnr: "",
+				Pat: null,
+				Tecet: "",
+				Jt: AppManagementHelper.getStringUserLegacy(),
+				CotCotdt: AppManagementHelper.getStringUserLegacy(),
+				Coment: "",
+				enabled: true,
+				showPrevValue: false,
+				fromBackend: false,
+				isNew: true,
+				canSend: true
+			};
+
+			aColocaciones.push(oNewCol);
+
+			// ===== 2) RETIROS =====
+			var aColBackend = aColocaciones.filter(function (c) { return !c.isNew; });
+
+			// Indexar retiros backend por IdFila
+			var mRetByIdFila = {};
+			cloneArr(aRetPrev).forEach(function (r) {
+				var sId = String(r.IdFila != null ? r.IdFila : "");
+				if (sId !== "") {
+					if (!mRetByIdFila[sId]) mRetByIdFila[sId] = [];
+					mRetByIdFila[sId].push(r);
+				}
+			});
+
+			var aRetiros = [];
+			var aActiveColEts = [];
+			aColBackend.forEach(function (oCol) {
+				var sId = String(oCol.IdFila != null ? oCol.IdFila : "");
+
+				if (sId !== "" && mRetByIdFila[sId] && mRetByIdFila[sId].length) {
+					// Ya existe retiro en backend → mostrar deshabilitado
+					var oRet = markPrevRet(cloneObj(mRetByIdFila[sId].shift()));
+					oRet.__lid = oCol.__lid;
+					oRet.enabledTecet = false;
+					aRetiros.push(oRet);
+					return;
+				}
+
+				// No existe retiro → ET activa (colocación sin retirar)
+				if (oCol.Tplnr && aActiveColEts.indexOf(oCol.Tplnr) === -1) {
+					aActiveColEts.push(oCol.Tplnr);
+				}
+
+				// Crear instancia para poder retirar
+				var oMirror = cloneObj(oCol);
+				oMirror.Coment = "";
+				oMirror.isMirror = true;
+				oMirror.fromBackend = false;
+				oMirror.showPrevValue = false;
+				oMirror.enabled = true;
+				oMirror.enabledTecet = true;
+				oMirror.canSend = true;
+				oMirror.Datehab = now;
+				oMirror.Time = now;
+				oMirror.__lid = oCol.__lid;
+				aRetiros.push(oMirror);
+			});
+
+			this.formatUTCDatesHab(aColocaciones);
+			this.formatUTCDatesHab(aRetiros);
+
+			AppManagementHelper.getModel("ColocacionTableJsonModel").setData({ Colocacion: aColocaciones, activeEts: aActiveColEts });
+			AppManagementHelper.getModel("RetiroTableJsonModel").setData({ Retiro: aRetiros });
+		},
+
+
+
+
 
 		setPersonalHabilitadoParaCboEntraga: function (oLicense) {
 			var oModel = AppManagementHelper.getModel("PersonalHabilitadoModel");
@@ -906,6 +1076,8 @@ sap.ui.define([
 				var oLastJefeTransferido = aDataTODOS.find(oItem => oItem.Legajo === oLastTranfer.Jefetra);
 				aOptions.push(oLastJefeTransferido);
 			}
+
+			console.log("Options", aOptions)
 
 			oModel.setProperty("/CboJefeCancelacion", aOptions);
 		},
@@ -976,11 +1148,11 @@ sap.ui.define([
 				aDevolution.forEach(e => e.sameDayValidation = true);
 			}
 		},
-		checkIfPlacementHasMade: function (aDelivery, aDevolution) {
+		checkIfPlacementHasMade: function (aColocaciones, aRetiros) {
 			//testing!!
 			//TODO verificar con juan si esto es lo que quieren
-			aDelivery.forEach(e => e.sameDayValidation = true);
-			aDevolution.forEach(e => e.sameDayValidation = true);
+			aColocaciones.forEach(e => e.sameDayValidation = true);
+			aRetiros.forEach(e => e.sameDayValidation = true);
 			return;
 			//fin
 			var sActualDate = new Date().toISOString().split("T")[0];
@@ -1006,11 +1178,11 @@ sap.ui.define([
 				aDevolution.forEach(e => e.sameDayValidation = true);
 			}
 		},
-		checkIfInhibitionHasMade: function (aDelivery, aDevolution) {
+		checkIfInhibitionHasMade: function (aInhibicion, aHabilitacion) {
 			//testing!!
 			//TODO verificar con juan si esto es lo que quieren
-			aDelivery.forEach(e => e.sameDayValidation = true);
-			aDevolution.forEach(e => e.sameDayValidation = true);
+			aInhibicion.forEach(e => e.sameDayValidation = true);
+			aHabilitacion.forEach(e => e.sameDayValidation = true);
 			return;
 			//fin
 			var sActualDate = new Date().toISOString().split("T")[0];
@@ -1053,6 +1225,22 @@ sap.ui.define([
 				case "S":
 					return sSubstatus === "R" || sSubstatus === "E";
 				case "F":
+					return false;
+			}
+
+		},
+
+		getEnabledEstatusPlacement: function (sPeriod, sSubstatus, sType) {
+			// Similar a entrega: si estoy iniciando, permito Colocación solo si no hay subestado.
+			// Retiro se permite si el subestado actual es Colocación.
+			// Finalización no habilita nada.
+
+			switch (sType) {
+				case "C": // Colocación
+					return sSubstatus === "R" || sSubstatus === "";
+				case "R": // Retiro
+					return sSubstatus === "C";
+				default:
 					return false;
 			}
 

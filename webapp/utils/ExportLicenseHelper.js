@@ -458,7 +458,7 @@ sap.ui.define([
 			return content;
 		},
 		createNormalPDFBody: function (content, licencia, oTextos,
-			// Colocaciones, Retiros, Habilitaciones, Inhibiciones,
+			Colocaciones, Retiros, Habilitaciones, Inhibiciones,
 			Entregas,
 			Devoluciones, Suspensiones, Reanudaciones,
 			Observaciones, Coordinaciones, Tramitaciones,
@@ -1871,284 +1871,331 @@ sap.ui.define([
 			});
 			return content;
 		},
-		// createColocacionesRetiros: function (licencia, Colocaciones, content, Retiros) {
-		// 	var tableFillColor = '#c4bd96';
-		// 	var tableFillColor2 = '#2980ba';
-		// 	content.push({
-		// 		table: {
-		// 			widths: ['*'],
-		// 			body: [
-		// 				[{
-		// 					text: "COLOCACION y RETIRO DE PAT",
-		// 					alignment: 'center',
-		// 					fillColor: tableFillColor
-		// 				}]
-		// 			]
-		// 		},
-		// 		margin: [0, 0, 0, 0]
-		// 	}, {
-		// 		table: {
-		// 			widths: ['*', '*'],
-		// 			body: [
-		// 				[{
-		// 					text: "Colocacion",
-		// 					alignment: 'center',
-		// 					fontSize: 10,
-		// 					fillColor: tableFillColor2
-		// 				}, {
-		// 					text: "Retiro",
-		// 					alignment: 'center',
-		// 					fontSize: 10,
-		// 					fillColor: tableFillColor2
-		// 				},]
-		// 			]
-		// 		}
-		// 	});
-		// 	var colocacionTableRow = [
-		// 		[{
-		// 			text: "Fecha",
-		// 			alignment: 'center',
-		// 			bold: true,
-		// 			fontSize: 8,
-		// 			border: [false, false, false, false]
-		// 		}, {
-		// 			text: "ET",
-		// 			alignment: 'center',
-		// 			bold: true,
-		// 			fontSize: 8,
-		// 			border: [false, false, false, false]
-		// 		}, {
-		// 			text: "Comentarios ",
-		// 			alignment: 'center',
-		// 			bold: true,
-		// 			fontSize: 8,
-		// 			border: [false, false, false, false]
-		// 		}]
-		// 	];
-		// 	var retiroTableRow = [
-		// 		[{
-		// 			text: "Fecha",
-		// 			alignment: 'center',
-		// 			bold: true,
-		// 			fontSize: 8,
-		// 			border: [true, false, false, false]
-		// 		}, {
-		// 			text: "ET",
-		// 			alignment: 'center',
-		// 			bold: true,
-		// 			fontSize: 8,
-		// 			border: [false, false, false, false]
-		// 		}, {
-		// 			text: "Comentarios ",
-		// 			alignment: 'center',
-		// 			bold: true,
-		// 			fontSize: 8,
-		// 			border: [false, false, false, false]
-		// 		}]
-		// 	];
-		// 	$.each(Colocaciones, function (index, item) {
-		// 		if (item.Time) {
-		// 			var time = FormatterHelper.msTohoursSeconds(item.Time.getTime());
-		// 		} else {
-		// 			var time = 'N/A';
-		// 		}
-		// 		colocacionTableRow.push(
-		// 			[{
-		// 				text: FormatHelper.formatDateLicense(item.Datehab) + " \n " + time,
-		// 				alignment: 'center',
-		// 				fontSize: 8,
-		// 				border: [false, false, false, false]
-		// 			}, {
-		// 				text: item.Tplnr,
-		// 				alignment: 'center',
-		// 				fontSize: 8,
-		// 				border: [false, false, false, false]
-		// 			}, {
-		// 				text: item.Coment,
-		// 				alignment: 'center',
-		// 				fontSize: 8,
-		// 				border: [false, false, false, false]
-		// 			}]
-		// 		);
-		// 	});
-		// 	$.each(Retiros, function (index, item) {
-		// 		if (item.Time) {
-		// 			var time = FormatterHelper.msTohoursSeconds(item.Time.getTime());
-		// 		} else {
-		// 			var time = 'N/A';
-		// 		}
-		// 		retiroTableRow.push(
-		// 			[{
-		// 				text: FormatHelper.formatDateLicense(item.Datehab) + " \n " + time,
-		// 				alignment: 'center',
-		// 				fontSize: 8,
-		// 				border: [true, false, false, false]
-		// 			}, {
-		// 				text: item.Tplnr,
-		// 				alignment: 'center',
-		// 				fontSize: 8,
-		// 				border: [false, false, false, false]
-		// 			}, {
-		// 				text: item.Coment,
-		// 				alignment: 'center',
-		// 				fontSize: 8,
-		// 				border: [false, false, false, false]
-		// 			}]
-		// 		);
-		// 	});
-		// 	content.push({
-		// 		columns: [{
-		// 			table: {
-		// 				widths: ['30%', '30%', '30%'],
-		// 				body: colocacionTableRow
-		// 			}
-		// 		}, {
-		// 			table: {
-		// 				widths: ['30%', '30%', '30%'],
-		// 				body: retiroTableRow
-		// 			}
+		createColocacionesRetiros: function (licencia, Colocaciones, content, Retiros) {
+			var tableFillColor = '#c4bd96';
+			var tableFillColor2 = '#2980ba';
+			content.push({
+				table: {
+					widths: ['*'],
+					body: [
+						[{
+							text: "COLOCACION y RETIRO DE PAT",
+							alignment: 'center',
+							fillColor: tableFillColor
+						}]
+					]
+				},
+				margin: [0, 0, 0, 0]
+			}, {
+				table: {
+					widths: ['*', '*'],
+					body: [
+						[{
+							text: "Colocacion",
+							alignment: 'center',
+							fontSize: 10,
+							fillColor: tableFillColor2
+						}, {
+							text: "Retiro",
+							alignment: 'center',
+							fontSize: 10,
+							fillColor: tableFillColor2
+						},]
+					]
+				}
+			});
+			var colocacionTableRow = [
+				[{
+					text: "Fecha",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				}, {
+					text: "ET",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				},
+				{
+					text: "COT/COTDT",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				},
+				{
+					text: "Tecnico ET",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				}, {
+					text: "Comentarios ",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				}]
+			];
+			var retiroTableRow = [
+				[{
+					text: "Fecha",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [true, false, false, false]
+				}, {
+					text: "ET",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				}, {
+					text: "COT/COTDT",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				},
+				{
+					text: "Tecnico ET",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				}, {
+					text: "Comentarios ",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				}]
+			];
+			$.each(Colocaciones, function (index, item) {
+				if (item.Time) {
+					var time = FormatterHelper.msTohoursSeconds(item.Time.getTime());
+				} else {
+					var time = 'N/A';
+				}
+				colocacionTableRow.push(
+					[{
+						text: FormatHelper.formatDateLicense(item.Datehab) + " \n " + time,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}, {
+						text: item.Tplnr,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}, {
+						text: item.CotCotdt,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}, {
+						text: item.Tecet,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}, {
+						text: item.Coment,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}]
+				);
+			});
+			$.each(Retiros, function (index, item) {
+				if (item.Time) {
+					var time = FormatterHelper.msTohoursSeconds(item.Time.getTime());
+				} else {
+					var time = 'N/A';
+				}
+				retiroTableRow.push(
+					[{
+						text: FormatHelper.formatDateLicense(item.Datehab) + " \n " + time,
+						alignment: 'center',
+						fontSize: 8,
+						border: [true, false, false, false]
+					}, {
+						text: item.Tplnr,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}, {
+						text: item.CotCotdt,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}, {
+						text: item.Tecet,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}, {
+						text: item.Coment,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}]
+				);
+			});
+			content.push({
+				columns: [{
+					table: {
+						widths: ['20%', '20%', '20%', '20%', '20%'],
+						body: colocacionTableRow
+					}
+				}, {
+					table: {
+						widths: ['20%', '20%', '20%', '20%', '20%'],
+						body: retiroTableRow
+					}
 
-		// 		}],
-		// 		margin: [0, 0, 0, 20]
-		// 	});
-		// 	return content;
-		// },
-		// createHabilitacionesInhibiciones: function (licencia, Habilitaciones, content, Inhibiciones) {
-		// 	var tableFillColor = '#c4bd96';
-		// 	var tableFillColor2 = '#2980ba';
-		// 	content.push({
-		// 		table: {
-		// 			widths: ['*'],
-		// 			body: [
-		// 				[{
-		// 					text: "HABILITACION e INHIBICION DE RECIERRE",
-		// 					alignment: 'center',
-		// 					fillColor: tableFillColor
-		// 				}]
-		// 			]
-		// 		},
-		// 		margin: [0, 0, 0, 0]
-		// 	}, {
-		// 		table: {
-		// 			widths: ['*', '*'],
-		// 			body: [
-		// 				[{
-		// 					text: "Habilitacion",
-		// 					alignment: 'center',
-		// 					fontSize: 10,
-		// 					fillColor: tableFillColor2
-		// 				}, {
-		// 					text: "Inhibicion",
-		// 					alignment: 'center',
-		// 					fontSize: 10,
-		// 					fillColor: tableFillColor2
-		// 				},]
-		// 			]
-		// 		}
-		// 	});
-		// 	var habilitacionTableRow = [
-		// 		[{
-		// 			text: "Fecha",
-		// 			alignment: 'center',
-		// 			bold: true,
-		// 			fontSize: 8,
-		// 			border: [false, false, false, false]
-		// 		}, {
-		// 			text: "ET",
-		// 			alignment: 'center',
-		// 			bold: true,
-		// 			fontSize: 8,
-		// 			border: [false, false, false, false]
-		// 		}, {
-		// 			text: "Comentarios ",
-		// 			alignment: 'center',
-		// 			bold: true,
-		// 			fontSize: 8,
-		// 			border: [false, false, false, false]
-		// 		}]
-		// 	];
-		// 	var inhibicionTableRow = [
-		// 		[{
-		// 			text: "Fecha",
-		// 			alignment: 'center',
-		// 			bold: true,
-		// 			fontSize: 8,
-		// 			border: [true, false, false, false]
-		// 		}, {
-		// 			text: "ET",
-		// 			alignment: 'center',
-		// 			bold: true,
-		// 			fontSize: 8,
-		// 			border: [false, false, false, false]
-		// 		}, {
-		// 			text: "Comentarios ",
-		// 			alignment: 'center',
-		// 			bold: true,
-		// 			fontSize: 8,
-		// 			border: [false, false, false, false]
-		// 		}]
-		// 	];
-		// 	$.each(Habilitaciones, function (index, item) {
-		// 		if (item.Time) {
-		// 			var time = FormatterHelper.msTohoursSeconds(item.Time.getTime());
-		// 		} else {
-		// 			var time = 'N/A';
-		// 		}
-		// 		habilitacionTableRow.push(
-		// 			[{
-		// 				text: FormatHelper.formatDateLicense(item.Datehab) + " \n " + time,
-		// 				alignment: 'center',
-		// 				fontSize: 8,
-		// 				border: [false, false, false, false]
-		// 			}, {
-		// 				text: item.Tplnr,
-		// 				alignment: 'center',
-		// 				fontSize: 8,
-		// 				border: [false, false, false, false]
-		// 			}, {
-		// 				text: item.Coment,
-		// 				alignment: 'center',
-		// 				fontSize: 8,
-		// 				border: [false, false, false, false]
-		// 			}]
-		// 		);
-		// 	});
-		// 	$.each(Inhibiciones, function (index, item) {
-		// 		if (item.Time) {
-		// 			var time = FormatterHelper.msTohoursSeconds(item.Time.getTime());
-		// 		} else {
-		// 			var time = 'N/A';
-		// 		}
-		// 		inhibicionTableRow.push(
-		// 			[{
-		// 				text: FormatHelper.formatDateLicense(item.Datehab) + " \n " + time,
-		// 				alignment: 'center',
-		// 				fontSize: 8,
-		// 				border: [true, false, false, false]
-		// 			}, {
-		// 				text: item.Tplnr,
-		// 				alignment: 'center',
-		// 				fontSize: 8,
-		// 				border: [false, false, false, false]
-		// 			}, {
-		// 				text: item.Coment,
-		// 				alignment: 'center',
-		// 				fontSize: 8,
-		// 				border: [false, false, false, false]
-		// 			}]
-		// 		);
-		// 	});
-		// 	content.push({
-		// 		columns: [{
-		// 			table: {
-		// 				widths: ['30%', '30%', '30%'],
-		// 				body: habilitacionTableRow
-		// 			}
-		// 		}, {
-		// 			table: {
-		// 				widths: ['30%', '30%', '30%'],
-		// 				body: inhibicionTableRow
-		// 			}
+				}],
+				margin: [0, 0, 0, 20]
+			});
+			return content;
+		},
+		createHabilitacionesInhibiciones: function (licencia, Habilitaciones, content, Inhibiciones) {
+			var tableFillColor = '#c4bd96';
+			var tableFillColor2 = '#2980ba';
+			content.push({
+				table: {
+					widths: ['*'],
+					body: [
+						[{
+							text: "INHIBICION y HABILITACION DE RECIERRE",
+							alignment: 'center',
+							fillColor: tableFillColor
+						}]
+					]
+				},
+				margin: [0, 0, 0, 0]
+			}, {
+				table: {
+					widths: ['*', '*'],
+					body: [
+						[{
+							text: "Inhibicion",
+							alignment: 'center',
+							fontSize: 10,
+							fillColor: tableFillColor2
+						}, {
+							text: "Habilitacion",
+							alignment: 'center',
+							fontSize: 10,
+							fillColor: tableFillColor2
+						}]
+					]
+				}
+			});
+			var habilitacionTableRow = [
+				[{
+					text: "Fecha",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				}, {
+					text: "ET",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				}, {
+					text: "Comentarios ",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				}]
+			];
+			var inhibicionTableRow = [
+				[{
+					text: "Fecha",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [true, false, false, false]
+				}, {
+					text: "ET",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				}, {
+					text: "Comentarios ",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				}]
+			];
+			$.each(Habilitaciones, function (index, item) {
+				if (item.Time) {
+					var time = FormatterHelper.msTohoursSeconds(item.Time.getTime());
+				} else {
+					var time = 'N/A';
+				}
+				habilitacionTableRow.push(
+					[{
+						text: FormatHelper.formatDateLicense(item.Datehab) + " \n " + time,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}, {
+						text: item.Tplnr,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}, {
+						text: item.Coment,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}]
+				);
+			});
+			$.each(Inhibiciones, function (index, item) {
+				if (item.Time) {
+					var time = FormatterHelper.msTohoursSeconds(item.Time.getTime());
+				} else {
+					var time = 'N/A';
+				}
+				inhibicionTableRow.push(
+					[{
+						text: FormatHelper.formatDateLicense(item.Datehab) + " \n " + time,
+						alignment: 'center',
+						fontSize: 8,
+						border: [true, false, false, false]
+					}, {
+						text: item.Tplnr,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}, {
+						text: item.Coment,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}]
+				);
+			});
+			content.push({
+				columns: [{
+					table: {
+						widths: ['30%', '30%', '30%'],
+						body: inhibicionTableRow
+					}
+				}, {
+					table: {
+						widths: ['30%', '30%', '30%'],
+						body: habilitacionTableRow
+					}
 
 		// 		}],
 		// 		margin: [0, 0, 0, 20]
@@ -2881,7 +2928,7 @@ sap.ui.define([
 						fontSize: 9,
 						text: item.TipoJefeTrj + " - " + FormatterHelper.getTipoHabName(item.TipoJefeTrj)
 					}],
-					 margin: [0, 0, 0, 10]
+					margin: [0, 0, 0, 10]
 				});
 
 				content.push({

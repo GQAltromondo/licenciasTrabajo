@@ -477,7 +477,7 @@ sap.ui.define([
 
 						emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"],
 						hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]
-						].map(permiso => permiso && permiso.Mail );
+						].map(permiso => permiso && permiso.Mail);
 
 						let usuariosAsignados = {
 							Coordinador: currentUser.Legajo + ", " + currentName,
@@ -709,25 +709,56 @@ sap.ui.define([
 		// licstat 09 = generada
 		// licstat 07 coordinada
 
-		HabilitacionLicence: function (oHabilitacion) {
+		HabilitacionLicence: function (oHabilitacion, oMeta) {
 			var oLicence = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			var licenseClone = LicenceHelper.cloneLicense(oLicence);
 			//licenseClone.Licstat = "07";
 			this.updateLicense(licenseClone, {
-				success: $.proxy(this.successPUTLicenceHab, this, oHabilitacion, licenseClone),
+				success: $.proxy(this.successPUTLicenceHab, this, oHabilitacion, licenseClone, oMeta),
 				error: $.proxy(this.errorPUTLicenceHab, this)
 			});
 		},
-		successPUTLicenceHab: function (oHabilitacion, licenseClone) {
+		successPUTLicenceHab: function (oHabilitacion, licenseClone, oMeta) {
 			var entity = "/HabilitacionRecierreSet";
 			oHabilitacion.Datehab = FormatHelper.getUTCdate(oHabilitacion.Datehab);
 			oDataService.getModel("TransenerOperaciones").create(entity, oHabilitacion, {
-				success: $.proxy(this.successPOSTHabilitacion, this, oHabilitacion, licenseClone),
-				error: $.proxy(this.errorPOSTHabilitacion, this)
+				success: $.proxy(this.successPOSTHabilitacion, this, oMeta, oHabilitacion),
+				error: $.proxy(this.errorPOSTHabilitacion, this, oMeta)
 			});
 		},
-		successPOSTHabilitacion: function (data) {
+		successPOSTHabilitacion: function (data, oMeta, oHabilitacion) {
 			BusyDialogHelper.close();
+
+			const sRefId = oMeta && oMeta.RefId;
+			const sLid = oMeta && oMeta.__lid;
+
+			// Actualizar modelo ANTES de llamar a FIND para preservar la fecha
+			if (sRefId || sLid) {
+				const oModelHab = AppManagementHelper.getModel("HabilitacionTableJsonModel");
+				const aHab = oModelHab.getProperty("/Habilitacion") || [];
+
+				const iHab = aHab.findIndex(x =>
+					(sLid && x.__lid === sLid) || (sRefId && x.RefId === sRefId)
+				);
+
+				if (iHab >= 0) {
+					// Preservar Datehab del objeto original antes de mergear con data del backend
+					const oOriginal = aHab[iHab];
+					const oUpdated = jQuery.extend(true, {}, oOriginal, data || {});
+					// Mantener Datehab del objeto original para preservar la fecha ingresada
+					oUpdated.Datehab = oOriginal.Datehab;
+					oUpdated.__lid = oOriginal.__lid || sLid;
+					oUpdated.fromBackend = true;
+					oUpdated.isNew = false;
+					oUpdated.enabled = false;
+					oUpdated.canSend = false;
+					oUpdated.showPrevValue = true;
+					oUpdated.isMirror = false;
+
+					oModelHab.setProperty(`/Habilitacion/${iHab}`, oUpdated);
+				}
+			}
+
 			var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			MessageBoxHelper.showAlert("Alerta", "Se ha realizado la habilitación de manera correcta", $.proxy(this.FIND, this, license));
 		},
@@ -736,96 +767,255 @@ sap.ui.define([
 			BusyDialogHelper.close();
 			MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al crear el registro de habilitación");
 		},
-		InhibicionLicence: function (oInhibicion) {
+		InhibicionLicence: function (oInhibicion, oMeta) {
 			var oLicence = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			var licenseClone = LicenceHelper.cloneLicense(oLicence);
 			//	licenseClone.Licstat = "07";
 			this.updateLicense(licenseClone, {
-				success: $.proxy(this.successPUTLicenceInhib, this, oInhibicion, licenseClone),
+				success: $.proxy(this.successPUTLicenceInhib, this, oInhibicion, licenseClone, oMeta),
 				error: $.proxy(this.errorPUTLicenceHab, this)
 			});
 		},
-		successPUTLicenceInhib: function (oInhibicion, licenseClone) {
+		successPUTLicenceInhib: function (oInhibicion, licenseClone, oMeta) {
 			var entity = "/InhibicionRecierreSet";
 			oInhibicion.Datehab = FormatHelper.getUTCdate(oInhibicion.Datehab);
 			oDataService.getModel("TransenerOperaciones").create(entity, oInhibicion, {
-				success: $.proxy(this.successPOSTInhibicion, this, oInhibicion, licenseClone),
-				error: $.proxy(this.errorPOSTInhibicion, this)
+				success: $.proxy(this.successPOSTInhibicion, this, oMeta, oInhibicion),
+				error: $.proxy(this.errorPOSTInhibicion, this, oMeta)
 			});
 		},
-		successPOSTInhibicion: function (data) {
-			var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
+		successPOSTInhibicion: function (data, oMeta, oInhibicion) {
 			BusyDialogHelper.close();
-			var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
-			var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
-			MessageBoxHelper.showAlert("Alerta", "Se ha realizado la colocacion de manera correcta", $.proxy(this.FIND, this, license));
 
+			const sRefId = oMeta && oMeta.RefId;
+			const sLid = oMeta && oMeta.__lid;
+
+			// Actualizar modelo ANTES de llamar a FIND para preservar la fecha
+			if (sRefId || sLid) {
+				const oModelInh = AppManagementHelper.getModel("InhibicionTableJsonModel");
+				const aInh = oModelInh.getProperty("/Inhibicion") || [];
+
+				const iInh = aInh.findIndex(x =>
+					(sLid && x.__lid === sLid) || (sRefId && x.RefId === sRefId)
+				);
+
+				if (iInh >= 0) {
+					// Preservar Datehab del objeto original antes de mergear con data del backend
+					const oOriginal = aInh[iInh];
+					const oUpdated = jQuery.extend(true, {}, oOriginal, data || {});
+					// Mantener Datehab del objeto original para preservar la fecha ingresada
+					oUpdated.Datehab = oOriginal.Datehab;
+					oUpdated.__lid = oOriginal.__lid || sLid;
+					oUpdated.fromBackend = true;
+					oUpdated.isNew = false;
+					oUpdated.enabled = false;
+					oUpdated.canSend = false;
+					oUpdated.showPrevValue = true;
+
+					oModelInh.setProperty(`/Inhibicion/${iInh}`, oUpdated);
+				}
+
+				// Habilitar Habilitación espejo (misma __lid)
+				const oModelHab = AppManagementHelper.getModel("HabilitacionTableJsonModel");
+				const aHab = oModelHab.getProperty("/Habilitacion") || [];
+
+				const iHab = aHab.findIndex(h => h && h.__lid === sLid);
+				if (iHab >= 0) {
+					const oHab = jQuery.extend(true, {}, aHab[iHab]);
+					// Si ya es backend, no lo habilito
+					if (!oHab.fromBackend) {
+						oHab.enabled = true;
+						oHab.canSend = true;
+						oHab.isMirror = true;
+						oHab.showPrevValue = false;
+						oModelHab.setProperty(`/Habilitacion/${iHab}`, oHab);
+					}
+				}
+			}
+
+			var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
+			MessageBoxHelper.showAlert("Alerta", "Se ha realizado la inhibicion de manera correcta", $.proxy(this.FIND, this, license));
 		},
 
 		errorPOSTInhibicion: function (error) {
 			BusyDialogHelper.close();
-			MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al crear el registro de colocacion");
+			MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al crear el registro de inhibicion");
 		},
 
-		ColocacionPATLicence: function (oColocacionPAT) {
+		ColocacionPATLicence: function (oColocacionPAT, oMeta) {
 			var oLicence = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			var licenseClone = LicenceHelper.cloneLicense(oLicence);
-			//licenseClone.Licstat = "07";
+
 			this.updateLicense(licenseClone, {
-				success: $.proxy(this.successPUTLicenceColocacionPAT, this, oColocacionPAT, licenseClone),
+				success: $.proxy(this.successPUTLicenceColocacionPAT, this, oColocacionPAT, licenseClone, oMeta),
 				error: $.proxy(this.errorPUTLicenceColocacionPAT, this)
 			});
 		},
-		successPUTLicenceColocacionPAT: function (oColocacionPAT, licenseClone) {
+
+		successPUTLicenceColocacionPAT: function (oColocacionPAT, licenseClone, oMeta) {
 			var entity = "/ColocacionPATSet";
 			oColocacionPAT.Datehab = FormatHelper.getUTCdate(oColocacionPAT.Datehab);
+
 			oDataService.getModel("TransenerOperaciones").create(entity, oColocacionPAT, {
-				success: $.proxy(this.successPOSTColocacionPAT, this, oColocacionPAT, licenseClone),
-				error: $.proxy(this.errorPOSTColocacionPAT, this)
+				success: $.proxy(this.successPOSTColocacionPAT, this, oMeta),
+				error: $.proxy(this.errorPOSTColocacionPAT, this, oMeta)
 			});
 		},
-		successPOSTColocacionPAT: function (data) {
-			BusyDialogHelper.close();
-			var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
-			MessageBoxHelper.showAlert("Alerta", "Se ha realizado la colocacion de manera correcta", $.proxy(this.FIND, this, license));
 
+		successPOSTColocacionPAT: function (oMeta, data) {
+			BusyDialogHelper.close();
+
+			const sRefId = oMeta && oMeta.RefId;
+			const sLid = oMeta && oMeta.__lid;
+
+			if (sRefId || sLid) {
+				// ✅ 1) marcar colocación enviada como backend
+				const oColModel = AppManagementHelper.getModel("ColocacionTableJsonModel");
+				const aCol = oColModel.getProperty("/Colocacion") || [];
+
+				const iCol = aCol.findIndex(x =>
+					(sLid && x.__lid === sLid) || (sRefId && x.RefId === sRefId)
+				);
+
+				if (iCol >= 0) {
+					// mergeo response del backend si viene (data)
+					const oUpdatedCol = jQuery.extend(true, {}, aCol[iCol], data || {});
+					oUpdatedCol.__lid = aCol[iCol].__lid || sLid;
+
+					oUpdatedCol.enabled = false;
+					oUpdatedCol.showPrevValue = true;
+
+					// flags del flujo nuevo
+					oUpdatedCol.fromBackend = true;
+					oUpdatedCol.isNew = false;
+					oUpdatedCol.canSend = false;
+
+					oColModel.setProperty(`/Colocacion/${iCol}`, oUpdatedCol);
+				}
+
+				// ✅ 2) crear/habilitar el retiro espejo correspondiente
+				const oRetModel = AppManagementHelper.getModel("RetiroTableJsonModel");
+				const aRet = oRetModel.getProperty("/Retiro") || [];
+
+				const iRet = aRet.findIndex(x =>
+					(sLid && x.__lid === sLid) || (sRefId && x.RefId === sRefId)
+				);
+
+				if (iCol >= 0) {
+					const oCol = oColModel.getProperty(`/Colocacion/${iCol}`);
+					
+					if (iRet >= 0) {
+						// Retiro existe: actualizar y habilitar
+						const oRet = jQuery.extend(true, {}, aRet[iRet]);
+						oRet.enabled = true;
+						oRet.canSend = true;
+						oRet.isMirror = true;
+						oRet.fromBackend = false;
+						oRet.isRemoval = true;
+						oRet.__lid = oRet.__lid || sLid;
+
+						// Copiar datos de la Colocación (incluido Pat)
+						oRet.Id = oCol.Id;
+						oRet.Empresa = oCol.Empresa;
+						oRet.Datehab = oCol.Datehab;
+						oRet.Time = oCol.Time;
+						oRet.Tplnr = oCol.Tplnr;
+						oRet.Jt = oCol.Jt;
+						oRet.Pat = oCol.Pat;
+						oRet.Tecet = oCol.Tecet;
+						oRet.Coment = oCol.Coment;
+						oRet.RefId = oCol.RefId;
+
+						oRetModel.setProperty(`/Retiro/${iRet}`, oRet);
+					} else {
+						// Retiro no existe: crear nuevo mirror con datos de la Colocación
+						const oNewRet = jQuery.extend(true, {}, oCol);
+						oNewRet.Coment = "";
+						oNewRet.isMirror = true;
+						oNewRet.fromBackend = false;
+						oNewRet.showPrevValue = false;
+						oNewRet.enabled = true;
+						oNewRet.canSend = true;
+						oNewRet.isNew = false;
+						oNewRet.isRemoval = true;
+						oNewRet.__lid = sLid;
+
+						aRet.push(oNewRet);
+						oRetModel.setProperty("/Retiro", aRet);
+					}
+				}
+			}
+
+			var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
+			MessageBoxHelper.showAlert(
+				"Alerta",
+				"Se ha realizado la colocacion de manera correcta",
+				$.proxy(this.FIND, this, license)
+			);
 		},
 
-		errorPOSTColocacionPAT: function (error) {
+
+		errorPOSTColocacionPAT: function (oMeta, error) {
 			BusyDialogHelper.close();
 			MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al crear el registro de colocacion");
 		},
 
-		RetiroPATLicence: function (oRetiroPAT) {
+
+		RetiroPATLicence: function (oRetiroPAT, oMeta) {
 			var oLicence = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			var licenseClone = LicenceHelper.cloneLicense(oLicence);
-			//licenseClone.Licstat = "07";
+
 			this.updateLicense(licenseClone, {
-				success: $.proxy(this.successPUTLicenceRetiroPAT, this, oRetiroPAT, licenseClone),
+				success: $.proxy(this.successPUTLicenceRetiroPAT, this, oRetiroPAT, licenseClone, oMeta),
 				error: $.proxy(this.errorPUTLicenceRetiroPAT, this)
 			});
 		},
-		successPUTLicenceRetiroPAT: function (oRetiroPAT, licenseClone) {
+
+		successPUTLicenceRetiroPAT: function (oRetiroPAT, licenseClone, oMeta) {
 			var entity = "/RetiroPATSet";
 			oRetiroPAT.Datehab = FormatHelper.getUTCdate(oRetiroPAT.Datehab);
+
 			oDataService.getModel("TransenerOperaciones").create(entity, oRetiroPAT, {
-				success: $.proxy(this.successPOSTRetiroPAT, this, oRetiroPAT, licenseClone),
-				error: $.proxy(this.errorPOSTRetiroPAT, this)
+				success: $.proxy(this.successPOSTRetiroPAT, this, oMeta),
+				error: $.proxy(this.errorPOSTRetiroPAT, this, oMeta)
 			});
 		},
-		successPOSTRetiroPAT: function (data) {
-			var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
-			BusyDialogHelper.close();
-			var sId = AppManagementHelper.getModel("LicenseJsonModel").getProperty("/Id");
-			var license = AppManagementHelper.getModel("LicenseJsonModel").getData();
-			MessageBoxHelper.showAlert("Alerta", "Se ha realizado el Retiro de manera correcta", $.proxy(this.FIND, this, license));
 
+		successPOSTRetiroPAT: function (oMeta, data) {
+			BusyDialogHelper.close();
+
+			var sLid = oMeta && oMeta.__lid;
+			var oLicenseData = AppManagementHelper.getModel("LicenseJsonModel").getData();
+
+			MessageBoxHelper.showAlert(
+				"Alerta",
+				"Se ha realizado el Retiro de manera correcta",
+				$.proxy(function () {
+					this.FIND(oLicenseData, function () {
+						if (!sLid) return;
+						var oRetModel = AppManagementHelper.getModel("RetiroTableJsonModel");
+						var aRetiros = oRetModel.getProperty("/Retiro") || [];
+
+						for (var i = 0; i < aRetiros.length; i++) {
+							if (aRetiros[i].__lid === sLid) {
+								oRetModel.setProperty("/Retiro/" + i + "/enabled", false);
+								oRetModel.setProperty("/Retiro/" + i + "/canSend", false);
+								oRetModel.setProperty("/Retiro/" + i + "/showPrevValue", true);
+								oRetModel.setProperty("/Retiro/" + i + "/fromBackend", true);
+								oRetModel.setProperty("/Retiro/" + i + "/isMirror", false);
+								break;
+							}
+						}
+					});
+				}, this)
+			);
 		},
 
-		errorPOSTRetiroPAT: function (error) {
+		errorPOSTRetiroPAT: function (oMeta, error) {
 			BusyDialogHelper.close();
 			MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al crear el registro de retiro");
 		},
+
 		coordinateLicence: function (oCoordination) {
 			var oLicence = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			var licenseClone = LicenceHelper.cloneLicense(oLicence);
@@ -883,7 +1073,7 @@ sap.ui.define([
 						"Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]].map(permiso => permiso &&
 							permiso.Mail);
 				} else {
-					aEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail );
+					aEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail);
 				}
 
 				var sEmails = aEmails.join(",");
@@ -1288,7 +1478,7 @@ sap.ui.define([
 				} else {
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos["Jefe_Trabajo"],
 					hashPermisos["Jefe_Trabajo_Suplente"], hashPermisos["Solicitante_Suplente_Auxiliar"]
-					].map(permiso => permiso && permiso.Mail );
+					].map(permiso => permiso && permiso.Mail);
 					sEmailEt = res[2].results && res[2].results !== 0 ? res[2].results.map(e => (e.Mail)).join(",") : "";
 				}
 
@@ -1425,7 +1615,7 @@ sap.ui.define([
 				let infAdicional = causaAnulado + "\n" + license.Obscausa;
 				let stringEmails = "";
 
-				stringEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail ).join(",");
+				stringEmails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"]].map(permiso => permiso && permiso.Mail).join(",");
 
 				var usuariosAsignados = {
 					Coordinador: hashPermisos["COORDINADOR"] ? hashPermisos["COORDINADOR"].Legajo + ", " + hashPermisos["COORDINADOR"].Nombre : "",
@@ -1860,7 +2050,7 @@ sap.ui.define([
 					hashPermisos["COORDINADOR"] = hashPermisos["COORDINADOR"] || "";
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 						"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
-							permiso.Mail ).join(",");
+							permiso.Mail).join(",");
 
 					var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 					var sCurrentUserMail = oUserJson.email;
@@ -1907,6 +2097,7 @@ sap.ui.define([
 						var vieneDeCancelacion = false;
 						var vieneDeCalendarioTramitacion = false;
 						var nameLegacyCoordinator = this.getLastCoordinator();
+						var vieneDeCalendarioTramitacion = false;
 						var nameLegacyTramitador = oLicence.Tramitador;
 						var MotivoObservacion = "";
 						var ComentarioObservacion = "";
@@ -1939,7 +2130,7 @@ sap.ui.define([
 					hashPermisos["COORDINADOR"] = hashPermisos["COORDINADOR"] || "";
 					emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 						"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
-							permiso.Mail ).join(",");
+							permiso.Mail).join(",");
 
 					var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 					var sCurrentUserMail = oUserJson.email;
@@ -2022,8 +2213,8 @@ sap.ui.define([
 				emails = [hashPermisos["Creador"], hashPermisos["ope_solic-lic_transener"], hashPermisos["Solicitante_Suplente"], hashPermisos[
 					"Solicitante_Suplente_Auxiliar"], hashPermisos["Jefe_Trabajo"], hashPermisos["Jefe_Trabajo_Suplente"]].map(permiso => permiso &&
 
-						permiso.Mail ).join(",");
-				
+						permiso.Mail).join(",");
+
 				var oUserJson = AppManagementHelper.getModel("UserJsonModel").getData();
 				var sCurrentUserMail = oUserJson.email;
 				var sCurrentUserName = oUserJson.nombre + ", " + oUserJson.apellido;
@@ -2150,7 +2341,7 @@ sap.ui.define([
 										MailHelper.sendEmail(
 											oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion,
 											MotivoDeAnulacion, ObservacionDeAnulacion, fechaAnulacion,
-											vieneDeTramitacion, vieneDeObservacion, 
+											vieneDeTramitacion, vieneDeObservacion,
 											comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
 											nameLegacyCoordinator, nameLegacyTramitador,
 											MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut, tramitaciones, false
@@ -2164,7 +2355,7 @@ sap.ui.define([
 											comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
 											nameLegacyCoordinator, nameLegacyTramitador,
 											MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut,
-											tramitaciones, true 
+											tramitaciones, true
 										);
 
 										// --- Log después de los dos envíos ---
@@ -2204,18 +2395,18 @@ sap.ui.define([
 									vieneDeTramitacion, vieneDeObservacion,
 									comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
 									nameLegacyCoordinator, nameLegacyTramitador,
-									MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut,tramitaciones,false
+									MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut, tramitaciones, false
 								);
 
 								// --- Segundo envío (desde calendario de tramitación) ---
 								MailHelper.sendEmail(
 									oLicence, oUsuariosAsignados, emails, sEmailEt, sInfAdicional, esAnulacion,
 									MotivoDeAnulacion, ObservacionDeAnulacion, fechaAnulacion,
-									vieneDeTramitacion, vieneDeObservacion, 
+									vieneDeTramitacion, vieneDeObservacion,
 									comentObserCoord, nameLegacyObservator, vieneDeCoordinacion, vieneDeCancelacion,
 									nameLegacyCoordinator, nameLegacyTramitador,
 									MotivoObservacion, ComentarioObservacion, MotivoNoAut, ComentariosNoAut,
-									tramitaciones ,true
+									tramitaciones, true
 								);
 
 								// --- Log después de los dos envíos ---
@@ -3255,7 +3446,7 @@ sap.ui.define([
 				this.getFullTramitacionesWithCalendarDates();
 
 			}).catch((e) => {
-				console.error("ACA",e);
+				console.error("ACA", e);
 				BusyDialogHelper.close();
 				MessageBoxHelper.showAlert("Alerta", "Se ha producido un error al obtener permisos")
 			})
@@ -3291,7 +3482,7 @@ sap.ui.define([
 				TeinformoValueStateText: "",
 				JefetraValueState: "Success",
 				JefetraValueStateText: "",
-				IdJefeTrj:""
+				IdJefeTrj: ""
 			});
 			aTransfers.forEach((e) => {
 				e.enabledCombo = e.Trjindex === undefined || e.Trjindex === "";
@@ -3409,6 +3600,8 @@ sap.ui.define([
 		successGET: function (bDontSort, data) {
 			var aLicenses = FormatHelper.removeResults(data);
 			FormatHelper.formatTimesFromGetLicenses(aLicenses);
+
+
 			aLicenses.forEach((oLicense) => {
 				oLicense.ArbplDesc = this.getArbplDesc(oLicense.Arbpl);
 				oLicense.EqustatText = this.getEqustatText(oLicense.Equstat);

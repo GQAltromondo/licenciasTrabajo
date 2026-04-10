@@ -332,10 +332,12 @@ sap.ui.jsview("Transener.Operaciones.LicenciasTrabajo.views.Main.Main", {
 							//uso el mismo que el boton del listado principal
 							formatter: oController.rolVisualization("listado/tramitacionMasiva")
 						},
-						press: [oController.openMassiveTramitationAddCompanyDialog, oController]
+						press: [oController.checkTramitacionMasivaEstados, oController]
+
+
 					}).addStyleClass("buttonInverted"),
 					new sap.m.Text({
-						text:"{version>/version}"
+						text: "{version>/version}"
 					})
 				]
 			}),

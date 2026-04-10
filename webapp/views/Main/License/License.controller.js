@@ -55,6 +55,14 @@ sap.ui.define([
 			return AppManagementHelper.getUser();
 		},
 
+		formatTplnrTooltip: function (codigo) {
+			return FormatterHelper.getEstacionLabel(codigo);
+		},
+
+		formatTecetTooltip: function (legajo) {
+			return FormatterHelper.getPersonalHabilitadoLabel(legajo);
+		},
+
 		enableEspecifyBarra: function (oEvent) {
 			var oFilterSelecitonJsonModel = AppManagementHelper.getModel("FilterSelectionJsonModel");
 			var oLicenseJsonModel = AppManagementHelper.getModel("LicenseJsonModel");
@@ -265,6 +273,8 @@ sap.ui.define([
 			this.oDialogTable.destroy(true);
 		},
 
+
+
 		onChangeSelectionRegion: function (evt) {
 			//return; //TODO remove this this is to go back to ordenes input
 			var oModel = AppManagementHelper.getModel("UnifilaresFileListModel");
@@ -375,7 +385,8 @@ sap.ui.define([
 							template: new sap.m.StandardListItem({
 								type: sap.m.ListType.Navigation,
 								press: [this.openUnifilarURL, this],
-								title: "{UnifilaresFileListModel>IdUnifilar} --- {UnifilaresFileListModel>Descripcion}",
+								// title: "{UnifilaresFileListModel>IdUnifilar} --- {UnifilaresFileListModel>Descripcion}",
+								title: "{UnifilaresFileListModel>Descripcion}",
 								description: {
 									path: "UnifilaresFileListModel>TipoUnifilar",
 									formatter: (tipo) => {
@@ -416,90 +427,191 @@ sap.ui.define([
 			})
 		},
 
+		// unifilarValid: function (oUnifilar) {
+		// 	var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
+		// 	this.oDialogSelection.setBusy(true);
+		// 	LicenseService.getUnifilares(oLicense, (data) => {
+		// 		this.oDialogSelection.setBusy(false);
+		// 		var oModel = AppManagementHelper.getModel("UnifilarListModel");
+		// 		oModel.setData({
+		// 			Unifilares: data.results,
+		// 			index: data.results.length + 1
+		// 		});
+		// 		let aUnifilares = AppManagementHelper.getModel("UnifilarListModel").getData().Unifilares;
+		// 		let oUnifilarFound = aUnifilares.find(e => e.Et === oUnifilar.Et && e.TipoUnifilar === oUnifilar.TipoUnifilar);
+		// 		if (oUnifilarFound) {
+		// 			MessageBoxHelper.showAlert("Alerta", "Ya se ha agregado un unifilar del mismo tipo para esta E.T");
+		// 		} else {
+		// 			var sRealIdUnifilar = oUnifilar.IdUnifilar.toString();
+		// 			var sTipo = oUnifilar.TipoUnifilar;
+		// 			var oModelSelectionData = AppManagementHelper.getModel("SelectionUnifilarModel").getData();
+		// 			var sVersion = "";
+		// 			var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
+		// 			var sIndex = new Date().valueOf().toString(36) + Math.random().toString(36).substr(2);
+		// 			var sIndexFormatted = sIndex.substr(1, 18);
+		// 			var sIndex = sIndexFormatted;
+
+		// 			// Fix issue #498 ID de solicitud y unifilres.
+		// 			var oLicencia = AppManagementHelper.getModel("LicenseJsonModel").getData();
+		// 			var sLicenciaCreada = (oLicencia.Id && oLicencia.Tipo === "L") ? oLicencia.Id : "";
+
+
+		// 			// Obtén los parámetros de la URL
+		// 			var searchParams = new URLSearchParams(window.location.search);
+
+		// 			// Obtén el valor de 'siteId'
+		// 			var siteId = searchParams.get("siteId");
+
+		// 			console.log("siteId:", siteId);
+
+		// 			// RL 10/12
+
+		// 			var navigationService = sap.ushell.Container.getService('CrossApplicationNavigation');
+		// 			var hash = navigationService.hrefForExternal({
+		// 				target: { semanticObject: 'GestionUnifilaresV1', action: 'Display' },
+		// 				params: {
+		// 					LicenciaCreada: sLicenciaCreada,
+		// 					Tipo: sTipo,
+		// 					Version: sVersion,
+		// 					Empresa: oLicense.Empresa,
+		// 					Anio: oLicense.Anio,
+		// 					Id: oLicense.Idunifilar,
+		// 					IdUnifilar: sIndex,
+		// 					RealIdUnifilar: sRealIdUnifilar,
+		// 					Centro: oModelSelectionData.Region,
+		// 					ET: oModelSelectionData.ET,
+		// 					Mode: "C"
+		// 				}
+		// 			});
+		// 			var url = window.location.href.split('#')[0] + hash;
+		// 			sap.m.URLHelper.redirect(url, true);
+		// 			// Fin RL 10/12
+
+		// 			// console.log("URL", window.location.hostname + "/site?siteId=" + siteId)
+		// 			// RL 10/12 var Hash = `#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${oLicense.Empresa}&Anio=${oLicense.Anio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&RealIdUnifilar=${sRealIdUnifilar}&Centro=${oModelSelectionData.Region}&ET=${oModelSelectionData.ET}&Mode=C`;
+		// 			// const sHost = (window.location.hostname + "/site?siteId=" + siteId + Hash)
+		// 			// window.location.href = (sHost, "_blank")
+
+
+		// 			// //window.open(sHost, "_blank");
+		// 			// // var sHost =
+		// 			// // 	`https://${window.location.host}/sites/fiorilaunchpad#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${oLicense.Empresa}&Anio=${oLicense.Anio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&RealIdUnifilar=${sRealIdUnifilar}&Centro=${oModelSelectionData.Region}&ET=${oModelSelectionData.ET}&Mode=C`;
+		// 			// // window.open(sHost, "_blank");
+		// 			// RL 10/12 location.hash = "GestionUnifilares-Display?Empresa=" + `LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${oLicense.Empresa}&Anio=${oLicense.Anio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&RealIdUnifilar=${sRealIdUnifilar}&Centro=${oModelSelectionData.Region}&ET=${oModelSelectionData.ET}&Mode=C`;
+		// 			//location.hash = Hash
+
+		// 			// const currentHash = Hash;
+
+		// 			// // Crear la URL para la nueva pestaña
+		// 			// const newUrl = `${location.origin}/site?siteId=${siteId}${currentHash}`;
+
+		// 			//}
+		// 		}
+		// 	}, $.proxy(this.onErrorGetUnifilares, this));
+		// },
+
 		unifilarValid: function (oUnifilar) {
 			var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
 			this.oDialogSelection.setBusy(true);
+
+			// helper local para resolver versión desde distintas fuentes
+			function resolveVersion(fromItem, fromResults) {
+				// a) campos típicos
+				let v = fromItem.NumVersion ?? fromItem.Version ?? fromItem.Numversion ?? fromItem.NroVersion;
+
+				// b) si no vino, intento en el resultado del backend por Idunifilar
+				if (!v && fromResults && fromResults.length) {
+					const id = String(fromItem.IdUnifilar ?? fromItem.Idunifilar ?? fromItem.Id ?? "");
+					let found = null;
+					if (id) found = fromResults.find(r => String(r.Idunifilar ?? r.Id) === id);
+					if (!found) {
+						// último intento: por Tipo + (si existe) ET
+						const tipo = String(fromItem.TipoUnifilar ?? fromItem.Tipo ?? "");
+						const et = String(fromItem.Et ?? fromItem.ET ?? "");
+						found = fromResults.find(r => String(r.TipoUnifilar) === tipo && (!et || String(r.Et) === et));
+					}
+					if (found) v = found.NumVersion ?? found.Version;
+				}
+
+				// c) último recurso: parsear de textos (p.ej. "2 v — E.T. ABSTO")
+				if (!v) {
+					const texts = [
+						String(fromItem.IdUnifilar ?? ""),
+						String(fromItem.Descripcion ?? fromItem.Nombre ?? fromItem.Title ?? "")
+					];
+					for (const s of texts) {
+						// “2 v …” o “… v 2”
+						let m = s.match(/^\s*(\d+)\s*v\b/i) || s.match(/\bv\s*(\d+)\b/i);
+						if (m && m[1]) { v = m[1]; break; }
+					}
+				}
+
+				// d) devuelvo string (o vacío si no hubo suerte)
+				return v != null ? String(v) : "";
+			}
+
 			LicenseService.getUnifilares(oLicense, (data) => {
 				this.oDialogSelection.setBusy(false);
+
+				// log de respaldo
+				console.log("[unifilarValid] item recibido:", oUnifilar);
+				console.log("[unifilarValid] results del backend:", data && data.results);
+
+				// (si usás el modelo local)
 				var oModel = AppManagementHelper.getModel("UnifilarListModel");
-				oModel.setData({
-					Unifilares: data.results,
-					index: data.results.length + 1
-				});
-				let aUnifilares = AppManagementHelper.getModel("UnifilarListModel").getData().Unifilares;
-				let oUnifilarFound = aUnifilares.find(e => e.Et === oUnifilar.Et && e.TipoUnifilar === oUnifilar.TipoUnifilar);
-				if (oUnifilarFound) {
-					MessageBoxHelper.showAlert("Alerta", "Ya se ha agregado un unifilar del mismo tipo para esta E.T");
-				} else {
-					var sRealIdUnifilar = oUnifilar.IdUnifilar.toString();
-					var sTipo = oUnifilar.TipoUnifilar;
-					var oModelSelectionData = AppManagementHelper.getModel("SelectionUnifilarModel").getData();
-					var sVersion = "";
-					var oLicense = AppManagementHelper.getModel("LicenseJsonModel").getData();
-					var sIndex = new Date().valueOf().toString(36) + Math.random().toString(36).substr(2);
-					var sIndexFormatted = sIndex.substr(1, 18);
-					var sIndex = sIndexFormatted;
+				oModel.setData({ Unifilares: data.results, index: (data.results || []).length + 1 });
 
-					// Fix issue #498 ID de solicitud y unifilres.
-					var oLicencia = AppManagementHelper.getModel("LicenseJsonModel").getData();
-					var sLicenciaCreada = (oLicencia.Id && oLicencia.Tipo === "L") ? oLicencia.Id : "";
+				// En tu payload, IdUnifilar es el número de versión
+				var sVersion = String(oUnifilar.IdUnifilar);
+				var sRealIdUnifilar = String(oUnifilar.IdUnifilar); // si más adelante te llega un ID real distinto, lo cambiamos
+				var sTipo = String(oUnifilar.TipoUnifilar || "");
 
 
-					// Obtén los parámetros de la URL
-					var searchParams = new URLSearchParams(window.location.search);
-
-					// Obtén el valor de 'siteId'
-					var siteId = searchParams.get("siteId");
-
-					console.log("siteId:", siteId);
-
-					// RL 10/12
-
-					var navigationService = sap.ushell.Container.getService('CrossApplicationNavigation');
-					var hash = navigationService.hrefForExternal({
-						target: { semanticObject: 'GestionUnifilaresV1', action: 'Display' },
-						params: {
-							LicenciaCreada: sLicenciaCreada,
-							Tipo: sTipo,
-							Version: sVersion,
-							Empresa: oLicense.Empresa,
-							Anio: oLicense.Anio,
-							Id: oLicense.Idunifilar,
-							IdUnifilar: sIndex,
-							RealIdUnifilar: sRealIdUnifilar,
-							Centro: oModelSelectionData.Region,
-							ET: oModelSelectionData.ET,
-							Mode: "C"
-						}
-					});
-					var url = window.location.href.split('#')[0] + hash;
-					sap.m.URLHelper.redirect(url, true);
-					// Fin RL 10/12
-
-					// console.log("URL", window.location.hostname + "/site?siteId=" + siteId)
-					// RL 10/12 var Hash = `#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${oLicense.Empresa}&Anio=${oLicense.Anio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&RealIdUnifilar=${sRealIdUnifilar}&Centro=${oModelSelectionData.Region}&ET=${oModelSelectionData.ET}&Mode=C`;
-					// const sHost = (window.location.hostname + "/site?siteId=" + siteId + Hash)
-					// window.location.href = (sHost, "_blank")
-
-
-					// //window.open(sHost, "_blank");
-					// // var sHost =
-					// // 	`https://${window.location.host}/sites/fiorilaunchpad#GestionUnifilares-Display?LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${oLicense.Empresa}&Anio=${oLicense.Anio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&RealIdUnifilar=${sRealIdUnifilar}&Centro=${oModelSelectionData.Region}&ET=${oModelSelectionData.ET}&Mode=C`;
-					// // window.open(sHost, "_blank");
-					// RL 10/12 location.hash = "GestionUnifilares-Display?Empresa=" + `LicenciaCreada=${sLicenciaCreada}&Tipo=${sTipo}&Version=${sVersion}&Empresa=${oLicense.Empresa}&Anio=${oLicense.Anio}&Id=${oLicense.Idunifilar}&IdUnifilar=${sIndex}&RealIdUnifilar=${sRealIdUnifilar}&Centro=${oModelSelectionData.Region}&ET=${oModelSelectionData.ET}&Mode=C`;
-					//location.hash = Hash
-
-					// const currentHash = Hash;
-
-					// // Crear la URL para la nueva pestaña
-					// const newUrl = `${location.origin}/site?siteId=${siteId}${currentHash}`;
-
-					//}
+				// Si aún así no se pudo, NO bloqueo: uso fallback "1" y dejo log.
+				if (!sVersion) {
+					console.warn("[unifilarValid] No se pudo resolver la versión; uso fallback '1'. Item:", oUnifilar);
+					sVersion = "1";
 				}
+
+				// índice temporal
+				var sIndex = (new Date().valueOf().toString(36) + Math.random().toString(36).slice(2)).slice(1, 19);
+
+				// Issue #498
+				var oLicencia = AppManagementHelper.getModel("LicenseJsonModel").getData();
+				var sLicenciaCreada = (oLicencia.Id && oLicencia.Tipo === "L") ? oLicencia.Id : "";
+
+				var oModelSelectionData = AppManagementHelper.getModel("SelectionUnifilarModel").getData();
+
+				// CrossApp nav (ojo con 'Id': acá es la licencia)
+				var navigationService = sap.ushell.Container.getService('CrossApplicationNavigation');
+				var hash = navigationService.hrefForExternal({
+					target: { semanticObject: 'GestionUnifilaresV1', action: 'Display' },
+					params: {
+						LicenciaCreada: sLicenciaCreada,
+						Tipo: String(oUnifilar.TipoUnifilar || ""),
+						Version: String(oUnifilar.IdUnifilar),          // ✅ ahora viaja
+						Empresa: oLicense.Empresa,
+						Anio: oLicense.Anio,
+						Id: oLicense.Idunifilar,    // ✅ más consistente que Idunifilar
+						IdUnifilar: sIndex,              // temporal
+						RealIdUnifilar: String(oUnifilar.IdUnifilar),     // lo que venga del item (texto o id)
+						Centro: oModelSelectionData.Region,
+						ET: oModelSelectionData.ET,
+						Mode: "C"
+					}
+				});
+
+				var url = window.location.href.split('#')[0] + hash;
+				sap.m.URLHelper.redirect(url, true);
+
 			}, $.proxy(this.onErrorGetUnifilares, this));
 		},
+
+
 		openUnifilarURL: function (oEvent) {
 			var oUnifilar = oEvent.getSource().getBindingContext("UnifilaresFileListModel").getObject()
+			console.log("[openUnifilarURL] item clickeado:", oUnifilar);
+
 			this.unifilarValid(oUnifilar)
 		},
 
@@ -1975,48 +2087,224 @@ sap.ui.define([
 				LicenseService.deliveryLicence(oDelivery);
 			}
 		},
-		sendHabilitacion: function (oEvent) {
-			var oHabilitacion = oEvent.getSource().getParent().getBindingContext("HabilitacionTableJsonModel").getObject();
 
-			var oValidation = this.validateSend(oHabilitacion)
-			if (!oValidation.valid) {
-				MessageBoxHelper.showAlert("Alerta", oValidation.message);
-			} else {
-				BusyDialogHelper.open();
-				LicenseService.HabilitacionLicence(oHabilitacion);
-			}
-		},
+
 		sendInhibicion: function (oEvent) {
-			var oInhibicion = oEvent.getSource().getParent().getBindingContext("InhibicionTableJsonModel").getObject();
-			var oValidation = this.validateSend(oInhibicion)
-			if (!oValidation.valid) {
+			const oModelInh = AppManagementHelper.getModel("InhibicionTableJsonModel");
+			const oModelHab = AppManagementHelper.getModel("HabilitacionTableJsonModel");
 
-				MessageBoxHelper.showAlert("Alerta", oValidation.message);
-			} else {
-				BusyDialogHelper.open();
-				LicenseService.InhibicionLicence(oInhibicion);
-			}
-		},
-		sendColocacionPAT: function (oEvent) {
-			var oColocacionPAT = oEvent.getSource().getParent().getBindingContext("ColocacionTableJsonModel").getObject();
-			var oValidation = this.validateSend(oColocacionPAT)
+			const oCtx = oEvent.getSource().getParent().getBindingContext("InhibicionTableJsonModel");
+			if (!oCtx) return;
+
+			const sPath = oCtx.getPath();           // ej: "/Inhibicion/3"
+			const oInh = oCtx.getObject() || {};
+
+			const oValidation = this.validateSend(oInh,"INHIBICION");
 			if (!oValidation.valid) {
-				MessageBoxHelper.showAlert("Alerta", oValidation.message);
-			} else {
-				BusyDialogHelper.open();
-				LicenseService.ColocacionPATLicence(oColocacionPAT);
+				return MessageBoxHelper.showAlert("Alerta", oValidation.message);
 			}
+
+			BusyDialogHelper.open();
+
+			const sLid = oInh.__lid;
+			const sRefId = oInh.RefId;
+
+			// ✅ payload limpio (NO mutar el objeto del modelo)
+			const oPayload = jQuery.extend(true, {}, oInh);
+
+			delete oPayload.sameDayValidation;
+			delete oPayload.enabled;
+			delete oPayload.TejtValueStateText;
+			delete oPayload.showPrevValue;
+			delete oPayload.__lid;
+			delete oPayload.isMirror;
+			delete oPayload.canSend;
+			delete oPayload.isNew;
+			delete oPayload.Datelicencia;
+			delete oPayload.fromBackend;
+			delete oPayload.Jt; // si Jt es solo de UI/usuario y backend lo deriva, dejalo borrado
+			delete oPayload.enabledTecet;
+
+			LicenseService.InhibicionLicence(
+				oPayload,
+				{ RefId: sRefId, __lid: sLid }
+			);
+		},
+
+		/**
+		 * Habilita la fila espejo en HabilitacionTableJsonModel
+		 * que tenga la misma __lid que la inhibición guardada.
+		 */
+		_enableHabilitacionForLid: function (sLid) {
+			const oModelHab = AppManagementHelper.getModel("HabilitacionTableJsonModel");
+			const aHab = oModelHab.getProperty("/Habilitacion") || [];
+
+			const iIdx = aHab.findIndex(h => h && h.__lid === sLid);
+			if (iIdx < 0) return;
+
+			const oHab = jQuery.extend(true, {}, aHab[iIdx]);
+
+			// Si ya es backend, no lo habilito
+			if (oHab.fromBackend) return;
+
+			oHab.enabled = true;
+			oHab.canSend = true;
+
+			// por coherencia con tu flujo espejo:
+			oHab.isMirror = true;
+			oHab.showPrevValue = false;
+
+			oModelHab.setProperty(`/Habilitacion/${iIdx}`, oHab);
+		},
+		sendHabilitacion: function (oEvent) {
+			const oModelHab = AppManagementHelper.getModel("HabilitacionTableJsonModel");
+
+			const oCtx = oEvent.getSource().getParent().getBindingContext("HabilitacionTableJsonModel");
+			if (!oCtx) return;
+
+			const sPath = oCtx.getPath();            // ej: "/Habilitacion/2"
+			const oHab = oCtx.getObject() || {};
+
+			const oValidation = this.validateSend(oHab, "HABILITACION");
+			if (!oValidation.valid) {
+				return MessageBoxHelper.showAlert("Alerta", oValidation.message);
+			}
+
+			BusyDialogHelper.open();
+
+			const sLid = oHab.__lid;
+			const sRefId = oHab.RefId;
+
+			// ✅ NO mutar el modelo
+			const oPayload = jQuery.extend(true, {}, oHab);
+
+			// limpiar campos de UI / control
+			delete oPayload.sameDayValidation;
+			delete oPayload.enabled;
+			delete oPayload.TejtValueStateText;
+			delete oPayload.showPrevValue;
+			delete oPayload.__lid;
+			delete oPayload.isMirror;
+			delete oPayload.canSend;
+			delete oPayload.isNew;
+			delete oPayload.Datelicencia;
+			delete oPayload.fromBackend;
+			delete oPayload.Jt;
+			delete oPayload.LicenciaTrabajo
+			delete oPayload.enabledTecet;
+
+			LicenseService.HabilitacionLicence(
+				oPayload,
+				{ RefId: sRefId, __lid: sLid }
+			);
+		},
+
+		sendColocacionPAT: function (oEvent) {
+
+			const oCtx = oEvent.getSource().getParent().getBindingContext("ColocacionTableJsonModel");
+
+			const oCol = oCtx.getObject();
+
+			const oValidation = this.validateSend(oCol, "COLOCACION");
+			if (!oValidation.valid) {
+				return MessageBoxHelper.showAlert("Alerta", oValidation.message);
+			}
+
+			BusyDialogHelper.open();
+
+
+			const sLid = oCol.__lid;
+			const sRefId = oCol.RefId;
+
+			const oPayload = jQuery.extend(true, {}, oCol);
+
+			delete oPayload.sameDayValidation;
+			delete oPayload.enabled;
+			delete oPayload.TejtValueStateText;
+			delete oPayload.showPrevValue;
+			delete oPayload.__lid;
+			delete oPayload.isRemoval;
+			delete oPayload.canSend;
+			delete oPayload.isNew;
+			delete oPayload.Datelicencia;
+			delete oPayload.fromBackend;
+			delete oPayload.Jt;
+
+			LicenseService.ColocacionPATLicence(
+				oPayload,
+				{ RefId: sRefId, __lid: sLid }
+			);
+		},
+		_enableRetiroForLid: function (sLid) {
+			const oModelCol = AppManagementHelper.getModel("ColocacionTableJsonModel");
+			const oModelRet = AppManagementHelper.getModel("RetiroTableJsonModel");
+			const aCol = oModelCol.getProperty("/Colocacion") || [];
+			const aRet = oModelRet.getProperty("/Retiro") || [];
+
+			const iIdx = aRet.findIndex(r => r && r.__lid === sLid);
+			if (iIdx < 0) return;
+
+			// si era espejo de la colocación nueva, ahora se habilita
+			const oRet = jQuery.extend(true, {}, aRet[iIdx]);
+			if (oRet.isMirror && !oRet.fromBackend) {
+				oRet.enabled = true;
+				oRet.canSend = true;
+				oRet.isNew = false;
+			}
+
+			// Copiar datos de la Colocación al Retiro (incluido Pat)
+			const iCol = aCol.findIndex(c => c && c.__lid === sLid);
+			if (iCol >= 0) {
+				const oCol = aCol[iCol];
+				oRet.Id = oCol.Id;
+				oRet.Empresa = oCol.Empresa;
+				oRet.Datehab = oCol.Datehab;
+				oRet.Time = oCol.Time;
+				oRet.Tplnr = oCol.Tplnr;
+				oRet.Jt = oCol.Jt;
+				oRet.Pat = oCol.Pat;
+				oRet.Tecet = oCol.Tecet;
+				oRet.RefId = oCol.RefId;
+			}
+
+			oModelRet.setProperty(`/Retiro/${iIdx}`, oRet);
 		},
 		sendRetiroPAT: function (oEvent) {
-			var oRetiroPAT = oEvent.getSource().getParent().getBindingContext("RetiroTableJsonModel").getObject();
-			var oValidation = this.validateSend(oRetiroPAT)
+			const oCtx = oEvent.getSource().getParent().getBindingContext("RetiroTableJsonModel");
+			const oRetiroPAT = oCtx.getObject();
+
+			const oValidation = this.validateSend(oRetiroPAT, "RETIRO");
 			if (!oValidation.valid) {
-				MessageBoxHelper.showAlert("Alerta", oValidation.message);
-			} else {
-				BusyDialogHelper.open();
-				LicenseService.RetiroPATLicence(oRetiroPAT);
+				return MessageBoxHelper.showAlert("Alerta", oValidation.message);
 			}
+
+			BusyDialogHelper.open();
+
+			const oPayload = jQuery.extend(true, {}, oRetiroPAT);
+			const sRefId = oPayload.RefId;
+			const sLid = oRetiroPAT.__lid;
+			
+			delete oPayload.sameDayValidation;
+			delete oPayload.enabled;
+			delete oPayload.TejtValueStateText;
+			delete oPayload.showPrevValue;
+			delete oPayload.__lid;
+			delete oPayload.isRemoval;
+
+			// ✅ nuevos: solo UI
+			delete oPayload.canSend;
+			delete oPayload.isNew;
+			delete oPayload.Datelicencia; // por si viene con ese nombre
+			delete oPayload.fromBackend;
+			delete oPayload.isMirror
+			delete oPayload.enabledTecet
+
+			LicenseService.RetiroPATLicence(oPayload, { RefId: sRefId, __lid: sLid });
 		},
+
+
+
+
 
 		sendDevolution: function (oEvent) {
 			BusyDialogHelper.open();
@@ -2286,12 +2574,31 @@ sap.ui.define([
 				this.isDateDeliveryValid = oEvent.getParameter("valid");
 			}
 
+			// Para Colocacion y Retiro: el DatePicker muestra Datelicencia pero el backend usa Datehab
+			// Sincronizamos Datehab cada vez que el usuario cambia la fecha
+			if ((sModel === "ColocacionTableJsonModel" || sModel === "RetiroTableJsonModel") &&
+				oEvent.getSource().getMetadata().getName() === "sap.m.DatePicker") {
+				const dNewDate = oEvent.getSource().getDateValue();
+				if (dNewDate) {
+					AppManagementHelper.getModel(sModel).setProperty(oBindingPath + "/Datehab", dNewDate);
+				}
+			}
+
 			if (sModel === "DeliveryTableJsonModel") {
 				if (oContextData.Time && oContextData.Datelicencia) {
 					AppManagementHelper.getModel(sModel).setProperty(oBindingPath + "/enabledInputMotivo", false);
 					AppManagementHelper.getModel(sModel).setProperty(oBindingPath + "/Motivono", "")
 				} else {
 					AppManagementHelper.getModel(sModel).setProperty(oBindingPath + "/enabledInputMotivo", true)
+				}
+			}
+
+			// Para Inhibicion y Habilitacion: sincronizar Datehab desde el DatePicker
+			if ((sModel === "InhibicionTableJsonModel" || sModel === "HabilitacionTableJsonModel") &&
+				oEvent.getSource().getMetadata().getName() === "sap.m.DatePicker") {
+				const dNewDate = oEvent.getSource().getDateValue();
+				if (dNewDate) {
+					AppManagementHelper.getModel(sModel).setProperty(oBindingPath + "/Datehab", dNewDate);
 				}
 			}
 
@@ -2356,33 +2663,62 @@ sap.ui.define([
 
 		},
 		validateSend: function (oObject, sType) {
-			var oValidationObject = {
-				valid: true,
-				message: "Campos requeridos."
-			};
+			var oValidationObject = { valid: true, message: "Campos requeridos." };
 
-			// Validate Datehab
+			// Date / Time / Tplnr ... (lo que ya tenés)
 			if (!oObject.Datehab) {
 				oValidationObject.valid = false;
 				oValidationObject.message = "La fecha es obligatoria";
+				return oValidationObject;
 			}
 
-			// Validate Time
 			if (oObject.Time === null) {
 				oValidationObject.valid = false;
 				oValidationObject.message = "La hora es requerida";
+				return oValidationObject;
 			}
 
-			// Validate Coment
-			if (oObject.Coment === '') {
-				oValidationObject.valid = false;
-				oValidationObject.message = "Debe completar un comentario";
-			}
-
-			// Validate Tplnr
 			if (oObject.Tplnr === "") {
 				oValidationObject.valid = false;
 				oValidationObject.message = "Debe de agregar una Estacion para poder realizar la operación";
+				return oValidationObject;
+			}
+
+			if (sType === "COLOCACION") {
+				var aActiveColEts = (AppManagementHelper.getModel("ColocacionTableJsonModel").getProperty("/activeEts")) || [];
+				if (aActiveColEts.indexOf(oObject.Tplnr) >= 0) {
+					oValidationObject.valid = false;
+					oValidationObject.message = "Ya existe una colocación activa para la ET " + oObject.Tplnr + ". Debe realizar el retiro antes de colocar nuevamente.";
+					return oValidationObject;
+				}
+			}
+
+			if (sType === "INHIBICION") {
+				var aActiveInhEts = (AppManagementHelper.getModel("InhibicionTableJsonModel").getProperty("/activeEts")) || [];
+				if (aActiveInhEts.indexOf(oObject.Tplnr) >= 0) {
+					oValidationObject.valid = false;
+					oValidationObject.message = "Ya existe una inhibición activa para la ET " + oObject.Tplnr + ". Debe realizar la habilitación antes de inhibir nuevamente.";
+					return oValidationObject;
+				}
+			}
+
+			if (sType === "COLOCACION" || sType === "HABILITACION" || sType === "RETIRO") {
+				const tecet = (oObject.Tecet || "").trim();
+				if (!tecet) {
+					oValidationObject.valid = false;
+					oValidationObject.message = "Debe completar el campo TECET.";
+					return oValidationObject;
+				}
+			}
+
+		
+
+			if ( sType === "COLOCACION") {
+				if (oObject.Pat === null || oObject.Pat === undefined) {
+					oValidationObject.valid = false;
+					oValidationObject.message = "Debe seleccionar PAT o PAT/A para realizar la colocacion.";
+					return oValidationObject;
+				}
 			}
 
 			return oValidationObject;
@@ -4085,6 +4421,66 @@ sap.ui.define([
 			return oLicense.Solbeg !== null && oLicense.Solend !== null && oLicense.Timend !== null && oLicense.Timbeg !== null
 		},
 
+		onOpenComentariosDialog: function (oEvent) {
+			var oSource = oEvent.getSource();
+			var sModelName = oSource.data("modelName");
+			var sPropertyName = oSource.data("propertyName");
+
+			var oInput = oSource.getParent().getItems()[0];
+			var bEditable = oInput.getEnabled();
+
+			var oContext = oSource.getBindingContext(sModelName);
+			var sPath = oContext.getPath() + "/" + sPropertyName;
+			var sCurrentValue = oContext.getModel().getProperty(sPath);
+
+			var oTextArea = new sap.m.TextArea({
+				value: sCurrentValue,
+				editable: bEditable,
+				width: "100%",
+				rows: 10,
+				growing: true,
+				growingMaxLines: 20
+			});
+
+			var aButtons = [];
+			if (bEditable) {
+				aButtons.push(
+					new sap.m.Button({
+						text: "Guardar",
+						icon: "sap-icon://save",
+						press: function (oEvt) {
+							oContext.getModel().setProperty(sPath, oTextArea.getValue());
+							oEvt.getSource().getParent().close();
+						}
+					}).addStyleClass("buttonInverted floatLeft")
+				);
+			}
+			aButtons.push(
+				new sap.m.Button({
+					text: bEditable ? "Cancelar" : "Cerrar",
+					icon: "sap-icon://decline",
+					press: function (oEvt) {
+						oEvt.getSource().getParent().close();
+					}
+				}).addStyleClass("buttonInverted floatLeft")
+			);
+
+			var oDialog = new sap.m.Dialog({
+				title: "Comentarios",
+				contentWidth: "500px",
+				resizable: true,
+				draggable: true,
+				afterClose: function (oEvt) {
+					oEvt.getSource().destroy(true);
+				},
+				content: [oTextArea],
+				buttons: aButtons
+			}).addStyleClass("customDialog");
+
+			this.getView().addDependent(oDialog);
+			oDialog.open();
+		},
+
 		closeDailyDialog: function () {
 			this.dailyDialog.close();
 			this.dailyDialog.destroy(true);
@@ -4664,8 +5060,8 @@ sap.ui.define([
 			sap.ui.getCore().byId("TransfHabJefeTrabajoComb").setSelectedKey("")
 			sap.ui.getCore().byId("JefeTrabajoSupComb").setSelectedKey("")
 			sap.ui.getCore().byId("JefeTrabajoCombo").setSelectedKey("")
-sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items")
-sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
+			sap.ui.getCore().byId("JefeTrabajoSupComb").unbindAggregation("items")
+			sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 			const lic = oView.getModel("LicenseJsonModel");
 			lic.setProperty("/IdHabJefeSup", "")
 			lic.setProperty("/IdHabJefe", "")
@@ -4896,13 +5292,13 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 		refreshJefesFromLicense: function () {
 			const view = this.getView();
 
-		
+
 			const comboMap = {
 				"JefeTrabajoCombo": { licProp: "TipoHabJefe", modelName: "JefesPreviewModel" },
 				"JefeTrabajoSupComb": { licProp: "TipoHabJefeSup", modelName: "JefesSupPreviewModel" }
 			};
 
-			
+
 			const licData = (view.getModel("LicenseJsonModel")?.getData?.()) || {};
 			var sIdHabJefe = (licData.IdHabJefe || "").trim();
 			var sIdHabJefeSup = (licData.IdHabJefeSup || "").trim();
@@ -4911,12 +5307,12 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 			const jobcond = String(licData.Jobcond || "").padStart(2, "0");
 			const isTct = (jobcond === "04" || jobcond === "05");
 
-			
+
 			const phModel = view.getModel("PersonalHabilitadoModel") || sap.ui.getCore().getModel("PersonalHabilitadoModel");
 			const srcPath = isTct ? "/JefeDeTrabajoTct" : "/JefeDeTrabajo";
 			const source = (phModel && phModel.getProperty(srcPath)) || [];
 
-		
+
 			const dedupeBy = (arr, keyFn) => {
 				const m = new Map();
 				arr.forEach(it => {
@@ -4939,11 +5335,11 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 				IdHabilitacion: it.IdHabilitacion
 			});
 
-			
+
 			Object.values(comboMap).forEach(({ licProp, modelName }) => {
 				const tipoHabKey = String(licData?.[licProp] || "").trim();
 
-				
+
 				let model = view.getModel(modelName);
 				if (!model) {
 					model = new sap.ui.model.json.JSONModel([]);
@@ -4951,14 +5347,14 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 					view.setModel(model, modelName);
 				}
 
-				
+
 				if (!tipoHabKey) {
 					const allProjected = dedupeBy(source, it => it.Legajo).map(projectRow);
 					model.setData(allProjected);
 					return;
 				}
 
-				
+
 				const matches = (row) => {
 					if (isTct) {
 						return String(row.TipoHab || "") === tipoHabKey || String(row.Lote || "") === tipoHabKey;
@@ -4968,9 +5364,9 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 
 				const projected = dedupeBy(source.filter(matches), it => it.Legajo).map(projectRow);
 
-				
+
 				model.setData(projected);
-				
+
 			});
 		},
 
@@ -5201,7 +5597,177 @@ sap.ui.getCore().byId("JefeTrabajoCombo").unbindAggregation("items")
 				AppManagementHelper.getModel("LicenseJsonModel").setProperty("/Tipolicencia", "N");
 			}
 
+		},
+
+		onChangePAT: function (oEvent) {
+			const oSrc = oEvent.getSource();
+
+			// Retiro table context
+			const oRetCtx = oSrc.getBindingContext("RetiroTableJsonModel");
+			if (oRetCtx) {
+				const sKey = oSrc.getSelectedKey();
+				const sVal = (sKey === "X") ? "X" : (sKey === "__PAT__") ? "" : null;
+				oRetCtx.getModel().setProperty(oRetCtx.getPath() + "/Pat", sVal);
+				return;
+			}
+
+			// Colocacion table context
+			const oCtx = oSrc.getBindingContext("ColocacionTableJsonModel");
+			if (!oCtx) return;
+
+			const sRowPath = oCtx.getPath();
+			const oRow = oCtx.getObject() || {};
+
+			const sKey = oSrc.getSelectedKey();
+
+			if (sKey === "__NONE__") {
+				oCtx.getModel().setProperty(sRowPath + "/Pat", null);
+				return;
+			}
+
+			const sNewPatModel = (sKey === "X") ? "X" : (sKey === "__PAT__") ? "" : null;
+
+			oCtx.getModel().setProperty(sRowPath + "/Pat", sNewPatModel);
+
+			const res = this._validateCurrentRowEtPat(
+				oCtx,
+				"ColocacionTableJsonModel",
+				"/Colocacion",
+				"colocación"
+			);
+
+			if (!res.ok) {
+				sap.m.MessageBox.error(res.message);
+			}
+		},
+
+		onTecetChange: function (oEvent) {
+			const oSrc = oEvent.getSource();
+			const sKey = oSrc.getSelectedKey();
+
+			const oRetCtx = oSrc.getBindingContext("RetiroTableJsonModel");
+			if (oRetCtx) {
+				oRetCtx.getModel().setProperty(oRetCtx.getPath() + "/Tecet", sKey);
+				return;
+			}
+
+			const oHabCtx = oSrc.getBindingContext("HabilitacionTableJsonModel");
+			if (oHabCtx) {
+				oHabCtx.getModel().setProperty(oHabCtx.getPath() + "/Tecet", sKey);
+			}
+		},
+
+
+		onEtChangeValidatePatPair: function (oEvent) {
+			const oSrc = oEvent.getSource();
+			const oCtx = oSrc.getBindingContext("ColocacionTableJsonModel");
+			if (!oCtx) return;
+
+			const sRowPath = oCtx.getPath();
+
+			const sNewEt = (typeof oSrc.getSelectedKey === "function")
+				? oSrc.getSelectedKey()
+				: oSrc.getValue();
+
+			oCtx.getModel().setProperty(sRowPath + "/Tplnr", sNewEt);
+
+			const res = this._validateCurrentRowEtPat(
+				oCtx,
+				"ColocacionTableJsonModel",
+				"/Colocacion",
+				"colocación"
+			);
+
+			if (!res.ok) {
+				sap.m.MessageBox.error(res.message);
+			}
+		},
+
+
+		onEtChangeValidateEtInhibicion: function (oEvent) {
+			const oSrc = oEvent.getSource();
+			const oCtx = oSrc.getBindingContext("InhibicionTableJsonModel");
+			if (!oCtx) return;
+
+			const sRowPath = oCtx.getPath();
+
+			const sNewEt = (typeof oSrc.getSelectedKey === "function")
+				? oSrc.getSelectedKey()
+				: (typeof oSrc.getValue === "function" ? oSrc.getValue() : "");
+
+			oCtx.getModel().setProperty(sRowPath + "/Tplnr", sNewEt);
+
+			if (!sNewEt) return;
+
+			var resActive = this._checkEtNotActive("InhibicionTableJsonModel", sNewEt, "inhibición");
+			if (!resActive.ok) {
+				sap.m.MessageBox.error(resActive.message);
+				return;
+			}
+
+			var oRow = oCtx.getObject() || {};
+			var resLocal = this._checkEtUniqueInNewRows(
+				"InhibicionTableJsonModel", "/Inhibicion", sNewEt, oRow.__lid, "inhibición"
+			);
+			if (!resLocal.ok) {
+				sap.m.MessageBox.error(resLocal.message);
+			}
+		},
+
+
+		_checkEtNotActive: function (sModelName, sEt, sEntityLabel) {
+			if (!sEt) return { ok: true };
+
+			var oModel = AppManagementHelper.getModel(sModelName);
+			var aActiveEts = (oModel && oModel.getProperty("/activeEts")) || [];
+
+			if (aActiveEts.indexOf(sEt) >= 0) {
+				var sWhat = sEntityLabel || "registro";
+				return {
+					ok: false,
+					message: "Ya existe una " + sWhat + " activa para la ET " + sEt +
+						". Debe completarse el proceso correspondiente antes de crear una nueva."
+				};
+			}
+			return { ok: true };
+		},
+
+		_checkEtUniqueInNewRows: function (sModelName, sPathRows, sEt, sExcludeLid, sEntityLabel) {
+			if (!sEt) return { ok: true };
+
+			var oModel = AppManagementHelper.getModel(sModelName);
+			var aRows = (oModel && oModel.getProperty(sPathRows)) || [];
+
+			var bDuplicate = aRows.some(function (r) {
+				if (!r || !r.isNew) return false;
+				if (sExcludeLid && r.__lid === sExcludeLid) return false;
+				return r.Tplnr === sEt;
+			});
+
+			if (bDuplicate) {
+				return {
+					ok: false,
+					message: "Ya existe una " + (sEntityLabel || "registro") + " nueva para la ET " + sEt + "."
+				};
+			}
+			return { ok: true };
+		},
+
+		_validateCurrentRowEtPat: function (oCtx, sModelName, sPathRows, sEntityLabel) {
+			var oRow = oCtx.getObject() || {};
+			var sEt = oRow.Tplnr;
+
+			if (!sEt) return { ok: true };
+
+			var resActive = this._checkEtNotActive(sModelName, sEt, sEntityLabel);
+			if (!resActive.ok) return resActive;
+
+			var resLocal = this._checkEtUniqueInNewRows(sModelName, sPathRows, sEt, oRow.__lid, sEntityLabel);
+			if (!resLocal.ok) return resLocal;
+
+			return { ok: true };
 		}
+
 
 	});
 });
