@@ -1349,6 +1349,7 @@ sap.ui.define([
 				content = this.createPdfSimpBody(content, licencia, oTextos);
 			} else {
 				content = this.createNormalPDFBody(content, licencia, oTextos,
+					Colocaciones, Retiros, Habilitaciones, Inhibiciones,
 					Entregas,
 					Devoluciones, Suspensiones, Reanudaciones,
 					Observaciones, Coordinaciones, Tramitaciones,
@@ -2107,6 +2108,18 @@ sap.ui.define([
 					fontSize: 8,
 					border: [false, false, false, false]
 				}, {
+					text: "COT/COTDT",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				}, {
+					text: "Tecnico ET",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				}, {
 					text: "Comentarios ",
 					alignment: 'center',
 					bold: true,
@@ -2123,6 +2136,18 @@ sap.ui.define([
 					border: [true, false, false, false]
 				}, {
 					text: "ET",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				}, {
+					text: "COT/COTDT",
+					alignment: 'center',
+					bold: true,
+					fontSize: 8,
+					border: [false, false, false, false]
+				}, {
+					text: "Tecnico ET",
 					alignment: 'center',
 					bold: true,
 					fontSize: 8,
@@ -2153,6 +2178,16 @@ sap.ui.define([
 						fontSize: 8,
 						border: [false, false, false, false]
 					}, {
+						text: item.Jt,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}, {
+						text: item.Tecet,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}, {
 						text: item.Coment,
 						alignment: 'center',
 						fontSize: 8,
@@ -2178,6 +2213,16 @@ sap.ui.define([
 						fontSize: 8,
 						border: [false, false, false, false]
 					}, {
+						text: item.Jt,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}, {
+						text: item.Tecet,
+						alignment: 'center',
+						fontSize: 8,
+						border: [false, false, false, false]
+					}, {
 						text: item.Coment,
 						alignment: 'center',
 						fontSize: 8,
@@ -2188,12 +2233,12 @@ sap.ui.define([
 			content.push({
 				columns: [{
 					table: {
-						widths: ['30%', '30%', '30%'],
+						widths: ['20%', '20%', '20%', '20%', '20%'],
 						body: inhibicionTableRow
 					}
 				}, {
 					table: {
-						widths: ['30%', '30%', '30%'],
+						widths: ['20%', '20%', '20%', '20%', '20%'],
 						body: habilitacionTableRow
 					}
 
