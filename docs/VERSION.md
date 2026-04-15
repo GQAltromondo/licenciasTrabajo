@@ -1,7 +1,7 @@
 # Documento de Version - Licencias de Trabajo TR-TB
 
-**Branch:** DOC2
-**Fecha:** 2026-04-10
+**Branch:** NewMain ( 1.0.30 )
+**Fecha:** 2026-04-15
 **Aplicacion:** Transener Operaciones - Licencias de Trabajo
 
 ---
