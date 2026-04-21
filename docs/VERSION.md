@@ -1,6 +1,11 @@
+# Altromondo S.A
+**Dev:** Guillermo Quattrocchi
+
+---
+
 # Documento de Version - Licencias de Trabajo TR-TB
 
-**Branch:** NewMain ( 1.0.30 )
+**Branch:** NewMain ( 1.0.30 ) se hara el merge a Main una vez confirmado todo funcional
 **Fecha:** 2026-04-15
 **Aplicacion:** Transener Operaciones - Licencias de Trabajo
 
@@ -57,7 +62,18 @@ Esta version incorpora cambios significativos en la gestion de licencias de trab
 - Se rehabilitaron las secciones de Colocaciones, Retiros, Habilitaciones e Inhibiciones en la exportacion a PDF (`createNormalPDFBody`), que anteriormente estaban comentadas.
 - Se ampliaron las funciones de generacion de contenido PDF para incluir las nuevas tablas de Colocacion/Retiro e Inhibicion/Habilitacion.
 
-### 4. Tooltips y UI
+### 4. Dialog de Observaciones / Comentarios expandibles
+
+**Archivos afectados:**
+- `webapp/views/Main/License/License.controller.js`
+- `webapp/views/Main/License/License.view.js`
+
+**Descripcion de cambios:**
+- Se agrego la funcion `onOpenComentariosDialog()` en el controlador de License, que abre un dialogo redimensionable y arrastrable con un `TextArea` ampliado (10 filas, crecimiento automatico hasta 20 filas) para visualizar o editar comentarios/observaciones que no se aprecian bien en las celdas de la tabla.
+- Si el campo es editable, el dialogo muestra un boton "Guardar" que persiste el valor modificado en el modelo y un boton "Cancelar". Si el campo es de solo lectura, muestra unicamente un boton "Cerrar".
+- Se agregaron botones con icono `sap-icon://display` y tooltip "Ver comentario completo" en las tablas de Colocacion, Retiro, Inhibicion, Habilitacion y Reanudacion, vinculados a `onOpenComentariosDialog` mediante `CustomData` (modelName y propertyName).
+
+### 5. Tooltips y UI
 
 **Archivos afectados:**
 - `webapp/views/Main/License/License.controller.js`
